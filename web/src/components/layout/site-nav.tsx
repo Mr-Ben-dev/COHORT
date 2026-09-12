@@ -150,7 +150,7 @@ export function SiteNav() {
 
         {/* Mobile toggle */}
         <div className="flex items-center gap-2 lg:hidden">
-          <PillButton size="sm" onClick={() => go("trials")}>
+          <PillButton size="sm" onClick={() => go("trials")} className="hidden sm:inline-flex">
             Find a trial
           </PillButton>
           <button

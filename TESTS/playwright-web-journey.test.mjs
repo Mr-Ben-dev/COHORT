@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright-core';
+import { openCheck as openCheckAt } from './playwright-web-helpers.mjs';
 
 const VERCEL_URL = process.env.PLAYWRIGHT_WEB_URL || 'https://cohort-web-orcin.vercel.app';
 
@@ -11,10 +12,7 @@ async function launch() {
 }
 
 async function openCheck(page) {
-  await page.goto(VERCEL_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name: 'Find a trial' }).click();
-  await page.getByRole('button', { name: /Check privately/i }).first().click();
-  await page.locator('input[id^="age-"]').waitFor({ timeout: 20000 });
+  await openCheckAt(page, VERCEL_URL);
 }
 
 async function completeTypedForm(page, { age, condition, medication }) {

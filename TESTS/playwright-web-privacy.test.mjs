@@ -4,6 +4,7 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
+import { openCheck } from './playwright-web-helpers.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const webDir = path.join(root, 'web');
@@ -77,11 +78,8 @@ test('Playwright: designer UI does not send PATIENT_A age to COHORT APIs', async
     if (isRemote && hitsAge) leaked.push({ url: urlStr, post });
   });
 
-  await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'domcontentloaded' });
-  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name: 'Find a trial' }).click();
-  await page.getByRole('button', { name: /Check privately/i }).first().click();
+  await openCheck(page, `http://127.0.0.1:${port}/`);
   const age = page.locator('input[id^="age-"]');
-  await age.waitFor({ timeout: 15000 });
   await age.fill(String(PATIENT_A));
   assert.equal(leaked.length, 0, JSON.stringify(leaked));
 
@@ -143,11 +141,8 @@ test('Playwright Vercel: PATIENT_A age never appears on COHORT or Vercel API tra
     }
   });
 
-  await page.goto(VERCEL_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name: 'Find a trial' }).click();
-  await page.getByRole('button', { name: /Check privately/i }).first().click();
+  await openCheck(page, VERCEL_URL);
   const age = page.locator('input[id^="age-"]');
-  await age.waitFor({ timeout: 20000 });
   await age.fill(String(PATIENT_A));
   await page.getByRole('button', { name: /^Yes$/ }).first().click();
   await page.getByRole('button', { name: /^No$/ }).first().click();
