@@ -126,6 +126,32 @@ function hideOneAmWait() {
   if (el) el.hidden = true;
 }
 
+const HINT_METHODS = [
+  'getProvingProvider',
+  'getDustBalance',
+  'getShieldedAddresses',
+  'getUnshieldedAddress',
+  'getConfiguration',
+  'balanceUnsealedTransaction',
+  'submitTransaction',
+];
+
+async function afterConnect(enabled, apiName) {
+  if (typeof enabled.getConnectionStatus === 'function') {
+    const connectionStatus = await enabled.getConnectionStatus();
+    if (connectionStatus?.status && connectionStatus.status !== 'connected') {
+      throw new Error('Wallet connection was not established.');
+    }
+  }
+  // EduProof: hintUsage is what raises the signing/proving permission modal.
+  // Connect alone can return without that prompt on 1AM.
+  if (typeof enabled.hintUsage === 'function') {
+    status('1AM connected. Approve proving and submit permissions in the wallet.', 'warn');
+    await enabled.hintUsage(HINT_METHODS);
+  }
+  finishWallet(enabled, apiName);
+}
+
 function finishWallet(enabled, apiName) {
   hideOneAmWait();
   state.wallet = enabled;
@@ -183,7 +209,7 @@ function connectFromClick() {
   pending
     .then((enabled) => {
       window.clearTimeout(waitTimer);
-      finishWallet(enabled, preferred.api?.name || preferred.name);
+      return afterConnect(enabled, preferred.api?.name || preferred.name);
     })
     .catch((e) => {
       window.clearTimeout(waitTimer);
