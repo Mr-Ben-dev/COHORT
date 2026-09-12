@@ -147,7 +147,7 @@ function freshBlind() {
 
 async function prove() {
   const trial = selectedTrial();
-  const facts = privateFacts();
+  const facts = { ...privateFacts(), blind: freshBlind() };
   const preview = localPredicate(trial, facts);
   if (!preview.ok) {
     status(`Not proven locally: ${preview.reason}. No network submit of private facts.`, 'bad');
@@ -174,7 +174,6 @@ async function prove() {
     );
     return;
   }
-  const facts = { ...privateFacts(), blind: freshBlind() };
   status(
     `Proving in ${state.apiName} via getProvingProvider (in-browser WASM). Private facts stay in this page. First proof can take a minute.`,
     'warn',
