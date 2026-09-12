@@ -1,9 +1,11 @@
 import { CohortError, ErrorCode } from './errors.mjs';
 import { PUBLIC_NETWORK_PINS } from './pins.mjs';
+import { PROVE_ELIGIBLE_CLAIMS } from './claims.mjs';
 
 export { PUBLIC_NETWORK_PINS, FORBIDDEN_PUBLIC_NET } from './pins.mjs';
 export { CohortError, ErrorCode } from './errors.mjs';
 export { ProveLifecycle, assertPrivateFactsShape } from './types.mjs';
+export { PROVE_ELIGIBLE_CLAIMS } from './claims.mjs';
 
 function notImplemented(name) {
   throw new CohortError(
@@ -18,6 +20,7 @@ function notImplemented(name) {
  */
 export const CohortDapp = Object.freeze({
   pins: PUBLIC_NETWORK_PINS,
+  claims: PROVE_ELIGIBLE_CLAIMS,
   connectWallet: () => notImplemented('connectWallet'),
   disconnectWallet: () => notImplemented('disconnectWallet'),
   getWalletState: () => notImplemented('getWalletState'),

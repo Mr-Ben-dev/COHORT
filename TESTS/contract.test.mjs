@@ -1,5 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { boot, prove, publicLedger, makePatient, RT, bytes32 } from './circuit-lib.mjs';
 
 test('A eligible user proof succeeds', () => {
@@ -94,4 +97,22 @@ test('public circuit output is boolean only — no age reconstruction', () => {
   const dump = JSON.stringify(out.result);
   assert.equal(dump, 'true');
   assert.equal(dump.includes('31'), false);
+});
+
+test('proveEligible claims match generated witnesses and non-claims', async () => {
+  const { PROVE_ELIGIBLE_CLAIMS } = await import('../packages/dapp/src/claims.mjs');
+  const generated = fs.readFileSync(
+    path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'packages/contract/managed/cohort/contract/index.js'),
+    'utf8',
+  );
+  assert.match(generated, /function-valued field named wAge/);
+  assert.match(generated, /function-valued field named wBlind/);
+  assert.equal(generated.includes('named wSex'), false);
+  assert.equal(PROVE_ELIGIBLE_CLAIMS.unusedWitnesses.includes('wSex'), true);
+  assert.ok(PROVE_ELIGIBLE_CLAIMS.doesNotProve.some((s) => s.toLowerCase().includes('fhir')));
+  assert.ok(PROVE_ELIGIBLE_CLAIMS.proves.some((s) => s.includes('minAge')));
+  assert.equal(
+    PROVE_ELIGIBLE_CLAIMS.contractAddress,
+    '1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc',
+  );
 });
