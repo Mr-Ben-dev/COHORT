@@ -15,3 +15,7 @@ export const COHORT_CONTRACT_ADDRESS =
 export const MIDNIGHT_INDEXER_URL =
   process.env.NEXT_PUBLIC_INDEXER_URL ||
   "https://indexer.preprod.midnight.network/api/v4/graphql";
+
+export const MIDNIGHT_INDEXER_WS_URL =
+  process.env.NEXT_PUBLIC_INDEXER_WS_URL ||
+  "wss://indexer.preprod.midnight.network/api/v4/graphql/ws";

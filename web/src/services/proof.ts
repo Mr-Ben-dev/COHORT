@@ -5,6 +5,7 @@ import {
   COHORT_API_ORIGIN,
   COHORT_CONTRACT_ADDRESS,
   MIDNIGHT_INDEXER_URL,
+  MIDNIGHT_INDEXER_WS_URL,
   MIDNIGHT_NETWORK,
 } from "@/lib/cohort-origin";
 import { loadCohortDapp, type OfficialTrial, type ProveResult } from "@/lib/cohort-dapp";
@@ -51,6 +52,7 @@ class CohortProofService implements ProofService {
       origin: COHORT_API_ORIGIN,
       networkId: MIDNIGHT_NETWORK,
       indexerUrl: MIDNIGHT_INDEXER_URL,
+      indexerWsUrl: MIDNIGHT_INDEXER_WS_URL,
       contractAddress: COHORT_CONTRACT_ADDRESS,
       trial: input.trial,
       trialId: input.trial.trialId,
