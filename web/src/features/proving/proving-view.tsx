@@ -111,7 +111,7 @@ export function ProvingView({ trialId }: { trialId: string }) {
   const activeProving = useCohortStore((s) => s.activeProving);
   const trial = useCohortStore((s) => s.trials.find((t) => t.id === trialId));
   const wallet = useCohortStore((s) => s.wallet);
-  const connectWallet = useCohortStore((s) => s.connectWallet);
+  const connectAndProve = useCohortStore((s) => s.connectAndProve);
   const approveWallet = useCohortStore((s) => s.approveWallet);
   const cancelProving = useCohortStore((s) => s.cancelProving);
   const reduce = useReducedMotion();
@@ -129,7 +129,17 @@ export function ProvingView({ trialId }: { trialId: string }) {
    * once `activeProving` has already been cleared.
    */
   const [lastProving, setLastProving] = useState(activeProving);
+  const [slowWallet, setSlowWallet] = useState(false);
   const proving = activeProving ?? lastProving;
+
+  useEffect(() => {
+    if (wallet.status !== "connecting") {
+      setSlowWallet(false);
+      return;
+    }
+    const timer = window.setTimeout(() => setSlowWallet(true), 12000);
+    return () => window.clearTimeout(timer);
+  }, [wallet.status]);
 
   useEffect(
     () =>
@@ -235,6 +245,12 @@ export function ProvingView({ trialId }: { trialId: string }) {
                   you&apos;ll make. The 1AM browser extension is the current
                   gold path on desktop. COHORT will not create a fake wallet.
                 </p>
+                <p className="mt-2 text-body-sm text-pearl/70">
+                  1AM does not open a page popup. After Connect, close the
+                  Transactions dashboard and approve COHORT from the 1AM
+                  toolbar icon. The in-browser proof starts once 1AM
+                  authorizes this page.
+                </p>
                 <div className="mt-5 space-y-3">
                   {WALLET_PROVIDERS.map((provider) => (
                     <div
@@ -255,7 +271,7 @@ export function ProvingView({ trialId }: { trialId: string }) {
                       <PillButton
                         size="sm"
                         className="ml-auto shrink-0"
-                        onClick={() => void connectWallet(provider.id)}
+                        onClick={() => void connectAndProve(provider.id)}
                       >
                         Connect
                       </PillButton>
@@ -276,9 +292,18 @@ export function ProvingView({ trialId }: { trialId: string }) {
                         : `Approve in ${wallet.provider}`}
                     </h2>
                     <p className="mt-1 text-body-sm text-pearl/70">
-                      One confirmation — the proof, not your facts, is what
-                      gets signed.
+                      {wallet.status === "connecting"
+                        ? "1AM does not open a page popup. Close the Transactions dashboard, then click the 1AM toolbar icon and approve COHORT. The proof starts after that authorization."
+                        : "One confirmation — the proof, not your facts, is what gets signed."}
                     </p>
+                    {slowWallet ? (
+                      <p className="mt-2 text-body-sm text-pearl/70" role="status">
+                        Still waiting on 1AM. Reload the extension at
+                        chrome://extensions, hard-refresh this page, then
+                        click Connect again. COHORT will not create a fake
+                        wallet.
+                      </p>
+                    ) : null}
                   </div>
                 </div>
                 <PillButton

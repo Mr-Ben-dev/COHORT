@@ -32,6 +32,9 @@ export function humanError(err: unknown): string {
   if (/extension context invalidated/.test(text)) {
     return "The wallet extension was reloaded. Hard-refresh this page, then connect again.";
   }
+  if (/request failed|receiving end|background/.test(text)) {
+    return "1AM background did not answer. Reload 1AM at chrome://extensions, hard-refresh this page, then click Connect. COHORT will not create a fake wallet.";
+  }
   if (/unsupported_criteria|typed-subset preview failed|unknown trial/.test(text)) {
     return "This check does not match the typed trial rules, so no proof was submitted.";
   }

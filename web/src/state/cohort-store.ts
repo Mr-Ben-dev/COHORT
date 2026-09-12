@@ -65,6 +65,7 @@ interface CohortState {
   setDiscovery: (partial: Partial<DiscoveryState>) => void;
   setAnswer: (trialId: string, partial: Partial<PrivateEligibilityInput>) => void;
   connectWallet: (provider: WalletProvider) => Promise<void>;
+  connectAndProve: (provider: WalletProvider) => Promise<void>;
   disconnectWallet: () => void;
   startCheck: (trial: Trial) => Promise<void>;
   approveWallet: () => Promise<void>;
@@ -154,6 +155,12 @@ export const useCohortStore = create<CohortState>((set, get) => ({
           : get().activeProving,
       });
     }
+  },
+
+  connectAndProve: async (provider) => {
+    await get().connectWallet(provider);
+    if (get().wallet.status !== "connected") return;
+    await get().approveWallet();
   },
 
   disconnectWallet: () => {

@@ -56,6 +56,7 @@ test('Vercel: eligible preview waits for 1AM and does not fake confirmed', async
     const body = await page.innerText('body');
     assert.match(body, /Connect your wallet|1AM/i);
     assert.match(body, /typed criteria only/i);
+    assert.match(body, /does not open a page popup/i);
     assert.match(body, /Connect/);
     assert.equal(await page.getByRole('heading', { name: /^Eligible$/i }).count(), 0);
     await page.getByRole('button', { name: 'Connect' }).first().waitFor();

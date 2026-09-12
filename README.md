@@ -17,9 +17,9 @@ Gold path (Preprod, contract `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594c
 Browser → 1AM `getProvingProvider` → `submitCallTx` (2026-09-12, live Render): txId `000657e4fb84d31e2426814305fca09a4af4b0abcf24417b176420eae0aa3a9867`, txHash `3b1624e9cc8c17808f67cb5c52244f197fe57c0c820c75ef5beb7e18b8bf1590`, indexer **proven=2**. The prior Node SDK prove (`00e53324…`) is not this path.
 
 1. Install **1AM** and sync Preprod with tNIGHT + DUST. Do not use a hosted proof-server.
-2. Open `https://cohort-y4zr.onrender.com/`. COHORT never draws the 1AM Approve UI on the page.
-3. Close the 1AM Transactions dashboard. Click **Connect Midnight wallet**, then click the 1AM toolbar icon and **Approve COHORT**. After connect, 1AM may ask again via `hintUsage` for proving/submit. If the icon still opens balances/Transactions, reload 1AM at `chrome://extensions`, refresh, and retry. The balance screen is not the connect dialog.
-4. Enter typed private facts in page memory only. **Generate proof** runs `connect('preprod')` in the same click if needed, then `submitCallTx` via `getProvingProvider` (in-browser WASM). Private facts are never POSTed. Page CSP `connect-src` allows the official Midnight indexer/RPC and 1AM GraphQL (`api-preprod.1am.xyz`); public-state truth stays `indexer.preprod.midnight.network`. Public `/zk` circuit keys are CORS `*` so 1AM can fetch them.
+2. Open the designer UI `https://cohort-web-orcin.vercel.app` (or the same-origin stub `https://cohort-y4zr.onrender.com/`). COHORT never draws the 1AM Approve UI on the page.
+3. Close the 1AM Transactions dashboard. Find a trial → Check privately → **Connect** 1AM, then click the 1AM toolbar icon and **Approve COHORT**. Connect runs `connect('preprod')` in that click, then `submitCallTx` via `getProvingProvider` (in-browser WASM). If the icon still opens balances/Transactions, reload 1AM at `chrome://extensions`, refresh, and retry. The balance screen is not the connect dialog.
+4. Typed private facts stay in page memory only and are never POSTed. Page CSP `connect-src` allows the official Midnight indexer/RPC and 1AM GraphQL (`api-preprod.1am.xyz`); public-state truth stays `indexer.preprod.midnight.network`. Public `/zk` circuit keys are CORS `*` so 1AM can fetch them.
 
 `apps/web` remains the Render same-origin stub. The visual product lives in `web/` (Next.js) and talks to Render `/api` + `/zk`, the official Preprod indexer, and 1AM `getProvingProvider`. Private facts stay in the browser.
 
