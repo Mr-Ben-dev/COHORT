@@ -56,12 +56,15 @@
           Gold path: 1AM wallet in-browser proving via DApp Connector.
           COHORT does not host a proof server and will not send witnesses to Render.
         </p>
+        <p class="note">
+          If Connect fails, click the 1AM icon in the Chrome toolbar so the wallet worker is awake, then try again.
+        </p>
         <p class="note" id="chain-status">Loading public network config…</p>
         <button id="connect" type="button">Connect Midnight wallet</button>
         <button id="prove" type="button">Generate proof and submit on Midnight</button>
         <pre id="status"></pre>
       </section>
     </main>
-    <script type="module" src="/app.js?v=wasm2"></script>
+    <script type="module" src="/app.js?v=wasm3"></script>
   </body>
 </html>

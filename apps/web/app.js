@@ -231,7 +231,19 @@ async function prove() {
 }
 
 document.getElementById('parse-fhir').addEventListener('click', parseFhirLocally);
-document.getElementById('connect').addEventListener('click', () => connectWallet().catch((e) => status(String(e.message || e), 'bad')));
+document.getElementById('connect').addEventListener('click', () => {
+  connectWallet().catch((e) => {
+    const raw = String(e?.message || e);
+    if (/request failed|receiving end|background/i.test(raw)) {
+      status(
+        '1AM did not answer. Click the 1AM icon in the Chrome toolbar to wake it, then Connect again. COHORT will not generate a fake transaction.',
+        'bad',
+      );
+      return;
+    }
+    status(raw, 'bad');
+  });
+});
 document.getElementById('prove').addEventListener('click', () => prove().catch((e) => status(String(e.message || e), 'bad')));
 loadTrials().catch((e) => status(String(e.message || e), 'bad'));
 loadPublicChain().catch((e) => status(String(e.message || e), 'bad'));
