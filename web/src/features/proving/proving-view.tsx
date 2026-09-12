@@ -14,6 +14,7 @@ import { PrivacyIndicator } from "@/components/privacy/privacy-indicator";
 import { BackLink } from "@/components/layout/back-link";
 import { useCohortStore } from "@/state/cohort-store";
 import { preloadCohortDapp } from "@/lib/cohort-dapp";
+import { isOneAmInjected } from "@/services/wallet";
 import {
   PROOF_STAGES,
   PROOF_STAGE_COPY,
@@ -130,6 +131,7 @@ export function ProvingView({ trialId }: { trialId: string }) {
    */
   const [lastProving, setLastProving] = useState(activeProving);
   const [slowWallet, setSlowWallet] = useState(false);
+  const [oneAm, setOneAm] = useState<"checking" | "ready" | "missing">("checking");
   const proving = activeProving ?? lastProving;
 
   useEffect(() => {
@@ -140,6 +142,24 @@ export function ProvingView({ trialId }: { trialId: string }) {
     const timer = window.setTimeout(() => setSlowWallet(true), 12000);
     return () => window.clearTimeout(timer);
   }, [wallet.status]);
+
+  useEffect(() => {
+    let ticks = 0;
+    const read = () => {
+      if (isOneAmInjected()) {
+        setOneAm("ready");
+        return true;
+      }
+      ticks += 1;
+      if (ticks >= 20) setOneAm("missing");
+      return false;
+    };
+    if (read()) return;
+    const id = window.setInterval(() => {
+      if (read()) window.clearInterval(id);
+    }, 400);
+    return () => window.clearInterval(id);
+  }, []);
 
   useEffect(
     () =>
@@ -250,6 +270,31 @@ export function ProvingView({ trialId }: { trialId: string }) {
                   Transactions dashboard and approve COHORT from the 1AM
                   toolbar icon. The in-browser proof starts once 1AM
                   authorizes this page.
+                </p>
+                <p
+                  className="mt-2 text-body-sm text-pearl/70"
+                  role="status"
+                  aria-live="polite"
+                >
+                  {oneAm === "ready"
+                    ? "1AM is injected in this browser. Click Connect, then approve COHORT from the toolbar icon."
+                    : oneAm === "missing"
+                      ? (
+                        <>
+                          1AM is not injected in this tab. Install the desktop
+                          extension from{" "}
+                          <a
+                            href="https://1am.xyz/"
+                            rel="noreferrer"
+                            className="text-clinical-cyan underline-offset-2 hover:underline"
+                          >
+                            1am.xyz
+                          </a>
+                          , hard-refresh, then click Connect. COHORT will not
+                          create a fake wallet.
+                        </>
+                        )
+                      : "Looking for the 1AM extension…"}
                 </p>
                 <div className="mt-5 space-y-3">
                   {WALLET_PROVIDERS.map((provider) => (

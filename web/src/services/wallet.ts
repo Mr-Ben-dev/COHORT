@@ -42,6 +42,15 @@ function pick1Am(): MidnightInjected | null {
   );
 }
 
+/** True only for the 1AM connector, not Lace or an unknown tile. */
+export function isOneAmInjected(): boolean {
+  const midnight = midnightGlobal();
+  if (!midnight) return false;
+  const one =
+    midnight["1am"] || Object.values(midnight).find((api) => api?.rdns === "com.midnight.1am");
+  return Boolean(one && typeof one.connect === "function");
+}
+
 class OneAmWalletService implements WalletService {
   connect(provider: WalletProvider): Promise<Extract<WalletState, { status: "connected" }>> {
     if (provider === "Lace") {

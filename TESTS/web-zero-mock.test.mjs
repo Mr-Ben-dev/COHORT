@@ -26,6 +26,7 @@ test('designer web production path does not import fixture trials or simulated w
   assert.equal(hay.includes('fullProofRef()'), false);
   assert.equal(hay.includes('setTimeout(() => success'), false);
   assert.match(fs.readFileSync(path.join(webSrc, 'services/wallet.ts'), 'utf8'), /connect\(['"]preprod['"]\)/);
+  assert.match(fs.readFileSync(path.join(webSrc, 'services/wallet.ts'), 'utf8'), /isOneAmInjected/);
   assert.match(fs.readFileSync(path.join(webSrc, 'state/cohort-store.ts'), 'utf8'), /connectAndProve/);
   assert.match(
     fs.readFileSync(path.join(webSrc, 'features/proving/proving-view.tsx'), 'utf8'),
