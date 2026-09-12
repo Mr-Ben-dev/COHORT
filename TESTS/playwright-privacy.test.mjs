@@ -65,6 +65,9 @@ test('Playwright Chromium: PATIENT_A/B ages stay off COHORT origin traffic and s
   assert.equal(JSON.stringify(storage.local).includes(String(PATIENT_A)), false);
   assert.equal(JSON.stringify(storage.session).includes(String(PATIENT_A)), false);
   assert.equal(JSON.stringify(storage.local).includes(String(PATIENT_B)), false);
-  assert.match(storage.status, /Connect a Midnight wallet first|complete private facts|Not proven locally/i);
+  assert.match(
+    storage.status,
+    /No Midnight DApp Connector found|Connect a Midnight wallet first|complete private facts|Not proven locally|will not generate a fake transaction/i,
+  );
   assert.equal(leaked.length, 0, JSON.stringify(leaked));
 });

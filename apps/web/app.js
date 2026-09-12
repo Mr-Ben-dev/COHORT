@@ -199,26 +199,70 @@ function finishWallet(enabled, apiName) {
   });
 }
 
-function connectFromClick() {
+function pickMidnightApi() {
   const apis = midnightApis();
   if (!apis.length) {
-    status(
-      'No Midnight DApp Connector found. Install 1AM (preferred: in-browser proving) or Lace with a local proof-server. COHORT will not generate a fake transaction.',
-      'warn',
-    );
-    return;
+    return {
+      error:
+        'No Midnight DApp Connector found. Install 1AM (preferred: in-browser proving) or Lace with a local proof-server. COHORT will not generate a fake transaction.',
+    };
   }
   const preferred =
     apis.find((a) => a.name === '1am' || a.api?.rdns === 'com.midnight.1am' || a.api?.name === '1AM') ||
     apis.find((a) => typeof a.api?.connect === 'function') ||
     apis[0];
   if (typeof preferred.api.connect !== 'function') {
-    status('Wallet connector has no connect(). COHORT will not generate a fake transaction.', 'bad');
-    return;
+    return { error: 'Wallet connector has no connect(). COHORT will not generate a fake transaction.' };
+  }
+  return { preferred };
+}
+
+function startConnectFromGesture() {
+  const picked = pickMidnightApi();
+  if (picked.error) {
+    status(picked.error, picked.error.includes('no connect') ? 'bad' : 'warn');
+    return null;
   }
   const networkId = state.config?.networkId || 'preprod';
   // 1AM sends ONEAM_CONNECT to the extension. Call connect() in this click, before any await.
-  const pending = preferred.api.connect(networkId);
+  const pending = picked.preferred.api.connect(networkId);
+  return { pending, apiName: picked.preferred.api?.name || picked.preferred.name };
+}
+
+function reportConnectFailure(e) {
+  hideOneAmWait();
+  const raw = String(e?.message || e);
+  if (/reject/i.test(raw)) {
+    status('1AM rejected the connection. COHORT will not generate a fake transaction.', 'bad');
+    return;
+  }
+  if (/extension context invalidated/i.test(raw)) {
+    status(
+      '1AM was reloaded while this tab stayed open, so the old connector died. Hard-refresh this page (Ctrl+Shift+R), then click Connect or Prove. COHORT will not generate a fake transaction.',
+      'bad',
+    );
+    return;
+  }
+  if (/timed out|timeout/i.test(raw)) {
+    status(
+      '1AM timed out inside the wallet (Request timed out). Reload 1AM at chrome://extensions, then hard-refresh THIS page before Connect or Prove. If it still times out, install 1AM v6.3.13 from https://1am.xyz/install-beta. COHORT will not generate a fake transaction.',
+      'bad',
+    );
+    return;
+  }
+  if (/request failed|receiving end|background|reading 'local'/i.test(raw)) {
+    status(
+      '1AM background did not answer. Open chrome://extensions, Reload 1AM, then hard-refresh this page (Ctrl+Shift+R) BEFORE clicking Connect or Prove. COHORT will not generate a fake transaction.',
+      'bad',
+    );
+    return;
+  }
+  status(raw, 'bad');
+}
+
+function connectFromClick() {
+  const started = startConnectFromGesture();
+  if (!started) return;
   showOneAmWait();
   status(
     '1AM connection is waiting. Close the Transactions dashboard, then click the 1AM toolbar icon and Approve COHORT. This page will not show a wallet popup.',
@@ -227,45 +271,18 @@ function connectFromClick() {
   const waitTimer = window.setTimeout(() => {
     if (state.wallet) return;
     status(
-      'Still waiting on 1AM. Reload the 1AM extension at chrome://extensions, refresh this page, close the 1AM dashboard, click Connect, then click the 1AM toolbar icon. COHORT will not generate a fake transaction.',
+      'Still waiting on 1AM. Reload the 1AM extension at chrome://extensions, refresh this page, close the 1AM dashboard, click Connect or Prove, then click the 1AM toolbar icon. COHORT will not generate a fake transaction.',
       'warn',
     );
   }, 12000);
-  pending
+  started.pending
     .then((enabled) => {
       window.clearTimeout(waitTimer);
-      return afterConnect(enabled, preferred.api?.name || preferred.name);
+      return afterConnect(enabled, started.apiName);
     })
     .catch((e) => {
       window.clearTimeout(waitTimer);
-      hideOneAmWait();
-      const raw = String(e?.message || e);
-      if (/reject/i.test(raw)) {
-        status('1AM rejected the connection. COHORT will not generate a fake transaction.', 'bad');
-        return;
-      }
-      if (/extension context invalidated/i.test(raw)) {
-        status(
-          '1AM was reloaded while this tab stayed open, so the old connector died. Hard-refresh this page (Ctrl+Shift+R), then click Connect. COHORT will not generate a fake transaction.',
-          'bad',
-        );
-        return;
-      }
-      if (/timed out|timeout/i.test(raw)) {
-        status(
-          '1AM timed out inside the wallet (Request timed out). Reload 1AM at chrome://extensions, then hard-refresh THIS page before Connect. If it still times out, install 1AM v6.3.13 from https://1am.xyz/install-beta. COHORT will not generate a fake transaction.',
-          'bad',
-        );
-        return;
-      }
-      if (/request failed|receiving end|background|reading 'local'/i.test(raw)) {
-        status(
-          '1AM background did not answer. Open chrome://extensions, Reload 1AM, then hard-refresh this page (Ctrl+Shift+R) BEFORE clicking Connect. COHORT will not generate a fake transaction.',
-          'bad',
-        );
-        return;
-      }
-      status(raw, 'bad');
+      reportConnectFailure(e);
     });
 }
 
@@ -284,8 +301,24 @@ async function prove() {
     return;
   }
   if (!state.wallet) {
-    status('Connect a Midnight wallet first. Private facts were not sent anywhere.', 'warn');
-    return;
+    const started = startConnectFromGesture();
+    if (!started) return;
+    showOneAmWait();
+    status(
+      '1AM connection is waiting from Prove. Close the Transactions dashboard, click the 1AM toolbar icon, and Approve COHORT. Proving starts after connect.',
+      'warn',
+    );
+    try {
+      const enabled = await started.pending;
+      await afterConnect(enabled, started.apiName);
+    } catch (e) {
+      reportConnectFailure(e);
+      return;
+    }
+    if (!state.wallet) {
+      status('1AM connect did not return a ConnectedAPI. COHORT will not generate a fake transaction.', 'bad');
+      return;
+    }
   }
   const provider = state.wallet.getProvingProvider;
   if (typeof provider !== 'function') {

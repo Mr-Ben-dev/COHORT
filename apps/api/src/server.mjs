@@ -212,7 +212,24 @@ const MIME = {
   '.zkir': 'application/octet-stream',
 };
 
+function publicZkCors(res) {
+  // 1AM FetchZkConfigProvider / extension may load public circuit keys cross-origin.
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'content-type');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+}
+
 function serveZk(req, res, url) {
+  if (req.method === 'OPTIONS') {
+    publicZkCors(res);
+    securityHeaders(res);
+    res.statusCode = 204;
+    return res.end();
+  }
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    return send(res, 405, { error: 'method not allowed' });
+  }
   let rel = url.pathname.slice('/zk'.length);
   rel = path.normalize(rel).replace(/^[/\\]+/, '');
   if (!rel || rel === '.' || rel.includes('..') || path.isAbsolute(rel)) {
@@ -224,10 +241,15 @@ function serveZk(req, res, url) {
   if (!fs.existsSync(file) || !fs.statSync(file).isFile()) return send(res, 404, { error: 'not found' });
   const ext = path.extname(file).toLowerCase();
   const type = MIME[ext] || 'application/octet-stream';
+  publicZkCors(res);
   securityHeaders(res, {
     cache: 'public, max-age=31536000, immutable',
     'Content-Type': type,
   });
+  if (req.method === 'HEAD') {
+    res.statusCode = 200;
+    return res.end();
+  }
   fs.createReadStream(file).pipe(res);
 }
 

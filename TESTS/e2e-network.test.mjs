@@ -67,6 +67,7 @@ test('browser-equivalent network sniff against local origin', async (t) => {
   assert.match(appSrc, /CohortDapp\.proveEligibility/);
   assert.match(appSrc, /CohortDapp\.getPublicVerification/);
   assert.match(appSrc, /preferred\.api\.connect\(networkId\)/);
+  assert.match(appSrc, /startConnectFromGesture/);
   assert.match(appSrc, /hintUsage/);
   assert.equal(appSrc.includes('preferred.api.enable()'), false);
 });

@@ -42,4 +42,11 @@ test('GET /zk artifacts use octet-stream and never text/html', async (t) => {
   const traverse = await request(url, '/zk/../.env');
   assert.ok([403, 404].includes(traverse.status));
   assert.equal((traverse.text || '').includes('GITHUB_TOKEN'), false);
+
+  const cors = await request(url, '/zk/keys/proveEligible.verifier', {
+    headers: { origin: 'chrome-extension://bphnkdkcnfhompoegfpgnkidcjfbojjp' },
+  });
+  assert.equal(cors.status, 200);
+  assert.equal(cors.headers['access-control-allow-origin'], '*');
+  assert.equal(cors.headers['cross-origin-resource-policy'], 'cross-origin');
 });
