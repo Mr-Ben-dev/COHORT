@@ -6,12 +6,12 @@ import { CohortDapp } from '../packages/dapp/src/index.mjs';
 import { readDeployedVerifierKey } from '../packages/dapp/src/public-state.mjs';
 import { zkArtifactPaths } from '../packages/dapp/src/zk-fs.mjs';
 
-test('Preprod indexer queryContractState + ledger() returns proven >= 1', async () => {
+test('Preprod indexer queryContractState + ledger() returns proven >= 2', async () => {
   const out = await CohortDapp.getPublicVerification();
   assert.equal(out.source, 'midnight-indexer');
   assert.equal(out.contractAddress, CohortDapp.claims.contractAddress);
-  assert.equal(out.proven >= 1, true, JSON.stringify(out));
-  assert.equal(out.spentCount >= 1, true);
+  assert.equal(out.proven >= 2, true, JSON.stringify(out));
+  assert.equal(out.spentCount >= 2, true, JSON.stringify(out));
   assert.equal(Object.hasOwn(out, 'age'), false);
 });
 

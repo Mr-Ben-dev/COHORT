@@ -67,7 +67,7 @@ test('indexer verification is source of truth; /api/public-state is labeled cach
   const cache = await CohortDapp.getReferralState({ origin: url });
   const network = await CohortDapp.getNetworkState();
   assert.equal(chain.source, 'midnight-indexer');
-  assert.equal(chain.proven >= 1, true);
+  assert.equal(chain.proven >= 2, true, JSON.stringify(chain));
   assert.equal(cache.notIndexerTruth, true);
   assert.equal(cache.source, 'cohort-memory-cache');
   assert.equal(cache.events[0].age, undefined);
