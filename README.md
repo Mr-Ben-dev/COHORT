@@ -18,3 +18,5 @@ Gold path (Preprod, contract `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594c
 4. Enter typed private facts in page memory only. **Generate proof** runs `submitCallTx` in the tab via `getProvingProvider` (in-browser WASM). Private facts are never POSTed.
 
 `apps/web` is an interim stub until a designer `web` drop-in. Midnight internals stay in `packages/dapp`.
+
+Privacy: `TESTS/playwright-privacy.test.mjs` launches installed Chrome against a local origin, types PATIENT_A age 31, and asserts cookies/storage/URL/COHORT requests never carry 31/52. 1AM Approve stays a manual wallet click.
