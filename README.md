@@ -1,6 +1,6 @@
 # COHORT
 
-Prove clinical-trial eligibility on Midnight without sending private medical facts to the COHORT server.
+Prove clinical-trial eligibility on Midnight without sending your private medical facts to the COHORT server.
 
 This directory is the application + Compact circuit + privacy tests. Operator setup is in **[FINAL_SETUP.md](./FINAL_SETUP.md)** (single setup document).
 
