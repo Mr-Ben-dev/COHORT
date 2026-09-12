@@ -41,3 +41,32 @@ export async function readPublicVerification({
     source: 'midnight-indexer',
   };
 }
+
+/** On-chain proveEligible verifier key from the deployed Preprod contract. */
+export async function readDeployedVerifierKey({
+  contractAddress = PROVE_ELIGIBLE_CLAIMS.contractAddress,
+  indexerUrl = env('MIDNIGHT_INDEXER_URL', 'https://indexer.preprod.midnight.network/api/v4/graphql'),
+  indexerWsUrl = env('MIDNIGHT_INDEXER_WS_URL', 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws'),
+  networkId = env('MIDNIGHT_NETWORK', 'preprod'),
+  circuitId = 'proveEligible',
+} = {}) {
+  configureNetwork(networkId);
+  const provider = createPublicDataProvider({ indexerUrl, indexerWsUrl });
+  const hex = contractAddress.startsWith('0x') ? contractAddress : contractAddress;
+  const state = await provider.queryContractState(hex);
+  if (!state || typeof state.operation !== 'function') {
+    throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, 'Indexer returned no contract operations for this address.');
+  }
+  const op = state.operation(circuitId);
+  const verifierKey = op?.verifierKey;
+  if (!verifierKey || verifierKey.byteLength < 32) {
+    throw new CohortError(ErrorCode.ZK_CONFIG_MISSING, `On-chain verifier key for ${circuitId} is missing.`);
+  }
+  return {
+    networkId,
+    contractAddress: hex,
+    circuitId,
+    verifierKey,
+    source: 'midnight-indexer',
+  };
+}

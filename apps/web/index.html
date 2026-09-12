@@ -60,10 +60,10 @@
           <p><strong>1AM does not open a connect dialog on this page.</strong> The white panel with 1000 tNIGHT / Transactions is the wallet dashboard, not approval.</p>
           <ol>
             <li>Close that 1AM dashboard completely.</li>
-            <li>Click <strong>Connect Midnight wallet</strong> once.</li>
+            <li>Click <strong>Connect Midnight wallet</strong> or <strong>Generate proof</strong> once. Prove starts <code>connect('preprod')</code> in that same click if needed.</li>
             <li>Immediately click the <strong>1AM icon</strong> in the Chrome toolbar (or the puzzle piece, then 1AM).</li>
             <li>Approve <strong>COHORT</strong>. If you still see Assets / NFTs / Transactions, that is the wrong screen.</li>
-            <li>If Connect says timed out: open <code>chrome://extensions</code>, Reload 1AM, then hard-refresh this page (<code>Ctrl+Shift+R</code>) <em>before</em> clicking Connect again. Reloading 1AM without refreshing this tab leaves a dead connector.</li>
+            <li>If Connect or Prove says timed out: open <code>chrome://extensions</code>, Reload 1AM, then hard-refresh this page (<code>Ctrl+Shift+R</code>) <em>before</em> clicking again. Reloading 1AM without refreshing this tab leaves a dead connector.</li>
           </ol>
         </div>
         <p class="note" id="chain-status">Loading public network config…</p>
@@ -80,11 +80,11 @@
           <li>Close the white 1AM balances window if it is still open.</li>
           <li>Click the 1AM icon in the toolbar now.</li>
           <li>Approve COHORT. Do not stay on Transactions.</li>
-          <li>If the toolbar icon still opens the same dashboard, reload 1AM at chrome://extensions, refresh this tab, and click Connect again.</li>
+          <li>If the toolbar icon still opens the same dashboard, reload 1AM at chrome://extensions, refresh this tab, and click Connect or Prove again.</li>
         </ol>
         <button type="button" id="oneam-wait-dismiss" class="secondary">Keep waiting</button>
       </div>
     </div>
-    <script type="module" src="/app.js?v=wasm10"></script>
+    <script type="module" src="/app.js?v=wasm11"></script>
   </body>
 </html>

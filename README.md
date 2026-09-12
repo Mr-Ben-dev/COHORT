@@ -6,6 +6,8 @@ This directory is the application + Compact circuit + privacy tests. Operator se
 
 Pinned public-network stack: Compact **0.31.1** / language **0.23** / compact-runtime **0.16.0** / midnight-js **4.1.1** / DApp Connector **4.0.1** / wallet-sdk **1.2.0** / on-chain runtime **3.0.0** (npm `overrides`). Do not mix Compact 0.34 / ledger 9 / midnight-js 5.x with Preview, Preprod, or Mainnet.
 
+Preprod `proveEligible` verifier (`midnight:verifier-key[v6]`) SHA-256 `5af3b4b2ed345f711c5ff87367cfb0049732701c5a5336d51234b2a95fe32ab1` matches the on-chain contract, repo `packages/contract/zk`, and live `/zk`. No redeploy.
+
 Non-visual DApp interface (future `web` folder): `packages/dapp`. `npm test` includes a dependency-tree guard that fails if two `onchain-runtime-v3` versions appear.
 
 Public Compact 0.31.1 circuit artifacts (not wallet secrets) are served at same-origin `/zk/keys`, `/zk/zkir`, and `/zk/compiler`. FetchZkConfigProvider should use `{origin}/zk/`. The hosted `.prover` file is a circuit proving key, not a seed.
