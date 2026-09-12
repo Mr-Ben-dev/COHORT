@@ -232,9 +232,23 @@ function connectFromClick() {
         status('1AM rejected the connection. COHORT will not generate a fake transaction.', 'bad');
         return;
       }
-      if (/request failed|receiving end|background/i.test(raw)) {
+      if (/extension context invalidated/i.test(raw)) {
         status(
-          '1AM background did not answer. Open chrome://extensions, Reload 1AM, refresh this page, close the dashboard, click Connect, then click the 1AM toolbar icon. COHORT will not generate a fake transaction.',
+          '1AM was reloaded while this tab stayed open, so the old connector died. Hard-refresh this page (Ctrl+Shift+R), then click Connect. COHORT will not generate a fake transaction.',
+          'bad',
+        );
+        return;
+      }
+      if (/timed out|timeout/i.test(raw)) {
+        status(
+          '1AM timed out inside the wallet (Request timed out). Reload 1AM at chrome://extensions, then hard-refresh THIS page before Connect. If it still times out, install 1AM v6.3.13 from https://1am.xyz/install-beta. COHORT will not generate a fake transaction.',
+          'bad',
+        );
+        return;
+      }
+      if (/request failed|receiving end|background|reading 'local'/i.test(raw)) {
+        status(
+          '1AM background did not answer. Open chrome://extensions, Reload 1AM, then hard-refresh this page (Ctrl+Shift+R) BEFORE clicking Connect. COHORT will not generate a fake transaction.',
           'bad',
         );
         return;

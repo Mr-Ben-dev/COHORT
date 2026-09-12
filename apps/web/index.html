@@ -63,7 +63,7 @@
             <li>Click <strong>Connect Midnight wallet</strong> once.</li>
             <li>Immediately click the <strong>1AM icon</strong> in the Chrome toolbar (or the puzzle piece, then 1AM).</li>
             <li>Approve <strong>COHORT</strong>. If you still see Assets / NFTs / Transactions, that is the wrong screen.</li>
-            <li>If nothing new appears: open <code>chrome://extensions</code>, click Reload on 1AM, refresh this page, and retry from step 1.</li>
+            <li>If Connect says timed out: open <code>chrome://extensions</code>, Reload 1AM, then hard-refresh this page (<code>Ctrl+Shift+R</code>) <em>before</em> clicking Connect again. Reloading 1AM without refreshing this tab leaves a dead connector.</li>
           </ol>
         </div>
         <p class="note" id="chain-status">Loading public network config…</p>
@@ -85,6 +85,6 @@
         <button type="button" id="oneam-wait-dismiss" class="secondary">Keep waiting</button>
       </div>
     </div>
-    <script type="module" src="/app.js?v=wasm7"></script>
+    <script type="module" src="/app.js?v=wasm8"></script>
   </body>
 </html>
