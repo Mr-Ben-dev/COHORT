@@ -23,6 +23,8 @@ Designer UI (`https://cohort-web-orcin.vercel.app`) → 1AM `connect('preprod')`
 3. Close the 1AM Transactions dashboard. Find a trial → Check privately → **Connect** 1AM, then click the 1AM toolbar icon and **Approve COHORT**. Connect runs `connect('preprod')` in that click, then `submitCallTx` via `getProvingProvider` (in-browser WASM). If the icon still opens balances/Transactions, reload 1AM at `chrome://extensions`, refresh, and retry. The balance screen is not the connect dialog.
 4. Typed private facts stay in page memory only and are never POSTed. Page CSP `connect-src` allows the official Midnight indexer/RPC and 1AM GraphQL (`api-preprod.1am.xyz`); public-state truth stays `indexer.preprod.midnight.network`. Public `/zk` circuit keys are CORS `*` so 1AM can fetch them.
 
+Cursor Chrome DevTools MCP does **not** attach to an already-open Chrome + 1AM profile (`list_pages` / `new_page` time out or close). A dedicated debug profile would not carry the user's 1AM session. Connect / Approve stay a real user gesture. Never extract a 1AM seed.
+
 `apps/web` remains the Render same-origin stub. The visual product lives in `web/` (Next.js) and talks to Render `/api` + `/zk`, the official Preprod indexer, and 1AM `getProvingProvider`. Private facts stay in the browser.
 
 Designer frontend (Vercel, public config only): `https://cohort-web-orcin.vercel.app`. Set `NEXT_PUBLIC_COHORT_API_ORIGIN=https://cohort-y4zr.onrender.com`. Never set `VITE_`/`NEXT_PUBLIC_` GitHub, Render, or Vercel tokens.

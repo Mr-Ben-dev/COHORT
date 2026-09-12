@@ -119,3 +119,36 @@ test('Vercel proving view preloads dapp without sending private facts', async ()
     await browser.close();
   }
 });
+
+const ALLOWED_HOST_RE =
+  /(^|\.)(vercel\.app|cohort-y4zr\.onrender\.com|indexer\.(preprod|preview|mainnet)\.midnight\.network|rpc\.(preprod|preview|mainnet)\.midnight\.network|api(-preprod|-preview)?\.1am\.xyz)$/i;
+
+test('Vercel check flow only talks to pinned public destinations', async () => {
+  const browser = await launch();
+  const page = await browser.newPage();
+  const hosts = new Set();
+  page.on('request', (req) => {
+    try {
+      hosts.add(new URL(req.url()).hostname);
+    } catch {
+      /* ignore invalid */
+    }
+  });
+  try {
+    const started = Date.now();
+    await page.goto(VERCEL_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.getByRole('navigation', { name: 'Main navigation' }).waitFor({ timeout: 30000 });
+    const landingMs = Date.now() - started;
+    await openCheck(page, VERCEL_URL);
+    await page.locator('input[id^="age-"]').fill('31');
+    const unexpected = [...hosts].filter((h) => !ALLOWED_HOST_RE.test(h));
+    assert.equal(unexpected.length, 0, JSON.stringify({ unexpected, hosts: [...hosts], landingMs }));
+    assert.equal(
+      [...hosts].some((h) => /google-analytics|posthog|sentry\.io|facebook|hotjar/i.test(h)),
+      false,
+      JSON.stringify([...hosts]),
+    );
+  } finally {
+    await browser.close();
+  }
+});

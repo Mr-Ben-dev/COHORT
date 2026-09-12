@@ -9,6 +9,7 @@ import { openCheck } from './playwright-web-helpers.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const webDir = path.join(root, 'web');
 const PATIENT_A = 31;
+const PATIENT_B = 52;
 
 function launchChromium() {
   return import('playwright-core').then(({ chromium }) =>
@@ -168,4 +169,65 @@ test('Playwright Vercel: PATIENT_A age never appears on COHORT or Vercel API tra
   assert.equal(storage.href.includes(String(PATIENT_A)), false);
   assert.equal(JSON.stringify(storage.local).includes(String(PATIENT_A)), false);
   assert.equal(JSON.stringify(storage.session).includes(String(PATIENT_A)), false);
+});
+
+test('Playwright Vercel: PATIENT_B age never appears on COHORT or Vercel API traffic', async (t) => {
+  const browser = await launchChromium();
+  t.after(() => browser.close().catch(() => {}));
+  const page = await browser.newPage();
+  const leaked = [];
+  page.on('request', (req) => {
+    const urlStr = req.url();
+    const post = req.postData() || '';
+    const hay = `${urlStr}\n${post}`;
+    const hitsAge =
+      hay.includes(`"${PATIENT_B}"`) ||
+      hay.includes(`:"${PATIENT_B}"`) ||
+      hay.includes(`:${PATIENT_B}`) ||
+      hay.includes(`age=${PATIENT_B}`) ||
+      hay.includes('"age":52');
+    let dest;
+    try {
+      dest = new URL(urlStr);
+    } catch {
+      dest = { hostname: urlStr, search: '' };
+    }
+    const isWatched =
+      dest.hostname.includes('vercel.app') ||
+      dest.hostname.includes('cohort-y4zr.onrender.com') ||
+      dest.hostname.includes('google-analytics') ||
+      dest.hostname.includes('posthog') ||
+      dest.hostname.includes('sentry');
+    if (isWatched && hitsAge) leaked.push({ url: urlStr, post });
+    if (dest.search && String(dest.search).includes(String(PATIENT_B))) {
+      leaked.push({ url: urlStr, post: 'query' });
+    }
+  });
+
+  await openCheck(page, VERCEL_URL);
+  await page.locator('input[id^="age-"]').fill(String(PATIENT_B));
+  await page.getByRole('button', { name: /^No$/ }).first().click();
+  await page.getByRole('button', { name: /^Yes$/ }).first().click();
+  assert.equal(leaked.length, 0, JSON.stringify(leaked));
+
+  const postTrials = await page.evaluate(async () => {
+    const res = await fetch('/api/trials', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ age: 52, condition: false, medication: true }),
+    });
+    return { status: res.status, text: await res.text() };
+  });
+  assert.equal(postTrials.status, 400);
+  assert.equal(postTrials.text.includes('52'), false);
+
+  const storage = await page.evaluate(() => ({
+    href: location.href,
+    cookie: document.cookie,
+    local: { ...localStorage },
+    session: { ...sessionStorage },
+  }));
+  assert.equal(storage.href.includes(String(PATIENT_B)), false);
+  assert.equal(JSON.stringify(storage.local).includes(String(PATIENT_B)), false);
+  assert.equal(JSON.stringify(storage.session).includes(String(PATIENT_B)), false);
 });

@@ -13,6 +13,11 @@ test('Preprod indexer queryContractState + ledger() returns proven >= 2', async 
   assert.equal(out.proven >= 2, true, JSON.stringify(out));
   assert.equal(out.spentCount >= 2, true, JSON.stringify(out));
   assert.equal(Object.hasOwn(out, 'age'), false);
+  const dump = JSON.stringify(out);
+  assert.equal(/"age"\s*:/.test(dump), false);
+  assert.equal(dump.includes('"age":31'), false);
+  assert.equal(dump.toLowerCase().includes('fhir'), false);
+  assert.equal(dump.toLowerCase().includes('medication'), false);
 });
 
 test('on-chain proveEligible verifier matches repo keys and live Render /zk', async () => {
