@@ -1,21 +1,9 @@
 import { setNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
-import { pathToFileURL } from 'node:url';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { ledger as contractLedger } from '../../contract/managed/cohort/contract/index.js';
 import { CohortError, ErrorCode } from './errors.mjs';
 import { PROVE_ELIGIBLE_CLAIMS } from './claims.mjs';
-
-let ledgerFnPromise;
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
-
-async function loadLedger() {
-  if (!ledgerFnPromise) {
-    const url = pathToFileURL(path.join(root, 'packages/contract/managed/cohort/contract/index.js')).href;
-    ledgerFnPromise = import(url).then((m) => m.ledger);
-  }
-  return ledgerFnPromise;
-}
+import { env } from './env.mjs';
 
 export function configureNetwork(networkId = 'preprod') {
   setNetworkId(networkId);
@@ -31,9 +19,9 @@ export function createPublicDataProvider({ indexerUrl, indexerWsUrl }) {
 
 export async function readPublicVerification({
   contractAddress = PROVE_ELIGIBLE_CLAIMS.contractAddress,
-  indexerUrl = process.env.MIDNIGHT_INDEXER_URL || 'https://indexer.preprod.midnight.network/api/v4/graphql',
-  indexerWsUrl = process.env.MIDNIGHT_INDEXER_WS_URL || 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws',
-  networkId = process.env.MIDNIGHT_NETWORK || 'preprod',
+  indexerUrl = env('MIDNIGHT_INDEXER_URL', 'https://indexer.preprod.midnight.network/api/v4/graphql'),
+  indexerWsUrl = env('MIDNIGHT_INDEXER_WS_URL', 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws'),
+  networkId = env('MIDNIGHT_NETWORK', 'preprod'),
 } = {}) {
   configureNetwork(networkId);
   const provider = createPublicDataProvider({ indexerUrl, indexerWsUrl });
@@ -42,7 +30,7 @@ export async function readPublicVerification({
   if (!state) {
     throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, 'Indexer returned no contract state for this address.');
   }
-  const ledger = await loadLedger();
+  const ledger = contractLedger;
   const pub = ledger(state.data);
   return {
     networkId,

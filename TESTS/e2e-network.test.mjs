@@ -30,6 +30,8 @@ test('browser-equivalent network sniff against local origin', async (t) => {
   assert.equal(html.status, 200);
   const app = await sniff('/app.js');
   assert.equal(app.status, 200);
+  const dapp = await sniff('/cohort-dapp.js');
+  assert.equal(dapp.status, 200);
   await sniff('/api/trials');
   await sniff('/api/config');
   await sniff('/health');
@@ -62,6 +64,9 @@ test('browser-equivalent network sniff against local origin', async (t) => {
   assert.match(appSrc, /freshBlind/);
   assert.match(appSrc, /getProvingProvider/);
   assert.match(appSrc, /will not generate a fake transaction/);
+  assert.match(appSrc, /CohortDapp\.proveEligibility/);
+  assert.match(appSrc, /CohortDapp\.connectWallet/);
+  assert.equal(appSrc.includes('preferred.api.enable()'), false);
 });
 
 test('error responses do not echo private facts or auth headers', async (t) => {

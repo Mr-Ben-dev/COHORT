@@ -8,6 +8,7 @@ import { CohortError, ErrorCode } from './errors.mjs';
 import { createPublicDataProvider } from './public-state.mjs';
 import { sessionStoragePassword } from './encoding.mjs';
 import { PROVE_ELIGIBLE_CLAIMS } from './claims.mjs';
+import { env } from './env.mjs';
 
 function isNode() {
   return typeof process !== 'undefined' && Boolean(process.versions?.node);
@@ -15,9 +16,10 @@ function isNode() {
 
 export async function createZkConfigProvider({ zkConfigProvider, zkBaseUrl, origin } = {}) {
   if (zkConfigProvider) return zkConfigProvider;
+  const fetchFn = typeof globalThis.fetch === 'function' ? globalThis.fetch.bind(globalThis) : undefined;
   if (zkBaseUrl) {
     const base = zkBaseUrl.endsWith('/') ? zkBaseUrl : `${zkBaseUrl}/`;
-    return new FetchZkConfigProvider(base);
+    return fetchFn ? new FetchZkConfigProvider(base, fetchFn) : new FetchZkConfigProvider(base);
   }
   if (isNode()) {
     const { NodeZkConfigProvider } = await import('@midnight-ntwrk/midnight-js-node-zk-config-provider');
@@ -38,7 +40,7 @@ export async function createZkConfigProvider({ zkConfigProvider, zkBaseUrl, orig
     );
   }
   const base = `${String(baseOrigin).replace(/\/$/, '')}/zk/`;
-  return new FetchZkConfigProvider(base);
+  return fetchFn ? new FetchZkConfigProvider(base, fetchFn) : new FetchZkConfigProvider(base);
 }
 
 export async function assertZkConfig(zkConfigProvider) {
@@ -100,8 +102,8 @@ export async function createCallProviders(input) {
   const accountId = String(shieldedAddresses.shieldedCoinPublicKey || 'cohort-session');
   const password = sessionStoragePassword();
 
-  let indexerUrl = input.indexerUrl || process.env.MIDNIGHT_INDEXER_URL || 'https://indexer.preprod.midnight.network/api/v4/graphql';
-  let indexerWsUrl = input.indexerWsUrl || process.env.MIDNIGHT_INDEXER_WS_URL || 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws';
+  let indexerUrl = input.indexerUrl || env('MIDNIGHT_INDEXER_URL', 'https://indexer.preprod.midnight.network/api/v4/graphql');
+  let indexerWsUrl = input.indexerWsUrl || env('MIDNIGHT_INDEXER_WS_URL', 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws');
   if (typeof api.getConfiguration === 'function') {
     try {
       const cfg = await api.getConfiguration();

@@ -2,14 +2,18 @@
   "name": "cohort",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "start": "node apps/api/src/server.mjs",
-    "test": "node --test TESTS/adversarial.test.mjs TESTS/backend-gate.test.mjs TESTS/contract.test.mjs TESTS/deps-tree.test.mjs TESTS/e2e-network.test.mjs TESTS/headers.test.mjs TESTS/logging.test.mjs TESTS/privacy.test.mjs TESTS/property.test.mjs TESTS/prove.test.mjs TESTS/public-state.test.mjs TESTS/secrets.test.mjs TESTS/trials.test.mjs TESTS/wallet.test.mjs TESTS/zk-artifacts.test.mjs",
+    "pretest": "node scripts/build-dapp.mjs",
+    "test": "node --test TESTS/adversarial.test.mjs TESTS/backend-gate.test.mjs TESTS/contract.test.mjs TESTS/deps-tree.test.mjs TESTS/e2e-network.test.mjs TESTS/gold-path.test.mjs TESTS/headers.test.mjs TESTS/logging.test.mjs TESTS/privacy.test.mjs TESTS/property.test.mjs TESTS/prove.test.mjs TESTS/public-state.test.mjs TESTS/render-privacy.test.mjs TESTS/secrets.test.mjs TESTS/trials.test.mjs TESTS/wallet.test.mjs TESTS/zk-artifacts.test.mjs",
     "test:deps": "node --test TESTS/deps-tree.test.mjs",
     "test:privacy": "node --test TESTS/privacy.test.mjs TESTS/backend-gate.test.mjs TESTS/contract.test.mjs TESTS/logging.test.mjs TESTS/property.test.mjs TESTS/adversarial.test.mjs",
     "test:e2e": "node --test TESTS/e2e-network.test.mjs TESTS/headers.test.mjs",
-    "build": "node apps/api/src/server.mjs --check",
+    "build:dapp": "node scripts/build-dapp.mjs",
+    "build": "node scripts/build-dapp.mjs && node apps/api/src/server.mjs --check",
     "audit": "npm audit --omit=dev"
   },
   "dependencies": {
@@ -27,7 +31,9 @@
     "@midnight-ntwrk/midnight-js-types": "4.1.1",
     "@midnight-ntwrk/midnight-js-utils": "4.1.1",
     "@midnight-ntwrk/onchain-runtime-v3": "3.0.0",
-    "@midnight-ntwrk/wallet-sdk": "1.2.0"
+    "@midnight-ntwrk/wallet-sdk": "1.2.0",
+    "esbuild": "0.25.9",
+    "esbuild-plugin-polyfill-node": "0.3.0"
   },
   "overrides": {
     "@midnight-ntwrk/onchain-runtime-v3": "3.0.0"

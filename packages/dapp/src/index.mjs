@@ -11,6 +11,7 @@ import {
 import { getTrials as getTrialsImpl, getTrial as getTrialImpl, checkEligibility as checkEligibilityImpl } from './trials.mjs';
 import { getTransactionStatus as getTransactionStatusImpl } from './tx-status.mjs';
 import { encodeTrialId } from './encoding.mjs';
+import { env } from './env.mjs';
 
 export { PUBLIC_NETWORK_PINS, FORBIDDEN_PUBLIC_NET } from './pins.mjs';
 export { CohortError, ErrorCode } from './errors.mjs';
@@ -19,13 +20,17 @@ export { PROVE_ELIGIBLE_CLAIMS } from './claims.mjs';
 export { readPublicVerification, configureNetwork, createPublicDataProvider } from './public-state.mjs';
 export { discoverWallets } from './wallet.mjs';
 export { encodeTrialId } from './encoding.mjs';
+export { bindOfficialTrial } from './prove.mjs';
 
-export function getNetworkState() {
+export async function getNetworkState(opts = {}) {
+  const verification = await readPublicVerification(opts).catch(() => null);
   return {
-    networkId: process.env.MIDNIGHT_NETWORK || 'preprod',
+    networkId: env('MIDNIGHT_NETWORK', 'preprod'),
     pins: PUBLIC_NETWORK_PINS,
     contractAddress: PROVE_ELIGIBLE_CLAIMS.contractAddress,
-    source: 'pins',
+    verification,
+    publicStateIsNotTruth: true,
+    source: verification ? 'midnight-indexer' : 'pins',
   };
 }
 

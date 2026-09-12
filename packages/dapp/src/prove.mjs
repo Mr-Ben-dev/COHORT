@@ -7,6 +7,7 @@ import { encodeTrialId, randomBytes32 } from './encoding.mjs';
 import { createCompiledContract } from './contract.mjs';
 import { createCallProviders } from './providers.mjs';
 import { configureNetwork, readPublicVerification } from './public-state.mjs';
+import { getTrial } from './trials.mjs';
 import { PROVE_ELIGIBLE_CLAIMS } from './claims.mjs';
 
 function requireTrialPolicy(trial) {
@@ -21,6 +22,53 @@ function requireTrialPolicy(trial) {
     throw new CohortError(ErrorCode.UNSUPPORTED_CRITERIA, 'Trial policy is missing hand-mapped flags.');
   }
   return { trialId, minAge, maxAge, requireCondition, forbidMedication };
+}
+
+function policiesMatch(a, b) {
+  return (
+    a.trialId === b.trialId &&
+    a.minAge === b.minAge &&
+    a.maxAge === b.maxAge &&
+    a.requireCondition === b.requireCondition &&
+    a.forbidMedication === b.forbidMedication
+  );
+}
+
+/** Circuit args must be the served /api/trials policy, never a user-typed bound. */
+export async function bindOfficialTrial(input = {}) {
+  const trialId = input.trial?.trialId || input.trialId;
+  if (!trialId) {
+    throw new CohortError(ErrorCode.UNSUPPORTED_CRITERIA, 'trialId is required so circuit args can bind to /api/trials.');
+  }
+  const official = await getTrial(trialId, { origin: input.origin });
+  if (!official) {
+    throw new CohortError(ErrorCode.UNSUPPORTED_CRITERIA, 'Unknown trial — not in the typed ClinicalTrials.gov subset.');
+  }
+  const policy = requireTrialPolicy(official);
+  if (input.trial) {
+    const caller = requireTrialPolicy(input.trial);
+    if (!policiesMatch(caller, policy)) {
+      throw new CohortError(
+        ErrorCode.UNSUPPORTED_CRITERIA,
+        'Circuit args must match the served /api/trials policy. User-typed bounds are rejected.',
+      );
+    }
+  }
+  return policy;
+}
+
+async function assertDust(wallet) {
+  let dust = wallet?.dust ?? null;
+  if (dust == null && typeof wallet?.api?.getDustBalance === 'function') {
+    try {
+      dust = await wallet.api.getDustBalance();
+    } catch {
+      dust = null;
+    }
+  }
+  if (dust && typeof dust === 'object' && dust.balance === 0n) {
+    throw new CohortError(ErrorCode.INSUFFICIENT_DUST, 'Wallet DUST balance is 0. Register NIGHT for DUST before proving.');
+  }
 }
 
 function localPreview(facts, trial) {
@@ -52,7 +100,7 @@ export async function proveEligibility(input = {}) {
     throw new CohortError(ErrorCode.PRIVATE_FIELD, 'Local facts {age, condition, medication} are required and must not be HTTP fields.');
   }
 
-  const trial = requireTrialPolicy(input.trial);
+  const trial = await bindOfficialTrial(input);
   if (!localPreview(facts, trial)) {
     throw new CohortError(
       ErrorCode.UNSUPPORTED_CRITERIA,
@@ -70,6 +118,8 @@ export async function proveEligibility(input = {}) {
       'Connected wallet does not expose getProvingProvider. COHORT will not send witnesses to a hosted prover.',
     );
   }
+
+  await assertDust(wallet);
 
   const networkId = input.networkId || 'preprod';
   configureNetwork(networkId);
@@ -118,6 +168,20 @@ export async function proveEligibility(input = {}) {
     } catch {
       verification = null;
     }
+    if (input.postPublicReferral && input.origin && (txId || txHash)) {
+      const origin = String(input.origin).replace(/\/$/, '');
+      await fetch(`${origin}/api/referral`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          trialId: trial.trialId,
+          txHash: txHash || null,
+          contractAddress: PROVE_ELIGIBLE_CLAIMS.contractAddress,
+          networkId,
+        }),
+      });
+    }
+
     return {
       lifecycle: ProveLifecycle.CONFIRMED,
       txId,

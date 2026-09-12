@@ -1,8 +1,11 @@
+import { CohortDapp, ErrorCode } from './cohort-dapp.js';
+
 const state = {
   trials: [],
   selectedTrialId: null,
   wallet: null,
   apiName: null,
+  config: null,
 };
 
 function status(msg, kind = '') {
@@ -35,6 +38,34 @@ function localPredicate(trial, facts) {
   if (trial.requireCondition && !facts.condition) return { ok: false, reason: 'required condition absent' };
   if (trial.forbidMedication && facts.medication) return { ok: false, reason: 'forbidden medication present' };
   return { ok: true, reason: 'local predicate matches public policy (not a chain proof)' };
+}
+
+async function loadPublicChain() {
+  const res = await fetch('/api/config');
+  const config = await res.json();
+  state.config = config;
+  const el = document.getElementById('chain-status');
+  if (!config.contractAddress) {
+    el.textContent = `Network ${config.networkId}. No public contract address yet.`;
+    return;
+  }
+  el.textContent = `Network ${config.networkId}. Public contract ${config.contractAddress}. Querying indexer…`;
+  if (!config.indexerUrl) return;
+  const gql = await fetch(config.indexerUrl, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      query: 'query($address: HexEncoded!) { contractAction(address: $address) { __typename ... on ContractDeploy { address } ... on ContractCall { address entryPoint } ... on ContractUpdate { address } } }',
+      variables: { address: config.contractAddress },
+    }),
+  });
+  const body = await gql.json();
+  const action = body.data?.contractAction;
+  if (!action) {
+    el.textContent = `Network ${config.networkId}. Contract ${config.contractAddress} not visible on the indexer yet.`;
+    return;
+  }
+  el.textContent = `Network ${config.networkId}. Indexer sees ${action.__typename} at ${action.address || config.contractAddress}${action.entryPoint ? ` (${action.entryPoint})` : ''}.`;
 }
 
 async function loadTrials() {
@@ -94,13 +125,16 @@ async function connectWallet() {
     );
     return;
   }
-  const preferred = apis.find((a) => a.name === '1am') || apis[0];
-  const enabled = await preferred.api.enable();
-  state.wallet = enabled;
-  state.apiName = preferred.name;
-  const proving = typeof enabled.getProvingProvider === 'function';
+  const networkId = state.config?.networkId || 'preprod';
+  status('Connecting 1AM via connect(preprod)… approve the wallet popup.', '');
+  const connected = await CohortDapp.connectWallet({ networkId });
+  state.wallet = connected.api;
+  state.apiName = connected.apiName || '1am';
+  const proving = typeof connected.api?.getProvingProvider === 'function';
+  const dust = connected.dust;
+  const dustLabel = dust?.balance != null ? String(dust.balance) : 'unknown';
   status(
-    `Connected ${preferred.name}. In-browser proving: ${proving ? 'yes' : 'no — Lace requires a user-local proof-server, never a COHORT proof-server'}.`,
+    `Connected ${state.apiName}. In-browser proving: ${proving ? 'yes' : 'no — Lace requires a user-local proof-server, never a COHORT proof-server'}. DUST: ${dustLabel}.`,
     proving ? 'ok' : 'warn',
   );
 }
@@ -131,7 +165,8 @@ async function prove() {
     );
     return;
   }
-  const config = await (await fetch('/api/config')).json();
+  const config = state.config || (await (await fetch('/api/config')).json());
+  state.config = config;
   if (!config.contractAddress) {
     status(
       'Local predicate matched, but no public-testnet contract address is configured. Wallet proving was not started, and private facts were not posted.',
@@ -139,9 +174,35 @@ async function prove() {
     );
     return;
   }
-  freshBlind();
+  const facts = { ...privateFacts(), blind: freshBlind() };
   status(
-    `Wallet proving would run in ${state.apiName} with a fresh blind. The COHORT server only accepts public {trialId, commitment, txHash}. Private facts stay in wallet memory.`,
+    `Proving in ${state.apiName} via getProvingProvider (in-browser WASM). Private facts stay in this page. First proof can take a minute.`,
+    'warn',
+  );
+  let result;
+  try {
+    result = await CohortDapp.proveEligibility({
+      wallet: { api: state.wallet },
+      trial,
+      facts,
+      origin: window.location.origin,
+      networkId: config.networkId || 'preprod',
+      indexerUrl: config.indexerUrl,
+      indexerWsUrl: config.indexerWsUrl,
+      contractAddress: config.contractAddress,
+      postPublicReferral: true,
+    });
+  } catch (err) {
+    const code = err?.code || ErrorCode.PROVING_FAILED;
+    status(`${code}: ${err?.publicMessage || err?.message || err}. COHORT will not generate a fake transaction.`, 'bad');
+    return;
+  }
+  if (!result?.txId && !result?.txHash) {
+    status('submitCallTx returned no identifier. COHORT will not generate a fake transaction.', 'bad');
+    return;
+  }
+  status(
+    `Submitted on Midnight. txId=${result.txId || 'n/a'} txHash=${result.txHash || 'n/a'} proven=${result.proven ?? 'pending indexer'}. The COHORT server only received public {trialId, txHash, contractAddress, networkId}.`,
     'ok',
   );
 }
@@ -150,3 +211,4 @@ document.getElementById('parse-fhir').addEventListener('click', parseFhirLocally
 document.getElementById('connect').addEventListener('click', () => connectWallet().catch((e) => status(String(e.message || e), 'bad')));
 document.getElementById('prove').addEventListener('click', () => prove().catch((e) => status(String(e.message || e), 'bad')));
 loadTrials().catch((e) => status(String(e.message || e), 'bad'));
+loadPublicChain().catch((e) => status(String(e.message || e), 'bad'));

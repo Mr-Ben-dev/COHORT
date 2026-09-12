@@ -73,7 +73,8 @@ test('FHIR fixture stays local — normalize does not HTTP', () => {
 });
 
 test('production static assets do not embed token prefixes', () => {
-  for (const rel of ['apps/web/app.js', 'apps/web/index.html', 'apps/api/src/server.mjs']) {
+  for (const rel of ['apps/web/app.js', 'apps/web/index.html', 'apps/api/src/server.mjs', 'apps/web/cohort-dapp.js']) {
+    if (!fs.existsSync(path.join(root, rel))) continue;
     const src = fs.readFileSync(path.join(root, rel), 'utf8');
     for (const needle of ['ghp_', 'github_pat_', 'rnd_', 'vcp_', 'VITE_GITHUB', 'VITE_RENDER', 'VITE_VERCEL']) {
       assert.equal(src.includes(needle), false, `${rel} ${needle}`);

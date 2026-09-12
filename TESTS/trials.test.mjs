@@ -54,6 +54,8 @@ test('CohortDapp.getTrials/checkEligibility stay local and do not invent proofs'
   const trial = trials.find((x) => x.trialId === 'NCT07153614');
   const preview = CohortDapp.checkEligibility({ age: 31, condition: true, medication: false }, trial);
   assert.equal(preview.eligiblePreview, true);
+  assert.equal(preview.isProof, false);
+  assert.equal(preview.kind, 'local-preview');
   assert.ok(Array.isArray(preview.circuitDoesNotProve));
   const young = CohortDapp.checkEligibility({ age: 17, condition: true, medication: false }, trial);
   assert.equal(young.eligiblePreview, false);

@@ -50,6 +50,8 @@ export function checkEligibility(facts, trial) {
   const conditionOk = !trial.requireCondition || facts.condition === true;
   const medicationOk = !trial.forbidMedication || facts.medication === false;
   return {
+    kind: 'local-preview',
+    isProof: false,
     eligiblePreview: ageOk && conditionOk && medicationOk,
     mapping: trial.mapping,
     unsupportedCriteria: trial.unsupportedCriteria || trial.mapping,
