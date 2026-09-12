@@ -48,8 +48,8 @@ test('privacy differential: backend traffic never contains PATIENT_A/B facts', a
     const keys = findForbiddenKeys(payload);
     assert.equal(keys.length, 0, JSON.stringify({ rec, keys }));
     assert.equal(markers.length, 0, JSON.stringify({ rec, markers }));
-    assert.equal(String(rec.responseText).includes('31'), false, rec.url);
-    assert.equal(String(rec.responseText).includes('52'), false, rec.url);
+    // Public hex (contract address) can contain the digits 31/52 as substrings.
+    // Patient ages must appear as JSON numbers/strings via findExactMarkers, not as hex noise.
   }
 });
 

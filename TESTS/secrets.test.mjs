@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -51,10 +51,17 @@ test('git history search when repo exists', () => {
   }
   const pattern =
     'ghp_' + '[A-Za-z0-9]{16,}' + '|' + 'github_pat_' + '[A-Za-z0-9_]{16,}' + '|' + 'rnd_' + '[A-Za-z0-9]{16,}' + '|' + 'vcp_' + '[A-Za-z0-9]{16,}';
-  const out = execSync(`git grep -I -nE "${pattern}" || true`, {
-    cwd: root,
-    encoding: 'utf8',
-    shell: true,
-  });
-  assert.equal(out.trim(), '');
+  try {
+    const out = execFileSync('git', ['grep', '-I', '-nE', pattern], {
+      cwd: root,
+      encoding: 'utf8',
+    });
+    assert.equal(out.trim(), '', 'git grep found live-looking token prefixes');
+  } catch (err) {
+    if (err.status === 1) {
+      assert.ok(true);
+      return;
+    }
+    throw err;
+  }
 });

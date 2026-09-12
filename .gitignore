@@ -34,3 +34,5 @@ logs/
 ENVIRONMENT/_write_install.py
 ENVIRONMENT/install-wsl-stack.sh
 ENVIRONMENT/pin-compact.sh
+TOOLS/
+preprod-result.json

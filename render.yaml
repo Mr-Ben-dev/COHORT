@@ -21,7 +21,7 @@ services:
       - key: MIDNIGHT_NODE_URL
         value: https://rpc.preprod.midnight.network
       - key: COHORT_CONTRACT_ADDRESS
-        value: ""
+        value: "1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc"
       - key: CORS_ORIGIN
         sync: false
       - key: PUBLIC_APP_URL

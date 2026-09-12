@@ -1,0 +1,23 @@
+export class CohortError extends Error {
+  constructor(code, publicMessage, options = {}) {
+    super(publicMessage, options);
+    this.name = 'CohortError';
+    this.code = code;
+    this.publicMessage = publicMessage;
+  }
+}
+
+export const ErrorCode = Object.freeze({
+  NOT_IMPLEMENTED: 'NOT_IMPLEMENTED',
+  INCOMPATIBLE_RUNTIME: 'INCOMPATIBLE_RUNTIME',
+  PRIVATE_FIELD: 'PRIVATE_FIELD',
+  WALLET_UNAVAILABLE: 'WALLET_UNAVAILABLE',
+  WALLET_NO_PROVING: 'WALLET_NO_PROVING',
+  NETWORK_MISMATCH: 'NETWORK_MISMATCH',
+  INSUFFICIENT_DUST: 'INSUFFICIENT_DUST',
+  PROVING_FAILED: 'PROVING_FAILED',
+  TX_REJECTED: 'TX_REJECTED',
+  TX_UNCONFIRMED: 'TX_UNCONFIRMED',
+  INDEXER_UNAVAILABLE: 'INDEXER_UNAVAILABLE',
+  UNSUPPORTED_CRITERIA: 'UNSUPPORTED_CRITERIA',
+});
