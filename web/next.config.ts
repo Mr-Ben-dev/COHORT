@@ -44,6 +44,7 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   env: {
+    NEXT_TELEMETRY_DISABLED: "1",
     NEXT_PUBLIC_COHORT_API_ORIGIN:
       process.env.NEXT_PUBLIC_COHORT_API_ORIGIN || "https://cohort-y4zr.onrender.com",
     NEXT_PUBLIC_MIDNIGHT_NETWORK: process.env.NEXT_PUBLIC_MIDNIGHT_NETWORK || "preprod",

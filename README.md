@@ -23,7 +23,7 @@ Browser → 1AM `getProvingProvider` → `submitCallTx` (2026-09-12, live Render
 
 `apps/web` remains the Render same-origin stub. The visual product lives in `web/` (Next.js) and talks to Render `/api` + `/zk`, the official Preprod indexer, and 1AM `getProvingProvider`. Private facts stay in the browser.
 
-Designer frontend (Vercel, public config only): set `NEXT_PUBLIC_COHORT_API_ORIGIN=https://cohort-y4zr.onrender.com`. Never set `VITE_`/`NEXT_PUBLIC_` GitHub, Render, or Vercel tokens.
+Designer frontend (Vercel, public config only): `https://cohort-web-orcin.vercel.app`. Set `NEXT_PUBLIC_COHORT_API_ORIGIN=https://cohort-y4zr.onrender.com`. Never set `VITE_`/`NEXT_PUBLIC_` GitHub, Render, or Vercel tokens.
 
 Privacy: `TESTS/playwright-privacy.test.mjs` launches installed Chrome against a local origin, types PATIENT_A age 31, and asserts cookies/storage/URL/COHORT requests never carry 31/52. 1AM Approve stays a manual wallet click.
 

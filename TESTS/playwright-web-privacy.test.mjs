@@ -107,3 +107,70 @@ test('Playwright: designer UI does not send PATIENT_A age to COHORT APIs', async
   assert.equal(JSON.stringify(storage.local).includes(String(PATIENT_A)), false);
   assert.equal(JSON.stringify(storage.session).includes(String(PATIENT_A)), false);
 });
+
+const VERCEL_URL = process.env.PLAYWRIGHT_WEB_URL || 'https://cohort-web-orcin.vercel.app';
+
+test('Playwright Vercel: PATIENT_A age never appears on COHORT or Vercel API traffic', async (t) => {
+  const browser = await launchChromium();
+  t.after(() => browser.close().catch(() => {}));
+  const page = await browser.newPage();
+  const leaked = [];
+  page.on('request', (req) => {
+    const urlStr = req.url();
+    const post = req.postData() || '';
+    const hay = `${urlStr}\n${post}`;
+    const hitsAge =
+      hay.includes(`"${PATIENT_A}"`) ||
+      hay.includes(`:"${PATIENT_A}"`) ||
+      hay.includes(`:${PATIENT_A}`) ||
+      hay.includes(`age=${PATIENT_A}`) ||
+      hay.includes('"age":31');
+    let dest;
+    try {
+      dest = new URL(urlStr);
+    } catch {
+      dest = { hostname: urlStr, search: '' };
+    }
+    const isWatched =
+      dest.hostname.includes('vercel.app') ||
+      dest.hostname.includes('cohort-y4zr.onrender.com') ||
+      dest.hostname.includes('google-analytics') ||
+      dest.hostname.includes('posthog') ||
+      dest.hostname.includes('sentry');
+    if (isWatched && hitsAge) leaked.push({ url: urlStr, post });
+    if (dest.search && String(dest.search).includes(String(PATIENT_A))) {
+      leaked.push({ url: urlStr, post: 'query' });
+    }
+  });
+
+  await page.goto(VERCEL_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name: 'Find a trial' }).click();
+  await page.getByRole('button', { name: /Check privately/i }).first().click();
+  const age = page.locator('input[id^="age-"]');
+  await age.waitFor({ timeout: 20000 });
+  await age.fill(String(PATIENT_A));
+  await page.getByRole('button', { name: /^Yes$/ }).first().click();
+  await page.getByRole('button', { name: /^No$/ }).first().click();
+  assert.equal(leaked.length, 0, JSON.stringify(leaked));
+
+  const postTrials = await page.evaluate(async () => {
+    const res = await fetch('/api/trials', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ age: 31, condition: true, medication: false }),
+    });
+    return { status: res.status, text: await res.text() };
+  });
+  assert.equal(postTrials.status, 400);
+  assert.equal(postTrials.text.includes('31'), false);
+
+  const storage = await page.evaluate(() => ({
+    href: location.href,
+    cookie: document.cookie,
+    local: { ...localStorage },
+    session: { ...sessionStorage },
+  }));
+  assert.equal(storage.href.includes(String(PATIENT_A)), false);
+  assert.equal(JSON.stringify(storage.local).includes(String(PATIENT_A)), false);
+  assert.equal(JSON.stringify(storage.session).includes(String(PATIENT_A)), false);
+});

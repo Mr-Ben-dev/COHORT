@@ -182,6 +182,10 @@ export function ProvingView({ trialId }: { trialId: string }) {
               {trial.title} · {trial.id}
             </p>
           )}
+          <p className="mt-2 text-body-sm text-pearl/70">
+            The proof covers the supported typed criteria only. COHORT does
+            not receive your private health facts.
+          </p>
         </motion.header>
 
         <motion.div

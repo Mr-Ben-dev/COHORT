@@ -1,0 +1,16 @@
+.env
+.env.*
+node_modules
+.next
+*.log
+db
+prisma
+mini-services
+agent-ctx
+.zscripts
+.zshots
+upload
+download
+worklog.md
+Caddyfile
+src/lib/db.ts
