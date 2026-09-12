@@ -15,6 +15,8 @@ test('security headers present on health and HTML', async (t) => {
   assert.equal(health.headers['referrer-policy'], 'no-referrer');
   assert.match(health.headers['content-security-policy'] || '', /frame-ancestors 'none'/);
   assert.match(health.headers['content-security-policy'] || '', /wasm-unsafe-eval/);
+  assert.match(health.headers['content-security-policy'] || '', /api-preprod\.1am\.xyz/);
+  assert.match(health.headers['content-security-policy'] || '', /indexer\.preprod\.midnight\.network/);
   assert.ok(health.headers['strict-transport-security']);
 
   const html = await request(url, '/');

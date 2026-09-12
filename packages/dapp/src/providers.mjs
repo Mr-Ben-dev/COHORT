@@ -14,6 +14,21 @@ function isNode() {
   return typeof process !== 'undefined' && Boolean(process.versions?.node);
 }
 
+/** Public-state truth is the official Midnight indexer, not 1AM's wallet GraphQL. */
+export function isMidnightPublicIndexer(url) {
+  if (!url) return false;
+  try {
+    const host = new URL(url).hostname;
+    return (
+      host === 'indexer.preprod.midnight.network' ||
+      host === 'indexer.preview.midnight.network' ||
+      host === 'indexer.mainnet.midnight.network'
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function createZkConfigProvider({ zkConfigProvider, zkBaseUrl, origin } = {}) {
   if (zkConfigProvider) return zkConfigProvider;
   const fetchFn = typeof globalThis.fetch === 'function' ? globalThis.fetch.bind(globalThis) : undefined;
@@ -107,10 +122,10 @@ export async function createCallProviders(input) {
   if (typeof api.getConfiguration === 'function') {
     try {
       const cfg = await api.getConfiguration();
-      if (cfg?.indexerUri) indexerUrl = cfg.indexerUri;
-      if (cfg?.indexerWsUri) indexerWsUrl = cfg.indexerWsUri;
+      if (isMidnightPublicIndexer(cfg?.indexerUri)) indexerUrl = cfg.indexerUri;
+      if (isMidnightPublicIndexer(cfg?.indexerWsUri)) indexerWsUrl = cfg.indexerWsUri;
     } catch {
-      // keep env defaults
+      // keep env defaults — 1AM may advertise api-*.1am.xyz, which is not indexer-as-truth
     }
   }
 

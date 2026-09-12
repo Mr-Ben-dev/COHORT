@@ -14,6 +14,18 @@ function status(msg, kind = '') {
   el.textContent = msg;
 }
 
+function publicFailure(err) {
+  const inner = err?.cause?.message || err?.cause;
+  const raw = [err?.publicMessage || err?.message, inner].filter(Boolean).join(' — ');
+  let text = String(raw)
+    .replace(/session_token=[^&\s'"]+/gi, 'session_token=redacted')
+    .slice(0, 500);
+  if (/Content Security Policy|Refused to connect/i.test(text)) {
+    text = `Page CSP blocked a 1AM API call. Hard-refresh after the latest deploy (connect-src must include api-preprod.1am.xyz). ${text}`;
+  }
+  return text;
+}
+
 function privateFacts() {
   const age = document.getElementById('age').value;
   const condition = document.getElementById('condition').value;
@@ -311,7 +323,7 @@ async function prove() {
     });
   } catch (err) {
     const code = err?.code || ErrorCode.PROVING_FAILED;
-    status(`${code}: ${err?.publicMessage || err?.message || err}. COHORT will not generate a fake transaction.`, 'bad');
+    status(`${code}: ${publicFailure(err)}. COHORT will not generate a fake transaction.`, 'bad');
     return;
   }
   if (!result?.txId && !result?.txHash) {

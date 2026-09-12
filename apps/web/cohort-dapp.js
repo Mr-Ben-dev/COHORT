@@ -68840,6 +68840,19 @@ async function connectWallet({ networkId = "preprod", preferred = "1am" } = {}) 
   if (typeof api.getConnectionStatus === "function") {
     status = await Promise.resolve(api.getConnectionStatus());
   }
+  if (typeof api.hintUsage === "function") {
+    await api.hintUsage([
+      "getProvingProvider",
+      "getDustBalance",
+      "getShieldedAddresses",
+      "getUnshieldedAddress",
+      "getConfiguration",
+      "balanceUnsealedTransaction",
+      "submitTransaction"
+    ]);
+  }
+  const resolvedNetwork = status.networkId || networkId;
+  configureNetwork(resolvedNetwork);
   const proving = typeof api.getProvingProvider === "function";
   if (!proving) {
     throw new CohortError(
@@ -68858,7 +68871,7 @@ async function connectWallet({ networkId = "preprod", preferred = "1am" } = {}) 
   return {
     lifecycle: ProveLifecycle.CONNECTED,
     apiName: "1am",
-    networkId: status.networkId || networkId,
+    networkId: resolvedNetwork,
     proving: "wasm",
     dust,
     api
@@ -71974,6 +71987,15 @@ var levelPrivateStateProvider = (config5) => {
 function isNode2() {
   return typeof process_exports !== "undefined" && Boolean(process_exports.versions?.node);
 }
+function isMidnightPublicIndexer(url2) {
+  if (!url2) return false;
+  try {
+    const host2 = new URL(url2).hostname;
+    return host2 === "indexer.preprod.midnight.network" || host2 === "indexer.preview.midnight.network" || host2 === "indexer.mainnet.midnight.network";
+  } catch {
+    return false;
+  }
+}
 async function createZkConfigProvider({ zkConfigProvider, zkBaseUrl, origin } = {}) {
   if (zkConfigProvider) return zkConfigProvider;
   const fetchFn = typeof globalThis.fetch === "function" ? globalThis.fetch.bind(globalThis) : void 0;
@@ -72060,8 +72082,8 @@ async function createCallProviders(input) {
   if (typeof api.getConfiguration === "function") {
     try {
       const cfg = await api.getConfiguration();
-      if (cfg?.indexerUri) indexerUrl = cfg.indexerUri;
-      if (cfg?.indexerWsUri) indexerWsUrl = cfg.indexerWsUri;
+      if (isMidnightPublicIndexer(cfg?.indexerUri)) indexerUrl = cfg.indexerUri;
+      if (isMidnightPublicIndexer(cfg?.indexerWsUri)) indexerWsUrl = cfg.indexerWsUri;
     } catch {
     }
   }
@@ -72373,7 +72395,8 @@ var CohortDapp = Object.freeze({
   getTransactionStatus: (opts) => getTransactionStatus(opts),
   getPublicVerification: (opts) => readPublicVerification(opts),
   getReferralState,
-  encodeTrialId
+  encodeTrialId,
+  configureNetwork
 });
 export {
   CohortDapp,

@@ -15,7 +15,7 @@ Gold path (Preprod, contract `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594c
 1. Install **1AM** and sync Preprod with tNIGHT + DUST. Do not use a hosted proof-server.
 2. Open `https://cohort-y4zr.onrender.com/`. COHORT never draws the 1AM Approve UI on the page.
 3. Close the 1AM Transactions dashboard. Click **Connect Midnight wallet**, then click the 1AM toolbar icon and **Approve COHORT**. After connect, 1AM may ask again via `hintUsage` for proving/submit. If the icon still opens balances/Transactions, reload 1AM at `chrome://extensions`, refresh, and retry. The balance screen is not the connect dialog.
-4. Enter typed private facts in page memory only. **Generate proof** runs `submitCallTx` in the tab via `getProvingProvider` (in-browser WASM). Private facts are never POSTed.
+4. Enter typed private facts in page memory only. **Generate proof** runs `submitCallTx` in the tab via `getProvingProvider` (in-browser WASM). Private facts are never POSTed. Page CSP `connect-src` allows the official Midnight indexer/RPC and 1AM GraphQL (`api-preprod.1am.xyz`); public-state truth stays `indexer.preprod.midnight.network`.
 
 `apps/web` is an interim stub until a designer `web` drop-in. Midnight internals stay in `packages/dapp`.
 

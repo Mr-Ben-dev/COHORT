@@ -40,7 +40,7 @@ function securityHeaders(res, extra = {}) {
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
     'X-Frame-Options': 'DENY',
     'Content-Security-Policy':
-      "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; connect-src 'self' https://indexer.preprod.midnight.network https://indexer.preview.midnight.network https://rpc.preprod.midnight.network https://rpc.preview.midnight.network wss://indexer.preprod.midnight.network wss://indexer.preview.midnight.network; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+      "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; connect-src 'self' https://indexer.preprod.midnight.network https://indexer.preview.midnight.network https://indexer.mainnet.midnight.network https://rpc.preprod.midnight.network https://rpc.preview.midnight.network https://rpc.mainnet.midnight.network wss://indexer.preprod.midnight.network wss://indexer.preview.midnight.network wss://indexer.mainnet.midnight.network https://api-preprod.1am.xyz https://api-preview.1am.xyz https://api.1am.xyz wss://api-preprod.1am.xyz wss://api-preview.1am.xyz wss://api.1am.xyz; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
     'Cache-Control': cache || 'no-store',
     ...httpExtra,
   };

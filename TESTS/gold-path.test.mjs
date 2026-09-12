@@ -102,3 +102,9 @@ test('browser CohortDapp bundle is present and does not use unwrapV9', () => {
   assert.equal(/\bunwrapV9\s*\(/.test(src), false);
   assert.match(src, /proveEligible/);
 });
+
+test('public-state indexer must be official Midnight, not 1AM GraphQL', async () => {
+  const { isMidnightPublicIndexer } = await import('../packages/dapp/src/providers.mjs');
+  assert.equal(isMidnightPublicIndexer('https://indexer.preprod.midnight.network/api/v4/graphql'), true);
+  assert.equal(isMidnightPublicIndexer('https://api-preprod.1am.xyz/api/v4/graphql'), false);
+});
