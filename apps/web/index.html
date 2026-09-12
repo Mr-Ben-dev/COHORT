@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <title>COHORT — private eligibility proof</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>COHORT</h1>
+      <p class="lede">
+        Prove you qualify for a public clinical trial without sending your private medical facts
+        to the COHORT server.
+      </p>
+      <section class="panel" id="privacy">
+        <h2>What stays on this device</h2>
+        <ul>
+          <li>Age, condition flag, medication flag</li>
+          <li>Any FHIR you paste — parsed locally, never uploaded</li>
+          <li>Wallet seed / proving witness / blinds</li>
+        </ul>
+        <p class="note">
+          The server only sees public trial IDs, commitments, transaction hashes, and contract addresses.
+        </p>
+      </section>
+      <section class="panel">
+        <h2>1. Public trials</h2>
+        <div id="trials">Loading public metadata…</div>
+      </section>
+      <section class="panel">
+        <h2>2. Private facts (memory only)</h2>
+        <p class="note">These fields are not written to localStorage, cookies, or the URL.</p>
+        <label for="age">Age in years</label>
+        <input id="age" type="number" min="0" max="120" autocomplete="off" />
+        <label for="condition">Required condition present?</label>
+        <select id="condition">
+          <option value="">Select</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+        <label for="medication">Forbidden medication present?</label>
+        <select id="medication">
+          <option value="">Select</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+        <label for="fhir">Optional synthetic FHIR JSON (local parse only)</label>
+        <textarea id="fhir" rows="4" placeholder='{"resourceType":"Patient"}'></textarea>
+        <button id="parse-fhir" class="secondary" type="button">Parse FHIR locally</button>
+      </section>
+      <section class="panel">
+        <h2>3. Prove on Midnight</h2>
+        <p class="note">
+          Gold path: 1AM wallet in-browser proving via DApp Connector.
+          COHORT does not host a proof server and will not send witnesses to Render.
+        </p>
+        <button id="connect" type="button">Connect Midnight wallet</button>
+        <button id="prove" type="button">Generate proof and submit on Midnight</button>
+        <pre id="status"></pre>
+      </section>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

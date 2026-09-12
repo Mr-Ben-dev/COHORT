@@ -1,0 +1,14 @@
+pragma language_version 0.23;
+import CompactStandardLibrary;
+
+export ledger cm: Bytes<32>;
+export ledger opened: Boolean;
+
+export circuit commit(v: Uint<64>, rand: Bytes<32>): [] {
+  cm = persistentCommit<Uint<64>>(v, rand);
+}
+
+export circuit reveal(v: Uint<64>, rand: Bytes<32>): [] {
+  assert(persistentCommit<Uint<64>>(v, rand) == cm, "bad opening");
+  opened = true;
+}

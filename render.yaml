@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: cohort
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: node apps/api/src/server.mjs
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: MIDNIGHT_NETWORK
+        value: preprod
+      - key: MIDNIGHT_INDEXER_URL
+        value: https://indexer.preprod.midnight.network/api/v4/graphql
+      - key: MIDNIGHT_INDEXER_WS_URL
+        value: wss://indexer.preprod.midnight.network/api/v4/graphql/ws
+      - key: MIDNIGHT_NODE_URL
+        value: https://rpc.preprod.midnight.network
+      - key: COHORT_CONTRACT_ADDRESS
+        value: ""
+      - key: CORS_ORIGIN
+        sync: false
+      - key: PUBLIC_APP_URL
+        sync: false

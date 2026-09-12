@@ -1,0 +1,8 @@
+pragma language_version 0.23;
+import CompactStandardLibrary;
+
+export ledger commitments: HistoricMerkleTree<10, Bytes<32>>;
+
+export circuit addLeaf(pk: Bytes<32>): [] {
+  commitments.insert(disclose(pk));
+}

@@ -1,0 +1,36 @@
+# secrets and env
+.env
+.env.*
+!.env.example
+!.env*.example
+
+# dependencies and build
+node_modules/
+dist/
+coverage/
+.playwright/
+test-results/
+blob-report/
+playwright-report/
+
+# compact / wallets
+*.prover
+managed/**/keys/
+**/*.seed
+**/*.mnemonic
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+logs/
+.idea/
+.vscode/
+
+# WSL / Windows junk
+*:Zone.Identifier
+
+# agent / local machine
+ENVIRONMENT/_write_install.py
+ENVIRONMENT/install-wsl-stack.sh
+ENVIRONMENT/pin-compact.sh

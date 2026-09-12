@@ -1,0 +1,11 @@
+pragma language_version 0.23;
+import CompactStandardLibrary;
+
+witness secretAge(): Uint<8>;
+witness opening(): Bytes<32>;
+
+export ledger ageCommit: Bytes<32>;
+
+export circuit commitAge(): [] {
+  ageCommit = persistentCommit<Uint<8>>(secretAge(), opening());
+}

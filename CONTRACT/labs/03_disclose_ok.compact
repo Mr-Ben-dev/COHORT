@@ -1,0 +1,10 @@
+pragma language_version 0.23;
+import CompactStandardLibrary;
+
+witness secretAge(): Uint<8>;
+
+export ledger publicAge: Uint<8>;
+
+export circuit leakAge(): [] {
+  publicAge = disclose(secretAge());
+}

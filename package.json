@@ -1,0 +1,17 @@
+{
+  "name": "cohort",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node apps/api/src/server.mjs",
+    "test": "node --test tests/adversarial.test.mjs tests/backend-gate.test.mjs tests/contract.test.mjs tests/e2e-network.test.mjs tests/headers.test.mjs tests/logging.test.mjs tests/privacy.test.mjs tests/property.test.mjs tests/secrets.test.mjs",
+    "test:privacy": "node --test tests/privacy.test.mjs tests/backend-gate.test.mjs tests/contract.test.mjs tests/logging.test.mjs tests/property.test.mjs tests/adversarial.test.mjs",
+    "test:e2e": "node --test tests/e2e-network.test.mjs tests/headers.test.mjs",
+    "build": "node apps/api/src/server.mjs --check",
+    "audit": "npm audit --omit=dev"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "0.16.0"
+  }
+}

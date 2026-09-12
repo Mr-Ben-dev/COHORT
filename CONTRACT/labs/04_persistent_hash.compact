@@ -1,0 +1,8 @@
+pragma language_version 0.23;
+import CompactStandardLibrary;
+
+export ledger h: Bytes<32>;
+
+export circuit setHash(x: Bytes<32>): [] {
+  h = persistentHash<Bytes<32>>(disclose(x));
+}

@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sourceRoot": "../../../",
+  "sources": ["cohort.compact", "compiler/standard-library.compact"],
+  "names": [],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;EAAA;;;;;;;;;;;;;;;;;;;;;;;;;MAsBA,AAAA,aAyBC;;;;;cAxBC,SAAkB;cAClB,QAAe;cACf,QAAe;cACf,kBAAyB;cACzB,kBAAyB;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;yCAJzB,SAAkB,+BAClB,QAAe,+BACf,QAAe,+BACf,kBAAyB,+BACzB,kBAAyB;;;;;;;;;+CAJzB,SAAkB;+CAClB,QAAe;+CACf,QAAe;+CACf,kBAAyB;+CACzB,kBAAyB;;;OAoB1B;;;;GACA;EAhDD;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IAUA;;;;;;;;;;yEAAoC;IACpC;;;;;;;;;;yEAAwC;IACxC;;;;;;;;;yEAA8B;;;;;;;GAoC7B;EChDD,AAAA,kBAAA;oEAAA;;;EAAA,AAAA,oBAAA,SAAA;;uDAAA;uDAAA;;;EDGA,AAAA,OAAwB;;0DAAxB,IAAwB;;;;;;;;;;;;;;GAAA;EAExB,AAAA,aAA8B;;0DAA9B,UAA8B;;;;;;;;;;;;;;GAAA;EAC9B,AAAA,cAA+B;;0DAA/B,WAA+B;;;;;;;;;;;;;;GAAA;EAC/B,AAAA,UAA6B;;0DAA7B,OAA6B;;;;;;;;;;;;;;GAAA;EAC7B,AAAA,SAA4B;;0DAA5B,MAA4B;;;;;;;;;;;;;;GAAA;EAM5B,AAAA,iBAMC,CANsB,SAAkB,EAAE,IAAa;;mCAGpD,SAAO;mCACP,IAAE;GAEL;EAED,AAAA,gBAyBC;;mBAxBC,SAAkB;mBAClB,QAAe;mBACf,QAAe;mBACf,kBAAyB;mBACzB,kBAAyB;;UAEnB,KAAY;UACZ,MAAmB;UACnB,KAAmB;4BAClB,KAAG,IAAI,QAAM;4BACb,KAAG,IAAI,QAAM;QAChB,kBAAgB;8BACX,MAAI;;QAET,kBAAgB;+BACV,KAAG;;UAEP,KAAwC,0BAAnB,SAAO;;;qDAC1B;;;;;;;;;;;4KAAsB,KAAG;;;;0HAApB;;IACb;;;;;;;;;;2HAAsB,KAAG;;;;;wEAApB;UACC,UAA2D;;;;IACjE;;;;;;;;;;2HAA0B,UAAQ;;;;;wEAAzB;UACT,KAAM;IAAN;;;;;;;;;;6FAAA,KAAM;;;;wEAAA;;GAEP;;;;;;;;;;;;;;;;IArCD;;;;;uCAAA;;;;;;;;;;;;;;;;4GAAoC;;;;;;uCAApC;;;;;;;;;;;;4GAAoC;;;;;;;;;;;;;;uCAApC;;;;;;;;;;;;;;;4GAAoC;;;;;;;;;KAAA;IACpC;;;;;uCAAA;;;;;;;;;;;;;;;;4GAAwC;;;;;;uCAAxC;;;;;;;;;;;;4GAAwC;;;;;;;;;;;;;;uCAAxC;;;;;;;;;;;;;;;4GAAwC;;;;;;;;;KAAA;IACxC;qCAAA;;;;;;;;;;;0GAA8B;KAAA;;;;;;;;;;;;;;;;"
+}
