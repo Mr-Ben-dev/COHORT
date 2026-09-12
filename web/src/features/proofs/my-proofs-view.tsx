@@ -43,7 +43,11 @@ function ProofCard({ check, index }: { check: EligibilityCheck; index: number })
       </h3>
 
       <div className="mt-3 flex flex-wrap gap-2">
-        <Tag tone="mint">Verified</Tag>
+        {check.proof.status === "verified" ? (
+          <Tag tone="mint">Verified</Tag>
+        ) : (
+          <Tag tone="lilac">Local preview only</Tag>
+        )}
         {eligible ? (
           check.referral ? (
             <Tag tone="mint">Referral sealed</Tag>

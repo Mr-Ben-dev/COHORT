@@ -367,7 +367,7 @@ export function CheckView({ trialId }: { trialId: string }) {
             )}
           >
             {complete
-              ? "You'll connect your wallet next to sign the proof. Your answers never leave this device."
+              ? "A local preview runs first. Connect 1AM only appears if that preview matches the typed rules. If it does not, no wallet is used and nothing is sent."
               : `Answer the ${remaining} remaining question${remaining === 1 ? "" : "s"} to continue.`}
           </p>
         </motion.div>

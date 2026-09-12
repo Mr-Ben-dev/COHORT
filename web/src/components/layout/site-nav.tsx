@@ -68,7 +68,7 @@ export function SiteNav() {
   };
 
   const current = activeKey(view);
-  const proofCount = Object.keys(checks).length;
+  const proofCount = Object.values(checks).filter((c) => c.proof.status === "verified").length;
 
   const links: { key: NavKey; label: string }[] = [
     { key: "home", label: "Home" },

@@ -104,6 +104,11 @@ export function ResultView({ checkId }: { checkId: string }) {
             <p className="mt-2 text-body-sm text-lilac-mist">
               Your answers stay on this device — nothing was shared.
             </p>
+            <p className="mt-2 text-body-sm text-pearl/70">
+              No wallet was connected and no transaction was created.
+              Connect 1AM appears only after this local preview matches
+              the typed rules.
+            </p>
           </motion.header>
 
           <motion.section
@@ -143,6 +148,13 @@ export function ResultView({ checkId }: { checkId: string }) {
           <motion.div {...fadeUp(0.22)} className="mt-8 flex flex-wrap gap-3">
             <PillButton
               size="lg"
+              onClick={() => navigate({ name: "check", trialId: trial.id })}
+            >
+              Check this trial again
+            </PillButton>
+            <PillButton
+              size="lg"
+              variant="ghost"
               onClick={() => navigate({ name: "trials" })}
             >
               Explore other trials

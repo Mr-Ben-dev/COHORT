@@ -41,6 +41,8 @@ test('Vercel: too-young local preview is ineligible and invents no tx', async ()
     assert.doesNotMatch(body, /Verified/i);
     assert.doesNotMatch(body, /0x[0-9a-f]{16}/i);
     assert.match(body, /nothing was shared/i);
+    assert.match(body, /No wallet was connected/i);
+    assert.equal(await page.getByRole('button', { name: 'Connect' }).count(), 0);
   } finally {
     await browser.close();
   }
