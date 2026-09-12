@@ -109,9 +109,9 @@ export function HeroSection() {
               {...fadeUp(0.26)}
               className="mt-7 max-w-md text-subheading text-pearl/85"
             >
-              Private eligibility checks for real clinical trials. Your health
-              facts stay on your device — the research site only ever sees the
-              verified result. Powered by Midnight.
+              Find trials you may qualify for without handing over your record.
+              When you prove, Midnight verifies the typed match. A site can
+              open the public qualification — not your dossier.
             </motion.p>
 
             <motion.div

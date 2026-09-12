@@ -79,9 +79,7 @@ function TrialCard({ trial, index }: { trial: Trial; index: number }) {
       />
 
       <div className="mt-5 flex items-center justify-between gap-3 pt-1">
-        <Tag tone="cyan">
-          {trial.bounty > 0 ? `$${trial.bounty} referral bounty` : "On-chain referral"}
-        </Tag>
+        <Tag tone="cyan">Typed subset · self-attested</Tag>
         <PillButton
           size="sm"
           className="relative z-10"

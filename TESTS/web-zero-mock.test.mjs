@@ -38,6 +38,9 @@ test('designer web production path does not import fixture trials or simulated w
   );
   assert.match(fs.readFileSync(path.join(webSrc, 'services/proof.ts'), 'utf8'), /proveEligibility/);
   assert.match(fs.readFileSync(path.join(webSrc, 'services/trials.ts'), 'utf8'), /\/api\/trials/);
+  assert.equal(/\$\{referral\.bounty\}/.test(hay), false);
+  assert.equal(hay.includes('Referral bounty'), false);
+  assert.equal(hay.includes('Daily refresh'), false);
 });
 
 test('GET /api/trials (live Render) is typed CT.gov subset, not designer fixtures', async () => {

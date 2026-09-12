@@ -31,6 +31,10 @@ const LIMITS = [
     title: "It doesn't monetize your data.",
     body: "No ads, no data brokerage, no analytics on your answers. The only output is the proof you choose to publish.",
   },
+  {
+    title: "It doesn't pay a referral bounty.",
+    body: "The live circuit records a uniqueness token, not an escrowed payment. A paid marketplace is coming next — it is not shown as live.",
+  },
 ];
 
 export function HonestySection() {

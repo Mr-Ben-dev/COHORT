@@ -145,8 +145,8 @@ export function CheckView({ trialId }: { trialId: string }) {
           </p>
           <p className="mt-2 text-body-sm text-lilac-mist">
             The proof covers the supported typed criteria only. Free-text
-            eligibility is not proven. COHORT does not receive your private
-            health facts.
+            eligibility is not proven. Answers are self-attested on this
+            device. COHORT does not receive your private health facts.
           </p>
         </motion.header>
 

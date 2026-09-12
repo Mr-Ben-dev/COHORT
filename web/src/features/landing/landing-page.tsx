@@ -10,6 +10,7 @@ import {
 import { TrustedBySection } from "./audiences-section";
 import { MidnightSection } from "./midnight-section";
 import { HonestySection } from "./honesty-section";
+import { ProductLadderSection } from "./product-ladder-section";
 import { FinalCtaSection } from "./final-cta-section";
 
 /**
@@ -36,6 +37,7 @@ export function LandingPage() {
       <TrustedBySection />
       <MidnightSection />
       <HonestySection />
+      <ProductLadderSection />
       <FinalCtaSection />
     </div>
   );

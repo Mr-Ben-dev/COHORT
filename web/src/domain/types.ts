@@ -1,9 +1,8 @@
 /**
  * COHORT domain models.
  *
- * These types are the contract between the UI and the (currently simulated)
- * service layer. When the real Midnight / ClinicalTrials.gov integrations are
- * connected, they plug in behind these exact interfaces — the UI never changes.
+ * These types are the contract between the UI and CohortDapp / Render.
+ * Private facts never leave the device. Public records contain no medical facts.
  *
  * PRIVACY BOUNDARY (security-critical, do not erode):
  *   - `PrivateEligibilityInput` and `EligibilityResult.outcomes` are PRIVATE,
@@ -103,7 +102,7 @@ export interface Trial {
   durationLabel: string;
   /** Estimated minutes for the private eligibility check */
   checkMinutes: number;
-  /** Referral bounty funded by the sponsor, in USD */
+  /** Unused on the live contract. Escrowed bounties are coming next, not shown as live. */
   bounty: number;
   policy: EligibilityPolicy;
   criteriaHighlights: PublicCriterion[];

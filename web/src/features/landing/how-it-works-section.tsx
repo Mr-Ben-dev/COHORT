@@ -1656,10 +1656,10 @@ const STEPS: StepDef[] = [
       </span>,
       <span key="b">eligibility,</span>,
       <span key="c">
-        <Mint>never your identity.</Mint>
+        <Mint>never your record.</Mint>
       </span>,
     ],
-    body: "The site receives the verified result and a sealed referral — nothing else. Your record stays with you, permanently.",
+    body: "A site you choose can open the public verification record: eligibility proven, typed subset only, facts never included. No payment is attached — the live contract does not hold bounty.",
     art: SiteVerifyArt,
   },
 ];
@@ -1700,7 +1700,7 @@ export function HowItWorksSection() {
           </span>
         </LineReveal>
         <motion.p {...appear(0.45)} className="mt-6 max-w-xl text-body text-lilac-mist/70">
-          From public trial criteria to a sealed referral — every step below
+          From public trial criteria to a public qualification — every step below
           runs without your record ever leaving your device.
         </motion.p>
 

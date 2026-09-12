@@ -87,8 +87,8 @@ export function FinalCtaSection() {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="mx-auto mt-6 max-w-lg text-body text-iris-ink/70"
           >
-            Check eligibility privately, prove it once, refer without
-            exposure.
+            Check eligibility privately, prove the typed match, share a
+            public qualification — not your record.
           </motion.p>
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 16 }}

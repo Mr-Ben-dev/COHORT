@@ -188,7 +188,8 @@ export function ResultView({ checkId }: { checkId: string }) {
             Your eligibility was verified privately.
           </p>
           <p className="mt-2 text-body-sm text-pearl/70">
-            The proof covers the supported typed criteria only.
+            The proof covers the supported typed criteria only. Source:
+            self-attested facts on this device — not an EHR or issuer.
           </p>
           <p className="mt-2 text-body-sm text-pearl/60">
             Your medical facts were used to prove the trial criteria. They
@@ -248,7 +249,7 @@ export function ResultView({ checkId }: { checkId: string }) {
               size="lg"
               onClick={() => void requestReferral(checkId)}
             >
-              Request referral
+              Share public qualification
             </PillButton>
           )}
           <PillButton

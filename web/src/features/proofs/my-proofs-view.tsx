@@ -79,7 +79,7 @@ function ProofCard({ check, index }: { check: EligibilityCheck; index: number })
             size="sm"
             onClick={() => void requestReferral(check.id)}
           >
-            Request referral
+            Share public qualification
           </PillButton>
         )}
       </div>

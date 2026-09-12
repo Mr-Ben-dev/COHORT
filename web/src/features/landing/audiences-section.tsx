@@ -32,8 +32,8 @@ const FEEDS = [
   },
   {
     icon: RefreshCw,
-    label: "Daily refresh",
-    sub: "Current as of today",
+    label: "Public registry source",
+    sub: "Fetched through COHORT's public API",
   },
 ];
 

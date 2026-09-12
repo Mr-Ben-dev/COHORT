@@ -180,10 +180,8 @@ export function ReferralView({ checkId }: { checkId: string }) {
             <ReferralField label="Trial">
               {trial.id} · {trial.condition}
             </ReferralField>
-            <ReferralField label="Referral bounty">
-              <span className="text-clinical-cyan">
-                ${referral.bounty}
-              </span>
+            <ReferralField label="Payment">
+              None on this contract — uniqueness token only
             </ReferralField>
             <ReferralField label="Public reference">
               <span className="text-clinical-cyan">{referral.publicRef}</span>
@@ -192,14 +190,15 @@ export function ReferralView({ checkId }: { checkId: string }) {
               {formatStamp(referral.sealedAt)}
             </ReferralField>
             <ReferralField label="Claim status">
-              <Tag tone="lilac">Unclaimed</Tag>
+              <Tag tone="lilac">No bounty to claim</Tag>
             </ReferralField>
           </dl>
         </motion.div>
 
         <motion.p {...fadeUp(0.18)} className="mt-5 text-body-sm text-pearl/70">
-          The research site can now verify your eligibility on the public
-          ledger. They never see the facts behind the proof.
+            The research site can open this public qualification on the
+            ledger. They never see the facts behind the proof. This is not
+            a paid referral.
         </motion.p>
 
         <motion.div {...fadeUp(0.22)} className="mt-8 flex flex-wrap gap-3">

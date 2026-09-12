@@ -439,7 +439,7 @@ function SyncRingArt({ reduce }: { reduce: Reduce }) {
   );
 }
 
-/* ── (c) Site APIs — extruded iso bars with a floating data layer ──
+/* ── (c) Public verification — extruded iso bars with a floating data layer ──
  * Three bars of rising height on a dashed base plane; a dashed data
  * layer hovers high above on a vertical tether, its shadow pooled
  * on the plane below. */
@@ -717,8 +717,8 @@ const CARDS = [
   },
   {
     art: LayeredChartsArt,
-    title: "Site APIs",
-    sub: "Sites verify eligibility through one public call.",
+    title: "Public verification",
+    sub: "Sites confirm the proof on the indexer — they never receive the record.",
   },
 ];
 
@@ -756,9 +756,8 @@ export function MidnightSection() {
             <span>It&apos;s a perfect match.</span>
           </LineReveal>
           <p className="mt-5 text-body text-iris-ink/70">
-            One privacy model connects every side of a referral — patients
-            keep the record, wallets carry the proof, sites verify the
-            result.
+            Patients keep the record. Midnight verifies the typed match.
+            Sites can confirm the public qualification without seeing facts.
           </p>
         </motion.div>
 

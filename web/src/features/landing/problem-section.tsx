@@ -137,10 +137,10 @@ export function ProblemSection() {
               {...reveal(0.1)}
               className="mx-auto mt-6 max-w-xl text-body text-pearl/80"
             >
-              Eligibility checks usually demand the record before the answer
-              exists. COHORT moves the check onto the patient&apos;s device and
-              sends only the verified answer — so attention returns to care,
-              not paperwork.
+            Eligibility checks usually demand the record before the answer
+            exists. COHORT moves the typed check onto the patient&apos;s device
+            and publishes only a qualification signal — so a site can know
+            &quot;eligible&quot; without receiving the dossier.
             </motion.p>
 
             {/* The Impilo signature — white pill marquee with ECG trace */}
