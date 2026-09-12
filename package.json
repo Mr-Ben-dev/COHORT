@@ -5,10 +5,10 @@
   "engines": { "node": ">=22" },
   "scripts": {
     "start": "node apps/api/src/server.mjs",
-    "test": "node --test tests/adversarial.test.mjs tests/backend-gate.test.mjs tests/contract.test.mjs tests/deps-tree.test.mjs tests/e2e-network.test.mjs tests/headers.test.mjs tests/logging.test.mjs tests/privacy.test.mjs tests/property.test.mjs tests/prove.test.mjs tests/public-state.test.mjs tests/secrets.test.mjs tests/wallet.test.mjs",
-    "test:deps": "node --test tests/deps-tree.test.mjs",
-    "test:privacy": "node --test tests/privacy.test.mjs tests/backend-gate.test.mjs tests/contract.test.mjs tests/logging.test.mjs tests/property.test.mjs tests/adversarial.test.mjs",
-    "test:e2e": "node --test tests/e2e-network.test.mjs tests/headers.test.mjs",
+    "test": "node --test TESTS/adversarial.test.mjs TESTS/backend-gate.test.mjs TESTS/contract.test.mjs TESTS/deps-tree.test.mjs TESTS/e2e-network.test.mjs TESTS/headers.test.mjs TESTS/logging.test.mjs TESTS/privacy.test.mjs TESTS/property.test.mjs TESTS/prove.test.mjs TESTS/public-state.test.mjs TESTS/secrets.test.mjs TESTS/trials.test.mjs TESTS/wallet.test.mjs TESTS/zk-artifacts.test.mjs",
+    "test:deps": "node --test TESTS/deps-tree.test.mjs",
+    "test:privacy": "node --test TESTS/privacy.test.mjs TESTS/backend-gate.test.mjs TESTS/contract.test.mjs TESTS/logging.test.mjs TESTS/property.test.mjs TESTS/adversarial.test.mjs",
+    "test:e2e": "node --test TESTS/e2e-network.test.mjs TESTS/headers.test.mjs",
     "build": "node apps/api/src/server.mjs --check",
     "audit": "npm audit --omit=dev"
   },

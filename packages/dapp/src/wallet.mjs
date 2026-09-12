@@ -45,7 +45,10 @@ export async function connectWallet({ networkId = 'preprod', preferred = '1am' }
     throw new CohortError(ErrorCode.WALLET_UNAVAILABLE, 'Wallet connector has no connect() method.');
   }
   const api = typeof oneAm.connect === 'function' ? await oneAm.connect(networkId) : await oneAm.enable();
-  const status = typeof api.getConnectionStatus === 'function' ? api.getConnectionStatus() : {};
+  let status = {};
+  if (typeof api.getConnectionStatus === 'function') {
+    status = await Promise.resolve(api.getConnectionStatus());
+  }
   const proving = typeof api.getProvingProvider === 'function';
   if (!proving) {
     throw new CohortError(

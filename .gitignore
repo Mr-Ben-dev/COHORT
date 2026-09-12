@@ -19,6 +19,16 @@ managed/**/keys/
 **/*.seed
 **/*.mnemonic
 
+# Public Compact circuit artifacts (not wallet secrets)
+!packages/contract/zk/
+!packages/contract/zk/**/
+!packages/contract/zk/**/*.prover
+!packages/contract/zk/**/keys/**
+
+# level private-state local files
+midnight-level-db*
+.cohort-private-state/
+
 # OS / editor
 .DS_Store
 Thumbs.db

@@ -2,12 +2,13 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { PUBLIC_TRIALS, getTrial } from './trials.mjs';
+import { getPublicTrials, getTrial, knownTrialId } from './trials.mjs';
 import { assertPublicOnly, PUBLIC_REFERRAL_KEYS, findPrivateFields } from './public-fields.mjs';
 import { publicLog, redact } from './redact.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WEB_DIR = path.resolve(__dirname, '../../web');
+const ZK_DIR = path.resolve(__dirname, '../../../packages/contract/zk');
 const ROOT = path.resolve(__dirname, '../../..');
 
 const SECRET_ENV = /^(GITHUB_TOKEN|GH_TOKEN|RENDER_API_KEY|VERCEL_API_TOKEN|MIDNIGHT_.*SEED|.*PRIVATE_KEY|.*MNEMONIC)$/i;
@@ -137,14 +138,27 @@ function handleApiFactory(publicEvents) {
   }
 
   if (url.pathname === '/api/trials' && req.method === 'GET') {
-    return send(res, 200, { trials: PUBLIC_TRIALS }, 'public, max-age=300');
+    try {
+      const trials = await getPublicTrials();
+      return send(res, 200, {
+        trials,
+        mapping: 'typed subset only; free-text ClinicalTrials.gov criteria are not proven',
+      }, 'public, max-age=300');
+    } catch (err) {
+      return send(res, err.status || 503, { error: 'clinicaltrials.gov unavailable' });
+    }
   }
 
   if (url.pathname.startsWith('/api/trials/') && req.method === 'GET') {
     const trialId = decodeURIComponent(url.pathname.slice('/api/trials/'.length));
-    const trial = getTrial(trialId);
-    if (!trial) return send(res, 404, { error: 'unknown trial' });
-    return send(res, 200, { trial }, 'public, max-age=300');
+    if (!knownTrialId(trialId)) return send(res, 404, { error: 'unknown trial' });
+    try {
+      const trial = await getTrial(trialId);
+      if (!trial) return send(res, 404, { error: 'unknown trial' });
+      return send(res, 200, { trial }, 'public, max-age=300');
+    } catch (err) {
+      return send(res, err.status || 503, { error: 'clinicaltrials.gov unavailable' });
+    }
   }
 
   if (url.pathname === '/api/public-state' && req.method === 'GET') {
@@ -165,7 +179,7 @@ function handleApiFactory(publicEvents) {
     if (!body.trialId || typeof body.trialId !== 'string') {
       return send(res, 400, { error: 'trialId required' });
     }
-    if (!getTrial(body.trialId)) return send(res, 400, { error: 'unknown trial' });
+    if (!knownTrialId(body.trialId)) return send(res, 400, { error: 'unknown trial' });
     const event = {
       trialId: body.trialId,
       commitment: body.commitment || null,
@@ -191,7 +205,30 @@ const MIME = {
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
+  '.prover': 'application/octet-stream',
+  '.verifier': 'application/octet-stream',
+  '.bzkir': 'application/octet-stream',
+  '.zkir': 'application/octet-stream',
 };
+
+function serveZk(req, res, url) {
+  let rel = url.pathname.slice('/zk'.length);
+  rel = path.normalize(rel).replace(/^[/\\]+/, '');
+  if (!rel || rel === '.' || rel.includes('..') || path.isAbsolute(rel)) {
+    return send(res, 403, { error: 'forbidden' });
+  }
+  const root = path.resolve(ZK_DIR);
+  const file = path.resolve(root, rel);
+  if (!file.startsWith(root + path.sep)) return send(res, 403, { error: 'forbidden' });
+  if (!fs.existsSync(file) || !fs.statSync(file).isFile()) return send(res, 404, { error: 'not found' });
+  const ext = path.extname(file).toLowerCase();
+  const type = MIME[ext] || 'application/octet-stream';
+  securityHeaders(res, {
+    cache: 'public, max-age=31536000, immutable',
+    'Content-Type': type,
+  });
+  fs.createReadStream(file).pipe(res);
+}
 
 function serveStatic(req, res, url) {
   let rel = url.pathname === '/' ? '/index.html' : url.pathname;
@@ -218,6 +255,9 @@ export function createServer() {
       if (url.pathname.startsWith('/api') || url.pathname === '/health') {
         return await handleApi(req, res, url);
       }
+      if (url.pathname === '/zk' || url.pathname.startsWith('/zk/')) {
+        return serveZk(req, res, url);
+      }
       return serveStatic(req, res, url);
     } catch (err) {
       publicLog('request error', { status: err.status || 500, code: err.code });
@@ -240,7 +280,11 @@ export function listenServer(port = 0, host = '127.0.0.1') {
 }
 
 if (process.argv.includes('--check')) {
-  publicLog('build check ok', { web: fs.existsSync(path.join(WEB_DIR, 'index.html')) });
+  const verifier = path.join(ZK_DIR, 'keys', 'proveEligible.verifier');
+  const prover = path.join(ZK_DIR, 'keys', 'proveEligible.prover');
+  const okZk = fs.existsSync(verifier) && fs.existsSync(prover);
+  publicLog('build check ok', { web: fs.existsSync(path.join(WEB_DIR, 'index.html')), zk: okZk });
+  if (!okZk) process.exit(1);
   process.exit(0);
 }
 
