@@ -72220,6 +72220,11 @@ function localPreview(facts, trial) {
   if (trial.forbidMedication && facts.medication) return false;
   return true;
 }
+function mintWitnessSecrets(facts = {}) {
+  const secret2 = facts.secret instanceof Uint8Array && facts.secret.length === 32 ? facts.secret : randomBytes32();
+  const blind = facts.blind instanceof Uint8Array && facts.blind.length === 32 ? facts.blind : randomBytes32();
+  return { secret: secret2, blind };
+}
 async function proveEligibility(input = {}) {
   const envelope = { ...input };
   delete envelope.facts;
@@ -72257,8 +72262,7 @@ async function proveEligibility(input = {}) {
   const networkId = input.networkId || "preprod";
   configureNetwork(networkId);
   const privateStateId = "cohortPrivateState";
-  const secret2 = facts.secret instanceof Uint8Array && facts.secret.length === 32 ? facts.secret : randomBytes32();
-  const blind = facts.blind instanceof Uint8Array && facts.blind.length === 32 ? facts.blind : randomBytes32();
+  const { secret: secret2, blind } = mintWitnessSecrets(facts);
   const privateState = {
     age: facts.age,
     condition: facts.condition,

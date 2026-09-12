@@ -24,3 +24,14 @@ Browser → 1AM `getProvingProvider` → `submitCallTx` (2026-09-12, live Render
 `apps/web` is an interim stub until a designer `web` drop-in. Midnight internals stay in `packages/dapp`.
 
 Privacy: `TESTS/playwright-privacy.test.mjs` launches installed Chrome against a local origin, types PATIENT_A age 31, and asserts cookies/storage/URL/COHORT requests never carry 31/52. 1AM Approve stays a manual wallet click.
+
+## Clean machine
+
+Node **22+**. From this directory (no hosted proof-server, no Compact 0.34 / midnight-js 5.x / `unwrapV9`):
+
+```
+npm ci
+npm test
+```
+
+Then install **1AM**, sync Preprod with tNIGHT + DUST, and open `https://cohort-y4zr.onrender.com/`. Local `npm start` is optional. Lace needs your own `proof-server:8.1.0` on `127.0.0.1:6300` and is not the gold path.

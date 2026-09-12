@@ -78,6 +78,13 @@ function localPreview(facts, trial) {
   return true;
 }
 
+/** Mint per-proof secret/blind. Reusing a secret for the same trial is rejected on-chain. */
+export function mintWitnessSecrets(facts = {}) {
+  const secret = facts.secret instanceof Uint8Array && facts.secret.length === 32 ? facts.secret : randomBytes32();
+  const blind = facts.blind instanceof Uint8Array && facts.blind.length === 32 ? facts.blind : randomBytes32();
+  return { secret, blind };
+}
+
 /**
  * Real midnight-js 4.1.1 submitCallTx path via 1AM getProvingProvider.
  * Never invents a transaction hash. Never posts private facts.
@@ -125,8 +132,7 @@ export async function proveEligibility(input = {}) {
   configureNetwork(networkId);
 
   const privateStateId = 'cohortPrivateState';
-  const secret = facts.secret instanceof Uint8Array && facts.secret.length === 32 ? facts.secret : randomBytes32();
-  const blind = facts.blind instanceof Uint8Array && facts.blind.length === 32 ? facts.blind : randomBytes32();
+  const { secret, blind } = mintWitnessSecrets(facts);
   const privateState = {
     age: facts.age,
     condition: facts.condition,

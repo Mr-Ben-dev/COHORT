@@ -356,7 +356,10 @@ async function prove() {
     });
   } catch (err) {
     const code = err?.code || ErrorCode.PROVING_FAILED;
-    status(`${code}: ${publicFailure(err)}. COHORT will not generate a fake transaction.`, 'bad');
+    status(
+      `${code}: ${publicFailure(err)}. Click Generate proof to retry — a new secret and blind are minted. COHORT will not generate a fake transaction.`,
+      'bad',
+    );
     return;
   }
   if (!result?.txId && !result?.txHash) {
@@ -364,7 +367,7 @@ async function prove() {
     return;
   }
   status(
-    `Submitted on Midnight. txId=${result.txId || 'n/a'} txHash=${result.txHash || 'n/a'} proven=${result.proven ?? 'pending indexer'}. The COHORT server only received public {trialId, txHash, contractAddress, networkId}.`,
+    `Submitted on Midnight. txId=${result.txId || 'n/a'} txHash=${result.txHash || 'n/a'} proven=${result.proven ?? 'pending indexer'}. The COHORT server only received public {trialId, txHash, contractAddress, networkId}. A later Prove mints a new secret and blind; reusing a previous secret for the same trial is rejected on-chain.`,
     'ok',
   );
   await loadPublicChain().catch(() => {});

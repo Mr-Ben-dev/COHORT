@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { proveEligibility } from '../packages/dapp/src/prove.mjs';
+import { proveEligibility, mintWitnessSecrets } from '../packages/dapp/src/prove.mjs';
 import { CohortError, ErrorCode } from '../packages/dapp/src/errors.mjs';
 import { encodeTrialId } from '../packages/dapp/src/encoding.mjs';
 
@@ -89,4 +89,18 @@ test('proveEligibility with incomplete wallet and hosted keys still does not inv
       return true;
     },
   );
+});
+
+test('mintWitnessSecrets is unique per call unless a secret is supplied', () => {
+  const a = mintWitnessSecrets({});
+  const b = mintWitnessSecrets({});
+  assert.equal(a.secret.length, 32);
+  assert.equal(a.blind.length, 32);
+  assert.notDeepEqual(Buffer.from(a.secret), Buffer.from(b.secret));
+  assert.notDeepEqual(Buffer.from(a.blind), Buffer.from(b.blind));
+  const secret = new Uint8Array(32).fill(7);
+  const blind = new Uint8Array(32).fill(9);
+  const reused = mintWitnessSecrets({ secret, blind });
+  assert.deepEqual(Buffer.from(reused.secret), Buffer.from(secret));
+  assert.deepEqual(Buffer.from(reused.blind), Buffer.from(blind));
 });

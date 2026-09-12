@@ -91,6 +91,18 @@ test('I reused blind collapses referral set — application must mint fresh blin
   assert.equal(publicLedger(b).referrals.size().toString(), '1');
 });
 
+test('J two secrets for the same trial both succeed with distinct nullifiers', () => {
+  const session = boot();
+  const first = prove(session, makePatient({ secret: bytes32(1), blind: bytes32(11) }));
+  const second = prove(session, makePatient({ secret: bytes32(2), blind: bytes32(12) }), {
+    contractState: first.context.currentQueryContext.state,
+  });
+  const spent = [...publicLedger(second).spent].map((x) => RT.toHex(x));
+  assert.equal(publicLedger(second).proven.toString(), '2');
+  assert.equal(spent.length, 2);
+  assert.notEqual(spent[0], spent[1]);
+});
+
 test('public circuit output is boolean only — no age reconstruction', () => {
   const session = boot();
   const out = prove(session, makePatient({ age: 31n }));
