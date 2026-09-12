@@ -4,10 +4,8 @@
 !.env.example
 !.env*.example
 
-# dependencies and generated browser midnight-js bundle
+# dependencies and build
 node_modules/
-apps/web/cohort-dapp.js
-apps/web/*.wasm
 dist/
 coverage/
 .playwright/

@@ -5,7 +5,7 @@ services:
     plan: free
     region: oregon
     buildCommand: npm install && npm run build:dapp
-    startCommand: node apps/api/src/server.mjs
+    startCommand: npm run build:dapp && node apps/api/src/server.mjs
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
