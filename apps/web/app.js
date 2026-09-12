@@ -66,6 +66,19 @@ async function loadPublicChain() {
     return;
   }
   el.textContent = `Network ${config.networkId}. Indexer sees ${action.__typename} at ${action.address || config.contractAddress}${action.entryPoint ? ` (${action.entryPoint})` : ''}.`;
+  try {
+    const verification = await CohortDapp.getPublicVerification({
+      contractAddress: config.contractAddress,
+      indexerUrl: config.indexerUrl,
+      indexerWsUrl: config.indexerWsUrl,
+      networkId: config.networkId || 'preprod',
+    });
+    if (verification?.proven != null) {
+      el.textContent += ` Indexer proven=${verification.proven} (source ${verification.source}).`;
+    }
+  } catch (err) {
+    el.textContent += ` Indexer proven unavailable (${err?.publicMessage || err?.message || err}).`;
+  }
 }
 
 async function loadTrials() {
