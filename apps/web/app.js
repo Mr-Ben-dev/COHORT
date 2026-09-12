@@ -116,7 +116,18 @@ function midnightApis() {
   return Object.keys(root).map((name) => ({ name, api: root[name] }));
 }
 
+function showOneAmWait() {
+  const el = document.getElementById('oneam-wait');
+  if (el) el.hidden = false;
+}
+
+function hideOneAmWait() {
+  const el = document.getElementById('oneam-wait');
+  if (el) el.hidden = true;
+}
+
 function finishWallet(enabled, apiName) {
+  hideOneAmWait();
   state.wallet = enabled;
   state.apiName = apiName;
   const proving = typeof enabled.getProvingProvider === 'function';
@@ -157,13 +168,26 @@ function connectFromClick() {
   const networkId = state.config?.networkId || 'preprod';
   // 1AM sends ONEAM_CONNECT to the extension. Call connect() in this click, before any await.
   const pending = preferred.api.connect(networkId);
+  showOneAmWait();
   status(
-    '1AM connection is waiting. Close the Transactions dashboard, then click the 1AM toolbar icon again and Approve COHORT. The balance screen is not the connect dialog.',
+    '1AM connection is waiting. Close the Transactions dashboard, then click the 1AM toolbar icon and Approve COHORT. This page will not show a wallet popup.',
     'warn',
   );
+  const waitTimer = window.setTimeout(() => {
+    if (state.wallet) return;
+    status(
+      'Still waiting on 1AM. Reload the 1AM extension at chrome://extensions, refresh this page, close the 1AM dashboard, click Connect, then click the 1AM toolbar icon. COHORT will not generate a fake transaction.',
+      'warn',
+    );
+  }, 12000);
   pending
-    .then((enabled) => finishWallet(enabled, preferred.api?.name || preferred.name))
+    .then((enabled) => {
+      window.clearTimeout(waitTimer);
+      finishWallet(enabled, preferred.api?.name || preferred.name);
+    })
     .catch((e) => {
+      window.clearTimeout(waitTimer);
+      hideOneAmWait();
       const raw = String(e?.message || e);
       if (/reject/i.test(raw)) {
         status('1AM rejected the connection. COHORT will not generate a fake transaction.', 'bad');
@@ -171,7 +195,7 @@ function connectFromClick() {
       }
       if (/request failed|receiving end|background/i.test(raw)) {
         status(
-          '1AM did not answer. Close the wallet dashboard, click Connect, then immediately click the 1AM toolbar icon. COHORT will not generate a fake transaction.',
+          '1AM background did not answer. Open chrome://extensions, Reload 1AM, refresh this page, close the dashboard, click Connect, then click the 1AM toolbar icon. COHORT will not generate a fake transaction.',
           'bad',
         );
         return;
@@ -249,6 +273,7 @@ async function prove() {
 
 document.getElementById('parse-fhir').addEventListener('click', parseFhirLocally);
 document.getElementById('connect').addEventListener('click', connectFromClick);
+document.getElementById('oneam-wait-dismiss')?.addEventListener('click', hideOneAmWait);
 document.getElementById('prove').addEventListener('click', () => prove().catch((e) => status(String(e.message || e), 'bad')));
 loadTrials().catch((e) => status(String(e.message || e), 'bad'));
 loadPublicChain().catch((e) => status(String(e.message || e), 'bad'));

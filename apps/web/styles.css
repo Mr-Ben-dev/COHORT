@@ -40,4 +40,34 @@ button.secondary { background: #1b2238; border-color: var(--line); }
 .warn { color: var(--warn); }
 .bad { color: var(--bad); }
 .ok { color: var(--accent); }
-ul { padding-left: 18px; }
+ul, ol { padding-left: 18px; }
+.callout {
+  border: 1px solid var(--warn);
+  background: #241c10;
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 12px 0;
+}
+.callout p { margin: 0 0 8px; }
+.callout ol { margin: 0; }
+.callout li { margin: 6px 0; }
+#oneam-wait {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 16, 0.82);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  z-index: 50;
+}
+#oneam-wait[hidden] { display: none; }
+.oneam-wait-card {
+  max-width: 560px;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 20px;
+}
+.oneam-wait-card h3 { margin: 0 0 8px; }
+.oneam-wait-card p, .oneam-wait-card li { color: var(--muted); }

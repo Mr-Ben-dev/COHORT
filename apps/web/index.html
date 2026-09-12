@@ -56,16 +56,35 @@
           Gold path: 1AM wallet in-browser proving via DApp Connector.
           COHORT does not host a proof server and will not send witnesses to Render.
         </p>
-        <p class="note">
-          Close the 1AM Transactions window first. Click Connect, then click the 1AM toolbar icon
-          again and Approve COHORT. The balance/transactions screen is not the connect dialog.
-        </p>
+        <div class="callout">
+          <p><strong>1AM does not open a connect dialog on this page.</strong> The white panel with 1000 tNIGHT / Transactions is the wallet dashboard, not approval.</p>
+          <ol>
+            <li>Close that 1AM dashboard completely.</li>
+            <li>Click <strong>Connect Midnight wallet</strong> once.</li>
+            <li>Immediately click the <strong>1AM icon</strong> in the Chrome toolbar (or the puzzle piece, then 1AM).</li>
+            <li>Approve <strong>COHORT</strong>. If you still see Assets / NFTs / Transactions, that is the wrong screen.</li>
+            <li>If nothing new appears: open <code>chrome://extensions</code>, click Reload on 1AM, refresh this page, and retry from step 1.</li>
+          </ol>
+        </div>
         <p class="note" id="chain-status">Loading public network config…</p>
         <button id="connect" type="button">Connect Midnight wallet</button>
         <button id="prove" type="button">Generate proof and submit on Midnight</button>
         <pre id="status"></pre>
       </section>
     </main>
-    <script type="module" src="/app.js?v=wasm4"></script>
+    <div id="oneam-wait" hidden>
+      <div class="oneam-wait-card">
+        <h3>Look at the Chrome toolbar — not this page</h3>
+        <p>COHORT already sent the connect request. 1AM will not draw an Approve box inside this site.</p>
+        <ol>
+          <li>Close the white 1AM balances window if it is still open.</li>
+          <li>Click the 1AM icon in the toolbar now.</li>
+          <li>Approve COHORT. Do not stay on Transactions.</li>
+          <li>If the toolbar icon still opens the same dashboard, reload 1AM at chrome://extensions, refresh this tab, and click Connect again.</li>
+        </ol>
+        <button type="button" id="oneam-wait-dismiss" class="secondary">Keep waiting</button>
+      </div>
+    </div>
+    <script type="module" src="/app.js?v=wasm5"></script>
   </body>
 </html>
