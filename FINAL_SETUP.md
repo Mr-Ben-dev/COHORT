@@ -104,20 +104,25 @@ Prior local hello-world (undeployed lab, not COHORT): `84d9eb030adb40678c6e14d41
 ## 9. Deployment information
 
 - GitHub: https://github.com/Mr-Ben-dev/COHORT
-- Application host: Render Free Web Service (see §10). Vercel token was **not** used (no VITE_ frontend secrets path).
+- Render Free Web Service: **https://cohort-y4zr.onrender.com**
+- Plan confirmed via API: `free`
+- Service id: `srv-daibkpp594qs73836as0`
+- `GET /health` on the public URL returned `{"status":"ok"}` after first deploy (`live`)
+- Vercel token was **not** used (no `VITE_*` frontend secrets path)
 - Circuit tests execute via compact-runtime 0.16.0 in Node. That is circuit semantics, not a mock chain transaction.
 
 ## 10. Render setup
 
-Free web service only.
+Free web service only. Created with `serviceDetails.plan = "free"` (API default is `starter`; that paid default was not used).
 
 - Runtime: Node 22
 - Build: `npm install`
 - Start: `node apps/api/src/server.mjs`
 - Health: `/health`
+- Region: oregon
 - Blueprint: `render.yaml` (variable **names** / public URLs only — no secret values)
 
-After the public URL exists, set `PUBLIC_APP_URL` and `CORS_ORIGIN` to that origin. Same-origin browser calls are allowed by Host matching even before that.
+Same-origin browser calls to `https://cohort-y4zr.onrender.com` are allowed by Host matching. Cross-origin `https://evil.example` received 403.
 
 ## 11. Render Free limitations
 
@@ -300,16 +305,17 @@ Local hello-world deploy/prove on undeployed was completed in the earlier recon 
 | Public indexer confirmation | FAIL |
 | Wallet flow | FAIL (not executed live) |
 | Real frontend + wallet gold path | FAIL (UI present; wallet not connected) |
-| Render Free deploy | (filled after deploy attempt) |
-| Render `/health` | (filled after deploy attempt) |
-| Render cold start | NOT TESTED (idle wait not performed) |
-| Public app, second user | NOT TESTED |
+| Render Free deploy | PASS (`plan=free`, `https://cohort-y4zr.onrender.com`) |
+| Render `/health` | PASS `{"status":"ok"}` |
+| Render public API privacy re-test | PASS (private POST 400, no age echo; trials JSON has no 31/52; config has no token prefixes; evil Origin 403) |
+| Render cold start | NOT TESTED (idle wait not performed; do not run a keep-alive pinger) |
+| Public app, second user | NOT TESTED (no second browser profile / wallet) |
 | No private fact to COHORT backend | PASS (tested paths) |
 | No fake chain tx in gold path | PASS |
 | No mock proving in gold path | PASS |
 
 **READY for public-testnet “production deployed” label: NO.**  
-**READY for local + public API host with honest wallet gating: CONDITIONAL on Render.**
+**READY as a public Render Free host with honest wallet gating and a privacy-gated API: YES, with the residual risks in §24.**
 
 ## 28. Reproducible clean-machine setup
 
