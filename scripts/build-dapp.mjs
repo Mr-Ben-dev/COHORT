@@ -54,6 +54,7 @@ ${named}
 }
 
 const outFile = path.join(root, 'apps/web/cohort-dapp.js');
+const designerDappDir = path.join(root, 'web/public/dapp');
 
 await esbuild.build({
   absWorkingDir: root,
@@ -105,3 +106,15 @@ await esbuild.build({
     },
   ],
 });
+
+await fs.mkdir(designerDappDir, { recursive: true });
+await fs.copyFile(outFile, path.join(designerDappDir, 'cohort-dapp.js'));
+const wasmNames = ['midnight_onchain_runtime_wasm_bg.wasm', 'midnight_ledger_wasm_bg.wasm'];
+for (const name of wasmNames) {
+  const src = path.join(path.dirname(outFile), name);
+  try {
+    await fs.copyFile(src, path.join(designerDappDir, name));
+  } catch {
+    /* wasm is emitted beside the stub bundle when the plugin resolves it */
+  }
+}

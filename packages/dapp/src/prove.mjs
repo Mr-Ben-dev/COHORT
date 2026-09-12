@@ -89,11 +89,22 @@ export function mintWitnessSecrets(facts = {}) {
  * Real midnight-js 4.1.1 submitCallTx path via 1AM getProvingProvider.
  * Never invents a transaction hash. Never posts private facts.
  */
+function emitStage(input, stage) {
+  if (typeof input?.onStage === 'function') {
+    try {
+      input.onStage(stage);
+    } catch {
+      /* UI progress must never abort a real prove. */
+    }
+  }
+}
+
 export async function proveEligibility(input = {}) {
   const envelope = { ...input };
   delete envelope.facts;
   delete envelope.wallet;
   delete envelope.zkConfigProvider;
+  delete envelope.onStage;
   const leaked = findPrivateFields(envelope);
   if (leaked.length) {
     throw new CohortError(
@@ -107,6 +118,7 @@ export async function proveEligibility(input = {}) {
     throw new CohortError(ErrorCode.PRIVATE_FIELD, 'Local facts {age, condition, medication} are required and must not be HTTP fields.');
   }
 
+  emitStage(input, ProveLifecycle.PREPARING);
   const trial = await bindOfficialTrial(input);
   if (!localPreview(facts, trial)) {
     throw new CohortError(
@@ -130,6 +142,7 @@ export async function proveEligibility(input = {}) {
 
   const networkId = input.networkId || 'preprod';
   configureNetwork(networkId);
+  emitStage(input, ProveLifecycle.PROVING);
 
   const privateStateId = 'cohortPrivateState';
   const { secret, blind } = mintWitnessSecrets(facts);
@@ -145,6 +158,8 @@ export async function proveEligibility(input = {}) {
     const providers = await createCallProviders({ ...input, wallet });
     await providers.privateStateProvider.set(privateStateId, privateState);
     const compiledContract = await createCompiledContract();
+    emitStage(input, ProveLifecycle.WAITING_FOR_WALLET);
+    emitStage(input, ProveLifecycle.SUBMITTING);
     const result = await submitCallTx(providers, {
       compiledContract,
       circuitId: 'proveEligible',
@@ -163,6 +178,7 @@ export async function proveEligibility(input = {}) {
     if (!txId && !txHash) {
       throw new CohortError(ErrorCode.TX_UNCONFIRMED, 'submitCallTx returned no transaction identifier.');
     }
+    emitStage(input, ProveLifecycle.CONFIRMING);
     let verification = null;
     try {
       verification = await readPublicVerification({
@@ -188,6 +204,7 @@ export async function proveEligibility(input = {}) {
       });
     }
 
+    emitStage(input, ProveLifecycle.CONFIRMED);
     return {
       lifecycle: ProveLifecycle.CONFIRMED,
       txId,
@@ -198,6 +215,7 @@ export async function proveEligibility(input = {}) {
       claims: PROVE_ELIGIBLE_CLAIMS,
     };
   } catch (err) {
+    emitStage(input, ProveLifecycle.FAILED);
     if (err instanceof CohortError) throw err;
     throw new CohortError(ErrorCode.PROVING_FAILED, 'Proving or submission failed.', { cause: err });
   }

@@ -1,0 +1,644 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * COHORT design system — measured from live impilo.health (wave 6).
+ * Computed-style verified:
+ *   canvas #3f3ccd · hero-word cyan #72e6ff · steps navy #232265 ·
+ *   footer ink #161658 · lilac #b1a6f6 · bright-blue strokes #3faeff ·
+ *   soft blue #70b2ff · mint #5cffb1 · light bg #f1f1fd / #f4f4fb ·
+ *   CTA halo #5250c5 · nav text #f4f4fb.
+ * Outfit (Gilroy substitute) weights 400/500/600 — Impilo ships no 700.
+ */
+@theme {
+  /* ── Colors ─────────────────────────────────────────────── */
+  --color-deep-iris: #3f3ccd; /* hero / app canvas — impilo exact */
+  --color-iris-shadow: #3b38b7; /* interface panel fill */
+  --color-iris-glow: #161658; /* deep ink footer surface */
+  --color-iris-pulse: #524fd9; /* raised surface / hover */
+  --color-iris-veil: #524fe1; /* highlight band */
+  --color-iris-border: #6a67e6; /* hairline on bright canvas */
+  --color-iris-ink: #232265; /* dark indigo text on white — impilo exact */
+  --color-iris-halo: #5250c5; /* CTA double-pill halo — impilo exact */
+  --color-navy-canvas: #232265; /* steps section canvas — impilo exact */
+  --color-lilac-mist: #b1a6f6; /* impilo exact lilac */
+  --color-hero-word: #72e6ff; /* rotating hero word — impilo exact */
+  --color-clinical-cyan: #2ee9ff; /* impilo exact cyan accent */
+  --color-cyan-soft: #70b2ff; /* impilo soft blue */
+  --color-mint-vital: #5cffb1; /* impilo exact mint */
+  --color-teal-signal: #3faeff; /* impilo bright blue (line art) */
+  --color-cloud-white: #ffffff;
+  --color-pearl: #f1f1fd; /* impilo light section bg */
+  --color-pearl-bright: #f4f4fb; /* impilo lighter lilac */
+  --color-ash: #d6d6f0;
+  --color-fog: #7c7c9e;
+
+  /* ── Typography ─────────────────────────────────────────── */
+  --font-sans: var(--font-outfit), "Gilroy", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Impilo scale — hero 92px / word 124px (word is 1.35× the headline!) */
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.44;
+  --text-caption--letter-spacing: 0.02em;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.44;
+  --text-body-sm--letter-spacing: 0.01em;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.5;
+  --text-body--letter-spacing: -0.005em;
+  --text-subheading: 1.125rem;
+  --text-subheading--line-height: 1.5;
+  --text-subheading--letter-spacing: -0.01em;
+  --text-heading-sm: 1.5rem;
+  --text-heading-sm--line-height: 1.18;
+  --text-heading-sm--letter-spacing: -0.02em;
+  --text-heading: 2.875rem;
+  --text-heading--line-height: 1.04;
+  --text-heading--letter-spacing: -0.03em;
+  --text-heading-lg: 3.375rem;
+  --text-heading-lg--line-height: 1.02;
+  --text-heading-lg--letter-spacing: -0.035em;
+  --text-heading-xl: 4.125rem;
+  --text-heading-xl--line-height: 1;
+  --text-heading-xl--letter-spacing: -0.04em;
+  /* hero headline — impilo 92px/600 lh .92 ls -.04em */
+  --text-display: clamp(2.75rem, 6.4vw, 5.75rem);
+  --text-display--line-height: 0.92;
+  --text-display--letter-spacing: -0.04em;
+  /* impilo hero word — 124px (1.35× the 92px headline) */
+  --text-display-word: clamp(3.25rem, 8.6vw, 7.75rem);
+  --text-display-word--line-height: 0.92;
+  --text-display-word--letter-spacing: -0.045em;
+  /* impilo focus statement — 124px full-bleed */
+  --text-display-xl: clamp(3rem, 8.6vw, 7.75rem);
+  --text-display-xl--line-height: 0.94;
+  --text-display-xl--letter-spacing: -0.045em;
+
+  /* ── Radii ──────────────────────────────────────────────── */
+  --radius-pill: 9999px;
+  --radius-card: 24px;
+  --radius-card-elevated: 32px;
+  --radius-field: 16px;
+  --radius-node: 7px;
+
+  /* ── Elevation — colored (never pure black), measured Impilo depth ── */
+  --shadow-glow: 0 8px 28px rgba(22, 22, 88, 0.35);
+  --shadow-glow-lg: 0 12px 44px rgba(22, 22, 88, 0.42);
+  --shadow-lift: 0 4px 14px rgba(22, 22, 88, 0.18);
+  --shadow-interface: 0 24px 60px rgba(22, 22, 88, 0.28);
+  --shadow-float: 0 28px 56px -16px rgba(22, 22, 88, 0.55);
+  --shadow-float-lg: 0 44px 88px -24px rgba(22, 22, 88, 0.6);
+  --shadow-cta: 0 12px 28px -8px rgba(22, 22, 88, 0.5);
+  --shadow-cta-hover: 0 18px 40px -8px rgba(22, 22, 88, 0.58);
+  --shadow-card-light: 0 20px 44px -16px rgba(35, 34, 101, 0.16);
+  --shadow-card-light-hover: 0 32px 64px -20px rgba(35, 34, 101, 0.22);
+
+  /* ── Motion ─────────────────────────────────────────────── */
+  --ease-calm: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* shadcn/ui semantic variables — resolved onto the Impilo-matched palette. */
+:root {
+  --radius: 1rem;
+  --background: #3f3ccd;
+  --foreground: #ffffff;
+  --card: #4846bf;
+  --card-foreground: #ffffff;
+  --popover: #4846bf;
+  --popover-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #232265;
+  --secondary: #4846bf;
+  --secondary-foreground: #f1f1fd;
+  --muted: #3b38b7;
+  --muted-foreground: #b1a6f6;
+  --accent: #524fe1;
+  --accent-foreground: #ffffff;
+  --destructive: #ff6b8d;
+  --border: #6a67e6;
+  --input: #6a67e6;
+  --ring: #2ee9ff;
+  --chart-1: #2ee9ff;
+  --chart-2: #5cffb1;
+  --chart-3: #b1a6f6;
+  --chart-4: #3faeff;
+  --chart-5: #524fd9;
+  --sidebar: #4846bf;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #232265;
+  --sidebar-accent: #524fe1;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #6a67e6;
+  --sidebar-ring: #2ee9ff;
+}
+
+/* Map the shadcn semantic variables onto Tailwind color tokens.
+ * `inline` is required so utilities like `border-border`, `bg-background`,
+ * `ring-ring` resolve when the value is a var() reference. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: auto; /* Lenis drives smoothing */
+  }
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  body {
+    @apply bg-deep-iris text-cloud-white font-sans antialiased;
+    font-weight: 500;
+  }
+  ::selection {
+    background: rgba(46, 233, 255, 0.35);
+    color: #ffffff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-clinical-cyan);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer utilities {
+  /* Long-list scrolling with an on-brand custom scrollbar */
+  .scroll-iris {
+    scrollbar-width: thin;
+    scrollbar-color: #6a67e6 transparent;
+  }
+  .scroll-iris::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scroll-iris::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scroll-iris::-webkit-scrollbar-thumb {
+    background: #6a67e6;
+    border-radius: 9999px;
+  }
+  .scroll-iris::-webkit-scrollbar-thumb:hover {
+    background: #8a87ec;
+  }
+
+  /* Ambient dot grid used behind dark sections */
+  .bg-dots {
+    background-image: radial-gradient(
+      rgba(177, 166, 246, 0.16) 1px,
+      transparent 1px
+    );
+    background-size: 28px 28px;
+  }
+  .bg-dots-light {
+    background-image: radial-gradient(
+      rgba(35, 34, 101, 0.1) 1px,
+      transparent 1px
+    );
+    background-size: 28px 28px;
+  }
+
+  /* Impilo hero veil — layered radial lift + cyan atmosphere bleed.
+   * A brighter core pulls the eye to the copy, a cyan glow bleeds
+   * from the artwork zone (left), and edges fall to shadow — the
+   * "spotlight stage" Impilo renders on every dark section. */
+  .bg-hero-veil {
+    background:
+      radial-gradient(52% 42% at 26% 40%, rgba(114, 230, 255, 0.09) 0%, transparent 70%),
+      radial-gradient(120% 92% at 68% 36%, #524fe1 0%, #3f3ccd 52%, #3b38b7 100%);
+  }
+  /* Navy veil for the steps canvas — same staged light, navy family */
+  .bg-navy-veil {
+    background:
+      radial-gradient(48% 40% at 50% 8%, rgba(114, 230, 255, 0.07) 0%, transparent 72%),
+      radial-gradient(120% 100% at 50% 0%, #2b2a7a 0%, #232265 46%, #1f1f81 100%);
+  }
+
+  /* Film-grain noise — kills the "dead flat hex" feeling of large
+   * fills; 2.5% presence, blend-screened over any canvas. */
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+    mix-blend-mode: overlay;
+    opacity: 0.05;
+  }
+
+  /* Depth blobs — the blurred amorphous "ambient occlusion" zones
+   * Impilo places behind floating objects. Sizes/positions are set
+   * per-use; this supplies the material. */
+  .glow-blob {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(72px);
+    pointer-events: none;
+  }
+  .glow-blob-cyan {
+    background: radial-gradient(
+      circle,
+      rgba(46, 233, 255, 0.22) 0%,
+      rgba(46, 233, 255, 0.06) 46%,
+      transparent 70%
+    );
+  }
+  .glow-blob-lilac {
+    background: radial-gradient(
+      circle,
+      rgba(177, 166, 246, 0.2) 0%,
+      rgba(177, 166, 246, 0.05) 46%,
+      transparent 70%
+    );
+  }
+  .glow-blob-veil {
+    background: radial-gradient(
+      circle,
+      rgba(82, 79, 225, 0.5) 0%,
+      rgba(82, 79, 225, 0.16) 48%,
+      transparent 72%
+    );
+  }
+
+  /* Marquee — seamless horizontal loop (Keep Scrolling pill) */
+  .marquee-mask {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 14%,
+      black 86%,
+      transparent
+    );
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 16s linear infinite;
+  }
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+  @keyframes marquee-scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+
+  /* Dashed data-flow line animation (honors prefers-reduced-motion) */
+  .flow-dash {
+    stroke-dasharray: 6 8;
+    animation: flow-dash-move 1.4s linear infinite;
+  }
+  @keyframes flow-dash-move {
+    to {
+      stroke-dashoffset: -14;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flow-dash {
+      animation: none;
+    }
+  }
+
+  /* Soft pulse used on "live" status dots */
+  .pulse-mint {
+    animation: pulse-mint 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse-mint {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(92, 255, 177, 0.45);
+    }
+    50% {
+      box-shadow: 0 0 0 7px rgba(92, 255, 177, 0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pulse-mint {
+      animation: none;
+    }
+  }
+
+  /* ── GLASS — Impilo panel material (dark surfaces) ──────────
+   * translucent white + backdrop blur + 1px light border + an
+   * inset top highlight (the "glass edge catching light") and a
+   * deep colored drop shadow that floats the panel off the canvas. */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.07);
+    -webkit-backdrop-filter: blur(18px) saturate(1.15);
+    backdrop-filter: blur(18px) saturate(1.15);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      inset 0 -1px 0 rgba(22, 22, 88, 0.22),
+      0 24px 56px -20px rgba(22, 22, 88, 0.55);
+  }
+  .glass-panel-soft {
+    background: rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 16px 40px -18px rgba(22, 22, 88, 0.45);
+  }
+
+  /* ── SVG LIGHTING — rim lights, glow bleed, depth ──────────
+   * Applied to SVG groups/elements so line art reads as lit
+   * objects instead of ink on paper. */
+  .glow-cyan {
+    filter: drop-shadow(0 0 10px rgba(46, 233, 255, 0.45))
+      drop-shadow(0 6px 18px rgba(22, 22, 88, 0.35));
+  }
+  .glow-mint {
+    filter: drop-shadow(0 0 10px rgba(92, 255, 177, 0.5))
+      drop-shadow(0 6px 18px rgba(22, 22, 88, 0.35));
+  }
+  .glow-soft {
+    filter: drop-shadow(0 14px 28px rgba(22, 22, 88, 0.4));
+  }
+  /* Rim light — a cool white halo on the lit (top-left) edge */
+  .rim-light {
+    filter: drop-shadow(-2px -2px 1px rgba(255, 255, 255, 0.35))
+      drop-shadow(8px 14px 22px rgba(22, 22, 88, 0.42));
+  }
+  .rim-light-faint {
+    filter: drop-shadow(-1px -1px 1px rgba(255, 255, 255, 0.22))
+      drop-shadow(6px 10px 18px rgba(22, 22, 88, 0.34));
+  }
+
+  /* ── CONTACT SHADOWS — the soft ellipse that grounds floating
+   * objects a few millimeters above the canvas plane. */
+  .contact-shadow {
+    background: radial-gradient(
+      58% 100% at 50% 50%,
+      rgba(22, 22, 88, 0.5) 0%,
+      rgba(22, 22, 88, 0.22) 45%,
+      transparent 72%
+    );
+    filter: blur(14px);
+  }
+  .contact-shadow-soft {
+    background: radial-gradient(
+      58% 100% at 50% 50%,
+      rgba(22, 22, 88, 0.32) 0%,
+      rgba(22, 22, 88, 0.12) 45%,
+      transparent 72%
+    );
+    filter: blur(12px);
+  }
+  /* Light-section contact shadows (ink-tinted, whisper-soft) */
+  .contact-shadow-light {
+    background: radial-gradient(
+      58% 100% at 50% 50%,
+      rgba(35, 34, 101, 0.14) 0%,
+      rgba(35, 34, 101, 0.06) 45%,
+      transparent 72%
+    );
+    filter: blur(12px);
+  }
+
+  /* ── FLOATS — the buoyant idle motion of lit objects. Three
+   * phases so sibling devices never sync (parallax feel). */
+  .float-a {
+    animation: float-a 7s ease-in-out infinite;
+  }
+  .float-b {
+    animation: float-a 9.5s ease-in-out -2.6s infinite;
+  }
+  .float-c {
+    animation: float-b 12s ease-in-out -4.2s infinite;
+  }
+  @keyframes float-a {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    50% {
+      transform: translate3d(0, -11px, 0) rotate(-0.7deg);
+    }
+  }
+  @keyframes float-b {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    50% {
+      transform: translate3d(3px, -8px, 0) rotate(0.9deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .float-a,
+    .float-b,
+    .float-c {
+      animation: none;
+    }
+  }
+
+  /* Gentle float for hero line-art devices (legacy aliases) */
+  .float-soft {
+    animation: float-a 7s ease-in-out infinite;
+  }
+  .float-soft-2 {
+    animation: float-a 9s ease-in-out -3s infinite;
+  }
+  @keyframes float-soft {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .float-soft,
+    .float-soft-2 {
+      animation: none;
+    }
+  }
+
+  /* ── MARCHING DASHES — the animated dashed box around accent
+   * words (Impilo's "selected layer" meta-detail). Four edge
+   * gradients dash along the border path; the keyframes march
+   * them. Drawn thick enough to read as a border at 1.5px. */
+  .dash-march {
+    border: 0 !important;
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        var(--dash-color, rgba(114, 230, 255, 0.7)) 0 9px,
+        transparent 9px 16px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        var(--dash-color, rgba(114, 230, 255, 0.7)) 0 9px,
+        transparent 9px 16px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        var(--dash-color, rgba(114, 230, 255, 0.7)) 0 9px,
+        transparent 9px 16px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        var(--dash-color, rgba(114, 230, 255, 0.7)) 0 9px,
+        transparent 9px 16px
+      );
+    background-repeat: no-repeat;
+    background-size:
+      100% 1.5px,
+      100% 1.5px,
+      1.5px 100%,
+      1.5px 100%;
+    background-position:
+      0 0,
+      0 100%,
+      0 0,
+      100% 0;
+    animation: dash-march-x 1.6s linear infinite,
+      dash-march-y 1.6s linear infinite;
+  }
+  @keyframes dash-march-x {
+    to {
+      background-position: 16px 0, 16px 100%, 0 0, 100% 0;
+    }
+  }
+  @keyframes dash-march-y {
+    to {
+      background-position: 0 0, 0 100%, 0 16px, 100% 16px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dash-march {
+      animation: none;
+    }
+  }
+
+  /* ── CARD LIFT — light-section cards gaining hover elevation */
+  .card-lift {
+    transition:
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.5s;
+  }
+  .card-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-light-hover);
+  }
+
+  /* Refined live-dot pulse (concentric glow ring) */
+  .pulse-dot {
+    animation: pulse-dot 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(92, 255, 177, 0.4), 0 0 12px rgba(92, 255, 177, 0.35);
+    }
+    50% {
+      box-shadow: 0 0 0 7px rgba(92, 255, 177, 0), 0 0 4px rgba(92, 255, 177, 0.2);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pulse-dot {
+      animation: none;
+    }
+  }
+
+  /* Rotating dashed proof ring (hero) */
+  .ring-spin {
+    animation: ring-spin 18s linear infinite;
+    transform-origin: center;
+  }
+  @keyframes ring-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ring-spin {
+      animation: none;
+    }
+  }
+
+  /* ECG trace loop for the Keep Scrolling pill */
+  .ecg-dash {
+    stroke-dasharray: 120 26;
+    animation: ecg-move 2.4s linear infinite;
+  }
+  @keyframes ecg-move {
+    to {
+      stroke-dashoffset: -146;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ecg-dash {
+      animation: none;
+    }
+  }
+
+  /* Impilo word-flip — rotationX carousel used by RotatingWord */
+  .word-flip {
+    transform-style: preserve-3d;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

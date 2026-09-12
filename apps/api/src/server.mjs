@@ -59,6 +59,24 @@ function allowedOrigins() {
   return new Set(raw);
 }
 
+function isPublicFrontendOrigin(origin) {
+  try {
+    const u = new URL(origin);
+    if (u.protocol === 'https:' && (u.hostname === 'vercel.app' || u.hostname.endsWith('.vercel.app'))) {
+      return true;
+    }
+    if (
+      (u.hostname === 'localhost' || u.hostname === '127.0.0.1') &&
+      (u.port === '3000' || u.port === '3001')
+    ) {
+      return true;
+    }
+  } catch {
+    return false;
+  }
+  return false;
+}
+
 function setCors(req, res) {
   const origin = req.headers.origin;
   if (!origin) return true;
@@ -68,7 +86,7 @@ function setCors(req, res) {
   } catch {
     sameOrigin = false;
   }
-  if (sameOrigin || allowedOrigins().has(origin)) {
+  if (sameOrigin || allowedOrigins().has(origin) || isPublicFrontendOrigin(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Vary', 'Origin');
     res.setHeader('Access-Control-Allow-Headers', 'content-type');

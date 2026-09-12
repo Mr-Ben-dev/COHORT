@@ -47,6 +47,15 @@ export function publicTrialFromStudy(nctId, study, mapping) {
   const maxAge = parseAgeYears(elig.maximumAge) ?? 255;
   const sexCriterion = typeof elig.sex === 'string' ? elig.sex : 'ALL';
   const healthyVolunteers = Boolean(elig.healthyVolunteers);
+  const sponsor =
+    protocol.sponsorCollaboratorsModule?.leadSponsor?.name ||
+    ident.organization?.fullName ||
+    'ClinicalTrials.gov record';
+  const phases = protocol.designModule?.phases;
+  const phaseRaw = Array.isArray(phases) && typeof phases[0] === 'string' ? phases[0] : null;
+  const phase = phaseRaw ? phaseRaw.replace(/_/g, ' ') : 'See study record';
+  const brief = protocol.descriptionModule?.briefSummary || protocol.descriptionModule?.detailedDescription || '';
+  const loc = protocol.contactsLocationsModule?.locations?.[0];
   return {
     trialId: nctId,
     title: `${ident.briefTitle || nctId} (typed subset)`,
@@ -58,6 +67,17 @@ export function publicTrialFromStudy(nctId, study, mapping) {
     forbidMedication: mapping.forbidMedication,
     conditionLabel: mapping.conditionLabel,
     medicationLabel: mapping.medicationLabel,
+    sponsor,
+    phase,
+    summary: typeof brief === 'string' && brief.trim() ? brief.trim().slice(0, 480) : mapping.mapping,
+    location: loc
+      ? {
+          city: loc.city || '',
+          region: loc.state || loc.country || '',
+          country: loc.country || '',
+          remote: false,
+        }
+      : null,
     source: `https://clinicaltrials.gov/study/${nctId}`,
     mapping: mapping.mapping,
     unsupportedCriteria: mapping.unsupportedCriteria,

@@ -21,7 +21,9 @@ Browser → 1AM `getProvingProvider` → `submitCallTx` (2026-09-12, live Render
 3. Close the 1AM Transactions dashboard. Click **Connect Midnight wallet**, then click the 1AM toolbar icon and **Approve COHORT**. After connect, 1AM may ask again via `hintUsage` for proving/submit. If the icon still opens balances/Transactions, reload 1AM at `chrome://extensions`, refresh, and retry. The balance screen is not the connect dialog.
 4. Enter typed private facts in page memory only. **Generate proof** runs `connect('preprod')` in the same click if needed, then `submitCallTx` via `getProvingProvider` (in-browser WASM). Private facts are never POSTed. Page CSP `connect-src` allows the official Midnight indexer/RPC and 1AM GraphQL (`api-preprod.1am.xyz`); public-state truth stays `indexer.preprod.midnight.network`. Public `/zk` circuit keys are CORS `*` so 1AM can fetch them.
 
-`apps/web` is an interim stub until a designer `web` drop-in. Midnight internals stay in `packages/dapp`.
+`apps/web` remains the Render same-origin stub. The visual product lives in `web/` (Next.js) and talks to Render `/api` + `/zk`, the official Preprod indexer, and 1AM `getProvingProvider`. Private facts stay in the browser.
+
+Designer frontend (Vercel, public config only): set `NEXT_PUBLIC_COHORT_API_ORIGIN=https://cohort-y4zr.onrender.com`. Never set `VITE_`/`NEXT_PUBLIC_` GitHub, Render, or Vercel tokens.
 
 Privacy: `TESTS/playwright-privacy.test.mjs` launches installed Chrome against a local origin, types PATIENT_A age 31, and asserts cookies/storage/URL/COHORT requests never carry 31/52. 1AM Approve stays a manual wallet click.
 

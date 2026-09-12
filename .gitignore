@@ -4,6 +4,26 @@
 !.env.example
 !.env*.example
 
+# next / vercel
+.next/
+web/.next/
+web/node_modules/
+web/.vercel/
+web/mini-services/
+web/agent-ctx/
+web/.zscripts/
+web/.zshots/
+web/.design-ref/
+web/upload/
+web/download/
+web/db/
+web/tool-results/
+web/examples/
+web/tests/
+web/prisma/
+web/*.png
+web/bun.lock
+
 # dependencies and build
 node_modules/
 dist/
