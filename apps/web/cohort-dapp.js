@@ -2408,7 +2408,7 @@ var require_object_inspect = __commonJS({
       if (typeof window !== "undefined" && obj === window) {
         return "{ [object Window] }";
       }
-      if (typeof globalThis !== "undefined" && obj === globalThis || typeof globalThis !== "undefined" && obj === globalThis) {
+      if (typeof globalThis !== "undefined" && obj === globalThis || typeof global !== "undefined" && obj === global) {
         return "{ [object globalThis] }";
       }
       if (!isDate4(obj) && !isRegExp3(obj)) {
@@ -5002,10 +5002,10 @@ var init_util = __esm({
     _dewExec$62 = false;
     exports$62 = {};
     _dewExec$52 = false;
-    _global$2 = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : globalThis;
+    _global$2 = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : global;
     exports$52 = {};
     _dewExec$42 = false;
-    _global$1 = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : globalThis;
+    _global$1 = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : global;
     exports$42 = {};
     _dewExec$32 = false;
     exports$32 = {};
@@ -5014,7 +5014,7 @@ var init_util = __esm({
     _dewExec$13 = false;
     exports$13 = {};
     _dewExec4 = false;
-    _global = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : globalThis;
+    _global = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : global;
     exports5 = dew4();
     exports5["format"];
     exports5["deprecate"];
@@ -8652,7 +8652,7 @@ var require_browser_ponyfill = __commonJS({
     init_dirname();
     init_buffer2();
     init_process2();
-    var __global__ = typeof globalThis !== "undefined" && globalThis || typeof self !== "undefined" && self || typeof globalThis !== "undefined" && globalThis;
+    var __global__ = typeof globalThis !== "undefined" && globalThis || typeof self !== "undefined" && self || typeof global !== "undefined" && global;
     var __globalThis__ = (function() {
       function F() {
         this.fetch = false;
@@ -8664,7 +8664,7 @@ var require_browser_ponyfill = __commonJS({
     (function(globalThis2) {
       var irrelevant = (function(exports9) {
         var g = typeof globalThis2 !== "undefined" && globalThis2 || typeof self !== "undefined" && self || // eslint-disable-next-line no-undef
-        typeof globalThis2 !== "undefined" && globalThis2 || {};
+        typeof global !== "undefined" && global || {};
         var support = {
           searchParams: "URLSearchParams" in g,
           iterable: "Symbol" in g && "iterator" in Symbol,
@@ -16873,7 +16873,7 @@ var global_default = (
   // long as at least one of globalThis, window, self, or global is defined, so
   // we are under no obligation to make it easy for static analysis tools to
   // detect syntactic usage of the Function constructor. If you think you can
-  maybe(() => globalThis) || maybe(() => window) || maybe(() => self) || maybe(() => globalThis) || // improve your static analysis to detect this obfuscation, think again. This
+  maybe(() => globalThis) || maybe(() => window) || maybe(() => self) || maybe(() => global) || // improve your static analysis to detect this obfuscation, think again. This
   // is an arms race you cannot win, at least not in JavaScript.
   maybe(function() {
     return maybe.constructor("return this")();
@@ -18407,7 +18407,7 @@ var host = (
   maybe2(() => globalThis) || // Fall back to global, which works in Node.js and may be converted by some
   // bundlers to the appropriate identifier (window, self, ...) depending on the
   // bundling target. https://github.com/endojs/endo/issues/576#issuecomment-1178515224
-  maybe2(() => globalThis) || // Otherwise, use a dummy host that's local to this module. We used to fall
+  maybe2(() => global) || // Otherwise, use a dummy host that's local to this module. We used to fall
   // back to using the Array constructor as a namespace, but that was flagged in
   // https://github.com/benjamn/wryware/issues/347, and can be avoided.
   /* @__PURE__ */ Object.create(null)
@@ -27757,14 +27757,356 @@ init_dirname();
 init_buffer2();
 init_process2();
 
-// node_modules/@midnight-ntwrk/onchain-runtime-v3/midnight_onchain_runtime_wasm_bg.wasm
-var midnight_onchain_runtime_wasm_bg_exports = {};
-__export(midnight_onchain_runtime_wasm_bg_exports, {
-  default: () => midnight_onchain_runtime_wasm_bg_default
+// wasm-bindgen:D:\route\midnight\COHORT\node_modules\@midnight-ntwrk\onchain-runtime-v3\midnight_onchain_runtime_wasm_bg.wasm
+var midnight_onchain_runtime_wasm_bg_exports2 = {};
+__export(midnight_onchain_runtime_wasm_bg_exports2, {
+  __externref_drop_slice: () => __externref_drop_slice,
+  __externref_table_alloc: () => __externref_table_alloc,
+  __externref_table_dealloc: () => __externref_table_dealloc,
+  __wbg_chargedstate_free: () => __wbg_chargedstate_free,
+  __wbg_contractmaintenanceauthority_free: () => __wbg_contractmaintenanceauthority_free,
+  __wbg_contractoperation_free: () => __wbg_contractoperation_free,
+  __wbg_contractstate_free: () => __wbg_contractstate_free,
+  __wbg_costmodel_free: () => __wbg_costmodel_free,
+  __wbg_intounderlyingbytesource_free: () => __wbg_intounderlyingbytesource_free,
+  __wbg_intounderlyingsink_free: () => __wbg_intounderlyingsink_free,
+  __wbg_intounderlyingsource_free: () => __wbg_intounderlyingsource_free,
+  __wbg_querycontext_free: () => __wbg_querycontext_free,
+  __wbg_queryresults_free: () => __wbg_queryresults_free,
+  __wbg_stateboundedmerkletree_free: () => __wbg_stateboundedmerkletree_free,
+  __wbg_statemap_free: () => __wbg_statemap_free,
+  __wbg_statevalue_free: () => __wbg_statevalue_free,
+  __wbg_vmresults_free: () => __wbg_vmresults_free,
+  __wbg_vmstack_free: () => __wbg_vmstack_free,
+  __wbindgen_exn_store: () => __wbindgen_exn_store,
+  __wbindgen_export_2: () => __wbindgen_export_2,
+  __wbindgen_export_5: () => __wbindgen_export_5,
+  __wbindgen_free: () => __wbindgen_free,
+  __wbindgen_malloc: () => __wbindgen_malloc,
+  __wbindgen_realloc: () => __wbindgen_realloc,
+  __wbindgen_start: () => __wbindgen_start,
+  bigIntModFr: () => bigIntModFr2,
+  bigIntToValue: () => bigIntToValue2,
+  chargedstate_new: () => chargedstate_new,
+  chargedstate_state: () => chargedstate_state,
+  chargedstate_toString: () => chargedstate_toString,
+  closure690_externref_shim: () => closure690_externref_shim,
+  closure730_externref_shim: () => closure730_externref_shim,
+  communicationCommitment: () => communicationCommitment2,
+  communicationCommitmentRandomness: () => communicationCommitmentRandomness2,
+  contractmaintenanceauthority_committee: () => contractmaintenanceauthority_committee,
+  contractmaintenanceauthority_counter: () => contractmaintenanceauthority_counter,
+  contractmaintenanceauthority_deserialize: () => contractmaintenanceauthority_deserialize,
+  contractmaintenanceauthority_new: () => contractmaintenanceauthority_new,
+  contractmaintenanceauthority_serialize: () => contractmaintenanceauthority_serialize,
+  contractmaintenanceauthority_threshold: () => contractmaintenanceauthority_threshold,
+  contractmaintenanceauthority_toString: () => contractmaintenanceauthority_toString,
+  contractoperation_deserialize: () => contractoperation_deserialize,
+  contractoperation_new: () => contractoperation_new,
+  contractoperation_serialize: () => contractoperation_serialize,
+  contractoperation_set_verifier_key: () => contractoperation_set_verifier_key,
+  contractoperation_toString: () => contractoperation_toString,
+  contractoperation_verifier_key: () => contractoperation_verifier_key,
+  contractstate_balance: () => contractstate_balance,
+  contractstate_data: () => contractstate_data,
+  contractstate_deserialize: () => contractstate_deserialize,
+  contractstate_maintenance_authority: () => contractstate_maintenance_authority,
+  contractstate_new: () => contractstate_new,
+  contractstate_operation: () => contractstate_operation,
+  contractstate_operations: () => contractstate_operations,
+  contractstate_query: () => contractstate_query,
+  contractstate_serialize: () => contractstate_serialize,
+  contractstate_setOperation: () => contractstate_setOperation,
+  contractstate_set_balance: () => contractstate_set_balance,
+  contractstate_set_data: () => contractstate_set_data,
+  contractstate_set_maintenance_authority: () => contractstate_set_maintenance_authority,
+  contractstate_toString: () => contractstate_toString,
+  costmodel_initialCostModel: () => costmodel_initialCostModel,
+  costmodel_new: () => costmodel_new,
+  costmodel_toString: () => costmodel_toString,
+  decodeCoinPublicKey: () => decodeCoinPublicKey2,
+  decodeContractAddress: () => decodeContractAddress2,
+  decodeQualifiedShieldedCoinInfo: () => decodeQualifiedShieldedCoinInfo2,
+  decodeRawTokenType: () => decodeRawTokenType2,
+  decodeShieldedCoinInfo: () => decodeShieldedCoinInfo2,
+  decodeUserAddress: () => decodeUserAddress2,
+  degradeToTransient: () => degradeToTransient2,
+  dummyContractAddress: () => dummyContractAddress2,
+  dummyUserAddress: () => dummyUserAddress2,
+  ecAdd: () => ecAdd2,
+  ecMul: () => ecMul2,
+  ecMulGenerator: () => ecMulGenerator2,
+  encodeCoinPublicKey: () => encodeCoinPublicKey2,
+  encodeContractAddress: () => encodeContractAddress2,
+  encodeQualifiedShieldedCoinInfo: () => encodeQualifiedShieldedCoinInfo2,
+  encodeRawTokenType: () => encodeRawTokenType2,
+  encodeShieldedCoinInfo: () => encodeShieldedCoinInfo2,
+  encodeUserAddress: () => encodeUserAddress2,
+  entryPointHash: () => entryPointHash2,
+  hashToCurve: () => hashToCurve2,
+  intounderlyingbytesource_autoAllocateChunkSize: () => intounderlyingbytesource_autoAllocateChunkSize,
+  intounderlyingbytesource_cancel: () => intounderlyingbytesource_cancel,
+  intounderlyingbytesource_pull: () => intounderlyingbytesource_pull,
+  intounderlyingbytesource_start: () => intounderlyingbytesource_start,
+  intounderlyingbytesource_type: () => intounderlyingbytesource_type,
+  intounderlyingsink_abort: () => intounderlyingsink_abort,
+  intounderlyingsink_close: () => intounderlyingsink_close,
+  intounderlyingsink_write: () => intounderlyingsink_write,
+  intounderlyingsource_cancel: () => intounderlyingsource_cancel,
+  intounderlyingsource_pull: () => intounderlyingsource_pull,
+  leafHash: () => leafHash2,
+  maxAlignedSize: () => maxAlignedSize2,
+  maxField: () => maxField2,
+  memory: () => memory,
+  persistentCommit: () => persistentCommit2,
+  persistentHash: () => persistentHash2,
+  proofDataIntoSerializedPreimage: () => proofDataIntoSerializedPreimage2,
+  querycontext_address: () => querycontext_address,
+  querycontext_block: () => querycontext_block,
+  querycontext_com_indices: () => querycontext_com_indices,
+  querycontext_effects: () => querycontext_effects,
+  querycontext_insertCommitment: () => querycontext_insertCommitment,
+  querycontext_new: () => querycontext_new,
+  querycontext_qualify: () => querycontext_qualify,
+  querycontext_query: () => querycontext_query,
+  querycontext_runTranscript: () => querycontext_runTranscript,
+  querycontext_set_block: () => querycontext_set_block,
+  querycontext_set_effects: () => querycontext_set_effects,
+  querycontext_state: () => querycontext_state,
+  querycontext_toString: () => querycontext_toString,
+  querycontext_toVmStack: () => querycontext_toVmStack,
+  queryresults_context: () => queryresults_context,
+  queryresults_events: () => queryresults_events,
+  queryresults_gas_cost: () => queryresults_gas_cost,
+  queryresults_new: () => queryresults_new,
+  queryresults_toString: () => queryresults_toString,
+  rawTokenType: () => rawTokenType2,
+  runProgram: () => runProgram2,
+  runtimeCoinCommitment: () => runtimeCoinCommitment2,
+  runtimeCoinNullifier: () => runtimeCoinNullifier2,
+  sampleContractAddress: () => sampleContractAddress2,
+  sampleRawTokenType: () => sampleRawTokenType2,
+  sampleSigningKey: () => sampleSigningKey2,
+  sampleUserAddress: () => sampleUserAddress2,
+  signData: () => signData2,
+  signatureVerifyingKey: () => signatureVerifyingKey2,
+  signingKeyFromBip340: () => signingKeyFromBip3402,
+  stateboundedmerkletree_blank: () => stateboundedmerkletree_blank,
+  stateboundedmerkletree_collapse: () => stateboundedmerkletree_collapse,
+  stateboundedmerkletree_findPathForLeaf: () => stateboundedmerkletree_findPathForLeaf,
+  stateboundedmerkletree_height: () => stateboundedmerkletree_height,
+  stateboundedmerkletree_pathForLeaf: () => stateboundedmerkletree_pathForLeaf,
+  stateboundedmerkletree_rehash: () => stateboundedmerkletree_rehash,
+  stateboundedmerkletree_root: () => stateboundedmerkletree_root,
+  stateboundedmerkletree_toString: () => stateboundedmerkletree_toString,
+  stateboundedmerkletree_update: () => stateboundedmerkletree_update,
+  statemap_get: () => statemap_get,
+  statemap_insert: () => statemap_insert,
+  statemap_keys: () => statemap_keys,
+  statemap_new: () => statemap_new,
+  statemap_remove: () => statemap_remove,
+  statemap_toString: () => statemap_toString,
+  statevalue_arrayPush: () => statevalue_arrayPush,
+  statevalue_asArray: () => statevalue_asArray,
+  statevalue_asBoundedMerkleTree: () => statevalue_asBoundedMerkleTree,
+  statevalue_asCell: () => statevalue_asCell,
+  statevalue_asMap: () => statevalue_asMap,
+  statevalue_decode: () => statevalue_decode,
+  statevalue_encode: () => statevalue_encode,
+  statevalue_logSize: () => statevalue_logSize,
+  statevalue_new: () => statevalue_new,
+  statevalue_newArray: () => statevalue_newArray,
+  statevalue_newBoundedMerkleTree: () => statevalue_newBoundedMerkleTree,
+  statevalue_newCell: () => statevalue_newCell,
+  statevalue_newMap: () => statevalue_newMap,
+  statevalue_newNull: () => statevalue_newNull,
+  statevalue_toString: () => statevalue_toString,
+  statevalue_type: () => statevalue_type,
+  transientCommit: () => transientCommit2,
+  transientHash: () => transientHash2,
+  upgradeFromTransient: () => upgradeFromTransient2,
+  valueToBigInt: () => valueToBigInt2,
+  verifySignature: () => verifySignature2,
+  vmresults_events: () => vmresults_events,
+  vmresults_gas_cost: () => vmresults_gas_cost,
+  vmresults_new: () => vmresults_new,
+  vmresults_stack: () => vmresults_stack,
+  vmresults_toString: () => vmresults_toString,
+  vmstack_get: () => vmstack_get,
+  vmstack_isStrong: () => vmstack_isStrong,
+  vmstack_length: () => vmstack_length,
+  vmstack_new: () => vmstack_new,
+  vmstack_push: () => vmstack_push,
+  vmstack_removeLast: () => vmstack_removeLast,
+  vmstack_toString: () => vmstack_toString
 });
-var midnight_onchain_runtime_wasm_bg_default = "./midnight_onchain_runtime_wasm_bg.wasm";
+init_dirname();
+init_buffer2();
+init_process2();
 
 // node_modules/@midnight-ntwrk/onchain-runtime-v3/midnight_onchain_runtime_wasm_bg.js
+var midnight_onchain_runtime_wasm_bg_exports = {};
+__export(midnight_onchain_runtime_wasm_bg_exports, {
+  ChargedState: () => ChargedState,
+  ContractMaintenanceAuthority: () => ContractMaintenanceAuthority,
+  ContractOperation: () => ContractOperation,
+  ContractState: () => ContractState,
+  CostModel: () => CostModel,
+  IntoUnderlyingByteSource: () => IntoUnderlyingByteSource,
+  IntoUnderlyingSink: () => IntoUnderlyingSink,
+  IntoUnderlyingSource: () => IntoUnderlyingSource,
+  QueryContext: () => QueryContext,
+  QueryResults: () => QueryResults,
+  StateBoundedMerkleTree: () => StateBoundedMerkleTree,
+  StateMap: () => StateMap,
+  StateValue: () => StateValue,
+  VmResults: () => VmResults,
+  VmStack: () => VmStack,
+  __wbg_BigInt_40a77d45cca49470: () => __wbg_BigInt_40a77d45cca49470,
+  __wbg_BigInt_6adbfd8eb0f7ec07: () => __wbg_BigInt_6adbfd8eb0f7ec07,
+  __wbg_Error_e17e777aac105295: () => __wbg_Error_e17e777aac105295,
+  __wbg_Number_998bea33bd87c3e0: () => __wbg_Number_998bea33bd87c3e0,
+  __wbg_String_8f0eb39a4a4c2f66: () => __wbg_String_8f0eb39a4a4c2f66,
+  __wbg_buffer_8d40b1d762fb3c66: () => __wbg_buffer_8d40b1d762fb3c66,
+  __wbg_byobRequest_2c036bceca1e6037: () => __wbg_byobRequest_2c036bceca1e6037,
+  __wbg_byteLength_331a6b5545834024: () => __wbg_byteLength_331a6b5545834024,
+  __wbg_byteOffset_49a5b5608000358b: () => __wbg_byteOffset_49a5b5608000358b,
+  __wbg_call_13410aac570ffff7: () => __wbg_call_13410aac570ffff7,
+  __wbg_call_a5400b25a865cfd8: () => __wbg_call_a5400b25a865cfd8,
+  __wbg_close_cccada6053ee3a65: () => __wbg_close_cccada6053ee3a65,
+  __wbg_close_d71a78219dc23e91: () => __wbg_close_d71a78219dc23e91,
+  __wbg_contractstate_new: () => __wbg_contractstate_new,
+  __wbg_crypto_86f2631e91b51511: () => __wbg_crypto_86f2631e91b51511,
+  __wbg_done_75ed0ee6dd243d9d: () => __wbg_done_75ed0ee6dd243d9d,
+  __wbg_enqueue_452bc2343d1c2ff9: () => __wbg_enqueue_452bc2343d1c2ff9,
+  __wbg_entries_2be2f15bd5554996: () => __wbg_entries_2be2f15bd5554996,
+  __wbg_from_88bc52ce20ba6318: () => __wbg_from_88bc52ce20ba6318,
+  __wbg_getRandomValues_b3f15fcbfabb0f8b: () => __wbg_getRandomValues_b3f15fcbfabb0f8b,
+  __wbg_get_0da715ceaecea5c8: () => __wbg_get_0da715ceaecea5c8,
+  __wbg_get_458e874b43b18b25: () => __wbg_get_458e874b43b18b25,
+  __wbg_get_5ee3191755594360: () => __wbg_get_5ee3191755594360,
+  __wbg_getwithrefkey_1dc361bd10053bfe: () => __wbg_getwithrefkey_1dc361bd10053bfe,
+  __wbg_instanceof_ArrayBuffer_67f3012529f6a2dd: () => __wbg_instanceof_ArrayBuffer_67f3012529f6a2dd,
+  __wbg_instanceof_Map_ebb01a5b6b5ffd0b: () => __wbg_instanceof_Map_ebb01a5b6b5ffd0b,
+  __wbg_instanceof_Uint8Array_9a8378d955933db7: () => __wbg_instanceof_Uint8Array_9a8378d955933db7,
+  __wbg_isArray_030cce220591fb41: () => __wbg_isArray_030cce220591fb41,
+  __wbg_isSafeInteger_1c0d1af5542e102a: () => __wbg_isSafeInteger_1c0d1af5542e102a,
+  __wbg_iterator_f370b34483c71a1c: () => __wbg_iterator_f370b34483c71a1c,
+  __wbg_keys_822161a7faf55538: () => __wbg_keys_822161a7faf55538,
+  __wbg_length_186546c51cd61acd: () => __wbg_length_186546c51cd61acd,
+  __wbg_length_6bb7e81f9d7713e4: () => __wbg_length_6bb7e81f9d7713e4,
+  __wbg_msCrypto_d562bbe83e0d4b91: () => __wbg_msCrypto_d562bbe83e0d4b91,
+  __wbg_new_19c25a3f2fa63a02: () => __wbg_new_19c25a3f2fa63a02,
+  __wbg_new_1f3a344cf3123716: () => __wbg_new_1f3a344cf3123716,
+  __wbg_new_2e3c58a15f39f5f9: () => __wbg_new_2e3c58a15f39f5f9,
+  __wbg_new_2ff1f68f3676ea53: () => __wbg_new_2ff1f68f3676ea53,
+  __wbg_new_638ebfaedbf32a5e: () => __wbg_new_638ebfaedbf32a5e,
+  __wbg_new_da9dc54c5db29dfa: () => __wbg_new_da9dc54c5db29dfa,
+  __wbg_newfromslice_074c56947bd43469: () => __wbg_newfromslice_074c56947bd43469,
+  __wbg_newnoargs_254190557c45b4ec: () => __wbg_newnoargs_254190557c45b4ec,
+  __wbg_newwithbyteoffsetandlength_e8f53910b4d42b45: () => __wbg_newwithbyteoffsetandlength_e8f53910b4d42b45,
+  __wbg_newwithlength_a167dcc7aaa3ba77: () => __wbg_newwithlength_a167dcc7aaa3ba77,
+  __wbg_next_5b3530e612fde77d: () => __wbg_next_5b3530e612fde77d,
+  __wbg_next_692e82279131b03c: () => __wbg_next_692e82279131b03c,
+  __wbg_node_e1f24f89a7336c2e: () => __wbg_node_e1f24f89a7336c2e,
+  __wbg_process_3975fd6c72f520aa: () => __wbg_process_3975fd6c72f520aa,
+  __wbg_prototypesetcall_3d4a26c1ed734349: () => __wbg_prototypesetcall_3d4a26c1ed734349,
+  __wbg_push_330b2eb93e4e1212: () => __wbg_push_330b2eb93e4e1212,
+  __wbg_queueMicrotask_25d0739ac89e8c88: () => __wbg_queueMicrotask_25d0739ac89e8c88,
+  __wbg_queueMicrotask_4488407636f5bf24: () => __wbg_queueMicrotask_4488407636f5bf24,
+  __wbg_randomFillSync_f8c153b79f285817: () => __wbg_randomFillSync_f8c153b79f285817,
+  __wbg_require_b74f47fc2d022fd6: () => __wbg_require_b74f47fc2d022fd6,
+  __wbg_resolve_4055c623acdd6a1b: () => __wbg_resolve_4055c623acdd6a1b,
+  __wbg_respond_6c2c4e20ef85138e: () => __wbg_respond_6c2c4e20ef85138e,
+  __wbg_set_1353b2a5e96bc48c: () => __wbg_set_1353b2a5e96bc48c,
+  __wbg_set_3f1d0b984ed272ed: () => __wbg_set_3f1d0b984ed272ed,
+  __wbg_set_90f6c0f7bd8c0415: () => __wbg_set_90f6c0f7bd8c0415,
+  __wbg_set_b7f1cf4fae26fe2a: () => __wbg_set_b7f1cf4fae26fe2a,
+  __wbg_set_wasm: () => __wbg_set_wasm,
+  __wbg_statevalue_new: () => __wbg_statevalue_new,
+  __wbg_static_accessor_GLOBAL_8921f820c2ce3f12: () => __wbg_static_accessor_GLOBAL_8921f820c2ce3f12,
+  __wbg_static_accessor_GLOBAL_THIS_f0a4409105898184: () => __wbg_static_accessor_GLOBAL_THIS_f0a4409105898184,
+  __wbg_static_accessor_SELF_995b214ae681ff99: () => __wbg_static_accessor_SELF_995b214ae681ff99,
+  __wbg_static_accessor_WINDOW_cde3890479c675ea: () => __wbg_static_accessor_WINDOW_cde3890479c675ea,
+  __wbg_subarray_70fd07feefe14294: () => __wbg_subarray_70fd07feefe14294,
+  __wbg_then_e22500defe16819f: () => __wbg_then_e22500defe16819f,
+  __wbg_toString_7268338f40012a03: () => __wbg_toString_7268338f40012a03,
+  __wbg_toString_d8f537919ef401d6: () => __wbg_toString_d8f537919ef401d6,
+  __wbg_value_dd9372230531eade: () => __wbg_value_dd9372230531eade,
+  __wbg_versions_4e31226f5e8dc909: () => __wbg_versions_4e31226f5e8dc909,
+  __wbg_view_91cc97d57ab30530: () => __wbg_view_91cc97d57ab30530,
+  __wbg_wbindgenbigintgetasi64_ac743ece6ab9bba1: () => __wbg_wbindgenbigintgetasi64_ac743ece6ab9bba1,
+  __wbg_wbindgenbooleanget_3fe6f642c7d97746: () => __wbg_wbindgenbooleanget_3fe6f642c7d97746,
+  __wbg_wbindgencbdrop_eb10308566512b88: () => __wbg_wbindgencbdrop_eb10308566512b88,
+  __wbg_wbindgendebugstring_99ef257a3ddda34d: () => __wbg_wbindgendebugstring_99ef257a3ddda34d,
+  __wbg_wbindgenin_d7a1ee10933d2d55: () => __wbg_wbindgenin_d7a1ee10933d2d55,
+  __wbg_wbindgenisbigint_ecb90cc08a5a9154: () => __wbg_wbindgenisbigint_ecb90cc08a5a9154,
+  __wbg_wbindgenisfunction_8cee7dce3725ae74: () => __wbg_wbindgenisfunction_8cee7dce3725ae74,
+  __wbg_wbindgenisnull_f3037694abe4d97a: () => __wbg_wbindgenisnull_f3037694abe4d97a,
+  __wbg_wbindgenisobject_307a53c6bd97fbf8: () => __wbg_wbindgenisobject_307a53c6bd97fbf8,
+  __wbg_wbindgenisstring_d4fa939789f003b0: () => __wbg_wbindgenisstring_d4fa939789f003b0,
+  __wbg_wbindgenisundefined_c4b71d073b92f3c5: () => __wbg_wbindgenisundefined_c4b71d073b92f3c5,
+  __wbg_wbindgenjsvaleq_e6f2ad59ccae1b58: () => __wbg_wbindgenjsvaleq_e6f2ad59ccae1b58,
+  __wbg_wbindgenjsvallooseeq_9bec8c9be826bed1: () => __wbg_wbindgenjsvallooseeq_9bec8c9be826bed1,
+  __wbg_wbindgennumberget_f74b4c7525ac05cb: () => __wbg_wbindgennumberget_f74b4c7525ac05cb,
+  __wbg_wbindgenshr_7d2aae6044c0dab1: () => __wbg_wbindgenshr_7d2aae6044c0dab1,
+  __wbg_wbindgenstringget_0f16a6ddddef376f: () => __wbg_wbindgenstringget_0f16a6ddddef376f,
+  __wbg_wbindgenthrow_451ec1a8469d7eb6: () => __wbg_wbindgenthrow_451ec1a8469d7eb6,
+  __wbindgen_cast_2241b6af4c4b2941: () => __wbindgen_cast_2241b6af4c4b2941,
+  __wbindgen_cast_4625c577ab2ec9ee: () => __wbindgen_cast_4625c577ab2ec9ee,
+  __wbindgen_cast_9ae0607507abb057: () => __wbindgen_cast_9ae0607507abb057,
+  __wbindgen_cast_9f23747c70687cbf: () => __wbindgen_cast_9f23747c70687cbf,
+  __wbindgen_cast_cb9088102bce6b30: () => __wbindgen_cast_cb9088102bce6b30,
+  __wbindgen_cast_d6cd19b81560fd6e: () => __wbindgen_cast_d6cd19b81560fd6e,
+  __wbindgen_cast_e7b45dd881f38ce3: () => __wbindgen_cast_e7b45dd881f38ce3,
+  __wbindgen_init_externref_table: () => __wbindgen_init_externref_table,
+  bigIntModFr: () => bigIntModFr,
+  bigIntToValue: () => bigIntToValue,
+  communicationCommitment: () => communicationCommitment,
+  communicationCommitmentRandomness: () => communicationCommitmentRandomness,
+  decodeCoinPublicKey: () => decodeCoinPublicKey,
+  decodeContractAddress: () => decodeContractAddress,
+  decodeQualifiedShieldedCoinInfo: () => decodeQualifiedShieldedCoinInfo,
+  decodeRawTokenType: () => decodeRawTokenType,
+  decodeShieldedCoinInfo: () => decodeShieldedCoinInfo,
+  decodeUserAddress: () => decodeUserAddress,
+  degradeToTransient: () => degradeToTransient,
+  dummyContractAddress: () => dummyContractAddress,
+  dummyUserAddress: () => dummyUserAddress,
+  ecAdd: () => ecAdd,
+  ecMul: () => ecMul,
+  ecMulGenerator: () => ecMulGenerator,
+  encodeCoinPublicKey: () => encodeCoinPublicKey,
+  encodeContractAddress: () => encodeContractAddress,
+  encodeQualifiedShieldedCoinInfo: () => encodeQualifiedShieldedCoinInfo,
+  encodeRawTokenType: () => encodeRawTokenType,
+  encodeShieldedCoinInfo: () => encodeShieldedCoinInfo,
+  encodeUserAddress: () => encodeUserAddress,
+  entryPointHash: () => entryPointHash,
+  hashToCurve: () => hashToCurve,
+  leafHash: () => leafHash,
+  maxAlignedSize: () => maxAlignedSize,
+  maxField: () => maxField,
+  persistentCommit: () => persistentCommit,
+  persistentHash: () => persistentHash,
+  proofDataIntoSerializedPreimage: () => proofDataIntoSerializedPreimage,
+  rawTokenType: () => rawTokenType,
+  runProgram: () => runProgram,
+  runtimeCoinCommitment: () => runtimeCoinCommitment,
+  runtimeCoinNullifier: () => runtimeCoinNullifier,
+  sampleContractAddress: () => sampleContractAddress,
+  sampleRawTokenType: () => sampleRawTokenType,
+  sampleSigningKey: () => sampleSigningKey,
+  sampleUserAddress: () => sampleUserAddress,
+  signData: () => signData,
+  signatureVerifyingKey: () => signatureVerifyingKey,
+  signingKeyFromBip340: () => signingKeyFromBip340,
+  transientCommit: () => transientCommit,
+  transientHash: () => transientHash,
+  upgradeFromTransient: () => upgradeFromTransient,
+  valueToBigInt: () => valueToBigInt,
+  verifySignature: () => verifySignature
+});
 init_dirname();
 init_buffer2();
 init_process2();
@@ -27776,6 +28118,14 @@ function addToExternrefTable0(obj) {
   const idx = wasm.__externref_table_alloc();
   wasm.__wbindgen_export_2.set(idx, obj);
   return idx;
+}
+function handleError(f, args2) {
+  try {
+    return f.apply(this, args2);
+  } catch (e) {
+    const idx = addToExternrefTable0(e);
+    wasm.__wbindgen_exn_store(idx);
+  }
 }
 var cachedUint8ArrayMemory0 = null;
 function getUint8ArrayMemory0() {
@@ -27853,6 +28203,66 @@ function getDataViewMemory0() {
 function isLikeNone(x) {
   return x === void 0 || x === null;
 }
+function getArrayU8FromWasm0(ptr, len) {
+  ptr = ptr >>> 0;
+  return getUint8ArrayMemory0().subarray(ptr / 1, ptr / 1 + len);
+}
+function debugString(val) {
+  const type = typeof val;
+  if (type == "number" || type == "boolean" || val == null) {
+    return `${val}`;
+  }
+  if (type == "string") {
+    return `"${val}"`;
+  }
+  if (type == "symbol") {
+    const description = val.description;
+    if (description == null) {
+      return "Symbol";
+    } else {
+      return `Symbol(${description})`;
+    }
+  }
+  if (type == "function") {
+    const name2 = val.name;
+    if (typeof name2 == "string" && name2.length > 0) {
+      return `Function(${name2})`;
+    } else {
+      return "Function";
+    }
+  }
+  if (Array.isArray(val)) {
+    const length2 = val.length;
+    let debug = "[";
+    if (length2 > 0) {
+      debug += debugString(val[0]);
+    }
+    for (let i = 1; i < length2; i++) {
+      debug += ", " + debugString(val[i]);
+    }
+    debug += "]";
+    return debug;
+  }
+  const builtInMatches = /\[object ([^\]]+)\]/.exec(toString.call(val));
+  let className;
+  if (builtInMatches && builtInMatches.length > 1) {
+    className = builtInMatches[1];
+  } else {
+    return toString.call(val);
+  }
+  if (className == "Object") {
+    try {
+      return "Object(" + JSON.stringify(val) + ")";
+    } catch (_) {
+      return "Object";
+    }
+  }
+  if (val instanceof Error) {
+    return `${val.name}: ${val.message}
+${val.stack}`;
+  }
+  return className;
+}
 var CLOSURE_DTORS = typeof FinalizationRegistry === "undefined" ? { register: () => {
 }, unregister: () => {
 } } : new FinalizationRegistry(
@@ -27860,10 +28270,85 @@ var CLOSURE_DTORS = typeof FinalizationRegistry === "undefined" ? { register: ()
     wasm.__wbindgen_export_5.get(state.dtor)(state.a, state.b);
   }
 );
+function makeMutClosure(arg0, arg1, dtor, f) {
+  const state = { a: arg0, b: arg1, cnt: 1, dtor };
+  const real = (...args2) => {
+    state.cnt++;
+    const a = state.a;
+    state.a = 0;
+    try {
+      return f(a, state.b, ...args2);
+    } finally {
+      if (--state.cnt === 0) {
+        wasm.__wbindgen_export_5.get(state.dtor)(a, state.b);
+        CLOSURE_DTORS.unregister(state);
+      } else {
+        state.a = a;
+      }
+    }
+  };
+  real.original = state;
+  CLOSURE_DTORS.register(real, state, state);
+  return real;
+}
 function takeFromExternrefTable0(idx) {
   const value = wasm.__wbindgen_export_2.get(idx);
   wasm.__externref_table_dealloc(idx);
   return value;
+}
+function runtimeCoinCommitment(coin, recipient) {
+  const ret = wasm.runtimeCoinCommitment(coin, recipient);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function hashToCurve(align, val) {
+  const ret = wasm.hashToCurve(align, val);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function sampleRawTokenType() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm.sampleRawTokenType();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm0(ptr1, len1);
+  } finally {
+    wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function communicationCommitment(input, output, rand) {
+  let deferred3_0;
+  let deferred3_1;
+  try {
+    const ptr0 = passStringToWasm0(rand, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.communicationCommitment(input, output, ptr0, len0);
+    var ptr2 = ret[0];
+    var len2 = ret[1];
+    if (ret[3]) {
+      ptr2 = 0;
+      len2 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred3_0 = ptr2;
+    deferred3_1 = len2;
+    return getStringFromWasm0(ptr2, len2);
+  } finally {
+    wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
+  }
 }
 function dummyContractAddress() {
   let deferred2_0;
@@ -27884,6 +28369,46 @@ function dummyContractAddress() {
     wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
   }
 }
+function communicationCommitmentRandomness() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm.communicationCommitmentRandomness();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm0(ptr1, len1);
+  } finally {
+    wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function signData(key, data) {
+  let deferred3_0;
+  let deferred3_1;
+  try {
+    const ptr0 = passStringToWasm0(key, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.signData(ptr0, len0, data);
+    var ptr2 = ret[0];
+    var len2 = ret[1];
+    if (ret[3]) {
+      ptr2 = 0;
+      len2 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred3_0 = ptr2;
+    deferred3_1 = len2;
+    return getStringFromWasm0(ptr2, len2);
+  } finally {
+    wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
+  }
+}
 function persistentCommit(align, val, opening) {
   const ret = wasm.persistentCommit(align, val, opening);
   if (ret[2]) {
@@ -27897,6 +28422,59 @@ function bigIntToValue(x) {
     throw takeFromExternrefTable0(ret[1]);
   }
   return takeFromExternrefTable0(ret[0]);
+}
+function verifySignature(key, data, signature) {
+  const ptr0 = passStringToWasm0(key, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+  const len0 = WASM_VECTOR_LEN;
+  const ptr1 = passStringToWasm0(signature, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+  const len1 = WASM_VECTOR_LEN;
+  const ret = wasm.verifySignature(ptr0, len0, data, ptr1, len1);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return ret[0] !== 0;
+}
+function ecAdd(a, b) {
+  const ret = wasm.ecAdd(a, b);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function upgradeFromTransient(transient) {
+  const ret = wasm.upgradeFromTransient(transient);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function degradeToTransient(persistent) {
+  const ret = wasm.degradeToTransient(persistent);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function rawTokenType(domain_sep, contract) {
+  let deferred3_0;
+  let deferred3_1;
+  try {
+    const ptr0 = passStringToWasm0(contract, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.rawTokenType(domain_sep, ptr0, len0);
+    var ptr2 = ret[0];
+    var len2 = ret[1];
+    if (ret[3]) {
+      ptr2 = 0;
+      len2 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred3_0 = ptr2;
+    deferred3_1 = len2;
+    return getStringFromWasm0(ptr2, len2);
+  } finally {
+    wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
+  }
 }
 function signatureVerifyingKey(key) {
   let deferred3_0;
@@ -27926,6 +28504,72 @@ function maxField() {
   }
   return takeFromExternrefTable0(ret[0]);
 }
+function signingKeyFromBip340(bytes) {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm.signingKeyFromBip340(bytes);
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm0(ptr1, len1);
+  } finally {
+    wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function transientHash(align, val) {
+  const ret = wasm.transientHash(align, val);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function ecMulGenerator(val) {
+  const ret = wasm.ecMulGenerator(val);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function dummyUserAddress() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm.dummyUserAddress();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm0(ptr1, len1);
+  } finally {
+    wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function maxAlignedSize(alignment) {
+  const ret = wasm.maxAlignedSize(alignment);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return BigInt.asUintN(64, ret[0]);
+}
+function ecMul(a, b) {
+  const ret = wasm.ecMul(a, b);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
 function sampleSigningKey() {
   let deferred2_0;
   let deferred2_1;
@@ -27945,8 +28589,60 @@ function sampleSigningKey() {
     wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
   }
 }
+function sampleUserAddress() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm.sampleUserAddress();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm0(ptr1, len1);
+  } finally {
+    wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function sampleContractAddress() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm.sampleContractAddress();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm0(ptr1, len1);
+  } finally {
+    wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function runtimeCoinNullifier(coin, sender_evidence) {
+  const ret = wasm.runtimeCoinNullifier(coin, sender_evidence);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
 function persistentHash(align, val) {
   const ret = wasm.persistentHash(align, val);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function transientCommit(align, val, opening) {
+  const ret = wasm.transientCommit(align, val, opening);
   if (ret[2]) {
     throw takeFromExternrefTable0(ret[1]);
   }
@@ -27959,10 +28655,61 @@ function valueToBigInt(x) {
   }
   return takeFromExternrefTable0(ret[0]);
 }
+function proofDataIntoSerializedPreimage(input, output, public_transcript, private_transcript_outputs, key_location) {
+  var ptr0 = isLikeNone(key_location) ? 0 : passStringToWasm0(key_location, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+  var len0 = WASM_VECTOR_LEN;
+  const ret = wasm.proofDataIntoSerializedPreimage(input, output, public_transcript, private_transcript_outputs, ptr0, len0);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function entryPointHash(entry_point) {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm.entryPointHash(entry_point);
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm0(ptr1, len1);
+  } finally {
+    wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function bigIntModFr(x) {
+  const ret = wasm.bigIntModFr(x);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function leafHash(value) {
+  const ret = wasm.leafHash(value);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
 function encodeContractAddress(addr) {
   const ptr0 = passStringToWasm0(addr, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
   const len0 = WASM_VECTOR_LEN;
   const ret = wasm.encodeContractAddress(ptr0, len0);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function encodeUserAddress(addr) {
+  const ptr0 = passStringToWasm0(addr, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+  const len0 = WASM_VECTOR_LEN;
+  const ret = wasm.encodeUserAddress(ptr0, len0);
   if (ret[2]) {
     throw takeFromExternrefTable0(ret[1]);
   }
@@ -28003,6 +28750,34 @@ function encodeShieldedCoinInfo(coin) {
   }
   return takeFromExternrefTable0(ret[0]);
 }
+function encodeRawTokenType(tt) {
+  const ptr0 = passStringToWasm0(tt, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+  const len0 = WASM_VECTOR_LEN;
+  const ret = wasm.encodeRawTokenType(ptr0, len0);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return takeFromExternrefTable0(ret[0]);
+}
+function decodeUserAddress(addr) {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm.decodeUserAddress(addr);
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm0(ptr1, len1);
+  } finally {
+    wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
 function decodeShieldedCoinInfo(coin) {
   const ret = wasm.decodeShieldedCoinInfo(coin);
   if (ret[2]) {
@@ -28036,6 +28811,25 @@ function decodeQualifiedShieldedCoinInfo(coin) {
   }
   return takeFromExternrefTable0(ret[0]);
 }
+function decodeRawTokenType(tt) {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm.decodeRawTokenType(tt);
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm0(ptr1, len1);
+  } finally {
+    wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
 function encodeQualifiedShieldedCoinInfo(coin) {
   const ret = wasm.encodeQualifiedShieldedCoinInfo(coin);
   if (ret[2]) {
@@ -28048,6 +28842,15 @@ function _assertClass(instance, klass) {
     throw new Error(`expected instance of ${klass.name}`);
   }
 }
+function runProgram(initial, ops, cost_model, gas_limit) {
+  _assertClass(initial, VmStack);
+  _assertClass(cost_model, CostModel);
+  const ret = wasm.runProgram(initial.__wbg_ptr, ops, cost_model.__wbg_ptr, gas_limit);
+  if (ret[2]) {
+    throw takeFromExternrefTable0(ret[1]);
+  }
+  return VmResults.__wrap(ret[0]);
+}
 function getArrayJsValueFromWasm0(ptr, len) {
   ptr = ptr >>> 0;
   const mem = getDataViewMemory0();
@@ -28057,6 +28860,12 @@ function getArrayJsValueFromWasm0(ptr, len) {
   }
   wasm.__externref_drop_slice(ptr, len);
   return result;
+}
+function __wbg_adapter_14(arg0, arg1, arg2) {
+  wasm.closure690_externref_shim(arg0, arg1, arg2);
+}
+function __wbg_adapter_258(arg0, arg1, arg2, arg3) {
+  wasm.closure730_externref_shim(arg0, arg1, arg2, arg3);
 }
 var __wbindgen_enum_ReadableStreamType = ["bytes"];
 var ChargedStateFinalization = typeof FinalizationRegistry === "undefined" ? { register: () => {
@@ -29447,10 +30256,660 @@ var VmStack = class _VmStack {
   }
 };
 if (Symbol.dispose) VmStack.prototype[Symbol.dispose] = VmStack.prototype.free;
+function __wbg_BigInt_40a77d45cca49470() {
+  return handleError(function(arg0) {
+    const ret = BigInt(arg0);
+    return ret;
+  }, arguments);
+}
+function __wbg_BigInt_6adbfd8eb0f7ec07(arg0) {
+  const ret = BigInt(arg0);
+  return ret;
+}
+function __wbg_Error_e17e777aac105295(arg0, arg1) {
+  const ret = Error(getStringFromWasm0(arg0, arg1));
+  return ret;
+}
+function __wbg_Number_998bea33bd87c3e0(arg0) {
+  const ret = Number(arg0);
+  return ret;
+}
+function __wbg_String_8f0eb39a4a4c2f66(arg0, arg1) {
+  const ret = String(arg1);
+  const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+  const len1 = WASM_VECTOR_LEN;
+  getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+  getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+}
+function __wbg_buffer_8d40b1d762fb3c66(arg0) {
+  const ret = arg0.buffer;
+  return ret;
+}
+function __wbg_byobRequest_2c036bceca1e6037(arg0) {
+  const ret = arg0.byobRequest;
+  return isLikeNone(ret) ? 0 : addToExternrefTable0(ret);
+}
+function __wbg_byteLength_331a6b5545834024(arg0) {
+  const ret = arg0.byteLength;
+  return ret;
+}
+function __wbg_byteOffset_49a5b5608000358b(arg0) {
+  const ret = arg0.byteOffset;
+  return ret;
+}
+function __wbg_call_13410aac570ffff7() {
+  return handleError(function(arg0, arg1) {
+    const ret = arg0.call(arg1);
+    return ret;
+  }, arguments);
+}
+function __wbg_call_a5400b25a865cfd8() {
+  return handleError(function(arg0, arg1, arg2) {
+    const ret = arg0.call(arg1, arg2);
+    return ret;
+  }, arguments);
+}
+function __wbg_close_cccada6053ee3a65() {
+  return handleError(function(arg0) {
+    arg0.close();
+  }, arguments);
+}
+function __wbg_close_d71a78219dc23e91() {
+  return handleError(function(arg0) {
+    arg0.close();
+  }, arguments);
+}
+function __wbg_contractstate_new(arg0) {
+  const ret = ContractState.__wrap(arg0);
+  return ret;
+}
+function __wbg_crypto_86f2631e91b51511(arg0) {
+  const ret = arg0.crypto;
+  return ret;
+}
+function __wbg_done_75ed0ee6dd243d9d(arg0) {
+  const ret = arg0.done;
+  return ret;
+}
+function __wbg_enqueue_452bc2343d1c2ff9() {
+  return handleError(function(arg0, arg1) {
+    arg0.enqueue(arg1);
+  }, arguments);
+}
+function __wbg_entries_2be2f15bd5554996(arg0) {
+  const ret = Object.entries(arg0);
+  return ret;
+}
+function __wbg_from_88bc52ce20ba6318(arg0) {
+  const ret = Array.from(arg0);
+  return ret;
+}
+function __wbg_getRandomValues_b3f15fcbfabb0f8b() {
+  return handleError(function(arg0, arg1) {
+    arg0.getRandomValues(arg1);
+  }, arguments);
+}
+function __wbg_get_0da715ceaecea5c8(arg0, arg1) {
+  const ret = arg0[arg1 >>> 0];
+  return ret;
+}
+function __wbg_get_458e874b43b18b25() {
+  return handleError(function(arg0, arg1) {
+    const ret = Reflect.get(arg0, arg1);
+    return ret;
+  }, arguments);
+}
+function __wbg_get_5ee3191755594360(arg0, arg1) {
+  const ret = arg0.get(arg1);
+  return ret;
+}
+function __wbg_getwithrefkey_1dc361bd10053bfe(arg0, arg1) {
+  const ret = arg0[arg1];
+  return ret;
+}
+function __wbg_instanceof_ArrayBuffer_67f3012529f6a2dd(arg0) {
+  let result;
+  try {
+    result = arg0 instanceof ArrayBuffer;
+  } catch (_) {
+    result = false;
+  }
+  const ret = result;
+  return ret;
+}
+function __wbg_instanceof_Map_ebb01a5b6b5ffd0b(arg0) {
+  let result;
+  try {
+    result = arg0 instanceof Map;
+  } catch (_) {
+    result = false;
+  }
+  const ret = result;
+  return ret;
+}
+function __wbg_instanceof_Uint8Array_9a8378d955933db7(arg0) {
+  let result;
+  try {
+    result = arg0 instanceof Uint8Array;
+  } catch (_) {
+    result = false;
+  }
+  const ret = result;
+  return ret;
+}
+function __wbg_isArray_030cce220591fb41(arg0) {
+  const ret = Array.isArray(arg0);
+  return ret;
+}
+function __wbg_isSafeInteger_1c0d1af5542e102a(arg0) {
+  const ret = Number.isSafeInteger(arg0);
+  return ret;
+}
+function __wbg_iterator_f370b34483c71a1c() {
+  const ret = Symbol.iterator;
+  return ret;
+}
+function __wbg_keys_822161a7faf55538(arg0) {
+  const ret = arg0.keys();
+  return ret;
+}
+function __wbg_length_186546c51cd61acd(arg0) {
+  const ret = arg0.length;
+  return ret;
+}
+function __wbg_length_6bb7e81f9d7713e4(arg0) {
+  const ret = arg0.length;
+  return ret;
+}
+function __wbg_msCrypto_d562bbe83e0d4b91(arg0) {
+  const ret = arg0.msCrypto;
+  return ret;
+}
+function __wbg_new_19c25a3f2fa63a02() {
+  const ret = new Object();
+  return ret;
+}
+function __wbg_new_1f3a344cf3123716() {
+  const ret = new Array();
+  return ret;
+}
+function __wbg_new_2e3c58a15f39f5f9(arg0, arg1) {
+  try {
+    var state0 = { a: arg0, b: arg1 };
+    var cb0 = (arg02, arg12) => {
+      const a = state0.a;
+      state0.a = 0;
+      try {
+        return __wbg_adapter_258(a, state0.b, arg02, arg12);
+      } finally {
+        state0.a = a;
+      }
+    };
+    const ret = new Promise(cb0);
+    return ret;
+  } finally {
+    state0.a = state0.b = 0;
+  }
+}
+function __wbg_new_2ff1f68f3676ea53() {
+  const ret = /* @__PURE__ */ new Map();
+  return ret;
+}
+function __wbg_new_638ebfaedbf32a5e(arg0) {
+  const ret = new Uint8Array(arg0);
+  return ret;
+}
+function __wbg_new_da9dc54c5db29dfa(arg0, arg1) {
+  const ret = new Error(getStringFromWasm0(arg0, arg1));
+  return ret;
+}
+function __wbg_newfromslice_074c56947bd43469(arg0, arg1) {
+  const ret = new Uint8Array(getArrayU8FromWasm0(arg0, arg1));
+  return ret;
+}
+function __wbg_newnoargs_254190557c45b4ec(arg0, arg1) {
+  const ret = new Function(getStringFromWasm0(arg0, arg1));
+  return ret;
+}
+function __wbg_newwithbyteoffsetandlength_e8f53910b4d42b45(arg0, arg1, arg2) {
+  const ret = new Uint8Array(arg0, arg1 >>> 0, arg2 >>> 0);
+  return ret;
+}
+function __wbg_newwithlength_a167dcc7aaa3ba77(arg0) {
+  const ret = new Uint8Array(arg0 >>> 0);
+  return ret;
+}
+function __wbg_next_5b3530e612fde77d(arg0) {
+  const ret = arg0.next;
+  return ret;
+}
+function __wbg_next_692e82279131b03c() {
+  return handleError(function(arg0) {
+    const ret = arg0.next();
+    return ret;
+  }, arguments);
+}
+function __wbg_node_e1f24f89a7336c2e(arg0) {
+  const ret = arg0.node;
+  return ret;
+}
+function __wbg_process_3975fd6c72f520aa(arg0) {
+  const ret = arg0.process;
+  return ret;
+}
+function __wbg_prototypesetcall_3d4a26c1ed734349(arg0, arg1, arg2) {
+  Uint8Array.prototype.set.call(getArrayU8FromWasm0(arg0, arg1), arg2);
+}
+function __wbg_push_330b2eb93e4e1212(arg0, arg1) {
+  const ret = arg0.push(arg1);
+  return ret;
+}
+function __wbg_queueMicrotask_25d0739ac89e8c88(arg0) {
+  queueMicrotask(arg0);
+}
+function __wbg_queueMicrotask_4488407636f5bf24(arg0) {
+  const ret = arg0.queueMicrotask;
+  return ret;
+}
+function __wbg_randomFillSync_f8c153b79f285817() {
+  return handleError(function(arg0, arg1) {
+    arg0.randomFillSync(arg1);
+  }, arguments);
+}
+function __wbg_require_b74f47fc2d022fd6() {
+  return handleError(function() {
+    const ret = module.require;
+    return ret;
+  }, arguments);
+}
+function __wbg_resolve_4055c623acdd6a1b(arg0) {
+  const ret = Promise.resolve(arg0);
+  return ret;
+}
+function __wbg_respond_6c2c4e20ef85138e() {
+  return handleError(function(arg0, arg1) {
+    arg0.respond(arg1 >>> 0);
+  }, arguments);
+}
+function __wbg_set_1353b2a5e96bc48c(arg0, arg1, arg2) {
+  arg0.set(getArrayU8FromWasm0(arg1, arg2));
+}
+function __wbg_set_3f1d0b984ed272ed(arg0, arg1, arg2) {
+  arg0[arg1] = arg2;
+}
+function __wbg_set_90f6c0f7bd8c0415(arg0, arg1, arg2) {
+  arg0[arg1 >>> 0] = arg2;
+}
+function __wbg_set_b7f1cf4fae26fe2a(arg0, arg1, arg2) {
+  const ret = arg0.set(arg1, arg2);
+  return ret;
+}
+function __wbg_statevalue_new(arg0) {
+  const ret = StateValue.__wrap(arg0);
+  return ret;
+}
+function __wbg_static_accessor_GLOBAL_8921f820c2ce3f12() {
+  const ret = typeof global === "undefined" ? null : global;
+  return isLikeNone(ret) ? 0 : addToExternrefTable0(ret);
+}
+function __wbg_static_accessor_GLOBAL_THIS_f0a4409105898184() {
+  const ret = typeof globalThis === "undefined" ? null : globalThis;
+  return isLikeNone(ret) ? 0 : addToExternrefTable0(ret);
+}
+function __wbg_static_accessor_SELF_995b214ae681ff99() {
+  const ret = typeof self === "undefined" ? null : self;
+  return isLikeNone(ret) ? 0 : addToExternrefTable0(ret);
+}
+function __wbg_static_accessor_WINDOW_cde3890479c675ea() {
+  const ret = typeof window === "undefined" ? null : window;
+  return isLikeNone(ret) ? 0 : addToExternrefTable0(ret);
+}
+function __wbg_subarray_70fd07feefe14294(arg0, arg1, arg2) {
+  const ret = arg0.subarray(arg1 >>> 0, arg2 >>> 0);
+  return ret;
+}
+function __wbg_then_e22500defe16819f(arg0, arg1) {
+  const ret = arg0.then(arg1);
+  return ret;
+}
+function __wbg_toString_7268338f40012a03() {
+  return handleError(function(arg0, arg1) {
+    const ret = arg0.toString(arg1);
+    return ret;
+  }, arguments);
+}
+function __wbg_toString_d8f537919ef401d6(arg0) {
+  const ret = arg0.toString();
+  return ret;
+}
+function __wbg_value_dd9372230531eade(arg0) {
+  const ret = arg0.value;
+  return ret;
+}
+function __wbg_versions_4e31226f5e8dc909(arg0) {
+  const ret = arg0.versions;
+  return ret;
+}
+function __wbg_view_91cc97d57ab30530(arg0) {
+  const ret = arg0.view;
+  return isLikeNone(ret) ? 0 : addToExternrefTable0(ret);
+}
+function __wbg_wbindgenbigintgetasi64_ac743ece6ab9bba1(arg0, arg1) {
+  const v = arg1;
+  const ret = typeof v === "bigint" ? v : void 0;
+  getDataViewMemory0().setBigInt64(arg0 + 8 * 1, isLikeNone(ret) ? BigInt(0) : ret, true);
+  getDataViewMemory0().setInt32(arg0 + 4 * 0, !isLikeNone(ret), true);
+}
+function __wbg_wbindgenbooleanget_3fe6f642c7d97746(arg0) {
+  const v = arg0;
+  const ret = typeof v === "boolean" ? v : void 0;
+  return isLikeNone(ret) ? 16777215 : ret ? 1 : 0;
+}
+function __wbg_wbindgencbdrop_eb10308566512b88(arg0) {
+  const obj = arg0.original;
+  if (obj.cnt-- == 1) {
+    obj.a = 0;
+    return true;
+  }
+  const ret = false;
+  return ret;
+}
+function __wbg_wbindgendebugstring_99ef257a3ddda34d(arg0, arg1) {
+  const ret = debugString(arg1);
+  const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+  const len1 = WASM_VECTOR_LEN;
+  getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+  getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+}
+function __wbg_wbindgenin_d7a1ee10933d2d55(arg0, arg1) {
+  const ret = arg0 in arg1;
+  return ret;
+}
+function __wbg_wbindgenisbigint_ecb90cc08a5a9154(arg0) {
+  const ret = typeof arg0 === "bigint";
+  return ret;
+}
+function __wbg_wbindgenisfunction_8cee7dce3725ae74(arg0) {
+  const ret = typeof arg0 === "function";
+  return ret;
+}
+function __wbg_wbindgenisnull_f3037694abe4d97a(arg0) {
+  const ret = arg0 === null;
+  return ret;
+}
+function __wbg_wbindgenisobject_307a53c6bd97fbf8(arg0) {
+  const val = arg0;
+  const ret = typeof val === "object" && val !== null;
+  return ret;
+}
+function __wbg_wbindgenisstring_d4fa939789f003b0(arg0) {
+  const ret = typeof arg0 === "string";
+  return ret;
+}
+function __wbg_wbindgenisundefined_c4b71d073b92f3c5(arg0) {
+  const ret = arg0 === void 0;
+  return ret;
+}
+function __wbg_wbindgenjsvaleq_e6f2ad59ccae1b58(arg0, arg1) {
+  const ret = arg0 === arg1;
+  return ret;
+}
+function __wbg_wbindgenjsvallooseeq_9bec8c9be826bed1(arg0, arg1) {
+  const ret = arg0 == arg1;
+  return ret;
+}
+function __wbg_wbindgennumberget_f74b4c7525ac05cb(arg0, arg1) {
+  const obj = arg1;
+  const ret = typeof obj === "number" ? obj : void 0;
+  getDataViewMemory0().setFloat64(arg0 + 8 * 1, isLikeNone(ret) ? 0 : ret, true);
+  getDataViewMemory0().setInt32(arg0 + 4 * 0, !isLikeNone(ret), true);
+}
+function __wbg_wbindgenshr_7d2aae6044c0dab1(arg0, arg1) {
+  const ret = arg0 >> arg1;
+  return ret;
+}
+function __wbg_wbindgenstringget_0f16a6ddddef376f(arg0, arg1) {
+  const obj = arg1;
+  const ret = typeof obj === "string" ? obj : void 0;
+  var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+  var len1 = WASM_VECTOR_LEN;
+  getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+  getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+}
+function __wbg_wbindgenthrow_451ec1a8469d7eb6(arg0, arg1) {
+  throw new Error(getStringFromWasm0(arg0, arg1));
+}
+function __wbindgen_cast_2241b6af4c4b2941(arg0, arg1) {
+  const ret = getStringFromWasm0(arg0, arg1);
+  return ret;
+}
+function __wbindgen_cast_4625c577ab2ec9ee(arg0) {
+  const ret = BigInt.asUintN(64, arg0);
+  return ret;
+}
+function __wbindgen_cast_9ae0607507abb057(arg0) {
+  const ret = arg0;
+  return ret;
+}
+function __wbindgen_cast_9f23747c70687cbf(arg0, arg1) {
+  const ret = makeMutClosure(arg0, arg1, 689, __wbg_adapter_14);
+  return ret;
+}
+function __wbindgen_cast_cb9088102bce6b30(arg0, arg1) {
+  const ret = getArrayU8FromWasm0(arg0, arg1);
+  return ret;
+}
+function __wbindgen_cast_d6cd19b81560fd6e(arg0) {
+  const ret = arg0;
+  return ret;
+}
+function __wbindgen_cast_e7b45dd881f38ce3(arg0, arg1) {
+  const ret = BigInt.asUintN(64, arg0) | BigInt.asUintN(64, arg1) << BigInt(64);
+  return ret;
+}
+function __wbindgen_init_externref_table() {
+  const table = wasm.__wbindgen_export_2;
+  const offset = table.grow(4);
+  table.set(0, void 0);
+  table.set(offset + 0, void 0);
+  table.set(offset + 1, null);
+  table.set(offset + 2, true);
+  table.set(offset + 3, false);
+  ;
+}
+
+// wasm-bindgen:D:\route\midnight\COHORT\node_modules\@midnight-ntwrk\onchain-runtime-v3\midnight_onchain_runtime_wasm_bg.wasm
+var __wasmResponse = await fetch(new URL("./midnight_onchain_runtime_wasm_bg.wasm", import.meta.url));
+if (!__wasmResponse.ok) {
+  throw new Error("Failed to fetch midnight_onchain_runtime_wasm_bg.wasm: " + __wasmResponse.status);
+}
+var { instance: __wasmInstance } = await WebAssembly.instantiateStreaming(__wasmResponse, {
+  "./midnight_onchain_runtime_wasm_bg.js": midnight_onchain_runtime_wasm_bg_exports
+});
+var __wasmExports = __wasmInstance.exports;
+var memory = __wasmExports.memory;
+var __wbg_chargedstate_free = __wasmExports.__wbg_chargedstate_free;
+var __wbg_contractmaintenanceauthority_free = __wasmExports.__wbg_contractmaintenanceauthority_free;
+var __wbg_contractoperation_free = __wasmExports.__wbg_contractoperation_free;
+var __wbg_contractstate_free = __wasmExports.__wbg_contractstate_free;
+var __wbg_costmodel_free = __wasmExports.__wbg_costmodel_free;
+var __wbg_querycontext_free = __wasmExports.__wbg_querycontext_free;
+var __wbg_queryresults_free = __wasmExports.__wbg_queryresults_free;
+var __wbg_stateboundedmerkletree_free = __wasmExports.__wbg_stateboundedmerkletree_free;
+var __wbg_statemap_free = __wasmExports.__wbg_statemap_free;
+var __wbg_statevalue_free = __wasmExports.__wbg_statevalue_free;
+var __wbg_vmresults_free = __wasmExports.__wbg_vmresults_free;
+var __wbg_vmstack_free = __wasmExports.__wbg_vmstack_free;
+var bigIntModFr2 = __wasmExports.bigIntModFr;
+var bigIntToValue2 = __wasmExports.bigIntToValue;
+var chargedstate_new = __wasmExports.chargedstate_new;
+var chargedstate_state = __wasmExports.chargedstate_state;
+var chargedstate_toString = __wasmExports.chargedstate_toString;
+var communicationCommitment2 = __wasmExports.communicationCommitment;
+var communicationCommitmentRandomness2 = __wasmExports.communicationCommitmentRandomness;
+var contractmaintenanceauthority_committee = __wasmExports.contractmaintenanceauthority_committee;
+var contractmaintenanceauthority_counter = __wasmExports.contractmaintenanceauthority_counter;
+var contractmaintenanceauthority_deserialize = __wasmExports.contractmaintenanceauthority_deserialize;
+var contractmaintenanceauthority_new = __wasmExports.contractmaintenanceauthority_new;
+var contractmaintenanceauthority_serialize = __wasmExports.contractmaintenanceauthority_serialize;
+var contractmaintenanceauthority_threshold = __wasmExports.contractmaintenanceauthority_threshold;
+var contractmaintenanceauthority_toString = __wasmExports.contractmaintenanceauthority_toString;
+var contractoperation_deserialize = __wasmExports.contractoperation_deserialize;
+var contractoperation_new = __wasmExports.contractoperation_new;
+var contractoperation_serialize = __wasmExports.contractoperation_serialize;
+var contractoperation_set_verifier_key = __wasmExports.contractoperation_set_verifier_key;
+var contractoperation_toString = __wasmExports.contractoperation_toString;
+var contractoperation_verifier_key = __wasmExports.contractoperation_verifier_key;
+var contractstate_balance = __wasmExports.contractstate_balance;
+var contractstate_data = __wasmExports.contractstate_data;
+var contractstate_deserialize = __wasmExports.contractstate_deserialize;
+var contractstate_maintenance_authority = __wasmExports.contractstate_maintenance_authority;
+var contractstate_new = __wasmExports.contractstate_new;
+var contractstate_operation = __wasmExports.contractstate_operation;
+var contractstate_operations = __wasmExports.contractstate_operations;
+var contractstate_query = __wasmExports.contractstate_query;
+var contractstate_serialize = __wasmExports.contractstate_serialize;
+var contractstate_setOperation = __wasmExports.contractstate_setOperation;
+var contractstate_set_balance = __wasmExports.contractstate_set_balance;
+var contractstate_set_data = __wasmExports.contractstate_set_data;
+var contractstate_set_maintenance_authority = __wasmExports.contractstate_set_maintenance_authority;
+var contractstate_toString = __wasmExports.contractstate_toString;
+var costmodel_initialCostModel = __wasmExports.costmodel_initialCostModel;
+var costmodel_new = __wasmExports.costmodel_new;
+var costmodel_toString = __wasmExports.costmodel_toString;
+var decodeCoinPublicKey2 = __wasmExports.decodeCoinPublicKey;
+var decodeContractAddress2 = __wasmExports.decodeContractAddress;
+var decodeQualifiedShieldedCoinInfo2 = __wasmExports.decodeQualifiedShieldedCoinInfo;
+var decodeRawTokenType2 = __wasmExports.decodeRawTokenType;
+var decodeShieldedCoinInfo2 = __wasmExports.decodeShieldedCoinInfo;
+var decodeUserAddress2 = __wasmExports.decodeUserAddress;
+var degradeToTransient2 = __wasmExports.degradeToTransient;
+var dummyContractAddress2 = __wasmExports.dummyContractAddress;
+var dummyUserAddress2 = __wasmExports.dummyUserAddress;
+var ecAdd2 = __wasmExports.ecAdd;
+var ecMul2 = __wasmExports.ecMul;
+var ecMulGenerator2 = __wasmExports.ecMulGenerator;
+var encodeCoinPublicKey2 = __wasmExports.encodeCoinPublicKey;
+var encodeContractAddress2 = __wasmExports.encodeContractAddress;
+var encodeQualifiedShieldedCoinInfo2 = __wasmExports.encodeQualifiedShieldedCoinInfo;
+var encodeRawTokenType2 = __wasmExports.encodeRawTokenType;
+var encodeShieldedCoinInfo2 = __wasmExports.encodeShieldedCoinInfo;
+var encodeUserAddress2 = __wasmExports.encodeUserAddress;
+var entryPointHash2 = __wasmExports.entryPointHash;
+var hashToCurve2 = __wasmExports.hashToCurve;
+var leafHash2 = __wasmExports.leafHash;
+var maxAlignedSize2 = __wasmExports.maxAlignedSize;
+var maxField2 = __wasmExports.maxField;
+var persistentCommit2 = __wasmExports.persistentCommit;
+var persistentHash2 = __wasmExports.persistentHash;
+var proofDataIntoSerializedPreimage2 = __wasmExports.proofDataIntoSerializedPreimage;
+var querycontext_address = __wasmExports.querycontext_address;
+var querycontext_block = __wasmExports.querycontext_block;
+var querycontext_com_indices = __wasmExports.querycontext_com_indices;
+var querycontext_effects = __wasmExports.querycontext_effects;
+var querycontext_insertCommitment = __wasmExports.querycontext_insertCommitment;
+var querycontext_new = __wasmExports.querycontext_new;
+var querycontext_qualify = __wasmExports.querycontext_qualify;
+var querycontext_query = __wasmExports.querycontext_query;
+var querycontext_runTranscript = __wasmExports.querycontext_runTranscript;
+var querycontext_set_block = __wasmExports.querycontext_set_block;
+var querycontext_set_effects = __wasmExports.querycontext_set_effects;
+var querycontext_state = __wasmExports.querycontext_state;
+var querycontext_toString = __wasmExports.querycontext_toString;
+var querycontext_toVmStack = __wasmExports.querycontext_toVmStack;
+var queryresults_context = __wasmExports.queryresults_context;
+var queryresults_events = __wasmExports.queryresults_events;
+var queryresults_gas_cost = __wasmExports.queryresults_gas_cost;
+var queryresults_new = __wasmExports.queryresults_new;
+var queryresults_toString = __wasmExports.queryresults_toString;
+var rawTokenType2 = __wasmExports.rawTokenType;
+var runProgram2 = __wasmExports.runProgram;
+var runtimeCoinCommitment2 = __wasmExports.runtimeCoinCommitment;
+var runtimeCoinNullifier2 = __wasmExports.runtimeCoinNullifier;
+var sampleContractAddress2 = __wasmExports.sampleContractAddress;
+var sampleRawTokenType2 = __wasmExports.sampleRawTokenType;
+var sampleSigningKey2 = __wasmExports.sampleSigningKey;
+var sampleUserAddress2 = __wasmExports.sampleUserAddress;
+var signData2 = __wasmExports.signData;
+var signatureVerifyingKey2 = __wasmExports.signatureVerifyingKey;
+var signingKeyFromBip3402 = __wasmExports.signingKeyFromBip340;
+var stateboundedmerkletree_blank = __wasmExports.stateboundedmerkletree_blank;
+var stateboundedmerkletree_collapse = __wasmExports.stateboundedmerkletree_collapse;
+var stateboundedmerkletree_findPathForLeaf = __wasmExports.stateboundedmerkletree_findPathForLeaf;
+var stateboundedmerkletree_height = __wasmExports.stateboundedmerkletree_height;
+var stateboundedmerkletree_pathForLeaf = __wasmExports.stateboundedmerkletree_pathForLeaf;
+var stateboundedmerkletree_rehash = __wasmExports.stateboundedmerkletree_rehash;
+var stateboundedmerkletree_root = __wasmExports.stateboundedmerkletree_root;
+var stateboundedmerkletree_toString = __wasmExports.stateboundedmerkletree_toString;
+var stateboundedmerkletree_update = __wasmExports.stateboundedmerkletree_update;
+var statemap_get = __wasmExports.statemap_get;
+var statemap_insert = __wasmExports.statemap_insert;
+var statemap_keys = __wasmExports.statemap_keys;
+var statemap_new = __wasmExports.statemap_new;
+var statemap_remove = __wasmExports.statemap_remove;
+var statemap_toString = __wasmExports.statemap_toString;
+var statevalue_arrayPush = __wasmExports.statevalue_arrayPush;
+var statevalue_asArray = __wasmExports.statevalue_asArray;
+var statevalue_asBoundedMerkleTree = __wasmExports.statevalue_asBoundedMerkleTree;
+var statevalue_asCell = __wasmExports.statevalue_asCell;
+var statevalue_asMap = __wasmExports.statevalue_asMap;
+var statevalue_decode = __wasmExports.statevalue_decode;
+var statevalue_encode = __wasmExports.statevalue_encode;
+var statevalue_logSize = __wasmExports.statevalue_logSize;
+var statevalue_new = __wasmExports.statevalue_new;
+var statevalue_newArray = __wasmExports.statevalue_newArray;
+var statevalue_newBoundedMerkleTree = __wasmExports.statevalue_newBoundedMerkleTree;
+var statevalue_newCell = __wasmExports.statevalue_newCell;
+var statevalue_newMap = __wasmExports.statevalue_newMap;
+var statevalue_newNull = __wasmExports.statevalue_newNull;
+var statevalue_toString = __wasmExports.statevalue_toString;
+var statevalue_type = __wasmExports.statevalue_type;
+var transientCommit2 = __wasmExports.transientCommit;
+var transientHash2 = __wasmExports.transientHash;
+var upgradeFromTransient2 = __wasmExports.upgradeFromTransient;
+var valueToBigInt2 = __wasmExports.valueToBigInt;
+var verifySignature2 = __wasmExports.verifySignature;
+var vmresults_events = __wasmExports.vmresults_events;
+var vmresults_gas_cost = __wasmExports.vmresults_gas_cost;
+var vmresults_new = __wasmExports.vmresults_new;
+var vmresults_stack = __wasmExports.vmresults_stack;
+var vmresults_toString = __wasmExports.vmresults_toString;
+var vmstack_get = __wasmExports.vmstack_get;
+var vmstack_isStrong = __wasmExports.vmstack_isStrong;
+var vmstack_length = __wasmExports.vmstack_length;
+var vmstack_new = __wasmExports.vmstack_new;
+var vmstack_push = __wasmExports.vmstack_push;
+var vmstack_removeLast = __wasmExports.vmstack_removeLast;
+var vmstack_toString = __wasmExports.vmstack_toString;
+var __wbg_intounderlyingbytesource_free = __wasmExports.__wbg_intounderlyingbytesource_free;
+var __wbg_intounderlyingsink_free = __wasmExports.__wbg_intounderlyingsink_free;
+var __wbg_intounderlyingsource_free = __wasmExports.__wbg_intounderlyingsource_free;
+var intounderlyingbytesource_autoAllocateChunkSize = __wasmExports.intounderlyingbytesource_autoAllocateChunkSize;
+var intounderlyingbytesource_cancel = __wasmExports.intounderlyingbytesource_cancel;
+var intounderlyingbytesource_pull = __wasmExports.intounderlyingbytesource_pull;
+var intounderlyingbytesource_start = __wasmExports.intounderlyingbytesource_start;
+var intounderlyingbytesource_type = __wasmExports.intounderlyingbytesource_type;
+var intounderlyingsink_abort = __wasmExports.intounderlyingsink_abort;
+var intounderlyingsink_close = __wasmExports.intounderlyingsink_close;
+var intounderlyingsink_write = __wasmExports.intounderlyingsink_write;
+var intounderlyingsource_cancel = __wasmExports.intounderlyingsource_cancel;
+var intounderlyingsource_pull = __wasmExports.intounderlyingsource_pull;
+var __wbindgen_exn_store = __wasmExports.__wbindgen_exn_store;
+var __externref_table_alloc = __wasmExports.__externref_table_alloc;
+var __wbindgen_export_2 = __wasmExports.__wbindgen_export_2;
+var __wbindgen_malloc = __wasmExports.__wbindgen_malloc;
+var __wbindgen_realloc = __wasmExports.__wbindgen_realloc;
+var __wbindgen_export_5 = __wasmExports.__wbindgen_export_5;
+var __externref_table_dealloc = __wasmExports.__externref_table_dealloc;
+var __wbindgen_free = __wasmExports.__wbindgen_free;
+var __externref_drop_slice = __wasmExports.__externref_drop_slice;
+var closure690_externref_shim = __wasmExports.closure690_externref_shim;
+var closure730_externref_shim = __wasmExports.closure730_externref_shim;
+var __wbindgen_start = __wasmExports.__wbindgen_start;
 
 // node_modules/@midnight-ntwrk/onchain-runtime-v3/midnight_onchain_runtime_wasm.js
-__wbg_set_wasm(midnight_onchain_runtime_wasm_bg_exports);
-(void 0)();
+__wbg_set_wasm(midnight_onchain_runtime_wasm_bg_exports2);
+__wbindgen_start();
 
 // node_modules/@midnight-ntwrk/compact-runtime/dist/constants.js
 var MAX_FIELD = maxField();
@@ -29607,13 +31066,13 @@ init_dirname();
 init_buffer2();
 init_process2();
 var FIELD_MODULUS = MAX_FIELD + 1n;
-function persistentHash2(rtType, value) {
+function persistentHash3(rtType, value) {
   const wrapped = persistentHash(rtType.alignment(), rtType.toValue(value))[0];
   const res = new Uint8Array(32);
   res.set(wrapped, 0);
   return res;
 }
-function persistentCommit2(rtType, value, opening) {
+function persistentCommit3(rtType, value, opening) {
   if (opening.length != 32) {
     throw new CompactError("Expected 32-byte string");
   }
@@ -29796,14 +31255,1014 @@ init_dirname();
 init_buffer2();
 init_process2();
 
-// node_modules/@midnight-ntwrk/ledger-v8/midnight_ledger_wasm_bg.wasm
-var midnight_ledger_wasm_bg_exports = {};
-__export(midnight_ledger_wasm_bg_exports, {
-  default: () => midnight_ledger_wasm_bg_default
+// wasm-bindgen:D:\route\midnight\COHORT\node_modules\@midnight-ntwrk\ledger-v8\midnight_ledger_wasm_bg.wasm
+var midnight_ledger_wasm_bg_exports2 = {};
+__export(midnight_ledger_wasm_bg_exports2, {
+  __externref_drop_slice: () => __externref_drop_slice2,
+  __externref_table_alloc: () => __externref_table_alloc2,
+  __externref_table_dealloc: () => __externref_table_dealloc2,
+  __wbg_authorizedclaim_free: () => __wbg_authorizedclaim_free,
+  __wbg_binding_free: () => __wbg_binding_free,
+  __wbg_chargedstate_free: () => __wbg_chargedstate_free2,
+  __wbg_claimrewardstransaction_free: () => __wbg_claimrewardstransaction_free,
+  __wbg_coinsecretkey_free: () => __wbg_coinsecretkey_free,
+  __wbg_contractcall_free: () => __wbg_contractcall_free,
+  __wbg_contractcallprototype_free: () => __wbg_contractcallprototype_free,
+  __wbg_contractdeploy_free: () => __wbg_contractdeploy_free,
+  __wbg_contractmaintenanceauthority_free: () => __wbg_contractmaintenanceauthority_free2,
+  __wbg_contractoperation_free: () => __wbg_contractoperation_free2,
+  __wbg_contractoperationversion_free: () => __wbg_contractoperationversion_free,
+  __wbg_contractoperationversionedverifierkey_free: () => __wbg_contractoperationversionedverifierkey_free,
+  __wbg_contractstate_free: () => __wbg_contractstate_free2,
+  __wbg_costmodel_free: () => __wbg_costmodel_free2,
+  __wbg_dustactions_free: () => __wbg_dustactions_free,
+  __wbg_dustgenerationstate_free: () => __wbg_dustgenerationstate_free,
+  __wbg_dustlocalstate_free: () => __wbg_dustlocalstate_free,
+  __wbg_dustlocalstatewithchanges_free: () => __wbg_dustlocalstatewithchanges_free,
+  __wbg_dustparameters_free: () => __wbg_dustparameters_free,
+  __wbg_dustregistration_free: () => __wbg_dustregistration_free,
+  __wbg_dustsecretkey_free: () => __wbg_dustsecretkey_free,
+  __wbg_dustspend_free: () => __wbg_dustspend_free,
+  __wbg_duststate_free: () => __wbg_duststate_free,
+  __wbg_duststatechanges_free: () => __wbg_duststatechanges_free,
+  __wbg_duststatemerkletreecollapsedupdate_free: () => __wbg_duststatemerkletreecollapsedupdate_free,
+  __wbg_dustutxostate_free: () => __wbg_dustutxostate_free,
+  __wbg_encryptionsecretkey_free: () => __wbg_encryptionsecretkey_free,
+  __wbg_event_free: () => __wbg_event_free,
+  __wbg_intent_free: () => __wbg_intent_free,
+  __wbg_intounderlyingbytesource_free: () => __wbg_intounderlyingbytesource_free2,
+  __wbg_intounderlyingsink_free: () => __wbg_intounderlyingsink_free2,
+  __wbg_intounderlyingsource_free: () => __wbg_intounderlyingsource_free2,
+  __wbg_ledgerparameters_free: () => __wbg_ledgerparameters_free,
+  __wbg_ledgerstate_free: () => __wbg_ledgerstate_free,
+  __wbg_maintenanceupdate_free: () => __wbg_maintenanceupdate_free,
+  __wbg_merkletreecollapsedupdate_free: () => __wbg_merkletreecollapsedupdate_free,
+  __wbg_nobinding_free: () => __wbg_nobinding_free,
+  __wbg_noproof_free: () => __wbg_noproof_free,
+  __wbg_prebinding_free: () => __wbg_prebinding_free,
+  __wbg_prepartitioncontractcall_free: () => __wbg_prepartitioncontractcall_free,
+  __wbg_preproof_free: () => __wbg_preproof_free,
+  __wbg_pretranscript_free: () => __wbg_pretranscript_free,
+  __wbg_proof_free: () => __wbg_proof_free,
+  __wbg_querycontext_free: () => __wbg_querycontext_free2,
+  __wbg_queryresults_free: () => __wbg_queryresults_free2,
+  __wbg_replaceauthority_free: () => __wbg_replaceauthority_free,
+  __wbg_signatureenabled_free: () => __wbg_signatureenabled_free,
+  __wbg_signatureerased_free: () => __wbg_signatureerased_free,
+  __wbg_stateboundedmerkletree_free: () => __wbg_stateboundedmerkletree_free2,
+  __wbg_statemap_free: () => __wbg_statemap_free2,
+  __wbg_statevalue_free: () => __wbg_statevalue_free2,
+  __wbg_systemtransaction_free: () => __wbg_systemtransaction_free,
+  __wbg_transaction_free: () => __wbg_transaction_free,
+  __wbg_transactioncontext_free: () => __wbg_transactioncontext_free,
+  __wbg_transactioncostmodel_free: () => __wbg_transactioncostmodel_free,
+  __wbg_transactionresult_free: () => __wbg_transactionresult_free,
+  __wbg_unshieldedoffer_free: () => __wbg_unshieldedoffer_free,
+  __wbg_utxometa_free: () => __wbg_utxometa_free,
+  __wbg_utxostate_free: () => __wbg_utxostate_free,
+  __wbg_verifiedtransaction_free: () => __wbg_verifiedtransaction_free,
+  __wbg_verifierkeyinsert_free: () => __wbg_verifierkeyinsert_free,
+  __wbg_verifierkeyremove_free: () => __wbg_verifierkeyremove_free,
+  __wbg_vmresults_free: () => __wbg_vmresults_free2,
+  __wbg_vmstack_free: () => __wbg_vmstack_free2,
+  __wbg_wellformedstrictness_free: () => __wbg_wellformedstrictness_free,
+  __wbg_zswapchainstate_free: () => __wbg_zswapchainstate_free,
+  __wbg_zswapinput_free: () => __wbg_zswapinput_free,
+  __wbg_zswaplocalstate_free: () => __wbg_zswaplocalstate_free,
+  __wbg_zswaplocalstatewithchanges_free: () => __wbg_zswaplocalstatewithchanges_free,
+  __wbg_zswapoffer_free: () => __wbg_zswapoffer_free,
+  __wbg_zswapoutput_free: () => __wbg_zswapoutput_free,
+  __wbg_zswapsecretkeys_free: () => __wbg_zswapsecretkeys_free,
+  __wbg_zswapstatechanges_free: () => __wbg_zswapstatechanges_free,
+  __wbg_zswaptransient_free: () => __wbg_zswaptransient_free,
+  __wbindgen_exn_store: () => __wbindgen_exn_store2,
+  __wbindgen_export_2: () => __wbindgen_export_22,
+  __wbindgen_export_7: () => __wbindgen_export_7,
+  __wbindgen_free: () => __wbindgen_free2,
+  __wbindgen_malloc: () => __wbindgen_malloc2,
+  __wbindgen_realloc: () => __wbindgen_realloc2,
+  __wbindgen_start: () => __wbindgen_start2,
+  addressFromKey: () => addressFromKey2,
+  authorizedclaim_coin: () => authorizedclaim_coin,
+  authorizedclaim_deserialize: () => authorizedclaim_deserialize,
+  authorizedclaim_eraseProof: () => authorizedclaim_eraseProof,
+  authorizedclaim_new: () => authorizedclaim_new,
+  authorizedclaim_recipient: () => authorizedclaim_recipient,
+  authorizedclaim_serialize: () => authorizedclaim_serialize,
+  authorizedclaim_toString: () => authorizedclaim_toString,
+  bigIntModFr: () => bigIntModFr4,
+  bigIntToValue: () => bigIntToValue4,
+  binding_deserialize: () => binding_deserialize,
+  binding_instance: () => binding_instance,
+  binding_new: () => binding_new,
+  binding_serialize: () => binding_serialize,
+  binding_toString: () => binding_toString,
+  chargedstate_new: () => chargedstate_new2,
+  chargedstate_state: () => chargedstate_state2,
+  chargedstate_toString: () => chargedstate_toString2,
+  claimrewardstransaction_addSignature: () => claimrewardstransaction_addSignature,
+  claimrewardstransaction_construct: () => claimrewardstransaction_construct,
+  claimrewardstransaction_dataToSign: () => claimrewardstransaction_dataToSign,
+  claimrewardstransaction_deserialize: () => claimrewardstransaction_deserialize,
+  claimrewardstransaction_eraseSignatures: () => claimrewardstransaction_eraseSignatures,
+  claimrewardstransaction_kind: () => claimrewardstransaction_kind,
+  claimrewardstransaction_new: () => claimrewardstransaction_new,
+  claimrewardstransaction_nonce: () => claimrewardstransaction_nonce,
+  claimrewardstransaction_owner: () => claimrewardstransaction_owner,
+  claimrewardstransaction_serialize: () => claimrewardstransaction_serialize,
+  claimrewardstransaction_signature: () => claimrewardstransaction_signature,
+  claimrewardstransaction_toString: () => claimrewardstransaction_toString,
+  claimrewardstransaction_value: () => claimrewardstransaction_value,
+  closure3101_externref_shim: () => closure3101_externref_shim,
+  closure3146_externref_shim: () => closure3146_externref_shim,
+  closure3148_externref_shim: () => closure3148_externref_shim,
+  coinCommitment: () => coinCommitment2,
+  coinNullifier: () => coinNullifier2,
+  coinsecretkey_clear: () => coinsecretkey_clear,
+  coinsecretkey_new: () => coinsecretkey_new,
+  coinsecretkey_public_key: () => coinsecretkey_public_key,
+  coinsecretkey_yesIKnowTheSecurityImplicationsOfThis_serialize: () => coinsecretkey_yesIKnowTheSecurityImplicationsOfThis_serialize,
+  communicationCommitment: () => communicationCommitment4,
+  communicationCommitmentRandomness: () => communicationCommitmentRandomness4,
+  contractcall_address: () => contractcall_address,
+  contractcall_communicationCommitment: () => contractcall_communicationCommitment,
+  contractcall_entryPoint: () => contractcall_entryPoint,
+  contractcall_fallibleTranscript: () => contractcall_fallibleTranscript,
+  contractcall_guaranteedTranscript: () => contractcall_guaranteedTranscript,
+  contractcall_new: () => contractcall_new,
+  contractcall_proof: () => contractcall_proof,
+  contractcall_toString: () => contractcall_toString,
+  contractcallprototype_intoCall: () => contractcallprototype_intoCall,
+  contractcallprototype_new: () => contractcallprototype_new,
+  contractcallprototype_toString: () => contractcallprototype_toString,
+  contractdeploy_address: () => contractdeploy_address,
+  contractdeploy_initialState: () => contractdeploy_initialState,
+  contractdeploy_new: () => contractdeploy_new,
+  contractdeploy_toString: () => contractdeploy_toString,
+  contractmaintenanceauthority_committee: () => contractmaintenanceauthority_committee2,
+  contractmaintenanceauthority_counter: () => contractmaintenanceauthority_counter2,
+  contractmaintenanceauthority_deserialize: () => contractmaintenanceauthority_deserialize2,
+  contractmaintenanceauthority_new: () => contractmaintenanceauthority_new2,
+  contractmaintenanceauthority_serialize: () => contractmaintenanceauthority_serialize2,
+  contractmaintenanceauthority_threshold: () => contractmaintenanceauthority_threshold2,
+  contractmaintenanceauthority_toString: () => contractmaintenanceauthority_toString2,
+  contractoperation_deserialize: () => contractoperation_deserialize2,
+  contractoperation_new: () => contractoperation_new2,
+  contractoperation_serialize: () => contractoperation_serialize2,
+  contractoperation_set_verifier_key: () => contractoperation_set_verifier_key2,
+  contractoperation_toString: () => contractoperation_toString2,
+  contractoperation_verifier_key: () => contractoperation_verifier_key2,
+  contractoperationversion_new: () => contractoperationversion_new,
+  contractoperationversion_toString: () => contractoperationversion_toString,
+  contractoperationversion_version: () => contractoperationversion_version,
+  contractoperationversionedverifierkey_new: () => contractoperationversionedverifierkey_new,
+  contractoperationversionedverifierkey_raw_vk: () => contractoperationversionedverifierkey_raw_vk,
+  contractoperationversionedverifierkey_toString: () => contractoperationversionedverifierkey_toString,
+  contractoperationversionedverifierkey_version: () => contractoperationversionedverifierkey_version,
+  contractstate_balance: () => contractstate_balance2,
+  contractstate_data: () => contractstate_data2,
+  contractstate_deserialize: () => contractstate_deserialize2,
+  contractstate_maintenance_authority: () => contractstate_maintenance_authority2,
+  contractstate_new: () => contractstate_new2,
+  contractstate_operation: () => contractstate_operation2,
+  contractstate_operations: () => contractstate_operations2,
+  contractstate_query: () => contractstate_query2,
+  contractstate_serialize: () => contractstate_serialize2,
+  contractstate_setOperation: () => contractstate_setOperation2,
+  contractstate_set_balance: () => contractstate_set_balance2,
+  contractstate_set_data: () => contractstate_set_data2,
+  contractstate_set_maintenance_authority: () => contractstate_set_maintenance_authority2,
+  contractstate_toString: () => contractstate_toString2,
+  costmodel_initialCostModel: () => costmodel_initialCostModel2,
+  costmodel_new: () => costmodel_new2,
+  costmodel_toString: () => costmodel_toString2,
+  createCheckPayload: () => createCheckPayload2,
+  createCoinInfo: () => createCoinInfo2,
+  createProvingPayload: () => createProvingPayload2,
+  createProvingTransactionPayload: () => createProvingTransactionPayload2,
+  createShieldedCoinInfo: () => createShieldedCoinInfo2,
+  decodeCoinPublicKey: () => decodeCoinPublicKey4,
+  decodeContractAddress: () => decodeContractAddress4,
+  decodeQualifiedShieldedCoinInfo: () => decodeQualifiedShieldedCoinInfo4,
+  decodeRawTokenType: () => decodeRawTokenType4,
+  decodeShieldedCoinInfo: () => decodeShieldedCoinInfo4,
+  decodeUserAddress: () => decodeUserAddress4,
+  degradeToTransient: () => degradeToTransient4,
+  dummyContractAddress: () => dummyContractAddress4,
+  dummyUserAddress: () => dummyUserAddress4,
+  dustCommitment: () => dustCommitment2,
+  dustInitialNonce: () => dustInitialNonce2,
+  dustNonce: () => dustNonce2,
+  dustNullifier: () => dustNullifier2,
+  dustactions_ctime: () => dustactions_ctime,
+  dustactions_deserialize: () => dustactions_deserialize,
+  dustactions_new: () => dustactions_new,
+  dustactions_registrations: () => dustactions_registrations,
+  dustactions_serialize: () => dustactions_serialize,
+  dustactions_set_ctime: () => dustactions_set_ctime,
+  dustactions_set_registrations: () => dustactions_set_registrations,
+  dustactions_set_spends: () => dustactions_set_spends,
+  dustactions_spends: () => dustactions_spends,
+  dustactions_toString: () => dustactions_toString,
+  dustgenerationstate_deserialize: () => dustgenerationstate_deserialize,
+  dustgenerationstate_new: () => dustgenerationstate_new,
+  dustgenerationstate_serialize: () => dustgenerationstate_serialize,
+  dustgenerationstate_toString: () => dustgenerationstate_toString,
+  dustlocalstate_addUtxo: () => dustlocalstate_addUtxo,
+  dustlocalstate_applyCommitmentCollapsedUpdate: () => dustlocalstate_applyCommitmentCollapsedUpdate,
+  dustlocalstate_applyGenerationCollapsedUpdate: () => dustlocalstate_applyGenerationCollapsedUpdate,
+  dustlocalstate_collapseCommitmentTree: () => dustlocalstate_collapseCommitmentTree,
+  dustlocalstate_collapseGenerationTree: () => dustlocalstate_collapseGenerationTree,
+  dustlocalstate_commitmentTreeRoot: () => dustlocalstate_commitmentTreeRoot,
+  dustlocalstate_deserialize: () => dustlocalstate_deserialize,
+  dustlocalstate_findUtxoByNullifier: () => dustlocalstate_findUtxoByNullifier,
+  dustlocalstate_generatingTreeRoot: () => dustlocalstate_generatingTreeRoot,
+  dustlocalstate_generationInfo: () => dustlocalstate_generationInfo,
+  dustlocalstate_insertCommitment: () => dustlocalstate_insertCommitment,
+  dustlocalstate_insertGenerationInfo: () => dustlocalstate_insertGenerationInfo,
+  dustlocalstate_new: () => dustlocalstate_new,
+  dustlocalstate_params: () => dustlocalstate_params,
+  dustlocalstate_processTtls: () => dustlocalstate_processTtls,
+  dustlocalstate_removeCommitment: () => dustlocalstate_removeCommitment,
+  dustlocalstate_removeGenerationInfo: () => dustlocalstate_removeGenerationInfo,
+  dustlocalstate_removeUtxo: () => dustlocalstate_removeUtxo,
+  dustlocalstate_replayEvents: () => dustlocalstate_replayEvents,
+  dustlocalstate_replayEventsWithChanges: () => dustlocalstate_replayEventsWithChanges,
+  dustlocalstate_replayRawEvents: () => dustlocalstate_replayRawEvents,
+  dustlocalstate_serialize: () => dustlocalstate_serialize,
+  dustlocalstate_spend: () => dustlocalstate_spend,
+  dustlocalstate_successorUtxo: () => dustlocalstate_successorUtxo,
+  dustlocalstate_syncTime: () => dustlocalstate_syncTime,
+  dustlocalstate_toString: () => dustlocalstate_toString,
+  dustlocalstate_utxos: () => dustlocalstate_utxos,
+  dustlocalstate_walletBalance: () => dustlocalstate_walletBalance,
+  dustlocalstatewithchanges_changes: () => dustlocalstatewithchanges_changes,
+  dustlocalstatewithchanges_state: () => dustlocalstatewithchanges_state,
+  dustparameters_deserialize: () => dustparameters_deserialize,
+  dustparameters_dustGracePeriodSeconds: () => dustparameters_dustGracePeriodSeconds,
+  dustparameters_generationDecayRate: () => dustparameters_generationDecayRate,
+  dustparameters_new: () => dustparameters_new,
+  dustparameters_nightDustRatio: () => dustparameters_nightDustRatio,
+  dustparameters_serialize: () => dustparameters_serialize,
+  dustparameters_set_dustGracePeriodSeconds: () => dustparameters_set_dustGracePeriodSeconds,
+  dustparameters_set_generationDecayRate: () => dustparameters_set_generationDecayRate,
+  dustparameters_set_nightDustRatio: () => dustparameters_set_nightDustRatio,
+  dustparameters_timeToCapSeconds: () => dustparameters_timeToCapSeconds,
+  dustparameters_toString: () => dustparameters_toString,
+  dustregistration_allowFeePayment: () => dustregistration_allowFeePayment,
+  dustregistration_deserialize: () => dustregistration_deserialize,
+  dustregistration_dustAddress: () => dustregistration_dustAddress,
+  dustregistration_new: () => dustregistration_new,
+  dustregistration_nightKey: () => dustregistration_nightKey,
+  dustregistration_serialize: () => dustregistration_serialize,
+  dustregistration_set_allowFeePayment: () => dustregistration_set_allowFeePayment,
+  dustregistration_set_dustAddress: () => dustregistration_set_dustAddress,
+  dustregistration_set_nightKey: () => dustregistration_set_nightKey,
+  dustregistration_set_signature: () => dustregistration_set_signature,
+  dustregistration_signature: () => dustregistration_signature,
+  dustregistration_toString: () => dustregistration_toString,
+  dustsecretkey_clear: () => dustsecretkey_clear,
+  dustsecretkey_fromBigint: () => dustsecretkey_fromBigint,
+  dustsecretkey_fromSeed: () => dustsecretkey_fromSeed,
+  dustsecretkey_new: () => dustsecretkey_new,
+  dustsecretkey_publicKey: () => dustsecretkey_publicKey,
+  dustspend_new: () => dustspend_new,
+  dustspend_newCommitment: () => dustspend_newCommitment,
+  dustspend_oldNullifier: () => dustspend_oldNullifier,
+  dustspend_proof: () => dustspend_proof,
+  dustspend_toString: () => dustspend_toString,
+  dustspend_vFee: () => dustspend_vFee,
+  duststate_deserialize: () => duststate_deserialize,
+  duststate_generation: () => duststate_generation,
+  duststate_new: () => duststate_new,
+  duststate_serialize: () => duststate_serialize,
+  duststate_toString: () => duststate_toString,
+  duststate_utxo: () => duststate_utxo,
+  duststatechanges_receivedUtxos: () => duststatechanges_receivedUtxos,
+  duststatechanges_source: () => duststatechanges_source,
+  duststatechanges_spentUtxos: () => duststatechanges_spentUtxos,
+  duststatemerkletreecollapsedupdate_deserialize: () => duststatemerkletreecollapsedupdate_deserialize,
+  duststatemerkletreecollapsedupdate_new: () => duststatemerkletreecollapsedupdate_new,
+  duststatemerkletreecollapsedupdate_newFromCommitmentTree: () => duststatemerkletreecollapsedupdate_newFromCommitmentTree,
+  duststatemerkletreecollapsedupdate_newFromGenerationTree: () => duststatemerkletreecollapsedupdate_newFromGenerationTree,
+  duststatemerkletreecollapsedupdate_serialize: () => duststatemerkletreecollapsedupdate_serialize,
+  duststatemerkletreecollapsedupdate_toString: () => duststatemerkletreecollapsedupdate_toString,
+  dustutxostate_deserialize: () => dustutxostate_deserialize,
+  dustutxostate_new: () => dustutxostate_new,
+  dustutxostate_serialize: () => dustutxostate_serialize,
+  dustutxostate_toString: () => dustutxostate_toString,
+  ecAdd: () => ecAdd4,
+  ecMul: () => ecMul4,
+  ecMulGenerator: () => ecMulGenerator4,
+  encodeCoinPublicKey: () => encodeCoinPublicKey4,
+  encodeContractAddress: () => encodeContractAddress4,
+  encodeQualifiedShieldedCoinInfo: () => encodeQualifiedShieldedCoinInfo4,
+  encodeRawTokenType: () => encodeRawTokenType4,
+  encodeShieldedCoinInfo: () => encodeShieldedCoinInfo4,
+  encodeUserAddress: () => encodeUserAddress4,
+  encryptionsecretkey_clear: () => encryptionsecretkey_clear,
+  encryptionsecretkey_deserialize: () => encryptionsecretkey_deserialize,
+  encryptionsecretkey_new: () => encryptionsecretkey_new,
+  encryptionsecretkey_public_key: () => encryptionsecretkey_public_key,
+  encryptionsecretkey_taggedDeserialize: () => encryptionsecretkey_taggedDeserialize,
+  encryptionsecretkey_test: () => encryptionsecretkey_test,
+  encryptionsecretkey_yesIKnowTheSecurityImplicationsOfThis_serialize: () => encryptionsecretkey_yesIKnowTheSecurityImplicationsOfThis_serialize,
+  encryptionsecretkey_yesIKnowTheSecurityImplicationsOfThis_taggedSerialize: () => encryptionsecretkey_yesIKnowTheSecurityImplicationsOfThis_taggedSerialize,
+  entryPointHash: () => entryPointHash4,
+  event_content: () => event_content,
+  event_deserialize: () => event_deserialize,
+  event_new: () => event_new,
+  event_serialize: () => event_serialize,
+  event_source: () => event_source,
+  event_toString: () => event_toString,
+  feeToken: () => feeToken2,
+  hashToCurve: () => hashToCurve4,
+  intent_actions: () => intent_actions,
+  intent_addCall: () => intent_addCall,
+  intent_addDeploy: () => intent_addDeploy,
+  intent_addMaintenanceUpdate: () => intent_addMaintenanceUpdate,
+  intent_bind: () => intent_bind,
+  intent_binding: () => intent_binding,
+  intent_construct: () => intent_construct,
+  intent_deserialize: () => intent_deserialize,
+  intent_dustActions: () => intent_dustActions,
+  intent_eraseProofs: () => intent_eraseProofs,
+  intent_eraseSignatures: () => intent_eraseSignatures,
+  intent_fallibleUnshieldedOffer: () => intent_fallibleUnshieldedOffer,
+  intent_guaranteedUnshieldedOffer: () => intent_guaranteedUnshieldedOffer,
+  intent_has_contract_deployments: () => intent_has_contract_deployments,
+  intent_has_fallible_offers: () => intent_has_fallible_offers,
+  intent_has_fallible_transcripts: () => intent_has_fallible_transcripts,
+  intent_intentHash: () => intent_intentHash,
+  intent_new: () => intent_new,
+  intent_serialize: () => intent_serialize,
+  intent_set_actions: () => intent_set_actions,
+  intent_set_dustActions: () => intent_set_dustActions,
+  intent_set_fallibleUnshieldedOffer: () => intent_set_fallibleUnshieldedOffer,
+  intent_set_guaranteedUnshieldedOffer: () => intent_set_guaranteedUnshieldedOffer,
+  intent_set_ttl: () => intent_set_ttl,
+  intent_signatureData: () => intent_signatureData,
+  intent_toString: () => intent_toString,
+  intent_ttl: () => intent_ttl,
+  intounderlyingbytesource_autoAllocateChunkSize: () => intounderlyingbytesource_autoAllocateChunkSize2,
+  intounderlyingbytesource_cancel: () => intounderlyingbytesource_cancel2,
+  intounderlyingbytesource_pull: () => intounderlyingbytesource_pull2,
+  intounderlyingbytesource_start: () => intounderlyingbytesource_start2,
+  intounderlyingbytesource_type: () => intounderlyingbytesource_type2,
+  intounderlyingsink_abort: () => intounderlyingsink_abort2,
+  intounderlyingsink_close: () => intounderlyingsink_close2,
+  intounderlyingsink_write: () => intounderlyingsink_write2,
+  intounderlyingsource_cancel: () => intounderlyingsource_cancel2,
+  intounderlyingsource_pull: () => intounderlyingsource_pull2,
+  leafHash: () => leafHash4,
+  ledgerparameters_deserialize: () => ledgerparameters_deserialize,
+  ledgerparameters_dust: () => ledgerparameters_dust,
+  ledgerparameters_feePrices: () => ledgerparameters_feePrices,
+  ledgerparameters_initialParameters: () => ledgerparameters_initialParameters,
+  ledgerparameters_maxPriceAdjustment: () => ledgerparameters_maxPriceAdjustment,
+  ledgerparameters_new: () => ledgerparameters_new,
+  ledgerparameters_normalizeFullness: () => ledgerparameters_normalizeFullness,
+  ledgerparameters_serialize: () => ledgerparameters_serialize,
+  ledgerparameters_toString: () => ledgerparameters_toString,
+  ledgerparameters_transactionCostModel: () => ledgerparameters_transactionCostModel,
+  ledgerstate_apply: () => ledgerstate_apply,
+  ledgerstate_applySystemTx: () => ledgerstate_applySystemTx,
+  ledgerstate_blank: () => ledgerstate_blank,
+  ledgerstate_block_reward_pool: () => ledgerstate_block_reward_pool,
+  ledgerstate_bridgeReceiving: () => ledgerstate_bridgeReceiving,
+  ledgerstate_deserialize: () => ledgerstate_deserialize,
+  ledgerstate_dust: () => ledgerstate_dust,
+  ledgerstate_index: () => ledgerstate_index,
+  ledgerstate_locked_pool: () => ledgerstate_locked_pool,
+  ledgerstate_new: () => ledgerstate_new,
+  ledgerstate_parameters: () => ledgerstate_parameters,
+  ledgerstate_postBlockUpdate: () => ledgerstate_postBlockUpdate,
+  ledgerstate_reserve_pool: () => ledgerstate_reserve_pool,
+  ledgerstate_serialize: () => ledgerstate_serialize,
+  ledgerstate_set_parameters: () => ledgerstate_set_parameters,
+  ledgerstate_testingDistributeNight: () => ledgerstate_testingDistributeNight,
+  ledgerstate_toString: () => ledgerstate_toString,
+  ledgerstate_treasuryBalance: () => ledgerstate_treasuryBalance,
+  ledgerstate_unclaimedBlockRewards: () => ledgerstate_unclaimedBlockRewards,
+  ledgerstate_updateIndex: () => ledgerstate_updateIndex,
+  ledgerstate_utxo: () => ledgerstate_utxo,
+  ledgerstate_zswap: () => ledgerstate_zswap,
+  maintenanceupdate_addSignature: () => maintenanceupdate_addSignature,
+  maintenanceupdate_address: () => maintenanceupdate_address,
+  maintenanceupdate_counter: () => maintenanceupdate_counter,
+  maintenanceupdate_data_to_sign: () => maintenanceupdate_data_to_sign,
+  maintenanceupdate_new: () => maintenanceupdate_new,
+  maintenanceupdate_signatures: () => maintenanceupdate_signatures,
+  maintenanceupdate_toString: () => maintenanceupdate_toString,
+  maintenanceupdate_updates: () => maintenanceupdate_updates,
+  maxAlignedSize: () => maxAlignedSize4,
+  maxField: () => maxField4,
+  memory: () => memory2,
+  merkletreecollapsedupdate_deserialize: () => merkletreecollapsedupdate_deserialize,
+  merkletreecollapsedupdate_new: () => merkletreecollapsedupdate_new,
+  merkletreecollapsedupdate_serialize: () => merkletreecollapsedupdate_serialize,
+  merkletreecollapsedupdate_toString: () => merkletreecollapsedupdate_toString,
+  nativeToken: () => nativeToken2,
+  nobinding_deserialize: () => nobinding_deserialize,
+  nobinding_instance: () => nobinding_instance,
+  nobinding_new: () => nobinding_new,
+  nobinding_serialize: () => nobinding_serialize,
+  nobinding_toString: () => nobinding_toString,
+  noproof_instance: () => noproof_instance,
+  noproof_new: () => noproof_new,
+  noproof_toString: () => noproof_toString,
+  parseCheckResult: () => parseCheckResult2,
+  partitionTranscripts: () => partitionTranscripts2,
+  persistentCommit: () => persistentCommit5,
+  persistentHash: () => persistentHash5,
+  prebinding_deserialize: () => prebinding_deserialize,
+  prebinding_instance: () => prebinding_instance,
+  prebinding_new: () => prebinding_new,
+  prebinding_serialize: () => prebinding_serialize,
+  prebinding_toString: () => prebinding_toString,
+  prepartitioncontractcall_new: () => prepartitioncontractcall_new,
+  prepartitioncontractcall_toString: () => prepartitioncontractcall_toString,
+  preproof_deserialize: () => preproof_deserialize,
+  preproof_instance: () => preproof_instance,
+  preproof_new: () => preproof_new,
+  preproof_serialize: () => preproof_serialize,
+  preproof_toString: () => preproof_toString,
+  pretranscript_new: () => pretranscript_new,
+  pretranscript_toString: () => pretranscript_toString,
+  proofDataIntoSerializedPreimage: () => proofDataIntoSerializedPreimage4,
+  proof_deserialize: () => proof_deserialize,
+  proof_instance: () => proof_instance,
+  proof_new: () => proof_new,
+  proof_serialize: () => proof_serialize,
+  proof_toString: () => proof_toString,
+  querycontext_address: () => querycontext_address2,
+  querycontext_block: () => querycontext_block2,
+  querycontext_com_indices: () => querycontext_com_indices2,
+  querycontext_effects: () => querycontext_effects2,
+  querycontext_insertCommitment: () => querycontext_insertCommitment2,
+  querycontext_new: () => querycontext_new2,
+  querycontext_qualify: () => querycontext_qualify2,
+  querycontext_query: () => querycontext_query2,
+  querycontext_runTranscript: () => querycontext_runTranscript2,
+  querycontext_set_block: () => querycontext_set_block2,
+  querycontext_set_effects: () => querycontext_set_effects2,
+  querycontext_state: () => querycontext_state2,
+  querycontext_toString: () => querycontext_toString2,
+  querycontext_toVmStack: () => querycontext_toVmStack2,
+  queryresults_context: () => queryresults_context2,
+  queryresults_events: () => queryresults_events2,
+  queryresults_gas_cost: () => queryresults_gas_cost2,
+  queryresults_new: () => queryresults_new2,
+  queryresults_toString: () => queryresults_toString2,
+  rawTokenType: () => rawTokenType4,
+  replaceauthority_authority: () => replaceauthority_authority,
+  replaceauthority_new: () => replaceauthority_new,
+  replaceauthority_toString: () => replaceauthority_toString,
+  runProgram: () => runProgram4,
+  runtimeCoinCommitment: () => runtimeCoinCommitment4,
+  runtimeCoinNullifier: () => runtimeCoinNullifier4,
+  sampleCoinPublicKey: () => sampleCoinPublicKey2,
+  sampleContractAddress: () => sampleContractAddress4,
+  sampleDustSecretKey: () => sampleDustSecretKey2,
+  sampleEncryptionPublicKey: () => sampleEncryptionPublicKey2,
+  sampleIntentHash: () => sampleIntentHash2,
+  sampleRawTokenType: () => sampleRawTokenType4,
+  sampleSigningKey: () => sampleSigningKey4,
+  sampleUserAddress: () => sampleUserAddress4,
+  shieldedToken: () => shieldedToken2,
+  signData: () => signData4,
+  signatureVerifyingKey: () => signatureVerifyingKey4,
+  signatureenabled_deserialize: () => signatureenabled_deserialize,
+  signatureenabled_instance: () => signatureenabled_instance,
+  signatureenabled_new: () => signatureenabled_new,
+  signatureenabled_serialize: () => signatureenabled_serialize,
+  signatureenabled_toString: () => signatureenabled_toString,
+  signatureerased_instance: () => signatureerased_instance,
+  signatureerased_new: () => signatureerased_new,
+  signatureerased_toString: () => signatureerased_toString,
+  signingKeyFromBip340: () => signingKeyFromBip3404,
+  stateboundedmerkletree_blank: () => stateboundedmerkletree_blank2,
+  stateboundedmerkletree_collapse: () => stateboundedmerkletree_collapse2,
+  stateboundedmerkletree_findPathForLeaf: () => stateboundedmerkletree_findPathForLeaf2,
+  stateboundedmerkletree_height: () => stateboundedmerkletree_height2,
+  stateboundedmerkletree_pathForLeaf: () => stateboundedmerkletree_pathForLeaf2,
+  stateboundedmerkletree_rehash: () => stateboundedmerkletree_rehash2,
+  stateboundedmerkletree_root: () => stateboundedmerkletree_root2,
+  stateboundedmerkletree_toString: () => stateboundedmerkletree_toString2,
+  stateboundedmerkletree_update: () => stateboundedmerkletree_update2,
+  statemap_get: () => statemap_get2,
+  statemap_insert: () => statemap_insert2,
+  statemap_keys: () => statemap_keys2,
+  statemap_new: () => statemap_new2,
+  statemap_remove: () => statemap_remove2,
+  statemap_toString: () => statemap_toString2,
+  statevalue_arrayPush: () => statevalue_arrayPush2,
+  statevalue_asArray: () => statevalue_asArray2,
+  statevalue_asBoundedMerkleTree: () => statevalue_asBoundedMerkleTree2,
+  statevalue_asCell: () => statevalue_asCell2,
+  statevalue_asMap: () => statevalue_asMap2,
+  statevalue_decode: () => statevalue_decode2,
+  statevalue_encode: () => statevalue_encode2,
+  statevalue_logSize: () => statevalue_logSize2,
+  statevalue_new: () => statevalue_new2,
+  statevalue_newArray: () => statevalue_newArray2,
+  statevalue_newBoundedMerkleTree: () => statevalue_newBoundedMerkleTree2,
+  statevalue_newCell: () => statevalue_newCell2,
+  statevalue_newMap: () => statevalue_newMap2,
+  statevalue_newNull: () => statevalue_newNull2,
+  statevalue_toString: () => statevalue_toString2,
+  statevalue_type: () => statevalue_type2,
+  systemtransaction_deserialize: () => systemtransaction_deserialize,
+  systemtransaction_new: () => systemtransaction_new,
+  systemtransaction_serialize: () => systemtransaction_serialize,
+  systemtransaction_toString: () => systemtransaction_toString,
+  transaction_addCalls: () => transaction_addCalls,
+  transaction_addIntent: () => transaction_addIntent,
+  transaction_addZswapOffer: () => transaction_addZswapOffer,
+  transaction_bind: () => transaction_bind,
+  transaction_bindingRandomness: () => transaction_bindingRandomness,
+  transaction_cost: () => transaction_cost,
+  transaction_deserialize: () => transaction_deserialize,
+  transaction_eraseProofs: () => transaction_eraseProofs,
+  transaction_eraseSignatures: () => transaction_eraseSignatures,
+  transaction_fallibleOffer: () => transaction_fallibleOffer,
+  transaction_fees: () => transaction_fees,
+  transaction_feesWithMargin: () => transaction_feesWithMargin,
+  transaction_fromParts: () => transaction_fromParts,
+  transaction_fromPartsRandomized: () => transaction_fromPartsRandomized,
+  transaction_fromRewards: () => transaction_fromRewards,
+  transaction_guaranteedOffer: () => transaction_guaranteedOffer,
+  transaction_identifiers: () => transaction_identifiers,
+  transaction_imbalances: () => transaction_imbalances,
+  transaction_intents: () => transaction_intents,
+  transaction_merge: () => transaction_merge,
+  transaction_mockProve: () => transaction_mockProve,
+  transaction_new: () => transaction_new,
+  transaction_prove: () => transaction_prove,
+  transaction_rewards: () => transaction_rewards,
+  transaction_serialize: () => transaction_serialize,
+  transaction_set_fallibleOffer: () => transaction_set_fallibleOffer,
+  transaction_set_guaranteedOffer: () => transaction_set_guaranteedOffer,
+  transaction_set_intents: () => transaction_set_intents,
+  transaction_toString: () => transaction_toString,
+  transaction_transactionHash: () => transaction_transactionHash,
+  transaction_wellFormed: () => transaction_wellFormed,
+  transactioncontext_new: () => transactioncontext_new,
+  transactioncontext_toString: () => transactioncontext_toString,
+  transactioncostmodel_baselineCost: () => transactioncostmodel_baselineCost,
+  transactioncostmodel_deserialize: () => transactioncostmodel_deserialize,
+  transactioncostmodel_initialTransactionCostModel: () => transactioncostmodel_initialTransactionCostModel,
+  transactioncostmodel_new: () => transactioncostmodel_new,
+  transactioncostmodel_runtimeCostModel: () => transactioncostmodel_runtimeCostModel,
+  transactioncostmodel_serialize: () => transactioncostmodel_serialize,
+  transactioncostmodel_toString: () => transactioncostmodel_toString,
+  transactionresult_error: () => transactionresult_error,
+  transactionresult_events: () => transactionresult_events,
+  transactionresult_new: () => transactionresult_new,
+  transactionresult_successfulSegments: () => transactionresult_successfulSegments,
+  transactionresult_toString: () => transactionresult_toString,
+  transactionresult_type_: () => transactionresult_type_,
+  transientCommit: () => transientCommit4,
+  transientHash: () => transientHash4,
+  unshieldedToken: () => unshieldedToken2,
+  unshieldedoffer_addSignatures: () => unshieldedoffer_addSignatures,
+  unshieldedoffer_construct: () => unshieldedoffer_construct,
+  unshieldedoffer_eraseSignatures: () => unshieldedoffer_eraseSignatures,
+  unshieldedoffer_inputs: () => unshieldedoffer_inputs,
+  unshieldedoffer_new: () => unshieldedoffer_new,
+  unshieldedoffer_outputs: () => unshieldedoffer_outputs,
+  unshieldedoffer_signatures: () => unshieldedoffer_signatures,
+  unshieldedoffer_toString: () => unshieldedoffer_toString,
+  updatedValue: () => updatedValue2,
+  upgradeFromTransient: () => upgradeFromTransient4,
+  utxometa_ctime: () => utxometa_ctime,
+  utxometa_new: () => utxometa_new,
+  utxometa_set_ctime: () => utxometa_set_ctime,
+  utxostate_delta: () => utxostate_delta,
+  utxostate_filter: () => utxostate_filter,
+  utxostate_lookupMeta: () => utxostate_lookupMeta,
+  utxostate_new: () => utxostate_new,
+  utxostate_utxos: () => utxostate_utxos,
+  valueToBigInt: () => valueToBigInt4,
+  verifiedtransaction_transaction: () => verifiedtransaction_transaction,
+  verifierkeyinsert_new: () => verifierkeyinsert_new,
+  verifierkeyinsert_operation: () => verifierkeyinsert_operation,
+  verifierkeyinsert_toString: () => verifierkeyinsert_toString,
+  verifierkeyinsert_vk: () => verifierkeyinsert_vk,
+  verifierkeyremove_new: () => verifierkeyremove_new,
+  verifierkeyremove_operation: () => verifierkeyremove_operation,
+  verifierkeyremove_toString: () => verifierkeyremove_toString,
+  verifierkeyremove_version: () => verifierkeyremove_version,
+  verifySignature: () => verifySignature4,
+  vmresults_events: () => vmresults_events2,
+  vmresults_gas_cost: () => vmresults_gas_cost2,
+  vmresults_new: () => vmresults_new2,
+  vmresults_stack: () => vmresults_stack2,
+  vmresults_toString: () => vmresults_toString2,
+  vmstack_get: () => vmstack_get2,
+  vmstack_isStrong: () => vmstack_isStrong2,
+  vmstack_length: () => vmstack_length2,
+  vmstack_new: () => vmstack_new2,
+  vmstack_push: () => vmstack_push2,
+  vmstack_removeLast: () => vmstack_removeLast2,
+  vmstack_toString: () => vmstack_toString2,
+  wellformedstrictness_enforce_balancing: () => wellformedstrictness_enforce_balancing,
+  wellformedstrictness_enforce_limits: () => wellformedstrictness_enforce_limits,
+  wellformedstrictness_new: () => wellformedstrictness_new,
+  wellformedstrictness_set_enforce_balancing: () => wellformedstrictness_set_enforce_balancing,
+  wellformedstrictness_set_enforce_limits: () => wellformedstrictness_set_enforce_limits,
+  wellformedstrictness_set_verify_contract_proofs: () => wellformedstrictness_set_verify_contract_proofs,
+  wellformedstrictness_set_verify_native_proofs: () => wellformedstrictness_set_verify_native_proofs,
+  wellformedstrictness_set_verify_signatures: () => wellformedstrictness_set_verify_signatures,
+  wellformedstrictness_verify_contract_proofs: () => wellformedstrictness_verify_contract_proofs,
+  wellformedstrictness_verify_native_proofs: () => wellformedstrictness_verify_native_proofs,
+  wellformedstrictness_verify_signatures: () => wellformedstrictness_verify_signatures,
+  zswapchainstate_deserialize: () => zswapchainstate_deserialize,
+  zswapchainstate_deserializeFromLedgerState: () => zswapchainstate_deserializeFromLedgerState,
+  zswapchainstate_filter: () => zswapchainstate_filter,
+  zswapchainstate_firstFree: () => zswapchainstate_firstFree,
+  zswapchainstate_new: () => zswapchainstate_new,
+  zswapchainstate_postBlockUpdate: () => zswapchainstate_postBlockUpdate,
+  zswapchainstate_serialize: () => zswapchainstate_serialize,
+  zswapchainstate_toString: () => zswapchainstate_toString,
+  zswapchainstate_tryApply: () => zswapchainstate_tryApply,
+  zswapinput_contractAddress: () => zswapinput_contractAddress,
+  zswapinput_deserialize: () => zswapinput_deserialize,
+  zswapinput_new: () => zswapinput_new,
+  zswapinput_newContractOwned: () => zswapinput_newContractOwned,
+  zswapinput_nullifier: () => zswapinput_nullifier,
+  zswapinput_proof: () => zswapinput_proof,
+  zswapinput_serialize: () => zswapinput_serialize,
+  zswapinput_toString: () => zswapinput_toString,
+  zswaplocalstate_apply: () => zswaplocalstate_apply,
+  zswaplocalstate_applyCollapsedUpdate: () => zswaplocalstate_applyCollapsedUpdate,
+  zswaplocalstate_applyFailed: () => zswaplocalstate_applyFailed,
+  zswaplocalstate_applyWithChanges: () => zswaplocalstate_applyWithChanges,
+  zswaplocalstate_clearPending: () => zswaplocalstate_clearPending,
+  zswaplocalstate_coins: () => zswaplocalstate_coins,
+  zswaplocalstate_deserialize: () => zswaplocalstate_deserialize,
+  zswaplocalstate_firstFree: () => zswaplocalstate_firstFree,
+  zswaplocalstate_insertCoin: () => zswaplocalstate_insertCoin,
+  zswaplocalstate_merkle_tree_root: () => zswaplocalstate_merkle_tree_root,
+  zswaplocalstate_new: () => zswaplocalstate_new,
+  zswaplocalstate_pendingOutputs: () => zswaplocalstate_pendingOutputs,
+  zswaplocalstate_pendingSpends: () => zswaplocalstate_pendingSpends,
+  zswaplocalstate_removeCoinByNullifier: () => zswaplocalstate_removeCoinByNullifier,
+  zswaplocalstate_replayEvents: () => zswaplocalstate_replayEvents,
+  zswaplocalstate_replayEventsWithChanges: () => zswaplocalstate_replayEventsWithChanges,
+  zswaplocalstate_replayRawEvents: () => zswaplocalstate_replayRawEvents,
+  zswaplocalstate_revertTransaction: () => zswaplocalstate_revertTransaction,
+  zswaplocalstate_serialize: () => zswaplocalstate_serialize,
+  zswaplocalstate_spend: () => zswaplocalstate_spend,
+  zswaplocalstate_spendFromOutput: () => zswaplocalstate_spendFromOutput,
+  zswaplocalstate_toString: () => zswaplocalstate_toString,
+  zswaplocalstate_watchFor: () => zswaplocalstate_watchFor,
+  zswaplocalstatewithchanges_changes: () => zswaplocalstatewithchanges_changes,
+  zswaplocalstatewithchanges_state: () => zswaplocalstatewithchanges_state,
+  zswapoffer_deltas: () => zswapoffer_deltas,
+  zswapoffer_deserialize: () => zswapoffer_deserialize,
+  zswapoffer_fromInput: () => zswapoffer_fromInput,
+  zswapoffer_fromOutput: () => zswapoffer_fromOutput,
+  zswapoffer_fromTransient: () => zswapoffer_fromTransient,
+  zswapoffer_inputs: () => zswapoffer_inputs,
+  zswapoffer_merge: () => zswapoffer_merge,
+  zswapoffer_new: () => zswapoffer_new,
+  zswapoffer_outputs: () => zswapoffer_outputs,
+  zswapoffer_serialize: () => zswapoffer_serialize,
+  zswapoffer_toString: () => zswapoffer_toString,
+  zswapoffer_transients: () => zswapoffer_transients,
+  zswapoutput_commitment: () => zswapoutput_commitment,
+  zswapoutput_construct: () => zswapoutput_construct,
+  zswapoutput_contractAddress: () => zswapoutput_contractAddress,
+  zswapoutput_deserialize: () => zswapoutput_deserialize,
+  zswapoutput_new: () => zswapoutput_new,
+  zswapoutput_newContractOwned: () => zswapoutput_newContractOwned,
+  zswapoutput_proof: () => zswapoutput_proof,
+  zswapoutput_serialize: () => zswapoutput_serialize,
+  zswapoutput_toString: () => zswapoutput_toString,
+  zswapsecretkeys_clear: () => zswapsecretkeys_clear,
+  zswapsecretkeys_coinPublicKey: () => zswapsecretkeys_coinPublicKey,
+  zswapsecretkeys_coinSecretKey: () => zswapsecretkeys_coinSecretKey,
+  zswapsecretkeys_encryptionPublicKey: () => zswapsecretkeys_encryptionPublicKey,
+  zswapsecretkeys_encryptionSecretKey: () => zswapsecretkeys_encryptionSecretKey,
+  zswapsecretkeys_fromSeed: () => zswapsecretkeys_fromSeed,
+  zswapsecretkeys_fromSeedRng: () => zswapsecretkeys_fromSeedRng,
+  zswapsecretkeys_new: () => zswapsecretkeys_new,
+  zswapstatechanges_receivedCoins: () => zswapstatechanges_receivedCoins,
+  zswapstatechanges_source: () => zswapstatechanges_source,
+  zswapstatechanges_spentCoins: () => zswapstatechanges_spentCoins,
+  zswaptransient_commitment: () => zswaptransient_commitment,
+  zswaptransient_contractAddress: () => zswaptransient_contractAddress,
+  zswaptransient_deserialize: () => zswaptransient_deserialize,
+  zswaptransient_inputProof: () => zswaptransient_inputProof,
+  zswaptransient_new: () => zswaptransient_new,
+  zswaptransient_newFromContractOwnedOutput: () => zswaptransient_newFromContractOwnedOutput,
+  zswaptransient_nullifier: () => zswaptransient_nullifier,
+  zswaptransient_outputProof: () => zswaptransient_outputProof,
+  zswaptransient_serialize: () => zswaptransient_serialize,
+  zswaptransient_toString: () => zswaptransient_toString
 });
-var midnight_ledger_wasm_bg_default = "./midnight_ledger_wasm_bg.wasm";
+init_dirname();
+init_buffer2();
+init_process2();
 
 // node_modules/@midnight-ntwrk/ledger-v8/midnight_ledger_wasm_bg.js
+var midnight_ledger_wasm_bg_exports = {};
+__export(midnight_ledger_wasm_bg_exports, {
+  AuthorizedClaim: () => AuthorizedClaim,
+  Binding: () => Binding,
+  ChargedState: () => ChargedState2,
+  ClaimRewardsTransaction: () => ClaimRewardsTransaction,
+  CoinSecretKey: () => CoinSecretKey,
+  ContractCall: () => ContractCall,
+  ContractCallPrototype: () => ContractCallPrototype,
+  ContractDeploy: () => ContractDeploy,
+  ContractMaintenanceAuthority: () => ContractMaintenanceAuthority2,
+  ContractOperation: () => ContractOperation2,
+  ContractOperationVersion: () => ContractOperationVersion,
+  ContractOperationVersionedVerifierKey: () => ContractOperationVersionedVerifierKey,
+  ContractState: () => ContractState2,
+  CostModel: () => CostModel2,
+  DustActions: () => DustActions,
+  DustGenerationState: () => DustGenerationState,
+  DustLocalState: () => DustLocalState,
+  DustLocalStateWithChanges: () => DustLocalStateWithChanges,
+  DustParameters: () => DustParameters,
+  DustRegistration: () => DustRegistration,
+  DustSecretKey: () => DustSecretKey,
+  DustSpend: () => DustSpend,
+  DustState: () => DustState,
+  DustStateChanges: () => DustStateChanges,
+  DustStateMerkleTreeCollapsedUpdate: () => DustStateMerkleTreeCollapsedUpdate,
+  DustUtxoState: () => DustUtxoState,
+  EncryptionSecretKey: () => EncryptionSecretKey,
+  Event: () => Event,
+  Intent: () => Intent,
+  IntoUnderlyingByteSource: () => IntoUnderlyingByteSource2,
+  IntoUnderlyingSink: () => IntoUnderlyingSink2,
+  IntoUnderlyingSource: () => IntoUnderlyingSource2,
+  LedgerParameters: () => LedgerParameters,
+  LedgerState: () => LedgerState,
+  MaintenanceUpdate: () => MaintenanceUpdate,
+  MerkleTreeCollapsedUpdate: () => MerkleTreeCollapsedUpdate,
+  NoBinding: () => NoBinding,
+  NoProof: () => NoProof,
+  PreBinding: () => PreBinding,
+  PrePartitionContractCall: () => PrePartitionContractCall,
+  PreProof: () => PreProof,
+  PreTranscript: () => PreTranscript,
+  Proof: () => Proof,
+  QueryContext: () => QueryContext2,
+  QueryResults: () => QueryResults2,
+  ReplaceAuthority: () => ReplaceAuthority,
+  SignatureEnabled: () => SignatureEnabled,
+  SignatureErased: () => SignatureErased,
+  StateBoundedMerkleTree: () => StateBoundedMerkleTree2,
+  StateMap: () => StateMap2,
+  StateValue: () => StateValue2,
+  SystemTransaction: () => SystemTransaction,
+  Transaction: () => Transaction,
+  TransactionContext: () => TransactionContext,
+  TransactionCostModel: () => TransactionCostModel,
+  TransactionResult: () => TransactionResult,
+  UnshieldedOffer: () => UnshieldedOffer,
+  UtxoMeta: () => UtxoMeta,
+  UtxoState: () => UtxoState,
+  VerifiedTransaction: () => VerifiedTransaction,
+  VerifierKeyInsert: () => VerifierKeyInsert,
+  VerifierKeyRemove: () => VerifierKeyRemove,
+  VmResults: () => VmResults2,
+  VmStack: () => VmStack2,
+  WellFormedStrictness: () => WellFormedStrictness,
+  ZswapChainState: () => ZswapChainState,
+  ZswapInput: () => ZswapInput,
+  ZswapLocalState: () => ZswapLocalState,
+  ZswapLocalStateWithChanges: () => ZswapLocalStateWithChanges,
+  ZswapOffer: () => ZswapOffer,
+  ZswapOutput: () => ZswapOutput,
+  ZswapSecretKeys: () => ZswapSecretKeys,
+  ZswapStateChanges: () => ZswapStateChanges,
+  ZswapTransient: () => ZswapTransient,
+  __wbg_BigInt_40a77d45cca49470: () => __wbg_BigInt_40a77d45cca494702,
+  __wbg_BigInt_6adbfd8eb0f7ec07: () => __wbg_BigInt_6adbfd8eb0f7ec072,
+  __wbg_Error_e17e777aac105295: () => __wbg_Error_e17e777aac1052952,
+  __wbg_Number_998bea33bd87c3e0: () => __wbg_Number_998bea33bd87c3e02,
+  __wbg_String_8f0eb39a4a4c2f66: () => __wbg_String_8f0eb39a4a4c2f662,
+  __wbg_add_bd7fa428f539a577: () => __wbg_add_bd7fa428f539a577,
+  __wbg_binding_new: () => __wbg_binding_new,
+  __wbg_buffer_8d40b1d762fb3c66: () => __wbg_buffer_8d40b1d762fb3c662,
+  __wbg_byobRequest_2c036bceca1e6037: () => __wbg_byobRequest_2c036bceca1e60372,
+  __wbg_byteLength_331a6b5545834024: () => __wbg_byteLength_331a6b55458340242,
+  __wbg_byteOffset_49a5b5608000358b: () => __wbg_byteOffset_49a5b5608000358b2,
+  __wbg_call_13410aac570ffff7: () => __wbg_call_13410aac570ffff72,
+  __wbg_call_641db1bb5db5a579: () => __wbg_call_641db1bb5db5a579,
+  __wbg_call_a5400b25a865cfd8: () => __wbg_call_a5400b25a865cfd82,
+  __wbg_call_f1fd202ba222e0ec: () => __wbg_call_f1fd202ba222e0ec,
+  __wbg_close_cccada6053ee3a65: () => __wbg_close_cccada6053ee3a652,
+  __wbg_close_d71a78219dc23e91: () => __wbg_close_d71a78219dc23e912,
+  __wbg_contractcall_new: () => __wbg_contractcall_new,
+  __wbg_contractdeploy_new: () => __wbg_contractdeploy_new,
+  __wbg_contractstate_new: () => __wbg_contractstate_new2,
+  __wbg_crypto_86f2631e91b51511: () => __wbg_crypto_86f2631e91b515112,
+  __wbg_delete_ded22f5899363180: () => __wbg_delete_ded22f5899363180,
+  __wbg_done_75ed0ee6dd243d9d: () => __wbg_done_75ed0ee6dd243d9d2,
+  __wbg_dustactions_new: () => __wbg_dustactions_new,
+  __wbg_dustlocalstate_new: () => __wbg_dustlocalstate_new,
+  __wbg_dustregistration_new: () => __wbg_dustregistration_new,
+  __wbg_dustspend_new: () => __wbg_dustspend_new,
+  __wbg_duststatechanges_new: () => __wbg_duststatechanges_new,
+  __wbg_enqueue_452bc2343d1c2ff9: () => __wbg_enqueue_452bc2343d1c2ff92,
+  __wbg_entries_2be2f15bd5554996: () => __wbg_entries_2be2f15bd55549962,
+  __wbg_event_new: () => __wbg_event_new,
+  __wbg_event_unwrap: () => __wbg_event_unwrap,
+  __wbg_forEach_48feffedd75c5b94: () => __wbg_forEach_48feffedd75c5b94,
+  __wbg_forEach_859dfd887a0f866c: () => __wbg_forEach_859dfd887a0f866c,
+  __wbg_from_88bc52ce20ba6318: () => __wbg_from_88bc52ce20ba63182,
+  __wbg_getPrototypeOf_1b3ce3e146539859: () => __wbg_getPrototypeOf_1b3ce3e146539859,
+  __wbg_getRandomValues_b3f15fcbfabb0f8b: () => __wbg_getRandomValues_b3f15fcbfabb0f8b2,
+  __wbg_getTime_6bb3f64e0f18f817: () => __wbg_getTime_6bb3f64e0f18f817,
+  __wbg_get_0da715ceaecea5c8: () => __wbg_get_0da715ceaecea5c82,
+  __wbg_get_458e874b43b18b25: () => __wbg_get_458e874b43b18b252,
+  __wbg_get_5ee3191755594360: () => __wbg_get_5ee31917555943602,
+  __wbg_getwithrefkey_1dc361bd10053bfe: () => __wbg_getwithrefkey_1dc361bd10053bfe2,
+  __wbg_has_6a9bff5f4208cfca: () => __wbg_has_6a9bff5f4208cfca,
+  __wbg_instanceof_ArrayBuffer_67f3012529f6a2dd: () => __wbg_instanceof_ArrayBuffer_67f3012529f6a2dd2,
+  __wbg_instanceof_Date_c0cdff0c3b978b0e: () => __wbg_instanceof_Date_c0cdff0c3b978b0e,
+  __wbg_instanceof_Map_ebb01a5b6b5ffd0b: () => __wbg_instanceof_Map_ebb01a5b6b5ffd0b2,
+  __wbg_instanceof_Promise_3ec9e849bf41bdb6: () => __wbg_instanceof_Promise_3ec9e849bf41bdb6,
+  __wbg_instanceof_Set_b0e0ca8a8b2062e8: () => __wbg_instanceof_Set_b0e0ca8a8b2062e8,
+  __wbg_instanceof_Uint8Array_9a8378d955933db7: () => __wbg_instanceof_Uint8Array_9a8378d955933db72,
+  __wbg_intent_new: () => __wbg_intent_new,
+  __wbg_isArray_030cce220591fb41: () => __wbg_isArray_030cce220591fb412,
+  __wbg_isSafeInteger_1c0d1af5542e102a: () => __wbg_isSafeInteger_1c0d1af5542e102a2,
+  __wbg_iterator_f370b34483c71a1c: () => __wbg_iterator_f370b34483c71a1c2,
+  __wbg_keys_822161a7faf55538: () => __wbg_keys_822161a7faf555382,
+  __wbg_ledgerstate_new: () => __wbg_ledgerstate_new,
+  __wbg_length_186546c51cd61acd: () => __wbg_length_186546c51cd61acd2,
+  __wbg_length_6bb7e81f9d7713e4: () => __wbg_length_6bb7e81f9d7713e42,
+  __wbg_maintenanceupdate_new: () => __wbg_maintenanceupdate_new,
+  __wbg_msCrypto_d562bbe83e0d4b91: () => __wbg_msCrypto_d562bbe83e0d4b912,
+  __wbg_new0_b0a0a38c201e6df5: () => __wbg_new0_b0a0a38c201e6df5,
+  __wbg_new_0dc86f3faa8a3b53: () => __wbg_new_0dc86f3faa8a3b53,
+  __wbg_new_19c25a3f2fa63a02: () => __wbg_new_19c25a3f2fa63a022,
+  __wbg_new_1f3a344cf3123716: () => __wbg_new_1f3a344cf31237162,
+  __wbg_new_2e3c58a15f39f5f9: () => __wbg_new_2e3c58a15f39f5f92,
+  __wbg_new_2ff1f68f3676ea53: () => __wbg_new_2ff1f68f3676ea532,
+  __wbg_new_638ebfaedbf32a5e: () => __wbg_new_638ebfaedbf32a5e2,
+  __wbg_new_da9dc54c5db29dfa: () => __wbg_new_da9dc54c5db29dfa2,
+  __wbg_newfromslice_074c56947bd43469: () => __wbg_newfromslice_074c56947bd434692,
+  __wbg_newnoargs_254190557c45b4ec: () => __wbg_newnoargs_254190557c45b4ec2,
+  __wbg_newwithbyteoffsetandlength_e8f53910b4d42b45: () => __wbg_newwithbyteoffsetandlength_e8f53910b4d42b452,
+  __wbg_newwithlength_a167dcc7aaa3ba77: () => __wbg_newwithlength_a167dcc7aaa3ba772,
+  __wbg_next_5b3530e612fde77d: () => __wbg_next_5b3530e612fde77d2,
+  __wbg_next_692e82279131b03c: () => __wbg_next_692e82279131b03c2,
+  __wbg_nobinding_new: () => __wbg_nobinding_new,
+  __wbg_node_e1f24f89a7336c2e: () => __wbg_node_e1f24f89a7336c2e2,
+  __wbg_noproof_new: () => __wbg_noproof_new,
+  __wbg_prebinding_new: () => __wbg_prebinding_new,
+  __wbg_preproof_new: () => __wbg_preproof_new,
+  __wbg_process_3975fd6c72f520aa: () => __wbg_process_3975fd6c72f520aa2,
+  __wbg_proof_new: () => __wbg_proof_new,
+  __wbg_prototypesetcall_3d4a26c1ed734349: () => __wbg_prototypesetcall_3d4a26c1ed7343492,
+  __wbg_push_330b2eb93e4e1212: () => __wbg_push_330b2eb93e4e12122,
+  __wbg_queueMicrotask_25d0739ac89e8c88: () => __wbg_queueMicrotask_25d0739ac89e8c882,
+  __wbg_queueMicrotask_4488407636f5bf24: () => __wbg_queueMicrotask_4488407636f5bf242,
+  __wbg_randomFillSync_f8c153b79f285817: () => __wbg_randomFillSync_f8c153b79f2858172,
+  __wbg_replaceauthority_new: () => __wbg_replaceauthority_new,
+  __wbg_require_b74f47fc2d022fd6: () => __wbg_require_b74f47fc2d022fd62,
+  __wbg_resolve_4055c623acdd6a1b: () => __wbg_resolve_4055c623acdd6a1b2,
+  __wbg_respond_6c2c4e20ef85138e: () => __wbg_respond_6c2c4e20ef85138e2,
+  __wbg_setTime_fb96d30252f92656: () => __wbg_setTime_fb96d30252f92656,
+  __wbg_set_1353b2a5e96bc48c: () => __wbg_set_1353b2a5e96bc48c2,
+  __wbg_set_3f1d0b984ed272ed: () => __wbg_set_3f1d0b984ed272ed2,
+  __wbg_set_90f6c0f7bd8c0415: () => __wbg_set_90f6c0f7bd8c04152,
+  __wbg_set_b7f1cf4fae26fe2a: () => __wbg_set_b7f1cf4fae26fe2a2,
+  __wbg_set_wasm: () => __wbg_set_wasm2,
+  __wbg_signatureenabled_new: () => __wbg_signatureenabled_new,
+  __wbg_signatureerased_new: () => __wbg_signatureerased_new,
+  __wbg_size_af8602b0b838d49e: () => __wbg_size_af8602b0b838d49e,
+  __wbg_statevalue_new: () => __wbg_statevalue_new2,
+  __wbg_static_accessor_GLOBAL_8921f820c2ce3f12: () => __wbg_static_accessor_GLOBAL_8921f820c2ce3f122,
+  __wbg_static_accessor_GLOBAL_THIS_f0a4409105898184: () => __wbg_static_accessor_GLOBAL_THIS_f0a44091058981842,
+  __wbg_static_accessor_SELF_995b214ae681ff99: () => __wbg_static_accessor_SELF_995b214ae681ff992,
+  __wbg_static_accessor_WINDOW_cde3890479c675ea: () => __wbg_static_accessor_WINDOW_cde3890479c675ea2,
+  __wbg_subarray_70fd07feefe14294: () => __wbg_subarray_70fd07feefe142942,
+  __wbg_then_b33a773d723afa3e: () => __wbg_then_b33a773d723afa3e,
+  __wbg_then_e22500defe16819f: () => __wbg_then_e22500defe16819f2,
+  __wbg_toString_7268338f40012a03: () => __wbg_toString_7268338f40012a032,
+  __wbg_toString_d8f537919ef401d6: () => __wbg_toString_d8f537919ef401d62,
+  __wbg_transaction_new: () => __wbg_transaction_new,
+  __wbg_transactionresult_new: () => __wbg_transactionresult_new,
+  __wbg_valueOf_7785fbf48c0e02e4: () => __wbg_valueOf_7785fbf48c0e02e4,
+  __wbg_value_dd9372230531eade: () => __wbg_value_dd9372230531eade2,
+  __wbg_verifierkeyinsert_new: () => __wbg_verifierkeyinsert_new,
+  __wbg_verifierkeyremove_new: () => __wbg_verifierkeyremove_new,
+  __wbg_versions_4e31226f5e8dc909: () => __wbg_versions_4e31226f5e8dc9092,
+  __wbg_view_91cc97d57ab30530: () => __wbg_view_91cc97d57ab305302,
+  __wbg_wbindgenbigintgetasi64_ac743ece6ab9bba1: () => __wbg_wbindgenbigintgetasi64_ac743ece6ab9bba12,
+  __wbg_wbindgenbooleanget_3fe6f642c7d97746: () => __wbg_wbindgenbooleanget_3fe6f642c7d977462,
+  __wbg_wbindgencbdrop_eb10308566512b88: () => __wbg_wbindgencbdrop_eb10308566512b882,
+  __wbg_wbindgendebugstring_99ef257a3ddda34d: () => __wbg_wbindgendebugstring_99ef257a3ddda34d2,
+  __wbg_wbindgenin_d7a1ee10933d2d55: () => __wbg_wbindgenin_d7a1ee10933d2d552,
+  __wbg_wbindgenisbigint_ecb90cc08a5a9154: () => __wbg_wbindgenisbigint_ecb90cc08a5a91542,
+  __wbg_wbindgenisfunction_8cee7dce3725ae74: () => __wbg_wbindgenisfunction_8cee7dce3725ae742,
+  __wbg_wbindgenisnull_f3037694abe4d97a: () => __wbg_wbindgenisnull_f3037694abe4d97a2,
+  __wbg_wbindgenisobject_307a53c6bd97fbf8: () => __wbg_wbindgenisobject_307a53c6bd97fbf82,
+  __wbg_wbindgenisstring_d4fa939789f003b0: () => __wbg_wbindgenisstring_d4fa939789f003b02,
+  __wbg_wbindgenisundefined_c4b71d073b92f3c5: () => __wbg_wbindgenisundefined_c4b71d073b92f3c52,
+  __wbg_wbindgenjsvaleq_e6f2ad59ccae1b58: () => __wbg_wbindgenjsvaleq_e6f2ad59ccae1b582,
+  __wbg_wbindgenjsvallooseeq_9bec8c9be826bed1: () => __wbg_wbindgenjsvallooseeq_9bec8c9be826bed12,
+  __wbg_wbindgennumberget_f74b4c7525ac05cb: () => __wbg_wbindgennumberget_f74b4c7525ac05cb2,
+  __wbg_wbindgenshr_7d2aae6044c0dab1: () => __wbg_wbindgenshr_7d2aae6044c0dab12,
+  __wbg_wbindgenstringget_0f16a6ddddef376f: () => __wbg_wbindgenstringget_0f16a6ddddef376f2,
+  __wbg_wbindgenthrow_451ec1a8469d7eb6: () => __wbg_wbindgenthrow_451ec1a8469d7eb62,
+  __wbg_zswapchainstate_new: () => __wbg_zswapchainstate_new,
+  __wbg_zswapinput_new: () => __wbg_zswapinput_new,
+  __wbg_zswaplocalstate_new: () => __wbg_zswaplocalstate_new,
+  __wbg_zswapoffer_new: () => __wbg_zswapoffer_new,
+  __wbg_zswapoutput_new: () => __wbg_zswapoutput_new,
+  __wbg_zswapstatechanges_new: () => __wbg_zswapstatechanges_new,
+  __wbg_zswaptransient_new: () => __wbg_zswaptransient_new,
+  __wbindgen_cast_0be206197f6586af: () => __wbindgen_cast_0be206197f6586af,
+  __wbindgen_cast_2241b6af4c4b2941: () => __wbindgen_cast_2241b6af4c4b29412,
+  __wbindgen_cast_2ddd8a25ff58642a: () => __wbindgen_cast_2ddd8a25ff58642a,
+  __wbindgen_cast_4625c577ab2ec9ee: () => __wbindgen_cast_4625c577ab2ec9ee2,
+  __wbindgen_cast_6141ab5ed7fb2796: () => __wbindgen_cast_6141ab5ed7fb2796,
+  __wbindgen_cast_9ae0607507abb057: () => __wbindgen_cast_9ae0607507abb0572,
+  __wbindgen_cast_cb9088102bce6b30: () => __wbindgen_cast_cb9088102bce6b302,
+  __wbindgen_cast_d6cd19b81560fd6e: () => __wbindgen_cast_d6cd19b81560fd6e2,
+  __wbindgen_cast_e7b45dd881f38ce3: () => __wbindgen_cast_e7b45dd881f38ce32,
+  __wbindgen_init_externref_table: () => __wbindgen_init_externref_table2,
+  addressFromKey: () => addressFromKey,
+  bigIntModFr: () => bigIntModFr3,
+  bigIntToValue: () => bigIntToValue3,
+  coinCommitment: () => coinCommitment,
+  coinNullifier: () => coinNullifier,
+  communicationCommitment: () => communicationCommitment3,
+  communicationCommitmentRandomness: () => communicationCommitmentRandomness3,
+  createCheckPayload: () => createCheckPayload,
+  createCoinInfo: () => createCoinInfo,
+  createProvingPayload: () => createProvingPayload,
+  createProvingTransactionPayload: () => createProvingTransactionPayload,
+  createShieldedCoinInfo: () => createShieldedCoinInfo,
+  decodeCoinPublicKey: () => decodeCoinPublicKey3,
+  decodeContractAddress: () => decodeContractAddress3,
+  decodeQualifiedShieldedCoinInfo: () => decodeQualifiedShieldedCoinInfo3,
+  decodeRawTokenType: () => decodeRawTokenType3,
+  decodeShieldedCoinInfo: () => decodeShieldedCoinInfo3,
+  decodeUserAddress: () => decodeUserAddress3,
+  degradeToTransient: () => degradeToTransient3,
+  dummyContractAddress: () => dummyContractAddress3,
+  dummyUserAddress: () => dummyUserAddress3,
+  dustCommitment: () => dustCommitment,
+  dustInitialNonce: () => dustInitialNonce,
+  dustNonce: () => dustNonce,
+  dustNullifier: () => dustNullifier,
+  ecAdd: () => ecAdd3,
+  ecMul: () => ecMul3,
+  ecMulGenerator: () => ecMulGenerator3,
+  encodeCoinPublicKey: () => encodeCoinPublicKey3,
+  encodeContractAddress: () => encodeContractAddress3,
+  encodeQualifiedShieldedCoinInfo: () => encodeQualifiedShieldedCoinInfo3,
+  encodeRawTokenType: () => encodeRawTokenType3,
+  encodeShieldedCoinInfo: () => encodeShieldedCoinInfo3,
+  encodeUserAddress: () => encodeUserAddress3,
+  entryPointHash: () => entryPointHash3,
+  feeToken: () => feeToken,
+  hashToCurve: () => hashToCurve3,
+  leafHash: () => leafHash3,
+  maxAlignedSize: () => maxAlignedSize3,
+  maxField: () => maxField3,
+  nativeToken: () => nativeToken,
+  parseCheckResult: () => parseCheckResult,
+  partitionTranscripts: () => partitionTranscripts,
+  persistentCommit: () => persistentCommit4,
+  persistentHash: () => persistentHash4,
+  proofDataIntoSerializedPreimage: () => proofDataIntoSerializedPreimage3,
+  rawTokenType: () => rawTokenType3,
+  runProgram: () => runProgram3,
+  runtimeCoinCommitment: () => runtimeCoinCommitment3,
+  runtimeCoinNullifier: () => runtimeCoinNullifier3,
+  sampleCoinPublicKey: () => sampleCoinPublicKey,
+  sampleContractAddress: () => sampleContractAddress3,
+  sampleDustSecretKey: () => sampleDustSecretKey,
+  sampleEncryptionPublicKey: () => sampleEncryptionPublicKey,
+  sampleIntentHash: () => sampleIntentHash,
+  sampleRawTokenType: () => sampleRawTokenType3,
+  sampleSigningKey: () => sampleSigningKey3,
+  sampleUserAddress: () => sampleUserAddress3,
+  shieldedToken: () => shieldedToken,
+  signData: () => signData3,
+  signatureVerifyingKey: () => signatureVerifyingKey3,
+  signingKeyFromBip340: () => signingKeyFromBip3403,
+  transientCommit: () => transientCommit3,
+  transientHash: () => transientHash3,
+  unshieldedToken: () => unshieldedToken,
+  updatedValue: () => updatedValue,
+  upgradeFromTransient: () => upgradeFromTransient3,
+  valueToBigInt: () => valueToBigInt3,
+  verifySignature: () => verifySignature3
+});
 init_dirname();
 init_buffer2();
 init_process2();
@@ -29815,6 +32274,14 @@ function addToExternrefTable02(obj) {
   const idx = wasm2.__externref_table_alloc();
   wasm2.__wbindgen_export_2.set(idx, obj);
   return idx;
+}
+function handleError2(f, args2) {
+  try {
+    return f.apply(this, args2);
+  } catch (e) {
+    const idx = addToExternrefTable02(e);
+    wasm2.__wbindgen_exn_store(idx);
+  }
 }
 var cachedUint8ArrayMemory02 = null;
 function getUint8ArrayMemory02() {
@@ -29892,6 +32359,66 @@ function getDataViewMemory02() {
 function isLikeNone2(x) {
   return x === void 0 || x === null;
 }
+function getArrayU8FromWasm02(ptr, len) {
+  ptr = ptr >>> 0;
+  return getUint8ArrayMemory02().subarray(ptr / 1, ptr / 1 + len);
+}
+function debugString2(val) {
+  const type = typeof val;
+  if (type == "number" || type == "boolean" || val == null) {
+    return `${val}`;
+  }
+  if (type == "string") {
+    return `"${val}"`;
+  }
+  if (type == "symbol") {
+    const description = val.description;
+    if (description == null) {
+      return "Symbol";
+    } else {
+      return `Symbol(${description})`;
+    }
+  }
+  if (type == "function") {
+    const name2 = val.name;
+    if (typeof name2 == "string" && name2.length > 0) {
+      return `Function(${name2})`;
+    } else {
+      return "Function";
+    }
+  }
+  if (Array.isArray(val)) {
+    const length2 = val.length;
+    let debug = "[";
+    if (length2 > 0) {
+      debug += debugString2(val[0]);
+    }
+    for (let i = 1; i < length2; i++) {
+      debug += ", " + debugString2(val[i]);
+    }
+    debug += "]";
+    return debug;
+  }
+  const builtInMatches = /\[object ([^\]]+)\]/.exec(toString.call(val));
+  let className;
+  if (builtInMatches && builtInMatches.length > 1) {
+    className = builtInMatches[1];
+  } else {
+    return toString.call(val);
+  }
+  if (className == "Object") {
+    try {
+      return "Object(" + JSON.stringify(val) + ")";
+    } catch (_) {
+      return "Object";
+    }
+  }
+  if (val instanceof Error) {
+    return `${val.name}: ${val.message}
+${val.stack}`;
+  }
+  return className;
+}
 function getArrayJsValueFromWasm02(ptr, len) {
   ptr = ptr >>> 0;
   const mem = getDataViewMemory02();
@@ -29909,6 +32436,27 @@ var CLOSURE_DTORS2 = typeof FinalizationRegistry === "undefined" ? { register: (
     wasm2.__wbindgen_export_7.get(state.dtor)(state.a, state.b);
   }
 );
+function makeMutClosure2(arg0, arg1, dtor, f) {
+  const state = { a: arg0, b: arg1, cnt: 1, dtor };
+  const real = (...args2) => {
+    state.cnt++;
+    const a = state.a;
+    state.a = 0;
+    try {
+      return f(a, state.b, ...args2);
+    } finally {
+      if (--state.cnt === 0) {
+        wasm2.__wbindgen_export_7.get(state.dtor)(a, state.b);
+        CLOSURE_DTORS2.unregister(state);
+      } else {
+        state.a = a;
+      }
+    }
+  };
+  real.original = state;
+  CLOSURE_DTORS2.register(real, state, state);
+  return real;
+}
 function _assertClass2(instance, klass) {
   if (!(instance instanceof klass)) {
     throw new Error(`expected instance of ${klass.name}`);
@@ -29944,6 +32492,32 @@ function passArray8ToWasm0(arg, malloc) {
   WASM_VECTOR_LEN2 = arg.length;
   return ptr;
 }
+function createCoinInfo(type_, value) {
+  const ptr0 = passStringToWasm02(type_, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  const len0 = WASM_VECTOR_LEN2;
+  const ret = wasm2.createCoinInfo(ptr0, len0, value);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function dustNonce(initial_nonce, seq2, sk) {
+  const ptr0 = passStringToWasm02(initial_nonce, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  const len0 = WASM_VECTOR_LEN2;
+  _assertClass2(sk, DustSecretKey);
+  const ret = wasm2.dustNonce(ptr0, len0, seq2, sk.__wbg_ptr);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function parseCheckResult(result) {
+  const ret = wasm2.parseCheckResult(result);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
 function coinCommitment(coin, coin_public_key) {
   let deferred3_0;
   let deferred3_1;
@@ -29965,7 +32539,411 @@ function coinCommitment(coin, coin_public_key) {
     wasm2.__wbindgen_free(deferred3_0, deferred3_1, 1);
   }
 }
-function communicationCommitmentRandomness2() {
+function sampleIntentHash() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.sampleIntentHash();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function sampleCoinPublicKey() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.sampleCoinPublicKey();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function createProvingTransactionPayload(tx, proving_data) {
+  _assertClass2(tx, Transaction);
+  const ret = wasm2.createProvingTransactionPayload(tx.__wbg_ptr, proving_data);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function dustNullifier(utxo, sk) {
+  _assertClass2(sk, DustSecretKey);
+  const ret = wasm2.dustNullifier(utxo, sk.__wbg_ptr);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function shieldedToken() {
+  const ret = wasm2.shieldedToken();
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function createCheckPayload(serialized_preimage, ir) {
+  const ret = wasm2.createCheckPayload(serialized_preimage, isLikeNone2(ir) ? 0 : addToExternrefTable02(ir));
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function unshieldedToken() {
+  const ret = wasm2.unshieldedToken();
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function createProvingPayload(serialized_preimage, overwrite_binding_input, key_material) {
+  const ret = wasm2.createProvingPayload(serialized_preimage, isLikeNone2(overwrite_binding_input) ? 0 : addToExternrefTable02(overwrite_binding_input), key_material);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function feeToken() {
+  const ret = wasm2.feeToken();
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function dustInitialNonce(output_no, intent_hash) {
+  let deferred3_0;
+  let deferred3_1;
+  try {
+    const ptr0 = passStringToWasm02(intent_hash, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN2;
+    const ret = wasm2.dustInitialNonce(output_no, ptr0, len0);
+    var ptr2 = ret[0];
+    var len2 = ret[1];
+    if (ret[3]) {
+      ptr2 = 0;
+      len2 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred3_0 = ptr2;
+    deferred3_1 = len2;
+    return getStringFromWasm02(ptr2, len2);
+  } finally {
+    wasm2.__wbindgen_free(deferred3_0, deferred3_1, 1);
+  }
+}
+function sampleEncryptionPublicKey() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.sampleEncryptionPublicKey();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function createShieldedCoinInfo(type_, value) {
+  const ptr0 = passStringToWasm02(type_, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  const len0 = WASM_VECTOR_LEN2;
+  const ret = wasm2.createShieldedCoinInfo(ptr0, len0, value);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function dustCommitment(utxo) {
+  const ret = wasm2.dustCommitment(utxo);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function addressFromKey(key) {
+  let deferred3_0;
+  let deferred3_1;
+  try {
+    const ptr0 = passStringToWasm02(key, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN2;
+    const ret = wasm2.addressFromKey(ptr0, len0);
+    var ptr2 = ret[0];
+    var len2 = ret[1];
+    if (ret[3]) {
+      ptr2 = 0;
+      len2 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred3_0 = ptr2;
+    deferred3_1 = len2;
+    return getStringFromWasm02(ptr2, len2);
+  } finally {
+    wasm2.__wbindgen_free(deferred3_0, deferred3_1, 1);
+  }
+}
+function nativeToken() {
+  const ret = wasm2.nativeToken();
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function coinNullifier(coin_info, coin_secret_key) {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    _assertClass2(coin_secret_key, CoinSecretKey);
+    const ret = wasm2.coinNullifier(coin_info, coin_secret_key.__wbg_ptr);
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function updatedValue(ctime, initial_value, gen_info, now, params) {
+  const ret = wasm2.updatedValue(ctime, initial_value, gen_info, now, params);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function sampleDustSecretKey() {
+  const ret = wasm2.sampleDustSecretKey();
+  return DustSecretKey.__wrap(ret);
+}
+function valueToBigInt3(x) {
+  const ret = wasm2.valueToBigInt(x);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function transientHash3(align, val) {
+  const ret = wasm2.transientHash(align, val);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function sampleSigningKey3() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.sampleSigningKey();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function rawTokenType3(domain_sep, contract) {
+  let deferred3_0;
+  let deferred3_1;
+  try {
+    const ptr0 = passStringToWasm02(contract, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN2;
+    const ret = wasm2.rawTokenType(domain_sep, ptr0, len0);
+    var ptr2 = ret[0];
+    var len2 = ret[1];
+    if (ret[3]) {
+      ptr2 = 0;
+      len2 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred3_0 = ptr2;
+    deferred3_1 = len2;
+    return getStringFromWasm02(ptr2, len2);
+  } finally {
+    wasm2.__wbindgen_free(deferred3_0, deferred3_1, 1);
+  }
+}
+function transientCommit3(align, val, opening) {
+  const ret = wasm2.transientCommit(align, val, opening);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function sampleRawTokenType3() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.sampleRawTokenType();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function runtimeCoinNullifier3(coin, sender_evidence) {
+  const ret = wasm2.runtimeCoinNullifier(coin, sender_evidence);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function persistentHash4(align, val) {
+  const ret = wasm2.persistentHash(align, val);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function maxField3() {
+  const ret = wasm2.maxField();
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function dummyContractAddress3() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.dummyContractAddress();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function dummyUserAddress3() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.dummyUserAddress();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function signingKeyFromBip3403(bytes) {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.signingKeyFromBip340(bytes);
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function leafHash3(value) {
+  const ret = wasm2.leafHash(value);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function communicationCommitment3(input, output, rand) {
+  let deferred3_0;
+  let deferred3_1;
+  try {
+    const ptr0 = passStringToWasm02(rand, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN2;
+    const ret = wasm2.communicationCommitment(input, output, ptr0, len0);
+    var ptr2 = ret[0];
+    var len2 = ret[1];
+    if (ret[3]) {
+      ptr2 = 0;
+      len2 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred3_0 = ptr2;
+    deferred3_1 = len2;
+    return getStringFromWasm02(ptr2, len2);
+  } finally {
+    wasm2.__wbindgen_free(deferred3_0, deferred3_1, 1);
+  }
+}
+function ecMulGenerator3(val) {
+  const ret = wasm2.ecMulGenerator(val);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function bigIntToValue3(x) {
+  const ret = wasm2.bigIntToValue(x);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function communicationCommitmentRandomness3() {
   let deferred2_0;
   let deferred2_1;
   try {
@@ -29984,7 +32962,65 @@ function communicationCommitmentRandomness2() {
     wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
   }
 }
-function signData2(key, data) {
+function ecAdd3(a, b) {
+  const ret = wasm2.ecAdd(a, b);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function persistentCommit4(align, val, opening) {
+  const ret = wasm2.persistentCommit(align, val, opening);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function runtimeCoinCommitment3(coin, recipient) {
+  const ret = wasm2.runtimeCoinCommitment(coin, recipient);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function signatureVerifyingKey3(key) {
+  let deferred3_0;
+  let deferred3_1;
+  try {
+    const ptr0 = passStringToWasm02(key, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN2;
+    const ret = wasm2.signatureVerifyingKey(ptr0, len0);
+    var ptr2 = ret[0];
+    var len2 = ret[1];
+    if (ret[3]) {
+      ptr2 = 0;
+      len2 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred3_0 = ptr2;
+    deferred3_1 = len2;
+    return getStringFromWasm02(ptr2, len2);
+  } finally {
+    wasm2.__wbindgen_free(deferred3_0, deferred3_1, 1);
+  }
+}
+function proofDataIntoSerializedPreimage3(input, output, public_transcript, private_transcript_outputs, key_location) {
+  var ptr0 = isLikeNone2(key_location) ? 0 : passStringToWasm02(key_location, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  var len0 = WASM_VECTOR_LEN2;
+  const ret = wasm2.proofDataIntoSerializedPreimage(input, output, public_transcript, private_transcript_outputs, ptr0, len0);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function ecMul3(a, b) {
+  const ret = wasm2.ecMul(a, b);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function signData3(key, data) {
   let deferred3_0;
   let deferred3_1;
   try {
@@ -30004,6 +33040,267 @@ function signData2(key, data) {
   } finally {
     wasm2.__wbindgen_free(deferred3_0, deferred3_1, 1);
   }
+}
+function entryPointHash3(entry_point) {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.entryPointHash(entry_point);
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function bigIntModFr3(x) {
+  const ret = wasm2.bigIntModFr(x);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function maxAlignedSize3(alignment) {
+  const ret = wasm2.maxAlignedSize(alignment);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return BigInt.asUintN(64, ret[0]);
+}
+function upgradeFromTransient3(transient) {
+  const ret = wasm2.upgradeFromTransient(transient);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function sampleContractAddress3() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.sampleContractAddress();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function degradeToTransient3(persistent) {
+  const ret = wasm2.degradeToTransient(persistent);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function verifySignature3(key, data, signature) {
+  const ptr0 = passStringToWasm02(key, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  const len0 = WASM_VECTOR_LEN2;
+  const ptr1 = passStringToWasm02(signature, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  const len1 = WASM_VECTOR_LEN2;
+  const ret = wasm2.verifySignature(ptr0, len0, data, ptr1, len1);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return ret[0] !== 0;
+}
+function hashToCurve3(align, val) {
+  const ret = wasm2.hashToCurve(align, val);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function sampleUserAddress3() {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.sampleUserAddress();
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function decodeCoinPublicKey3(pk) {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.decodeCoinPublicKey(pk);
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function decodeRawTokenType3(tt) {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.decodeRawTokenType(tt);
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function encodeShieldedCoinInfo3(coin) {
+  const ret = wasm2.encodeShieldedCoinInfo(coin);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function decodeShieldedCoinInfo3(coin) {
+  const ret = wasm2.decodeShieldedCoinInfo(coin);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function encodeQualifiedShieldedCoinInfo3(coin) {
+  const ret = wasm2.encodeQualifiedShieldedCoinInfo(coin);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function encodeUserAddress3(addr) {
+  const ptr0 = passStringToWasm02(addr, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  const len0 = WASM_VECTOR_LEN2;
+  const ret = wasm2.encodeUserAddress(ptr0, len0);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function decodeContractAddress3(addr) {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.decodeContractAddress(addr);
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function encodeCoinPublicKey3(pk) {
+  const ptr0 = passStringToWasm02(pk, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  const len0 = WASM_VECTOR_LEN2;
+  const ret = wasm2.encodeCoinPublicKey(ptr0, len0);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function decodeQualifiedShieldedCoinInfo3(coin) {
+  const ret = wasm2.decodeQualifiedShieldedCoinInfo(coin);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function encodeRawTokenType3(tt) {
+  const ptr0 = passStringToWasm02(tt, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  const len0 = WASM_VECTOR_LEN2;
+  const ret = wasm2.encodeRawTokenType(ptr0, len0);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function encodeContractAddress3(addr) {
+  const ptr0 = passStringToWasm02(addr, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  const len0 = WASM_VECTOR_LEN2;
+  const ret = wasm2.encodeContractAddress(ptr0, len0);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return takeFromExternrefTable02(ret[0]);
+}
+function decodeUserAddress3(addr) {
+  let deferred2_0;
+  let deferred2_1;
+  try {
+    const ret = wasm2.decodeUserAddress(addr);
+    var ptr1 = ret[0];
+    var len1 = ret[1];
+    if (ret[3]) {
+      ptr1 = 0;
+      len1 = 0;
+      throw takeFromExternrefTable02(ret[2]);
+    }
+    deferred2_0 = ptr1;
+    deferred2_1 = len1;
+    return getStringFromWasm02(ptr1, len1);
+  } finally {
+    wasm2.__wbindgen_free(deferred2_0, deferred2_1, 1);
+  }
+}
+function runProgram3(initial, ops, cost_model, gas_limit) {
+  _assertClass2(initial, VmStack2);
+  _assertClass2(cost_model, CostModel2);
+  const ret = wasm2.runProgram(initial.__wbg_ptr, ops, cost_model.__wbg_ptr, gas_limit);
+  if (ret[2]) {
+    throw takeFromExternrefTable02(ret[1]);
+  }
+  return VmResults2.__wrap(ret[0]);
+}
+function __wbg_adapter_16(arg0, arg1, arg2) {
+  wasm2.closure3101_externref_shim(arg0, arg1, arg2);
+}
+function __wbg_adapter_816(arg0, arg1, arg2, arg3, arg4) {
+  wasm2.closure3148_externref_shim(arg0, arg1, arg2, arg3, arg4);
+}
+function __wbg_adapter_871(arg0, arg1, arg2, arg3) {
+  wasm2.closure3146_externref_shim(arg0, arg1, arg2, arg3);
 }
 var __wbindgen_enum_ReadableStreamType2 = ["bytes"];
 var AuthorizedClaimFinalization = typeof FinalizationRegistry === "undefined" ? { register: () => {
@@ -37946,10 +41243,1691 @@ var ZswapTransient = class _ZswapTransient {
   }
 };
 if (Symbol.dispose) ZswapTransient.prototype[Symbol.dispose] = ZswapTransient.prototype.free;
+function __wbg_BigInt_40a77d45cca494702() {
+  return handleError2(function(arg0) {
+    const ret = BigInt(arg0);
+    return ret;
+  }, arguments);
+}
+function __wbg_BigInt_6adbfd8eb0f7ec072(arg0) {
+  const ret = BigInt(arg0);
+  return ret;
+}
+function __wbg_Error_e17e777aac1052952(arg0, arg1) {
+  const ret = Error(getStringFromWasm02(arg0, arg1));
+  return ret;
+}
+function __wbg_Number_998bea33bd87c3e02(arg0) {
+  const ret = Number(arg0);
+  return ret;
+}
+function __wbg_String_8f0eb39a4a4c2f662(arg0, arg1) {
+  const ret = String(arg1);
+  const ptr1 = passStringToWasm02(ret, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  const len1 = WASM_VECTOR_LEN2;
+  getDataViewMemory02().setInt32(arg0 + 4 * 1, len1, true);
+  getDataViewMemory02().setInt32(arg0 + 4 * 0, ptr1, true);
+}
+function __wbg_add_bd7fa428f539a577(arg0, arg1) {
+  const ret = arg0.add(arg1);
+  return ret;
+}
+function __wbg_binding_new(arg0) {
+  const ret = Binding.__wrap(arg0);
+  return ret;
+}
+function __wbg_buffer_8d40b1d762fb3c662(arg0) {
+  const ret = arg0.buffer;
+  return ret;
+}
+function __wbg_byobRequest_2c036bceca1e60372(arg0) {
+  const ret = arg0.byobRequest;
+  return isLikeNone2(ret) ? 0 : addToExternrefTable02(ret);
+}
+function __wbg_byteLength_331a6b55458340242(arg0) {
+  const ret = arg0.byteLength;
+  return ret;
+}
+function __wbg_byteOffset_49a5b5608000358b2(arg0) {
+  const ret = arg0.byteOffset;
+  return ret;
+}
+function __wbg_call_13410aac570ffff72() {
+  return handleError2(function(arg0, arg1) {
+    const ret = arg0.call(arg1);
+    return ret;
+  }, arguments);
+}
+function __wbg_call_641db1bb5db5a579() {
+  return handleError2(function(arg0, arg1, arg2, arg3) {
+    const ret = arg0.call(arg1, arg2, arg3);
+    return ret;
+  }, arguments);
+}
+function __wbg_call_a5400b25a865cfd82() {
+  return handleError2(function(arg0, arg1, arg2) {
+    const ret = arg0.call(arg1, arg2);
+    return ret;
+  }, arguments);
+}
+function __wbg_call_f1fd202ba222e0ec() {
+  return handleError2(function(arg0, arg1, arg2, arg3, arg4) {
+    const ret = arg0.call(arg1, arg2, arg3, arg4);
+    return ret;
+  }, arguments);
+}
+function __wbg_close_cccada6053ee3a652() {
+  return handleError2(function(arg0) {
+    arg0.close();
+  }, arguments);
+}
+function __wbg_close_d71a78219dc23e912() {
+  return handleError2(function(arg0) {
+    arg0.close();
+  }, arguments);
+}
+function __wbg_contractcall_new(arg0) {
+  const ret = ContractCall.__wrap(arg0);
+  return ret;
+}
+function __wbg_contractdeploy_new(arg0) {
+  const ret = ContractDeploy.__wrap(arg0);
+  return ret;
+}
+function __wbg_contractstate_new2(arg0) {
+  const ret = ContractState2.__wrap(arg0);
+  return ret;
+}
+function __wbg_crypto_86f2631e91b515112(arg0) {
+  const ret = arg0.crypto;
+  return ret;
+}
+function __wbg_delete_ded22f5899363180(arg0, arg1) {
+  const ret = arg0.delete(arg1);
+  return ret;
+}
+function __wbg_done_75ed0ee6dd243d9d2(arg0) {
+  const ret = arg0.done;
+  return ret;
+}
+function __wbg_dustactions_new(arg0) {
+  const ret = DustActions.__wrap(arg0);
+  return ret;
+}
+function __wbg_dustlocalstate_new(arg0) {
+  const ret = DustLocalState.__wrap(arg0);
+  return ret;
+}
+function __wbg_dustregistration_new(arg0) {
+  const ret = DustRegistration.__wrap(arg0);
+  return ret;
+}
+function __wbg_dustspend_new(arg0) {
+  const ret = DustSpend.__wrap(arg0);
+  return ret;
+}
+function __wbg_duststatechanges_new(arg0) {
+  const ret = DustStateChanges.__wrap(arg0);
+  return ret;
+}
+function __wbg_enqueue_452bc2343d1c2ff92() {
+  return handleError2(function(arg0, arg1) {
+    arg0.enqueue(arg1);
+  }, arguments);
+}
+function __wbg_entries_2be2f15bd55549962(arg0) {
+  const ret = Object.entries(arg0);
+  return ret;
+}
+function __wbg_event_new(arg0) {
+  const ret = Event.__wrap(arg0);
+  return ret;
+}
+function __wbg_event_unwrap(arg0) {
+  const ret = Event.__unwrap(arg0);
+  return ret;
+}
+function __wbg_forEach_48feffedd75c5b94(arg0, arg1, arg2) {
+  try {
+    var state0 = { a: arg1, b: arg2 };
+    var cb0 = (arg02, arg12, arg22) => {
+      const a = state0.a;
+      state0.a = 0;
+      try {
+        return __wbg_adapter_816(a, state0.b, arg02, arg12, arg22);
+      } finally {
+        state0.a = a;
+      }
+    };
+    arg0.forEach(cb0);
+  } finally {
+    state0.a = state0.b = 0;
+  }
+}
+function __wbg_forEach_859dfd887a0f866c(arg0, arg1, arg2) {
+  try {
+    var state0 = { a: arg1, b: arg2 };
+    var cb0 = (arg02, arg12) => {
+      const a = state0.a;
+      state0.a = 0;
+      try {
+        return __wbg_adapter_871(a, state0.b, arg02, arg12);
+      } finally {
+        state0.a = a;
+      }
+    };
+    arg0.forEach(cb0);
+  } finally {
+    state0.a = state0.b = 0;
+  }
+}
+function __wbg_from_88bc52ce20ba63182(arg0) {
+  const ret = Array.from(arg0);
+  return ret;
+}
+function __wbg_getPrototypeOf_1b3ce3e146539859() {
+  return handleError2(function(arg0) {
+    const ret = Reflect.getPrototypeOf(arg0);
+    return ret;
+  }, arguments);
+}
+function __wbg_getRandomValues_b3f15fcbfabb0f8b2() {
+  return handleError2(function(arg0, arg1) {
+    arg0.getRandomValues(arg1);
+  }, arguments);
+}
+function __wbg_getTime_6bb3f64e0f18f817(arg0) {
+  const ret = arg0.getTime();
+  return ret;
+}
+function __wbg_get_0da715ceaecea5c82(arg0, arg1) {
+  const ret = arg0[arg1 >>> 0];
+  return ret;
+}
+function __wbg_get_458e874b43b18b252() {
+  return handleError2(function(arg0, arg1) {
+    const ret = Reflect.get(arg0, arg1);
+    return ret;
+  }, arguments);
+}
+function __wbg_get_5ee31917555943602(arg0, arg1) {
+  const ret = arg0.get(arg1);
+  return ret;
+}
+function __wbg_getwithrefkey_1dc361bd10053bfe2(arg0, arg1) {
+  const ret = arg0[arg1];
+  return ret;
+}
+function __wbg_has_6a9bff5f4208cfca(arg0, arg1) {
+  const ret = arg0.has(arg1);
+  return ret;
+}
+function __wbg_instanceof_ArrayBuffer_67f3012529f6a2dd2(arg0) {
+  let result;
+  try {
+    result = arg0 instanceof ArrayBuffer;
+  } catch (_) {
+    result = false;
+  }
+  const ret = result;
+  return ret;
+}
+function __wbg_instanceof_Date_c0cdff0c3b978b0e(arg0) {
+  let result;
+  try {
+    result = arg0 instanceof Date;
+  } catch (_) {
+    result = false;
+  }
+  const ret = result;
+  return ret;
+}
+function __wbg_instanceof_Map_ebb01a5b6b5ffd0b2(arg0) {
+  let result;
+  try {
+    result = arg0 instanceof Map;
+  } catch (_) {
+    result = false;
+  }
+  const ret = result;
+  return ret;
+}
+function __wbg_instanceof_Promise_3ec9e849bf41bdb6(arg0) {
+  let result;
+  try {
+    result = arg0 instanceof Promise;
+  } catch (_) {
+    result = false;
+  }
+  const ret = result;
+  return ret;
+}
+function __wbg_instanceof_Set_b0e0ca8a8b2062e8(arg0) {
+  let result;
+  try {
+    result = arg0 instanceof Set;
+  } catch (_) {
+    result = false;
+  }
+  const ret = result;
+  return ret;
+}
+function __wbg_instanceof_Uint8Array_9a8378d955933db72(arg0) {
+  let result;
+  try {
+    result = arg0 instanceof Uint8Array;
+  } catch (_) {
+    result = false;
+  }
+  const ret = result;
+  return ret;
+}
+function __wbg_intent_new(arg0) {
+  const ret = Intent.__wrap(arg0);
+  return ret;
+}
+function __wbg_isArray_030cce220591fb412(arg0) {
+  const ret = Array.isArray(arg0);
+  return ret;
+}
+function __wbg_isSafeInteger_1c0d1af5542e102a2(arg0) {
+  const ret = Number.isSafeInteger(arg0);
+  return ret;
+}
+function __wbg_iterator_f370b34483c71a1c2() {
+  const ret = Symbol.iterator;
+  return ret;
+}
+function __wbg_keys_822161a7faf555382(arg0) {
+  const ret = arg0.keys();
+  return ret;
+}
+function __wbg_ledgerstate_new(arg0) {
+  const ret = LedgerState.__wrap(arg0);
+  return ret;
+}
+function __wbg_length_186546c51cd61acd2(arg0) {
+  const ret = arg0.length;
+  return ret;
+}
+function __wbg_length_6bb7e81f9d7713e42(arg0) {
+  const ret = arg0.length;
+  return ret;
+}
+function __wbg_maintenanceupdate_new(arg0) {
+  const ret = MaintenanceUpdate.__wrap(arg0);
+  return ret;
+}
+function __wbg_msCrypto_d562bbe83e0d4b912(arg0) {
+  const ret = arg0.msCrypto;
+  return ret;
+}
+function __wbg_new0_b0a0a38c201e6df5() {
+  const ret = /* @__PURE__ */ new Date();
+  return ret;
+}
+function __wbg_new_0dc86f3faa8a3b53(arg0) {
+  const ret = new Set(arg0);
+  return ret;
+}
+function __wbg_new_19c25a3f2fa63a022() {
+  const ret = new Object();
+  return ret;
+}
+function __wbg_new_1f3a344cf31237162() {
+  const ret = new Array();
+  return ret;
+}
+function __wbg_new_2e3c58a15f39f5f92(arg0, arg1) {
+  try {
+    var state0 = { a: arg0, b: arg1 };
+    var cb0 = (arg02, arg12) => {
+      const a = state0.a;
+      state0.a = 0;
+      try {
+        return __wbg_adapter_871(a, state0.b, arg02, arg12);
+      } finally {
+        state0.a = a;
+      }
+    };
+    const ret = new Promise(cb0);
+    return ret;
+  } finally {
+    state0.a = state0.b = 0;
+  }
+}
+function __wbg_new_2ff1f68f3676ea532() {
+  const ret = /* @__PURE__ */ new Map();
+  return ret;
+}
+function __wbg_new_638ebfaedbf32a5e2(arg0) {
+  const ret = new Uint8Array(arg0);
+  return ret;
+}
+function __wbg_new_da9dc54c5db29dfa2(arg0, arg1) {
+  const ret = new Error(getStringFromWasm02(arg0, arg1));
+  return ret;
+}
+function __wbg_newfromslice_074c56947bd434692(arg0, arg1) {
+  const ret = new Uint8Array(getArrayU8FromWasm02(arg0, arg1));
+  return ret;
+}
+function __wbg_newnoargs_254190557c45b4ec2(arg0, arg1) {
+  const ret = new Function(getStringFromWasm02(arg0, arg1));
+  return ret;
+}
+function __wbg_newwithbyteoffsetandlength_e8f53910b4d42b452(arg0, arg1, arg2) {
+  const ret = new Uint8Array(arg0, arg1 >>> 0, arg2 >>> 0);
+  return ret;
+}
+function __wbg_newwithlength_a167dcc7aaa3ba772(arg0) {
+  const ret = new Uint8Array(arg0 >>> 0);
+  return ret;
+}
+function __wbg_next_5b3530e612fde77d2(arg0) {
+  const ret = arg0.next;
+  return ret;
+}
+function __wbg_next_692e82279131b03c2() {
+  return handleError2(function(arg0) {
+    const ret = arg0.next();
+    return ret;
+  }, arguments);
+}
+function __wbg_nobinding_new(arg0) {
+  const ret = NoBinding.__wrap(arg0);
+  return ret;
+}
+function __wbg_node_e1f24f89a7336c2e2(arg0) {
+  const ret = arg0.node;
+  return ret;
+}
+function __wbg_noproof_new(arg0) {
+  const ret = NoProof.__wrap(arg0);
+  return ret;
+}
+function __wbg_prebinding_new(arg0) {
+  const ret = PreBinding.__wrap(arg0);
+  return ret;
+}
+function __wbg_preproof_new(arg0) {
+  const ret = PreProof.__wrap(arg0);
+  return ret;
+}
+function __wbg_process_3975fd6c72f520aa2(arg0) {
+  const ret = arg0.process;
+  return ret;
+}
+function __wbg_proof_new(arg0) {
+  const ret = Proof.__wrap(arg0);
+  return ret;
+}
+function __wbg_prototypesetcall_3d4a26c1ed7343492(arg0, arg1, arg2) {
+  Uint8Array.prototype.set.call(getArrayU8FromWasm02(arg0, arg1), arg2);
+}
+function __wbg_push_330b2eb93e4e12122(arg0, arg1) {
+  const ret = arg0.push(arg1);
+  return ret;
+}
+function __wbg_queueMicrotask_25d0739ac89e8c882(arg0) {
+  queueMicrotask(arg0);
+}
+function __wbg_queueMicrotask_4488407636f5bf242(arg0) {
+  const ret = arg0.queueMicrotask;
+  return ret;
+}
+function __wbg_randomFillSync_f8c153b79f2858172() {
+  return handleError2(function(arg0, arg1) {
+    arg0.randomFillSync(arg1);
+  }, arguments);
+}
+function __wbg_replaceauthority_new(arg0) {
+  const ret = ReplaceAuthority.__wrap(arg0);
+  return ret;
+}
+function __wbg_require_b74f47fc2d022fd62() {
+  return handleError2(function() {
+    const ret = module.require;
+    return ret;
+  }, arguments);
+}
+function __wbg_resolve_4055c623acdd6a1b2(arg0) {
+  const ret = Promise.resolve(arg0);
+  return ret;
+}
+function __wbg_respond_6c2c4e20ef85138e2() {
+  return handleError2(function(arg0, arg1) {
+    arg0.respond(arg1 >>> 0);
+  }, arguments);
+}
+function __wbg_setTime_fb96d30252f92656(arg0, arg1) {
+  const ret = arg0.setTime(arg1);
+  return ret;
+}
+function __wbg_set_1353b2a5e96bc48c2(arg0, arg1, arg2) {
+  arg0.set(getArrayU8FromWasm02(arg1, arg2));
+}
+function __wbg_set_3f1d0b984ed272ed2(arg0, arg1, arg2) {
+  arg0[arg1] = arg2;
+}
+function __wbg_set_90f6c0f7bd8c04152(arg0, arg1, arg2) {
+  arg0[arg1 >>> 0] = arg2;
+}
+function __wbg_set_b7f1cf4fae26fe2a2(arg0, arg1, arg2) {
+  const ret = arg0.set(arg1, arg2);
+  return ret;
+}
+function __wbg_signatureenabled_new(arg0) {
+  const ret = SignatureEnabled.__wrap(arg0);
+  return ret;
+}
+function __wbg_signatureerased_new(arg0) {
+  const ret = SignatureErased.__wrap(arg0);
+  return ret;
+}
+function __wbg_size_af8602b0b838d49e(arg0) {
+  const ret = arg0.size;
+  return ret;
+}
+function __wbg_statevalue_new2(arg0) {
+  const ret = StateValue2.__wrap(arg0);
+  return ret;
+}
+function __wbg_static_accessor_GLOBAL_8921f820c2ce3f122() {
+  const ret = typeof global === "undefined" ? null : global;
+  return isLikeNone2(ret) ? 0 : addToExternrefTable02(ret);
+}
+function __wbg_static_accessor_GLOBAL_THIS_f0a44091058981842() {
+  const ret = typeof globalThis === "undefined" ? null : globalThis;
+  return isLikeNone2(ret) ? 0 : addToExternrefTable02(ret);
+}
+function __wbg_static_accessor_SELF_995b214ae681ff992() {
+  const ret = typeof self === "undefined" ? null : self;
+  return isLikeNone2(ret) ? 0 : addToExternrefTable02(ret);
+}
+function __wbg_static_accessor_WINDOW_cde3890479c675ea2() {
+  const ret = typeof window === "undefined" ? null : window;
+  return isLikeNone2(ret) ? 0 : addToExternrefTable02(ret);
+}
+function __wbg_subarray_70fd07feefe142942(arg0, arg1, arg2) {
+  const ret = arg0.subarray(arg1 >>> 0, arg2 >>> 0);
+  return ret;
+}
+function __wbg_then_b33a773d723afa3e(arg0, arg1, arg2) {
+  const ret = arg0.then(arg1, arg2);
+  return ret;
+}
+function __wbg_then_e22500defe16819f2(arg0, arg1) {
+  const ret = arg0.then(arg1);
+  return ret;
+}
+function __wbg_toString_7268338f40012a032() {
+  return handleError2(function(arg0, arg1) {
+    const ret = arg0.toString(arg1);
+    return ret;
+  }, arguments);
+}
+function __wbg_toString_d8f537919ef401d62(arg0) {
+  const ret = arg0.toString();
+  return ret;
+}
+function __wbg_transaction_new(arg0) {
+  const ret = Transaction.__wrap(arg0);
+  return ret;
+}
+function __wbg_transactionresult_new(arg0) {
+  const ret = TransactionResult.__wrap(arg0);
+  return ret;
+}
+function __wbg_valueOf_7785fbf48c0e02e4(arg0) {
+  const ret = arg0.valueOf();
+  return ret;
+}
+function __wbg_value_dd9372230531eade2(arg0) {
+  const ret = arg0.value;
+  return ret;
+}
+function __wbg_verifierkeyinsert_new(arg0) {
+  const ret = VerifierKeyInsert.__wrap(arg0);
+  return ret;
+}
+function __wbg_verifierkeyremove_new(arg0) {
+  const ret = VerifierKeyRemove.__wrap(arg0);
+  return ret;
+}
+function __wbg_versions_4e31226f5e8dc9092(arg0) {
+  const ret = arg0.versions;
+  return ret;
+}
+function __wbg_view_91cc97d57ab305302(arg0) {
+  const ret = arg0.view;
+  return isLikeNone2(ret) ? 0 : addToExternrefTable02(ret);
+}
+function __wbg_wbindgenbigintgetasi64_ac743ece6ab9bba12(arg0, arg1) {
+  const v = arg1;
+  const ret = typeof v === "bigint" ? v : void 0;
+  getDataViewMemory02().setBigInt64(arg0 + 8 * 1, isLikeNone2(ret) ? BigInt(0) : ret, true);
+  getDataViewMemory02().setInt32(arg0 + 4 * 0, !isLikeNone2(ret), true);
+}
+function __wbg_wbindgenbooleanget_3fe6f642c7d977462(arg0) {
+  const v = arg0;
+  const ret = typeof v === "boolean" ? v : void 0;
+  return isLikeNone2(ret) ? 16777215 : ret ? 1 : 0;
+}
+function __wbg_wbindgencbdrop_eb10308566512b882(arg0) {
+  const obj = arg0.original;
+  if (obj.cnt-- == 1) {
+    obj.a = 0;
+    return true;
+  }
+  const ret = false;
+  return ret;
+}
+function __wbg_wbindgendebugstring_99ef257a3ddda34d2(arg0, arg1) {
+  const ret = debugString2(arg1);
+  const ptr1 = passStringToWasm02(ret, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  const len1 = WASM_VECTOR_LEN2;
+  getDataViewMemory02().setInt32(arg0 + 4 * 1, len1, true);
+  getDataViewMemory02().setInt32(arg0 + 4 * 0, ptr1, true);
+}
+function __wbg_wbindgenin_d7a1ee10933d2d552(arg0, arg1) {
+  const ret = arg0 in arg1;
+  return ret;
+}
+function __wbg_wbindgenisbigint_ecb90cc08a5a91542(arg0) {
+  const ret = typeof arg0 === "bigint";
+  return ret;
+}
+function __wbg_wbindgenisfunction_8cee7dce3725ae742(arg0) {
+  const ret = typeof arg0 === "function";
+  return ret;
+}
+function __wbg_wbindgenisnull_f3037694abe4d97a2(arg0) {
+  const ret = arg0 === null;
+  return ret;
+}
+function __wbg_wbindgenisobject_307a53c6bd97fbf82(arg0) {
+  const val = arg0;
+  const ret = typeof val === "object" && val !== null;
+  return ret;
+}
+function __wbg_wbindgenisstring_d4fa939789f003b02(arg0) {
+  const ret = typeof arg0 === "string";
+  return ret;
+}
+function __wbg_wbindgenisundefined_c4b71d073b92f3c52(arg0) {
+  const ret = arg0 === void 0;
+  return ret;
+}
+function __wbg_wbindgenjsvaleq_e6f2ad59ccae1b582(arg0, arg1) {
+  const ret = arg0 === arg1;
+  return ret;
+}
+function __wbg_wbindgenjsvallooseeq_9bec8c9be826bed12(arg0, arg1) {
+  const ret = arg0 == arg1;
+  return ret;
+}
+function __wbg_wbindgennumberget_f74b4c7525ac05cb2(arg0, arg1) {
+  const obj = arg1;
+  const ret = typeof obj === "number" ? obj : void 0;
+  getDataViewMemory02().setFloat64(arg0 + 8 * 1, isLikeNone2(ret) ? 0 : ret, true);
+  getDataViewMemory02().setInt32(arg0 + 4 * 0, !isLikeNone2(ret), true);
+}
+function __wbg_wbindgenshr_7d2aae6044c0dab12(arg0, arg1) {
+  const ret = arg0 >> arg1;
+  return ret;
+}
+function __wbg_wbindgenstringget_0f16a6ddddef376f2(arg0, arg1) {
+  const obj = arg1;
+  const ret = typeof obj === "string" ? obj : void 0;
+  var ptr1 = isLikeNone2(ret) ? 0 : passStringToWasm02(ret, wasm2.__wbindgen_malloc, wasm2.__wbindgen_realloc);
+  var len1 = WASM_VECTOR_LEN2;
+  getDataViewMemory02().setInt32(arg0 + 4 * 1, len1, true);
+  getDataViewMemory02().setInt32(arg0 + 4 * 0, ptr1, true);
+}
+function __wbg_wbindgenthrow_451ec1a8469d7eb62(arg0, arg1) {
+  throw new Error(getStringFromWasm02(arg0, arg1));
+}
+function __wbg_zswapchainstate_new(arg0) {
+  const ret = ZswapChainState.__wrap(arg0);
+  return ret;
+}
+function __wbg_zswapinput_new(arg0) {
+  const ret = ZswapInput.__wrap(arg0);
+  return ret;
+}
+function __wbg_zswaplocalstate_new(arg0) {
+  const ret = ZswapLocalState.__wrap(arg0);
+  return ret;
+}
+function __wbg_zswapoffer_new(arg0) {
+  const ret = ZswapOffer.__wrap(arg0);
+  return ret;
+}
+function __wbg_zswapoutput_new(arg0) {
+  const ret = ZswapOutput.__wrap(arg0);
+  return ret;
+}
+function __wbg_zswapstatechanges_new(arg0) {
+  const ret = ZswapStateChanges.__wrap(arg0);
+  return ret;
+}
+function __wbg_zswaptransient_new(arg0) {
+  const ret = ZswapTransient.__wrap(arg0);
+  return ret;
+}
+function __wbindgen_cast_0be206197f6586af(arg0, arg1) {
+  var v0 = getArrayJsValueFromWasm02(arg0, arg1).slice();
+  wasm2.__wbindgen_free(arg0, arg1 * 4, 4);
+  const ret = v0;
+  return ret;
+}
+function __wbindgen_cast_2241b6af4c4b29412(arg0, arg1) {
+  const ret = getStringFromWasm02(arg0, arg1);
+  return ret;
+}
+function __wbindgen_cast_2ddd8a25ff58642a(arg0, arg1) {
+  const ret = BigInt.asUintN(64, arg0) | arg1 << BigInt(64);
+  return ret;
+}
+function __wbindgen_cast_4625c577ab2ec9ee2(arg0) {
+  const ret = BigInt.asUintN(64, arg0);
+  return ret;
+}
+function __wbindgen_cast_6141ab5ed7fb2796(arg0, arg1) {
+  const ret = makeMutClosure2(arg0, arg1, 3100, __wbg_adapter_16);
+  return ret;
+}
+function __wbindgen_cast_9ae0607507abb0572(arg0) {
+  const ret = arg0;
+  return ret;
+}
+function __wbindgen_cast_cb9088102bce6b302(arg0, arg1) {
+  const ret = getArrayU8FromWasm02(arg0, arg1);
+  return ret;
+}
+function __wbindgen_cast_d6cd19b81560fd6e2(arg0) {
+  const ret = arg0;
+  return ret;
+}
+function __wbindgen_cast_e7b45dd881f38ce32(arg0, arg1) {
+  const ret = BigInt.asUintN(64, arg0) | BigInt.asUintN(64, arg1) << BigInt(64);
+  return ret;
+}
+function __wbindgen_init_externref_table2() {
+  const table = wasm2.__wbindgen_export_2;
+  const offset = table.grow(4);
+  table.set(0, void 0);
+  table.set(offset + 0, void 0);
+  table.set(offset + 1, null);
+  table.set(offset + 2, true);
+  table.set(offset + 3, false);
+  ;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline0.js
+var inline0_exports = {};
+__export(inline0_exports, {
+  PreTranscript_: () => PreTranscript_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function PreTranscript_() {
+  return PreTranscript;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline1.js
+var inline1_exports = {};
+__export(inline1_exports, {
+  UnshieldedOffer_: () => UnshieldedOffer_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function UnshieldedOffer_() {
+  return UnshieldedOffer;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline2.js
+var inline2_exports = {};
+__export(inline2_exports, {
+  ZswapInput_: () => ZswapInput_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function ZswapInput_() {
+  return ZswapInput;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline4.js
+var inline4_exports = {};
+__export(inline4_exports, {
+  ZswapOffer_: () => ZswapOffer_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function ZswapOffer_() {
+  return ZswapOffer;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline5.js
+var inline5_exports = {};
+__export(inline5_exports, {
+  ZswapOutput_: () => ZswapOutput_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function ZswapOutput_() {
+  return ZswapOutput;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline3.js
+var inline3_exports = {};
+__export(inline3_exports, {
+  ZswapTransient_: () => ZswapTransient_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function ZswapTransient_() {
+  return ZswapTransient;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline6.js
+var inline6_exports = {};
+__export(inline6_exports, {
+  PrePartitionContractCall_: () => PrePartitionContractCall_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function PrePartitionContractCall_() {
+  return PrePartitionContractCall;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline7.js
+var inline7_exports = {};
+__export(inline7_exports, {
+  DustSpend_: () => DustSpend_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function DustSpend_() {
+  return DustSpend;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline8.js
+var inline8_exports = {};
+__export(inline8_exports, {
+  DustActions_: () => DustActions_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function DustActions_() {
+  return DustActions;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline9.js
+var inline9_exports = {};
+__export(inline9_exports, {
+  DustRegistration_: () => DustRegistration_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function DustRegistration_() {
+  return DustRegistration;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline11.js
+var inline11_exports = {};
+__export(inline11_exports, {
+  SignatureErased_: () => SignatureErased_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function SignatureErased_() {
+  return SignatureErased;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline13.js
+var inline13_exports = {};
+__export(inline13_exports, {
+  SignatureEnabled_: () => SignatureEnabled_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function SignatureEnabled_() {
+  return SignatureEnabled;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline17.js
+var inline17_exports = {};
+__export(inline17_exports, {
+  Intent_: () => Intent_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function Intent_() {
+  return Intent;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline18.js
+var inline18_exports = {};
+__export(inline18_exports, {
+  ContractCall_: () => ContractCall_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function ContractCall_() {
+  return ContractCall;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline23.js
+var inline23_exports = {};
+__export(inline23_exports, {
+  ContractDeploy_: () => ContractDeploy_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function ContractDeploy_() {
+  return ContractDeploy;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline19.js
+var inline19_exports = {};
+__export(inline19_exports, {
+  ReplaceAuthority_: () => ReplaceAuthority_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function ReplaceAuthority_() {
+  return ReplaceAuthority;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline20.js
+var inline20_exports = {};
+__export(inline20_exports, {
+  MaintenanceUpdate_: () => MaintenanceUpdate_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function MaintenanceUpdate_() {
+  return MaintenanceUpdate;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline21.js
+var inline21_exports = {};
+__export(inline21_exports, {
+  VerifierKeyInsert_: () => VerifierKeyInsert_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function VerifierKeyInsert_() {
+  return VerifierKeyInsert;
+}
+
+// node_modules/@midnight-ntwrk/ledger-v8/snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline22.js
+var inline22_exports = {};
+__export(inline22_exports, {
+  VerifierKeyRemove_: () => VerifierKeyRemove_
+});
+init_dirname();
+init_buffer2();
+init_process2();
+function VerifierKeyRemove_() {
+  return VerifierKeyRemove;
+}
+
+// wasm-bindgen:D:\route\midnight\COHORT\node_modules\@midnight-ntwrk\ledger-v8\midnight_ledger_wasm_bg.wasm
+var __wasmResponse2 = await fetch(new URL("./midnight_ledger_wasm_bg.wasm", import.meta.url));
+if (!__wasmResponse2.ok) {
+  throw new Error("Failed to fetch midnight_ledger_wasm_bg.wasm: " + __wasmResponse2.status);
+}
+var { instance: __wasmInstance2 } = await WebAssembly.instantiateStreaming(__wasmResponse2, {
+  "./midnight_ledger_wasm_bg.js": midnight_ledger_wasm_bg_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline0.js": inline0_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline1.js": inline1_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline2.js": inline2_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline4.js": inline4_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline5.js": inline5_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline3.js": inline3_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline6.js": inline6_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline7.js": inline7_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline8.js": inline8_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline9.js": inline9_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline11.js": inline11_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline13.js": inline13_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline17.js": inline17_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline18.js": inline18_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline23.js": inline23_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline19.js": inline19_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline20.js": inline20_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline21.js": inline21_exports,
+  "./snippets/midnight-ledger-wasm-9f71df61dc0427fb/inline22.js": inline22_exports
+});
+var __wasmExports2 = __wasmInstance2.exports;
+var memory2 = __wasmExports2.memory;
+var __wbg_authorizedclaim_free = __wasmExports2.__wbg_authorizedclaim_free;
+var __wbg_binding_free = __wasmExports2.__wbg_binding_free;
+var __wbg_claimrewardstransaction_free = __wasmExports2.__wbg_claimrewardstransaction_free;
+var __wbg_coinsecretkey_free = __wasmExports2.__wbg_coinsecretkey_free;
+var __wbg_contractcall_free = __wasmExports2.__wbg_contractcall_free;
+var __wbg_contractcallprototype_free = __wasmExports2.__wbg_contractcallprototype_free;
+var __wbg_contractdeploy_free = __wasmExports2.__wbg_contractdeploy_free;
+var __wbg_contractoperationversion_free = __wasmExports2.__wbg_contractoperationversion_free;
+var __wbg_contractoperationversionedverifierkey_free = __wasmExports2.__wbg_contractoperationversionedverifierkey_free;
+var __wbg_dustactions_free = __wasmExports2.__wbg_dustactions_free;
+var __wbg_dustgenerationstate_free = __wasmExports2.__wbg_dustgenerationstate_free;
+var __wbg_dustlocalstate_free = __wasmExports2.__wbg_dustlocalstate_free;
+var __wbg_dustlocalstatewithchanges_free = __wasmExports2.__wbg_dustlocalstatewithchanges_free;
+var __wbg_dustparameters_free = __wasmExports2.__wbg_dustparameters_free;
+var __wbg_dustregistration_free = __wasmExports2.__wbg_dustregistration_free;
+var __wbg_dustsecretkey_free = __wasmExports2.__wbg_dustsecretkey_free;
+var __wbg_dustspend_free = __wasmExports2.__wbg_dustspend_free;
+var __wbg_duststate_free = __wasmExports2.__wbg_duststate_free;
+var __wbg_duststatechanges_free = __wasmExports2.__wbg_duststatechanges_free;
+var __wbg_duststatemerkletreecollapsedupdate_free = __wasmExports2.__wbg_duststatemerkletreecollapsedupdate_free;
+var __wbg_dustutxostate_free = __wasmExports2.__wbg_dustutxostate_free;
+var __wbg_encryptionsecretkey_free = __wasmExports2.__wbg_encryptionsecretkey_free;
+var __wbg_event_free = __wasmExports2.__wbg_event_free;
+var __wbg_intent_free = __wasmExports2.__wbg_intent_free;
+var __wbg_ledgerparameters_free = __wasmExports2.__wbg_ledgerparameters_free;
+var __wbg_ledgerstate_free = __wasmExports2.__wbg_ledgerstate_free;
+var __wbg_maintenanceupdate_free = __wasmExports2.__wbg_maintenanceupdate_free;
+var __wbg_nobinding_free = __wasmExports2.__wbg_nobinding_free;
+var __wbg_prebinding_free = __wasmExports2.__wbg_prebinding_free;
+var __wbg_prepartitioncontractcall_free = __wasmExports2.__wbg_prepartitioncontractcall_free;
+var __wbg_preproof_free = __wasmExports2.__wbg_preproof_free;
+var __wbg_pretranscript_free = __wasmExports2.__wbg_pretranscript_free;
+var __wbg_proof_free = __wasmExports2.__wbg_proof_free;
+var __wbg_replaceauthority_free = __wasmExports2.__wbg_replaceauthority_free;
+var __wbg_signatureenabled_free = __wasmExports2.__wbg_signatureenabled_free;
+var __wbg_systemtransaction_free = __wasmExports2.__wbg_systemtransaction_free;
+var __wbg_transaction_free = __wasmExports2.__wbg_transaction_free;
+var __wbg_transactioncontext_free = __wasmExports2.__wbg_transactioncontext_free;
+var __wbg_transactioncostmodel_free = __wasmExports2.__wbg_transactioncostmodel_free;
+var __wbg_transactionresult_free = __wasmExports2.__wbg_transactionresult_free;
+var __wbg_unshieldedoffer_free = __wasmExports2.__wbg_unshieldedoffer_free;
+var __wbg_utxometa_free = __wasmExports2.__wbg_utxometa_free;
+var __wbg_utxostate_free = __wasmExports2.__wbg_utxostate_free;
+var __wbg_verifiedtransaction_free = __wasmExports2.__wbg_verifiedtransaction_free;
+var __wbg_verifierkeyinsert_free = __wasmExports2.__wbg_verifierkeyinsert_free;
+var __wbg_wellformedstrictness_free = __wasmExports2.__wbg_wellformedstrictness_free;
+var __wbg_zswapchainstate_free = __wasmExports2.__wbg_zswapchainstate_free;
+var __wbg_zswapinput_free = __wasmExports2.__wbg_zswapinput_free;
+var __wbg_zswaplocalstate_free = __wasmExports2.__wbg_zswaplocalstate_free;
+var __wbg_zswaplocalstatewithchanges_free = __wasmExports2.__wbg_zswaplocalstatewithchanges_free;
+var __wbg_zswapoffer_free = __wasmExports2.__wbg_zswapoffer_free;
+var __wbg_zswapoutput_free = __wasmExports2.__wbg_zswapoutput_free;
+var __wbg_zswapsecretkeys_free = __wasmExports2.__wbg_zswapsecretkeys_free;
+var __wbg_zswapstatechanges_free = __wasmExports2.__wbg_zswapstatechanges_free;
+var __wbg_zswaptransient_free = __wasmExports2.__wbg_zswaptransient_free;
+var addressFromKey2 = __wasmExports2.addressFromKey;
+var authorizedclaim_coin = __wasmExports2.authorizedclaim_coin;
+var authorizedclaim_deserialize = __wasmExports2.authorizedclaim_deserialize;
+var authorizedclaim_eraseProof = __wasmExports2.authorizedclaim_eraseProof;
+var authorizedclaim_new = __wasmExports2.authorizedclaim_new;
+var authorizedclaim_recipient = __wasmExports2.authorizedclaim_recipient;
+var authorizedclaim_serialize = __wasmExports2.authorizedclaim_serialize;
+var authorizedclaim_toString = __wasmExports2.authorizedclaim_toString;
+var binding_deserialize = __wasmExports2.binding_deserialize;
+var binding_instance = __wasmExports2.binding_instance;
+var binding_new = __wasmExports2.binding_new;
+var binding_serialize = __wasmExports2.binding_serialize;
+var binding_toString = __wasmExports2.binding_toString;
+var claimrewardstransaction_addSignature = __wasmExports2.claimrewardstransaction_addSignature;
+var claimrewardstransaction_construct = __wasmExports2.claimrewardstransaction_construct;
+var claimrewardstransaction_dataToSign = __wasmExports2.claimrewardstransaction_dataToSign;
+var claimrewardstransaction_deserialize = __wasmExports2.claimrewardstransaction_deserialize;
+var claimrewardstransaction_eraseSignatures = __wasmExports2.claimrewardstransaction_eraseSignatures;
+var claimrewardstransaction_kind = __wasmExports2.claimrewardstransaction_kind;
+var claimrewardstransaction_new = __wasmExports2.claimrewardstransaction_new;
+var claimrewardstransaction_nonce = __wasmExports2.claimrewardstransaction_nonce;
+var claimrewardstransaction_owner = __wasmExports2.claimrewardstransaction_owner;
+var claimrewardstransaction_serialize = __wasmExports2.claimrewardstransaction_serialize;
+var claimrewardstransaction_signature = __wasmExports2.claimrewardstransaction_signature;
+var claimrewardstransaction_toString = __wasmExports2.claimrewardstransaction_toString;
+var claimrewardstransaction_value = __wasmExports2.claimrewardstransaction_value;
+var coinCommitment2 = __wasmExports2.coinCommitment;
+var coinNullifier2 = __wasmExports2.coinNullifier;
+var coinsecretkey_clear = __wasmExports2.coinsecretkey_clear;
+var coinsecretkey_new = __wasmExports2.coinsecretkey_new;
+var coinsecretkey_public_key = __wasmExports2.coinsecretkey_public_key;
+var coinsecretkey_yesIKnowTheSecurityImplicationsOfThis_serialize = __wasmExports2.coinsecretkey_yesIKnowTheSecurityImplicationsOfThis_serialize;
+var contractcall_address = __wasmExports2.contractcall_address;
+var contractcall_communicationCommitment = __wasmExports2.contractcall_communicationCommitment;
+var contractcall_entryPoint = __wasmExports2.contractcall_entryPoint;
+var contractcall_fallibleTranscript = __wasmExports2.contractcall_fallibleTranscript;
+var contractcall_guaranteedTranscript = __wasmExports2.contractcall_guaranteedTranscript;
+var contractcall_new = __wasmExports2.contractcall_new;
+var contractcall_proof = __wasmExports2.contractcall_proof;
+var contractcall_toString = __wasmExports2.contractcall_toString;
+var contractcallprototype_intoCall = __wasmExports2.contractcallprototype_intoCall;
+var contractcallprototype_new = __wasmExports2.contractcallprototype_new;
+var contractcallprototype_toString = __wasmExports2.contractcallprototype_toString;
+var contractdeploy_address = __wasmExports2.contractdeploy_address;
+var contractdeploy_initialState = __wasmExports2.contractdeploy_initialState;
+var contractdeploy_new = __wasmExports2.contractdeploy_new;
+var contractdeploy_toString = __wasmExports2.contractdeploy_toString;
+var contractoperationversion_new = __wasmExports2.contractoperationversion_new;
+var contractoperationversion_toString = __wasmExports2.contractoperationversion_toString;
+var contractoperationversion_version = __wasmExports2.contractoperationversion_version;
+var contractoperationversionedverifierkey_new = __wasmExports2.contractoperationversionedverifierkey_new;
+var contractoperationversionedverifierkey_raw_vk = __wasmExports2.contractoperationversionedverifierkey_raw_vk;
+var contractoperationversionedverifierkey_toString = __wasmExports2.contractoperationversionedverifierkey_toString;
+var contractoperationversionedverifierkey_version = __wasmExports2.contractoperationversionedverifierkey_version;
+var createCheckPayload2 = __wasmExports2.createCheckPayload;
+var createCoinInfo2 = __wasmExports2.createCoinInfo;
+var createProvingPayload2 = __wasmExports2.createProvingPayload;
+var createProvingTransactionPayload2 = __wasmExports2.createProvingTransactionPayload;
+var createShieldedCoinInfo2 = __wasmExports2.createShieldedCoinInfo;
+var dustCommitment2 = __wasmExports2.dustCommitment;
+var dustInitialNonce2 = __wasmExports2.dustInitialNonce;
+var dustNonce2 = __wasmExports2.dustNonce;
+var dustNullifier2 = __wasmExports2.dustNullifier;
+var dustactions_ctime = __wasmExports2.dustactions_ctime;
+var dustactions_deserialize = __wasmExports2.dustactions_deserialize;
+var dustactions_new = __wasmExports2.dustactions_new;
+var dustactions_registrations = __wasmExports2.dustactions_registrations;
+var dustactions_serialize = __wasmExports2.dustactions_serialize;
+var dustactions_set_ctime = __wasmExports2.dustactions_set_ctime;
+var dustactions_set_registrations = __wasmExports2.dustactions_set_registrations;
+var dustactions_set_spends = __wasmExports2.dustactions_set_spends;
+var dustactions_spends = __wasmExports2.dustactions_spends;
+var dustactions_toString = __wasmExports2.dustactions_toString;
+var dustgenerationstate_deserialize = __wasmExports2.dustgenerationstate_deserialize;
+var dustgenerationstate_new = __wasmExports2.dustgenerationstate_new;
+var dustgenerationstate_serialize = __wasmExports2.dustgenerationstate_serialize;
+var dustgenerationstate_toString = __wasmExports2.dustgenerationstate_toString;
+var dustlocalstate_addUtxo = __wasmExports2.dustlocalstate_addUtxo;
+var dustlocalstate_applyCommitmentCollapsedUpdate = __wasmExports2.dustlocalstate_applyCommitmentCollapsedUpdate;
+var dustlocalstate_applyGenerationCollapsedUpdate = __wasmExports2.dustlocalstate_applyGenerationCollapsedUpdate;
+var dustlocalstate_collapseCommitmentTree = __wasmExports2.dustlocalstate_collapseCommitmentTree;
+var dustlocalstate_collapseGenerationTree = __wasmExports2.dustlocalstate_collapseGenerationTree;
+var dustlocalstate_commitmentTreeRoot = __wasmExports2.dustlocalstate_commitmentTreeRoot;
+var dustlocalstate_deserialize = __wasmExports2.dustlocalstate_deserialize;
+var dustlocalstate_findUtxoByNullifier = __wasmExports2.dustlocalstate_findUtxoByNullifier;
+var dustlocalstate_generatingTreeRoot = __wasmExports2.dustlocalstate_generatingTreeRoot;
+var dustlocalstate_generationInfo = __wasmExports2.dustlocalstate_generationInfo;
+var dustlocalstate_insertCommitment = __wasmExports2.dustlocalstate_insertCommitment;
+var dustlocalstate_insertGenerationInfo = __wasmExports2.dustlocalstate_insertGenerationInfo;
+var dustlocalstate_new = __wasmExports2.dustlocalstate_new;
+var dustlocalstate_params = __wasmExports2.dustlocalstate_params;
+var dustlocalstate_processTtls = __wasmExports2.dustlocalstate_processTtls;
+var dustlocalstate_removeCommitment = __wasmExports2.dustlocalstate_removeCommitment;
+var dustlocalstate_removeGenerationInfo = __wasmExports2.dustlocalstate_removeGenerationInfo;
+var dustlocalstate_removeUtxo = __wasmExports2.dustlocalstate_removeUtxo;
+var dustlocalstate_replayEvents = __wasmExports2.dustlocalstate_replayEvents;
+var dustlocalstate_replayEventsWithChanges = __wasmExports2.dustlocalstate_replayEventsWithChanges;
+var dustlocalstate_replayRawEvents = __wasmExports2.dustlocalstate_replayRawEvents;
+var dustlocalstate_serialize = __wasmExports2.dustlocalstate_serialize;
+var dustlocalstate_spend = __wasmExports2.dustlocalstate_spend;
+var dustlocalstate_successorUtxo = __wasmExports2.dustlocalstate_successorUtxo;
+var dustlocalstate_syncTime = __wasmExports2.dustlocalstate_syncTime;
+var dustlocalstate_toString = __wasmExports2.dustlocalstate_toString;
+var dustlocalstate_utxos = __wasmExports2.dustlocalstate_utxos;
+var dustlocalstate_walletBalance = __wasmExports2.dustlocalstate_walletBalance;
+var dustlocalstatewithchanges_changes = __wasmExports2.dustlocalstatewithchanges_changes;
+var dustlocalstatewithchanges_state = __wasmExports2.dustlocalstatewithchanges_state;
+var dustparameters_deserialize = __wasmExports2.dustparameters_deserialize;
+var dustparameters_dustGracePeriodSeconds = __wasmExports2.dustparameters_dustGracePeriodSeconds;
+var dustparameters_generationDecayRate = __wasmExports2.dustparameters_generationDecayRate;
+var dustparameters_new = __wasmExports2.dustparameters_new;
+var dustparameters_nightDustRatio = __wasmExports2.dustparameters_nightDustRatio;
+var dustparameters_serialize = __wasmExports2.dustparameters_serialize;
+var dustparameters_set_dustGracePeriodSeconds = __wasmExports2.dustparameters_set_dustGracePeriodSeconds;
+var dustparameters_set_generationDecayRate = __wasmExports2.dustparameters_set_generationDecayRate;
+var dustparameters_set_nightDustRatio = __wasmExports2.dustparameters_set_nightDustRatio;
+var dustparameters_timeToCapSeconds = __wasmExports2.dustparameters_timeToCapSeconds;
+var dustparameters_toString = __wasmExports2.dustparameters_toString;
+var dustregistration_allowFeePayment = __wasmExports2.dustregistration_allowFeePayment;
+var dustregistration_deserialize = __wasmExports2.dustregistration_deserialize;
+var dustregistration_dustAddress = __wasmExports2.dustregistration_dustAddress;
+var dustregistration_new = __wasmExports2.dustregistration_new;
+var dustregistration_nightKey = __wasmExports2.dustregistration_nightKey;
+var dustregistration_serialize = __wasmExports2.dustregistration_serialize;
+var dustregistration_set_allowFeePayment = __wasmExports2.dustregistration_set_allowFeePayment;
+var dustregistration_set_dustAddress = __wasmExports2.dustregistration_set_dustAddress;
+var dustregistration_set_nightKey = __wasmExports2.dustregistration_set_nightKey;
+var dustregistration_set_signature = __wasmExports2.dustregistration_set_signature;
+var dustregistration_signature = __wasmExports2.dustregistration_signature;
+var dustregistration_toString = __wasmExports2.dustregistration_toString;
+var dustsecretkey_clear = __wasmExports2.dustsecretkey_clear;
+var dustsecretkey_fromBigint = __wasmExports2.dustsecretkey_fromBigint;
+var dustsecretkey_fromSeed = __wasmExports2.dustsecretkey_fromSeed;
+var dustsecretkey_new = __wasmExports2.dustsecretkey_new;
+var dustsecretkey_publicKey = __wasmExports2.dustsecretkey_publicKey;
+var dustspend_new = __wasmExports2.dustspend_new;
+var dustspend_newCommitment = __wasmExports2.dustspend_newCommitment;
+var dustspend_oldNullifier = __wasmExports2.dustspend_oldNullifier;
+var dustspend_proof = __wasmExports2.dustspend_proof;
+var dustspend_toString = __wasmExports2.dustspend_toString;
+var dustspend_vFee = __wasmExports2.dustspend_vFee;
+var duststate_deserialize = __wasmExports2.duststate_deserialize;
+var duststate_generation = __wasmExports2.duststate_generation;
+var duststate_new = __wasmExports2.duststate_new;
+var duststate_serialize = __wasmExports2.duststate_serialize;
+var duststate_toString = __wasmExports2.duststate_toString;
+var duststate_utxo = __wasmExports2.duststate_utxo;
+var duststatechanges_receivedUtxos = __wasmExports2.duststatechanges_receivedUtxos;
+var duststatechanges_source = __wasmExports2.duststatechanges_source;
+var duststatechanges_spentUtxos = __wasmExports2.duststatechanges_spentUtxos;
+var duststatemerkletreecollapsedupdate_deserialize = __wasmExports2.duststatemerkletreecollapsedupdate_deserialize;
+var duststatemerkletreecollapsedupdate_new = __wasmExports2.duststatemerkletreecollapsedupdate_new;
+var duststatemerkletreecollapsedupdate_newFromCommitmentTree = __wasmExports2.duststatemerkletreecollapsedupdate_newFromCommitmentTree;
+var duststatemerkletreecollapsedupdate_newFromGenerationTree = __wasmExports2.duststatemerkletreecollapsedupdate_newFromGenerationTree;
+var duststatemerkletreecollapsedupdate_serialize = __wasmExports2.duststatemerkletreecollapsedupdate_serialize;
+var duststatemerkletreecollapsedupdate_toString = __wasmExports2.duststatemerkletreecollapsedupdate_toString;
+var dustutxostate_deserialize = __wasmExports2.dustutxostate_deserialize;
+var dustutxostate_new = __wasmExports2.dustutxostate_new;
+var dustutxostate_serialize = __wasmExports2.dustutxostate_serialize;
+var dustutxostate_toString = __wasmExports2.dustutxostate_toString;
+var encryptionsecretkey_clear = __wasmExports2.encryptionsecretkey_clear;
+var encryptionsecretkey_deserialize = __wasmExports2.encryptionsecretkey_deserialize;
+var encryptionsecretkey_new = __wasmExports2.encryptionsecretkey_new;
+var encryptionsecretkey_public_key = __wasmExports2.encryptionsecretkey_public_key;
+var encryptionsecretkey_taggedDeserialize = __wasmExports2.encryptionsecretkey_taggedDeserialize;
+var encryptionsecretkey_test = __wasmExports2.encryptionsecretkey_test;
+var encryptionsecretkey_yesIKnowTheSecurityImplicationsOfThis_serialize = __wasmExports2.encryptionsecretkey_yesIKnowTheSecurityImplicationsOfThis_serialize;
+var encryptionsecretkey_yesIKnowTheSecurityImplicationsOfThis_taggedSerialize = __wasmExports2.encryptionsecretkey_yesIKnowTheSecurityImplicationsOfThis_taggedSerialize;
+var event_content = __wasmExports2.event_content;
+var event_deserialize = __wasmExports2.event_deserialize;
+var event_new = __wasmExports2.event_new;
+var event_serialize = __wasmExports2.event_serialize;
+var event_source = __wasmExports2.event_source;
+var event_toString = __wasmExports2.event_toString;
+var feeToken2 = __wasmExports2.feeToken;
+var intent_actions = __wasmExports2.intent_actions;
+var intent_addCall = __wasmExports2.intent_addCall;
+var intent_addDeploy = __wasmExports2.intent_addDeploy;
+var intent_addMaintenanceUpdate = __wasmExports2.intent_addMaintenanceUpdate;
+var intent_bind = __wasmExports2.intent_bind;
+var intent_binding = __wasmExports2.intent_binding;
+var intent_construct = __wasmExports2.intent_construct;
+var intent_deserialize = __wasmExports2.intent_deserialize;
+var intent_dustActions = __wasmExports2.intent_dustActions;
+var intent_eraseProofs = __wasmExports2.intent_eraseProofs;
+var intent_eraseSignatures = __wasmExports2.intent_eraseSignatures;
+var intent_fallibleUnshieldedOffer = __wasmExports2.intent_fallibleUnshieldedOffer;
+var intent_guaranteedUnshieldedOffer = __wasmExports2.intent_guaranteedUnshieldedOffer;
+var intent_has_contract_deployments = __wasmExports2.intent_has_contract_deployments;
+var intent_has_fallible_offers = __wasmExports2.intent_has_fallible_offers;
+var intent_has_fallible_transcripts = __wasmExports2.intent_has_fallible_transcripts;
+var intent_intentHash = __wasmExports2.intent_intentHash;
+var intent_new = __wasmExports2.intent_new;
+var intent_serialize = __wasmExports2.intent_serialize;
+var intent_set_actions = __wasmExports2.intent_set_actions;
+var intent_set_dustActions = __wasmExports2.intent_set_dustActions;
+var intent_set_fallibleUnshieldedOffer = __wasmExports2.intent_set_fallibleUnshieldedOffer;
+var intent_set_guaranteedUnshieldedOffer = __wasmExports2.intent_set_guaranteedUnshieldedOffer;
+var intent_set_ttl = __wasmExports2.intent_set_ttl;
+var intent_signatureData = __wasmExports2.intent_signatureData;
+var intent_toString = __wasmExports2.intent_toString;
+var intent_ttl = __wasmExports2.intent_ttl;
+var ledgerparameters_deserialize = __wasmExports2.ledgerparameters_deserialize;
+var ledgerparameters_dust = __wasmExports2.ledgerparameters_dust;
+var ledgerparameters_feePrices = __wasmExports2.ledgerparameters_feePrices;
+var ledgerparameters_initialParameters = __wasmExports2.ledgerparameters_initialParameters;
+var ledgerparameters_maxPriceAdjustment = __wasmExports2.ledgerparameters_maxPriceAdjustment;
+var ledgerparameters_new = __wasmExports2.ledgerparameters_new;
+var ledgerparameters_normalizeFullness = __wasmExports2.ledgerparameters_normalizeFullness;
+var ledgerparameters_serialize = __wasmExports2.ledgerparameters_serialize;
+var ledgerparameters_toString = __wasmExports2.ledgerparameters_toString;
+var ledgerparameters_transactionCostModel = __wasmExports2.ledgerparameters_transactionCostModel;
+var ledgerstate_apply = __wasmExports2.ledgerstate_apply;
+var ledgerstate_applySystemTx = __wasmExports2.ledgerstate_applySystemTx;
+var ledgerstate_blank = __wasmExports2.ledgerstate_blank;
+var ledgerstate_block_reward_pool = __wasmExports2.ledgerstate_block_reward_pool;
+var ledgerstate_bridgeReceiving = __wasmExports2.ledgerstate_bridgeReceiving;
+var ledgerstate_deserialize = __wasmExports2.ledgerstate_deserialize;
+var ledgerstate_dust = __wasmExports2.ledgerstate_dust;
+var ledgerstate_index = __wasmExports2.ledgerstate_index;
+var ledgerstate_locked_pool = __wasmExports2.ledgerstate_locked_pool;
+var ledgerstate_new = __wasmExports2.ledgerstate_new;
+var ledgerstate_parameters = __wasmExports2.ledgerstate_parameters;
+var ledgerstate_postBlockUpdate = __wasmExports2.ledgerstate_postBlockUpdate;
+var ledgerstate_reserve_pool = __wasmExports2.ledgerstate_reserve_pool;
+var ledgerstate_serialize = __wasmExports2.ledgerstate_serialize;
+var ledgerstate_set_parameters = __wasmExports2.ledgerstate_set_parameters;
+var ledgerstate_testingDistributeNight = __wasmExports2.ledgerstate_testingDistributeNight;
+var ledgerstate_toString = __wasmExports2.ledgerstate_toString;
+var ledgerstate_treasuryBalance = __wasmExports2.ledgerstate_treasuryBalance;
+var ledgerstate_unclaimedBlockRewards = __wasmExports2.ledgerstate_unclaimedBlockRewards;
+var ledgerstate_updateIndex = __wasmExports2.ledgerstate_updateIndex;
+var ledgerstate_utxo = __wasmExports2.ledgerstate_utxo;
+var ledgerstate_zswap = __wasmExports2.ledgerstate_zswap;
+var maintenanceupdate_addSignature = __wasmExports2.maintenanceupdate_addSignature;
+var maintenanceupdate_address = __wasmExports2.maintenanceupdate_address;
+var maintenanceupdate_counter = __wasmExports2.maintenanceupdate_counter;
+var maintenanceupdate_data_to_sign = __wasmExports2.maintenanceupdate_data_to_sign;
+var maintenanceupdate_new = __wasmExports2.maintenanceupdate_new;
+var maintenanceupdate_signatures = __wasmExports2.maintenanceupdate_signatures;
+var maintenanceupdate_toString = __wasmExports2.maintenanceupdate_toString;
+var maintenanceupdate_updates = __wasmExports2.maintenanceupdate_updates;
+var merkletreecollapsedupdate_deserialize = __wasmExports2.merkletreecollapsedupdate_deserialize;
+var merkletreecollapsedupdate_new = __wasmExports2.merkletreecollapsedupdate_new;
+var nativeToken2 = __wasmExports2.nativeToken;
+var nobinding_deserialize = __wasmExports2.nobinding_deserialize;
+var nobinding_instance = __wasmExports2.nobinding_instance;
+var nobinding_new = __wasmExports2.nobinding_new;
+var nobinding_serialize = __wasmExports2.nobinding_serialize;
+var nobinding_toString = __wasmExports2.nobinding_toString;
+var noproof_instance = __wasmExports2.noproof_instance;
+var noproof_new = __wasmExports2.noproof_new;
+var noproof_toString = __wasmExports2.noproof_toString;
+var parseCheckResult2 = __wasmExports2.parseCheckResult;
+var partitionTranscripts2 = __wasmExports2.partitionTranscripts;
+var prebinding_deserialize = __wasmExports2.prebinding_deserialize;
+var prebinding_instance = __wasmExports2.prebinding_instance;
+var prebinding_new = __wasmExports2.prebinding_new;
+var prebinding_serialize = __wasmExports2.prebinding_serialize;
+var prebinding_toString = __wasmExports2.prebinding_toString;
+var prepartitioncontractcall_new = __wasmExports2.prepartitioncontractcall_new;
+var prepartitioncontractcall_toString = __wasmExports2.prepartitioncontractcall_toString;
+var preproof_deserialize = __wasmExports2.preproof_deserialize;
+var preproof_instance = __wasmExports2.preproof_instance;
+var preproof_new = __wasmExports2.preproof_new;
+var preproof_serialize = __wasmExports2.preproof_serialize;
+var preproof_toString = __wasmExports2.preproof_toString;
+var pretranscript_new = __wasmExports2.pretranscript_new;
+var pretranscript_toString = __wasmExports2.pretranscript_toString;
+var proof_deserialize = __wasmExports2.proof_deserialize;
+var proof_instance = __wasmExports2.proof_instance;
+var proof_new = __wasmExports2.proof_new;
+var proof_serialize = __wasmExports2.proof_serialize;
+var proof_toString = __wasmExports2.proof_toString;
+var replaceauthority_authority = __wasmExports2.replaceauthority_authority;
+var replaceauthority_new = __wasmExports2.replaceauthority_new;
+var replaceauthority_toString = __wasmExports2.replaceauthority_toString;
+var sampleCoinPublicKey2 = __wasmExports2.sampleCoinPublicKey;
+var sampleDustSecretKey2 = __wasmExports2.sampleDustSecretKey;
+var sampleEncryptionPublicKey2 = __wasmExports2.sampleEncryptionPublicKey;
+var sampleIntentHash2 = __wasmExports2.sampleIntentHash;
+var shieldedToken2 = __wasmExports2.shieldedToken;
+var signatureenabled_deserialize = __wasmExports2.signatureenabled_deserialize;
+var signatureenabled_instance = __wasmExports2.signatureenabled_instance;
+var signatureenabled_new = __wasmExports2.signatureenabled_new;
+var signatureenabled_serialize = __wasmExports2.signatureenabled_serialize;
+var signatureenabled_toString = __wasmExports2.signatureenabled_toString;
+var signatureerased_instance = __wasmExports2.signatureerased_instance;
+var signatureerased_toString = __wasmExports2.signatureerased_toString;
+var systemtransaction_deserialize = __wasmExports2.systemtransaction_deserialize;
+var systemtransaction_new = __wasmExports2.systemtransaction_new;
+var systemtransaction_serialize = __wasmExports2.systemtransaction_serialize;
+var systemtransaction_toString = __wasmExports2.systemtransaction_toString;
+var transaction_addCalls = __wasmExports2.transaction_addCalls;
+var transaction_addIntent = __wasmExports2.transaction_addIntent;
+var transaction_addZswapOffer = __wasmExports2.transaction_addZswapOffer;
+var transaction_bind = __wasmExports2.transaction_bind;
+var transaction_bindingRandomness = __wasmExports2.transaction_bindingRandomness;
+var transaction_cost = __wasmExports2.transaction_cost;
+var transaction_deserialize = __wasmExports2.transaction_deserialize;
+var transaction_eraseProofs = __wasmExports2.transaction_eraseProofs;
+var transaction_eraseSignatures = __wasmExports2.transaction_eraseSignatures;
+var transaction_fallibleOffer = __wasmExports2.transaction_fallibleOffer;
+var transaction_fees = __wasmExports2.transaction_fees;
+var transaction_feesWithMargin = __wasmExports2.transaction_feesWithMargin;
+var transaction_fromParts = __wasmExports2.transaction_fromParts;
+var transaction_fromPartsRandomized = __wasmExports2.transaction_fromPartsRandomized;
+var transaction_fromRewards = __wasmExports2.transaction_fromRewards;
+var transaction_guaranteedOffer = __wasmExports2.transaction_guaranteedOffer;
+var transaction_identifiers = __wasmExports2.transaction_identifiers;
+var transaction_imbalances = __wasmExports2.transaction_imbalances;
+var transaction_intents = __wasmExports2.transaction_intents;
+var transaction_merge = __wasmExports2.transaction_merge;
+var transaction_mockProve = __wasmExports2.transaction_mockProve;
+var transaction_new = __wasmExports2.transaction_new;
+var transaction_prove = __wasmExports2.transaction_prove;
+var transaction_rewards = __wasmExports2.transaction_rewards;
+var transaction_serialize = __wasmExports2.transaction_serialize;
+var transaction_set_fallibleOffer = __wasmExports2.transaction_set_fallibleOffer;
+var transaction_set_guaranteedOffer = __wasmExports2.transaction_set_guaranteedOffer;
+var transaction_set_intents = __wasmExports2.transaction_set_intents;
+var transaction_toString = __wasmExports2.transaction_toString;
+var transaction_transactionHash = __wasmExports2.transaction_transactionHash;
+var transaction_wellFormed = __wasmExports2.transaction_wellFormed;
+var transactioncontext_new = __wasmExports2.transactioncontext_new;
+var transactioncontext_toString = __wasmExports2.transactioncontext_toString;
+var transactioncostmodel_baselineCost = __wasmExports2.transactioncostmodel_baselineCost;
+var transactioncostmodel_deserialize = __wasmExports2.transactioncostmodel_deserialize;
+var transactioncostmodel_initialTransactionCostModel = __wasmExports2.transactioncostmodel_initialTransactionCostModel;
+var transactioncostmodel_new = __wasmExports2.transactioncostmodel_new;
+var transactioncostmodel_runtimeCostModel = __wasmExports2.transactioncostmodel_runtimeCostModel;
+var transactioncostmodel_serialize = __wasmExports2.transactioncostmodel_serialize;
+var transactioncostmodel_toString = __wasmExports2.transactioncostmodel_toString;
+var transactionresult_error = __wasmExports2.transactionresult_error;
+var transactionresult_events = __wasmExports2.transactionresult_events;
+var transactionresult_new = __wasmExports2.transactionresult_new;
+var transactionresult_successfulSegments = __wasmExports2.transactionresult_successfulSegments;
+var transactionresult_toString = __wasmExports2.transactionresult_toString;
+var transactionresult_type_ = __wasmExports2.transactionresult_type_;
+var unshieldedoffer_addSignatures = __wasmExports2.unshieldedoffer_addSignatures;
+var unshieldedoffer_construct = __wasmExports2.unshieldedoffer_construct;
+var unshieldedoffer_eraseSignatures = __wasmExports2.unshieldedoffer_eraseSignatures;
+var unshieldedoffer_inputs = __wasmExports2.unshieldedoffer_inputs;
+var unshieldedoffer_new = __wasmExports2.unshieldedoffer_new;
+var unshieldedoffer_outputs = __wasmExports2.unshieldedoffer_outputs;
+var unshieldedoffer_signatures = __wasmExports2.unshieldedoffer_signatures;
+var unshieldedoffer_toString = __wasmExports2.unshieldedoffer_toString;
+var updatedValue2 = __wasmExports2.updatedValue;
+var utxometa_ctime = __wasmExports2.utxometa_ctime;
+var utxometa_new = __wasmExports2.utxometa_new;
+var utxometa_set_ctime = __wasmExports2.utxometa_set_ctime;
+var utxostate_delta = __wasmExports2.utxostate_delta;
+var utxostate_filter = __wasmExports2.utxostate_filter;
+var utxostate_lookupMeta = __wasmExports2.utxostate_lookupMeta;
+var utxostate_new = __wasmExports2.utxostate_new;
+var utxostate_utxos = __wasmExports2.utxostate_utxos;
+var verifiedtransaction_transaction = __wasmExports2.verifiedtransaction_transaction;
+var verifierkeyinsert_new = __wasmExports2.verifierkeyinsert_new;
+var verifierkeyinsert_operation = __wasmExports2.verifierkeyinsert_operation;
+var verifierkeyinsert_toString = __wasmExports2.verifierkeyinsert_toString;
+var verifierkeyinsert_vk = __wasmExports2.verifierkeyinsert_vk;
+var verifierkeyremove_new = __wasmExports2.verifierkeyremove_new;
+var verifierkeyremove_operation = __wasmExports2.verifierkeyremove_operation;
+var verifierkeyremove_toString = __wasmExports2.verifierkeyremove_toString;
+var verifierkeyremove_version = __wasmExports2.verifierkeyremove_version;
+var wellformedstrictness_enforce_balancing = __wasmExports2.wellformedstrictness_enforce_balancing;
+var wellformedstrictness_enforce_limits = __wasmExports2.wellformedstrictness_enforce_limits;
+var wellformedstrictness_new = __wasmExports2.wellformedstrictness_new;
+var wellformedstrictness_set_enforce_balancing = __wasmExports2.wellformedstrictness_set_enforce_balancing;
+var wellformedstrictness_set_enforce_limits = __wasmExports2.wellformedstrictness_set_enforce_limits;
+var wellformedstrictness_set_verify_contract_proofs = __wasmExports2.wellformedstrictness_set_verify_contract_proofs;
+var wellformedstrictness_set_verify_native_proofs = __wasmExports2.wellformedstrictness_set_verify_native_proofs;
+var wellformedstrictness_set_verify_signatures = __wasmExports2.wellformedstrictness_set_verify_signatures;
+var wellformedstrictness_verify_contract_proofs = __wasmExports2.wellformedstrictness_verify_contract_proofs;
+var wellformedstrictness_verify_native_proofs = __wasmExports2.wellformedstrictness_verify_native_proofs;
+var wellformedstrictness_verify_signatures = __wasmExports2.wellformedstrictness_verify_signatures;
+var zswapchainstate_deserialize = __wasmExports2.zswapchainstate_deserialize;
+var zswapchainstate_deserializeFromLedgerState = __wasmExports2.zswapchainstate_deserializeFromLedgerState;
+var zswapchainstate_filter = __wasmExports2.zswapchainstate_filter;
+var zswapchainstate_firstFree = __wasmExports2.zswapchainstate_firstFree;
+var zswapchainstate_new = __wasmExports2.zswapchainstate_new;
+var zswapchainstate_postBlockUpdate = __wasmExports2.zswapchainstate_postBlockUpdate;
+var zswapchainstate_serialize = __wasmExports2.zswapchainstate_serialize;
+var zswapchainstate_toString = __wasmExports2.zswapchainstate_toString;
+var zswapchainstate_tryApply = __wasmExports2.zswapchainstate_tryApply;
+var zswapinput_contractAddress = __wasmExports2.zswapinput_contractAddress;
+var zswapinput_deserialize = __wasmExports2.zswapinput_deserialize;
+var zswapinput_new = __wasmExports2.zswapinput_new;
+var zswapinput_newContractOwned = __wasmExports2.zswapinput_newContractOwned;
+var zswapinput_nullifier = __wasmExports2.zswapinput_nullifier;
+var zswapinput_proof = __wasmExports2.zswapinput_proof;
+var zswapinput_serialize = __wasmExports2.zswapinput_serialize;
+var zswapinput_toString = __wasmExports2.zswapinput_toString;
+var zswaplocalstate_apply = __wasmExports2.zswaplocalstate_apply;
+var zswaplocalstate_applyCollapsedUpdate = __wasmExports2.zswaplocalstate_applyCollapsedUpdate;
+var zswaplocalstate_applyFailed = __wasmExports2.zswaplocalstate_applyFailed;
+var zswaplocalstate_applyWithChanges = __wasmExports2.zswaplocalstate_applyWithChanges;
+var zswaplocalstate_clearPending = __wasmExports2.zswaplocalstate_clearPending;
+var zswaplocalstate_coins = __wasmExports2.zswaplocalstate_coins;
+var zswaplocalstate_deserialize = __wasmExports2.zswaplocalstate_deserialize;
+var zswaplocalstate_firstFree = __wasmExports2.zswaplocalstate_firstFree;
+var zswaplocalstate_insertCoin = __wasmExports2.zswaplocalstate_insertCoin;
+var zswaplocalstate_merkle_tree_root = __wasmExports2.zswaplocalstate_merkle_tree_root;
+var zswaplocalstate_new = __wasmExports2.zswaplocalstate_new;
+var zswaplocalstate_pendingOutputs = __wasmExports2.zswaplocalstate_pendingOutputs;
+var zswaplocalstate_pendingSpends = __wasmExports2.zswaplocalstate_pendingSpends;
+var zswaplocalstate_removeCoinByNullifier = __wasmExports2.zswaplocalstate_removeCoinByNullifier;
+var zswaplocalstate_replayEvents = __wasmExports2.zswaplocalstate_replayEvents;
+var zswaplocalstate_replayEventsWithChanges = __wasmExports2.zswaplocalstate_replayEventsWithChanges;
+var zswaplocalstate_replayRawEvents = __wasmExports2.zswaplocalstate_replayRawEvents;
+var zswaplocalstate_revertTransaction = __wasmExports2.zswaplocalstate_revertTransaction;
+var zswaplocalstate_serialize = __wasmExports2.zswaplocalstate_serialize;
+var zswaplocalstate_spend = __wasmExports2.zswaplocalstate_spend;
+var zswaplocalstate_spendFromOutput = __wasmExports2.zswaplocalstate_spendFromOutput;
+var zswaplocalstate_toString = __wasmExports2.zswaplocalstate_toString;
+var zswaplocalstate_watchFor = __wasmExports2.zswaplocalstate_watchFor;
+var zswaplocalstatewithchanges_changes = __wasmExports2.zswaplocalstatewithchanges_changes;
+var zswaplocalstatewithchanges_state = __wasmExports2.zswaplocalstatewithchanges_state;
+var zswapoffer_deltas = __wasmExports2.zswapoffer_deltas;
+var zswapoffer_deserialize = __wasmExports2.zswapoffer_deserialize;
+var zswapoffer_fromInput = __wasmExports2.zswapoffer_fromInput;
+var zswapoffer_fromOutput = __wasmExports2.zswapoffer_fromOutput;
+var zswapoffer_fromTransient = __wasmExports2.zswapoffer_fromTransient;
+var zswapoffer_inputs = __wasmExports2.zswapoffer_inputs;
+var zswapoffer_merge = __wasmExports2.zswapoffer_merge;
+var zswapoffer_new = __wasmExports2.zswapoffer_new;
+var zswapoffer_outputs = __wasmExports2.zswapoffer_outputs;
+var zswapoffer_serialize = __wasmExports2.zswapoffer_serialize;
+var zswapoffer_toString = __wasmExports2.zswapoffer_toString;
+var zswapoffer_transients = __wasmExports2.zswapoffer_transients;
+var zswapoutput_commitment = __wasmExports2.zswapoutput_commitment;
+var zswapoutput_construct = __wasmExports2.zswapoutput_construct;
+var zswapoutput_contractAddress = __wasmExports2.zswapoutput_contractAddress;
+var zswapoutput_deserialize = __wasmExports2.zswapoutput_deserialize;
+var zswapoutput_new = __wasmExports2.zswapoutput_new;
+var zswapoutput_newContractOwned = __wasmExports2.zswapoutput_newContractOwned;
+var zswapoutput_proof = __wasmExports2.zswapoutput_proof;
+var zswapoutput_serialize = __wasmExports2.zswapoutput_serialize;
+var zswapoutput_toString = __wasmExports2.zswapoutput_toString;
+var zswapsecretkeys_clear = __wasmExports2.zswapsecretkeys_clear;
+var zswapsecretkeys_coinPublicKey = __wasmExports2.zswapsecretkeys_coinPublicKey;
+var zswapsecretkeys_coinSecretKey = __wasmExports2.zswapsecretkeys_coinSecretKey;
+var zswapsecretkeys_encryptionPublicKey = __wasmExports2.zswapsecretkeys_encryptionPublicKey;
+var zswapsecretkeys_encryptionSecretKey = __wasmExports2.zswapsecretkeys_encryptionSecretKey;
+var zswapsecretkeys_fromSeed = __wasmExports2.zswapsecretkeys_fromSeed;
+var zswapsecretkeys_fromSeedRng = __wasmExports2.zswapsecretkeys_fromSeedRng;
+var zswapsecretkeys_new = __wasmExports2.zswapsecretkeys_new;
+var zswapstatechanges_receivedCoins = __wasmExports2.zswapstatechanges_receivedCoins;
+var zswapstatechanges_source = __wasmExports2.zswapstatechanges_source;
+var zswapstatechanges_spentCoins = __wasmExports2.zswapstatechanges_spentCoins;
+var zswaptransient_commitment = __wasmExports2.zswaptransient_commitment;
+var zswaptransient_contractAddress = __wasmExports2.zswaptransient_contractAddress;
+var zswaptransient_deserialize = __wasmExports2.zswaptransient_deserialize;
+var zswaptransient_inputProof = __wasmExports2.zswaptransient_inputProof;
+var zswaptransient_new = __wasmExports2.zswaptransient_new;
+var zswaptransient_newFromContractOwnedOutput = __wasmExports2.zswaptransient_newFromContractOwnedOutput;
+var zswaptransient_nullifier = __wasmExports2.zswaptransient_nullifier;
+var zswaptransient_outputProof = __wasmExports2.zswaptransient_outputProof;
+var zswaptransient_serialize = __wasmExports2.zswaptransient_serialize;
+var zswaptransient_toString = __wasmExports2.zswaptransient_toString;
+var signatureerased_new = __wasmExports2.signatureerased_new;
+var unshieldedToken2 = __wasmExports2.unshieldedToken;
+var __wbg_noproof_free = __wasmExports2.__wbg_noproof_free;
+var __wbg_signatureerased_free = __wasmExports2.__wbg_signatureerased_free;
+var __wbg_merkletreecollapsedupdate_free = __wasmExports2.__wbg_merkletreecollapsedupdate_free;
+var __wbg_verifierkeyremove_free = __wasmExports2.__wbg_verifierkeyremove_free;
+var merkletreecollapsedupdate_toString = __wasmExports2.merkletreecollapsedupdate_toString;
+var merkletreecollapsedupdate_serialize = __wasmExports2.merkletreecollapsedupdate_serialize;
+var __wbg_chargedstate_free2 = __wasmExports2.__wbg_chargedstate_free;
+var __wbg_contractmaintenanceauthority_free2 = __wasmExports2.__wbg_contractmaintenanceauthority_free;
+var __wbg_contractoperation_free2 = __wasmExports2.__wbg_contractoperation_free;
+var __wbg_contractstate_free2 = __wasmExports2.__wbg_contractstate_free;
+var __wbg_costmodel_free2 = __wasmExports2.__wbg_costmodel_free;
+var __wbg_querycontext_free2 = __wasmExports2.__wbg_querycontext_free;
+var __wbg_queryresults_free2 = __wasmExports2.__wbg_queryresults_free;
+var __wbg_stateboundedmerkletree_free2 = __wasmExports2.__wbg_stateboundedmerkletree_free;
+var __wbg_statemap_free2 = __wasmExports2.__wbg_statemap_free;
+var __wbg_statevalue_free2 = __wasmExports2.__wbg_statevalue_free;
+var __wbg_vmresults_free2 = __wasmExports2.__wbg_vmresults_free;
+var __wbg_vmstack_free2 = __wasmExports2.__wbg_vmstack_free;
+var bigIntModFr4 = __wasmExports2.bigIntModFr;
+var bigIntToValue4 = __wasmExports2.bigIntToValue;
+var chargedstate_new2 = __wasmExports2.chargedstate_new;
+var chargedstate_state2 = __wasmExports2.chargedstate_state;
+var chargedstate_toString2 = __wasmExports2.chargedstate_toString;
+var communicationCommitment4 = __wasmExports2.communicationCommitment;
+var communicationCommitmentRandomness4 = __wasmExports2.communicationCommitmentRandomness;
+var contractmaintenanceauthority_committee2 = __wasmExports2.contractmaintenanceauthority_committee;
+var contractmaintenanceauthority_counter2 = __wasmExports2.contractmaintenanceauthority_counter;
+var contractmaintenanceauthority_deserialize2 = __wasmExports2.contractmaintenanceauthority_deserialize;
+var contractmaintenanceauthority_new2 = __wasmExports2.contractmaintenanceauthority_new;
+var contractmaintenanceauthority_serialize2 = __wasmExports2.contractmaintenanceauthority_serialize;
+var contractmaintenanceauthority_threshold2 = __wasmExports2.contractmaintenanceauthority_threshold;
+var contractmaintenanceauthority_toString2 = __wasmExports2.contractmaintenanceauthority_toString;
+var contractoperation_deserialize2 = __wasmExports2.contractoperation_deserialize;
+var contractoperation_new2 = __wasmExports2.contractoperation_new;
+var contractoperation_serialize2 = __wasmExports2.contractoperation_serialize;
+var contractoperation_set_verifier_key2 = __wasmExports2.contractoperation_set_verifier_key;
+var contractoperation_toString2 = __wasmExports2.contractoperation_toString;
+var contractoperation_verifier_key2 = __wasmExports2.contractoperation_verifier_key;
+var contractstate_balance2 = __wasmExports2.contractstate_balance;
+var contractstate_data2 = __wasmExports2.contractstate_data;
+var contractstate_deserialize2 = __wasmExports2.contractstate_deserialize;
+var contractstate_maintenance_authority2 = __wasmExports2.contractstate_maintenance_authority;
+var contractstate_new2 = __wasmExports2.contractstate_new;
+var contractstate_operation2 = __wasmExports2.contractstate_operation;
+var contractstate_operations2 = __wasmExports2.contractstate_operations;
+var contractstate_query2 = __wasmExports2.contractstate_query;
+var contractstate_serialize2 = __wasmExports2.contractstate_serialize;
+var contractstate_setOperation2 = __wasmExports2.contractstate_setOperation;
+var contractstate_set_balance2 = __wasmExports2.contractstate_set_balance;
+var contractstate_set_data2 = __wasmExports2.contractstate_set_data;
+var contractstate_set_maintenance_authority2 = __wasmExports2.contractstate_set_maintenance_authority;
+var contractstate_toString2 = __wasmExports2.contractstate_toString;
+var costmodel_initialCostModel2 = __wasmExports2.costmodel_initialCostModel;
+var costmodel_new2 = __wasmExports2.costmodel_new;
+var costmodel_toString2 = __wasmExports2.costmodel_toString;
+var decodeCoinPublicKey4 = __wasmExports2.decodeCoinPublicKey;
+var decodeContractAddress4 = __wasmExports2.decodeContractAddress;
+var decodeQualifiedShieldedCoinInfo4 = __wasmExports2.decodeQualifiedShieldedCoinInfo;
+var decodeRawTokenType4 = __wasmExports2.decodeRawTokenType;
+var decodeShieldedCoinInfo4 = __wasmExports2.decodeShieldedCoinInfo;
+var decodeUserAddress4 = __wasmExports2.decodeUserAddress;
+var degradeToTransient4 = __wasmExports2.degradeToTransient;
+var dummyContractAddress4 = __wasmExports2.dummyContractAddress;
+var dummyUserAddress4 = __wasmExports2.dummyUserAddress;
+var ecAdd4 = __wasmExports2.ecAdd;
+var ecMul4 = __wasmExports2.ecMul;
+var ecMulGenerator4 = __wasmExports2.ecMulGenerator;
+var encodeCoinPublicKey4 = __wasmExports2.encodeCoinPublicKey;
+var encodeContractAddress4 = __wasmExports2.encodeContractAddress;
+var encodeQualifiedShieldedCoinInfo4 = __wasmExports2.encodeQualifiedShieldedCoinInfo;
+var encodeRawTokenType4 = __wasmExports2.encodeRawTokenType;
+var encodeShieldedCoinInfo4 = __wasmExports2.encodeShieldedCoinInfo;
+var encodeUserAddress4 = __wasmExports2.encodeUserAddress;
+var entryPointHash4 = __wasmExports2.entryPointHash;
+var hashToCurve4 = __wasmExports2.hashToCurve;
+var leafHash4 = __wasmExports2.leafHash;
+var maxAlignedSize4 = __wasmExports2.maxAlignedSize;
+var maxField4 = __wasmExports2.maxField;
+var persistentCommit5 = __wasmExports2.persistentCommit;
+var persistentHash5 = __wasmExports2.persistentHash;
+var proofDataIntoSerializedPreimage4 = __wasmExports2.proofDataIntoSerializedPreimage;
+var querycontext_address2 = __wasmExports2.querycontext_address;
+var querycontext_block2 = __wasmExports2.querycontext_block;
+var querycontext_com_indices2 = __wasmExports2.querycontext_com_indices;
+var querycontext_effects2 = __wasmExports2.querycontext_effects;
+var querycontext_insertCommitment2 = __wasmExports2.querycontext_insertCommitment;
+var querycontext_new2 = __wasmExports2.querycontext_new;
+var querycontext_qualify2 = __wasmExports2.querycontext_qualify;
+var querycontext_query2 = __wasmExports2.querycontext_query;
+var querycontext_runTranscript2 = __wasmExports2.querycontext_runTranscript;
+var querycontext_set_block2 = __wasmExports2.querycontext_set_block;
+var querycontext_set_effects2 = __wasmExports2.querycontext_set_effects;
+var querycontext_state2 = __wasmExports2.querycontext_state;
+var querycontext_toString2 = __wasmExports2.querycontext_toString;
+var querycontext_toVmStack2 = __wasmExports2.querycontext_toVmStack;
+var queryresults_context2 = __wasmExports2.queryresults_context;
+var queryresults_events2 = __wasmExports2.queryresults_events;
+var queryresults_gas_cost2 = __wasmExports2.queryresults_gas_cost;
+var queryresults_new2 = __wasmExports2.queryresults_new;
+var queryresults_toString2 = __wasmExports2.queryresults_toString;
+var rawTokenType4 = __wasmExports2.rawTokenType;
+var runProgram4 = __wasmExports2.runProgram;
+var runtimeCoinCommitment4 = __wasmExports2.runtimeCoinCommitment;
+var runtimeCoinNullifier4 = __wasmExports2.runtimeCoinNullifier;
+var sampleContractAddress4 = __wasmExports2.sampleContractAddress;
+var sampleRawTokenType4 = __wasmExports2.sampleRawTokenType;
+var sampleSigningKey4 = __wasmExports2.sampleSigningKey;
+var sampleUserAddress4 = __wasmExports2.sampleUserAddress;
+var signData4 = __wasmExports2.signData;
+var signatureVerifyingKey4 = __wasmExports2.signatureVerifyingKey;
+var signingKeyFromBip3404 = __wasmExports2.signingKeyFromBip340;
+var stateboundedmerkletree_blank2 = __wasmExports2.stateboundedmerkletree_blank;
+var stateboundedmerkletree_collapse2 = __wasmExports2.stateboundedmerkletree_collapse;
+var stateboundedmerkletree_findPathForLeaf2 = __wasmExports2.stateboundedmerkletree_findPathForLeaf;
+var stateboundedmerkletree_height2 = __wasmExports2.stateboundedmerkletree_height;
+var stateboundedmerkletree_pathForLeaf2 = __wasmExports2.stateboundedmerkletree_pathForLeaf;
+var stateboundedmerkletree_rehash2 = __wasmExports2.stateboundedmerkletree_rehash;
+var stateboundedmerkletree_root2 = __wasmExports2.stateboundedmerkletree_root;
+var stateboundedmerkletree_toString2 = __wasmExports2.stateboundedmerkletree_toString;
+var stateboundedmerkletree_update2 = __wasmExports2.stateboundedmerkletree_update;
+var statemap_get2 = __wasmExports2.statemap_get;
+var statemap_insert2 = __wasmExports2.statemap_insert;
+var statemap_keys2 = __wasmExports2.statemap_keys;
+var statemap_new2 = __wasmExports2.statemap_new;
+var statemap_remove2 = __wasmExports2.statemap_remove;
+var statemap_toString2 = __wasmExports2.statemap_toString;
+var statevalue_arrayPush2 = __wasmExports2.statevalue_arrayPush;
+var statevalue_asArray2 = __wasmExports2.statevalue_asArray;
+var statevalue_asBoundedMerkleTree2 = __wasmExports2.statevalue_asBoundedMerkleTree;
+var statevalue_asCell2 = __wasmExports2.statevalue_asCell;
+var statevalue_asMap2 = __wasmExports2.statevalue_asMap;
+var statevalue_decode2 = __wasmExports2.statevalue_decode;
+var statevalue_encode2 = __wasmExports2.statevalue_encode;
+var statevalue_logSize2 = __wasmExports2.statevalue_logSize;
+var statevalue_new2 = __wasmExports2.statevalue_new;
+var statevalue_newArray2 = __wasmExports2.statevalue_newArray;
+var statevalue_newBoundedMerkleTree2 = __wasmExports2.statevalue_newBoundedMerkleTree;
+var statevalue_newCell2 = __wasmExports2.statevalue_newCell;
+var statevalue_newMap2 = __wasmExports2.statevalue_newMap;
+var statevalue_newNull2 = __wasmExports2.statevalue_newNull;
+var statevalue_toString2 = __wasmExports2.statevalue_toString;
+var statevalue_type2 = __wasmExports2.statevalue_type;
+var transientCommit4 = __wasmExports2.transientCommit;
+var transientHash4 = __wasmExports2.transientHash;
+var upgradeFromTransient4 = __wasmExports2.upgradeFromTransient;
+var valueToBigInt4 = __wasmExports2.valueToBigInt;
+var verifySignature4 = __wasmExports2.verifySignature;
+var vmresults_events2 = __wasmExports2.vmresults_events;
+var vmresults_gas_cost2 = __wasmExports2.vmresults_gas_cost;
+var vmresults_new2 = __wasmExports2.vmresults_new;
+var vmresults_stack2 = __wasmExports2.vmresults_stack;
+var vmresults_toString2 = __wasmExports2.vmresults_toString;
+var vmstack_get2 = __wasmExports2.vmstack_get;
+var vmstack_isStrong2 = __wasmExports2.vmstack_isStrong;
+var vmstack_length2 = __wasmExports2.vmstack_length;
+var vmstack_new2 = __wasmExports2.vmstack_new;
+var vmstack_push2 = __wasmExports2.vmstack_push;
+var vmstack_removeLast2 = __wasmExports2.vmstack_removeLast;
+var vmstack_toString2 = __wasmExports2.vmstack_toString;
+var __wbg_intounderlyingbytesource_free2 = __wasmExports2.__wbg_intounderlyingbytesource_free;
+var __wbg_intounderlyingsink_free2 = __wasmExports2.__wbg_intounderlyingsink_free;
+var __wbg_intounderlyingsource_free2 = __wasmExports2.__wbg_intounderlyingsource_free;
+var intounderlyingbytesource_autoAllocateChunkSize2 = __wasmExports2.intounderlyingbytesource_autoAllocateChunkSize;
+var intounderlyingbytesource_cancel2 = __wasmExports2.intounderlyingbytesource_cancel;
+var intounderlyingbytesource_pull2 = __wasmExports2.intounderlyingbytesource_pull;
+var intounderlyingbytesource_start2 = __wasmExports2.intounderlyingbytesource_start;
+var intounderlyingbytesource_type2 = __wasmExports2.intounderlyingbytesource_type;
+var intounderlyingsink_abort2 = __wasmExports2.intounderlyingsink_abort;
+var intounderlyingsink_close2 = __wasmExports2.intounderlyingsink_close;
+var intounderlyingsink_write2 = __wasmExports2.intounderlyingsink_write;
+var intounderlyingsource_cancel2 = __wasmExports2.intounderlyingsource_cancel;
+var intounderlyingsource_pull2 = __wasmExports2.intounderlyingsource_pull;
+var __wbindgen_exn_store2 = __wasmExports2.__wbindgen_exn_store;
+var __externref_table_alloc2 = __wasmExports2.__externref_table_alloc;
+var __wbindgen_export_22 = __wasmExports2.__wbindgen_export_2;
+var __wbindgen_malloc2 = __wasmExports2.__wbindgen_malloc;
+var __wbindgen_realloc2 = __wasmExports2.__wbindgen_realloc;
+var __externref_drop_slice2 = __wasmExports2.__externref_drop_slice;
+var __wbindgen_free2 = __wasmExports2.__wbindgen_free;
+var __wbindgen_export_7 = __wasmExports2.__wbindgen_export_7;
+var __externref_table_dealloc2 = __wasmExports2.__externref_table_dealloc;
+var closure3101_externref_shim = __wasmExports2.closure3101_externref_shim;
+var closure3148_externref_shim = __wasmExports2.closure3148_externref_shim;
+var closure3146_externref_shim = __wasmExports2.closure3146_externref_shim;
+var __wbindgen_start2 = __wasmExports2.__wbindgen_start;
 
 // node_modules/@midnight-ntwrk/ledger-v8/midnight_ledger_wasm.js
-__wbg_set_wasm2(midnight_ledger_wasm_bg_exports);
-(void 0)();
+__wbg_set_wasm2(midnight_ledger_wasm_bg_exports2);
+__wbindgen_start2();
 
 // node_modules/@midnight-ntwrk/midnight-js-types/dist/index.mjs
 init_dirname();
@@ -59722,7 +64700,7 @@ var ContractExecutableImpl = class {
     const maintenanceUpdate = new MaintenanceUpdate(address, Either_exports.getOrThrow(update5), contractState.maintenanceAuthority.counter);
     return Either_exports.right({
       public: {
-        maintenanceUpdate: maintenanceUpdate.addSignature(DEFAULT_SIGNATURE_INDEX, signData2(Option_exports.getOrThrow(currentSigningKey), maintenanceUpdate.dataToSign))
+        maintenanceUpdate: maintenanceUpdate.addSignature(DEFAULT_SIGNATURE_INDEX, signData3(Option_exports.getOrThrow(currentSigningKey), maintenanceUpdate.dataToSign))
       },
       private: {
         signingKey: Option_exports.getOrThrow(currentSigningKey)
@@ -60968,9 +65946,9 @@ function createClient(options) {
     ws2 = webSocketImpl;
   } else if (typeof WebSocket !== "undefined") {
     ws2 = WebSocket;
-  } else if (typeof globalThis !== "undefined") {
-    ws2 = globalThis.WebSocket || // @ts-expect-error: Support more browsers
-    globalThis.MozWebSocket;
+  } else if (typeof global !== "undefined") {
+    ws2 = global.WebSocket || // @ts-expect-error: Support more browsers
+    global.MozWebSocket;
   } else if (typeof window !== "undefined") {
     ws2 = window.WebSocket || // @ts-expect-error: Support more browsers
     window.MozWebSocket;
@@ -61421,8 +66399,8 @@ if (typeof WebSocket !== "undefined") {
   ws = WebSocket;
 } else if (typeof MozWebSocket !== "undefined") {
   ws = MozWebSocket;
-} else if (typeof globalThis !== "undefined") {
-  ws = globalThis.WebSocket || globalThis.MozWebSocket;
+} else if (typeof global !== "undefined") {
+  ws = global.WebSocket || global.MozWebSocket;
 } else if (typeof window !== "undefined") {
   ws = window.WebSocket || window.MozWebSocket;
 } else if (typeof self !== "undefined") {
@@ -62585,11 +67563,11 @@ var Contract = class {
     };
   }
   _persistentHash_0(value_0) {
-    const result_0 = persistentHash2(_descriptor_4, value_0);
+    const result_0 = persistentHash3(_descriptor_4, value_0);
     return result_0;
   }
   _persistentCommit_0(value_0, rand_0) {
-    const result_0 = persistentCommit2(
+    const result_0 = persistentCommit3(
       _descriptor_0,
       value_0,
       rand_0
@@ -63455,7 +68433,7 @@ var extractUserAddressedOutputs = (transcript) => {
 var createUnprovenLedgerCallTx = (circuitId, contractAddress, initialContractState, zswapChainState, partitionedTranscript, privateTranscriptOutputs, input, output, nextZswapLocalState, encryptionPublicKey) => {
   const op = toLedgerContractState(initialContractState).operation(circuitId);
   assertDefined(op, `Operation '${circuitId}' is undefined for contract state ${initialContractState.toString(false)}`);
-  const intent = Intent.new(ttlOneHour()).addCall(new ContractCallPrototype(contractAddress, circuitId, op, partitionedTranscript[0], partitionedTranscript[1], privateTranscriptOutputs, input, output, communicationCommitmentRandomness2(), circuitId));
+  const intent = Intent.new(ttlOneHour()).addCall(new ContractCallPrototype(contractAddress, circuitId, op, partitionedTranscript[0], partitionedTranscript[1], privateTranscriptOutputs, input, output, communicationCommitmentRandomness3(), circuitId));
   const guaranteedOutputs = extractUserAddressedOutputs(partitionedTranscript[0]);
   if (guaranteedOutputs.length > 0) {
     intent.guaranteedUnshieldedOffer = UnshieldedOffer.new([], guaranteedOutputs, []);

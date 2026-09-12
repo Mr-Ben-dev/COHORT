@@ -237,8 +237,9 @@ function serveStatic(req, res, url) {
   const file = path.join(WEB_DIR, rel);
   if (!file.startsWith(WEB_DIR)) return send(res, 403, { error: 'forbidden' });
   if (!fs.existsSync(file) || !fs.statSync(file).isFile()) return send(res, 404, { error: 'not found' });
+  const noStore = rel === 'index.html' || rel.endsWith('.js');
   securityHeaders(res, {
-    cache: rel === 'index.html' ? 'no-store' : 'public, max-age=300',
+    cache: noStore ? 'no-store' : 'public, max-age=300',
     'Content-Type': MIME[path.extname(file)] || 'application/octet-stream',
   });
   fs.createReadStream(file).pipe(res);
