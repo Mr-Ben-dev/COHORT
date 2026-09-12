@@ -1,5 +1,6 @@
 import { CohortError, ErrorCode } from './errors.mjs';
 import { ProveLifecycle } from './types.mjs';
+import { configureNetwork } from './public-state.mjs';
 
 function midnightGlobal() {
   if (typeof globalThis === 'undefined') return null;
@@ -49,6 +50,8 @@ export async function connectWallet({ networkId = 'preprod', preferred = '1am' }
   if (typeof api.getConnectionStatus === 'function') {
     status = await Promise.resolve(api.getConnectionStatus());
   }
+  const resolvedNetwork = status.networkId || networkId;
+  configureNetwork(resolvedNetwork);
   const proving = typeof api.getProvingProvider === 'function';
   if (!proving) {
     throw new CohortError(
@@ -67,7 +70,7 @@ export async function connectWallet({ networkId = 'preprod', preferred = '1am' }
   return {
     lifecycle: ProveLifecycle.CONNECTED,
     apiName: '1am',
-    networkId: status.networkId || networkId,
+    networkId: resolvedNetwork,
     proving: 'wasm',
     dust,
     api,

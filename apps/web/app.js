@@ -116,7 +116,28 @@ function midnightApis() {
   return Object.keys(root).map((name) => ({ name, api: root[name] }));
 }
 
-async function connectWallet() {
+function finishWallet(enabled, apiName) {
+  state.wallet = enabled;
+  state.apiName = apiName;
+  const proving = typeof enabled.getProvingProvider === 'function';
+  if (!proving) {
+    status(
+      'Connected wallet does not expose getProvingProvider. Use 1AM, or run Lace with a proof-server on YOUR machine. COHORT will not generate a fake transaction.',
+      'bad',
+    );
+    return;
+  }
+  const dustP =
+    typeof enabled.getDustBalance === 'function'
+      ? enabled.getDustBalance().catch(() => null)
+      : Promise.resolve(null);
+  dustP.then((dust) => {
+    const dustLabel = dust?.balance != null ? String(dust.balance) : 'unknown';
+    status(`Connected ${state.apiName}. In-browser proving: yes. DUST: ${dustLabel}.`, 'ok');
+  });
+}
+
+function connectFromClick() {
   const apis = midnightApis();
   if (!apis.length) {
     status(
@@ -129,38 +150,34 @@ async function connectWallet() {
     apis.find((a) => a.name === '1am' || a.api?.rdns === 'com.midnight.1am' || a.api?.name === '1AM') ||
     apis.find((a) => typeof a.api?.connect === 'function') ||
     apis[0];
-  const networkId = state.config?.networkId || 'preprod';
   if (typeof preferred.api.connect !== 'function') {
     status('Wallet connector has no connect(). COHORT will not generate a fake transaction.', 'bad');
     return;
   }
-  // connect() must start in this click turn. An extra await before it drops the user gesture.
-  status('Connecting 1AM via connect(preprod)… approve the wallet popup.', '');
+  const networkId = state.config?.networkId || 'preprod';
+  // 1AM sends ONEAM_CONNECT to the extension. Call connect() in this click, before any await.
   const pending = preferred.api.connect(networkId);
-  const enabled = await pending;
-  state.wallet = enabled;
-  state.apiName = preferred.api?.name || preferred.name;
-  const proving = typeof enabled.getProvingProvider === 'function';
-  if (!proving) {
-    status(
-      'Connected wallet does not expose getProvingProvider. Use 1AM, or run Lace with a proof-server on YOUR machine. COHORT will not generate a fake transaction.',
-      'bad',
-    );
-    return;
-  }
-  let dustLabel = 'unknown';
-  if (typeof enabled.getDustBalance === 'function') {
-    try {
-      const dust = await enabled.getDustBalance();
-      dustLabel = dust?.balance != null ? String(dust.balance) : 'unknown';
-    } catch {
-      dustLabel = 'unavailable';
-    }
-  }
   status(
-    `Connected ${state.apiName}. In-browser proving: yes. DUST: ${dustLabel}.`,
-    'ok',
+    '1AM connection is waiting. Close the Transactions dashboard, then click the 1AM toolbar icon again and Approve COHORT. The balance screen is not the connect dialog.',
+    'warn',
   );
+  pending
+    .then((enabled) => finishWallet(enabled, preferred.api?.name || preferred.name))
+    .catch((e) => {
+      const raw = String(e?.message || e);
+      if (/reject/i.test(raw)) {
+        status('1AM rejected the connection. COHORT will not generate a fake transaction.', 'bad');
+        return;
+      }
+      if (/request failed|receiving end|background/i.test(raw)) {
+        status(
+          '1AM did not answer. Close the wallet dashboard, click Connect, then immediately click the 1AM toolbar icon. COHORT will not generate a fake transaction.',
+          'bad',
+        );
+        return;
+      }
+      status(raw, 'bad');
+    });
 }
 
 function freshBlind() {
@@ -231,19 +248,7 @@ async function prove() {
 }
 
 document.getElementById('parse-fhir').addEventListener('click', parseFhirLocally);
-document.getElementById('connect').addEventListener('click', () => {
-  connectWallet().catch((e) => {
-    const raw = String(e?.message || e);
-    if (/request failed|receiving end|background/i.test(raw)) {
-      status(
-        '1AM did not answer. Click the 1AM icon in the Chrome toolbar to wake it, then Connect again. COHORT will not generate a fake transaction.',
-        'bad',
-      );
-      return;
-    }
-    status(raw, 'bad');
-  });
-});
+document.getElementById('connect').addEventListener('click', connectFromClick);
 document.getElementById('prove').addEventListener('click', () => prove().catch((e) => status(String(e.message || e), 'bad')));
 loadTrials().catch((e) => status(String(e.message || e), 'bad'));
 loadPublicChain().catch((e) => status(String(e.message || e), 'bad'));

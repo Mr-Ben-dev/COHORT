@@ -1,7 +1,7 @@
 import { CohortError, ErrorCode } from './errors.mjs';
 import { PUBLIC_NETWORK_PINS } from './pins.mjs';
 import { PROVE_ELIGIBLE_CLAIMS } from './claims.mjs';
-import { readPublicVerification } from './public-state.mjs';
+import { readPublicVerification, configureNetwork } from './public-state.mjs';
 import { proveEligibility as proveEligibilityImpl } from './prove.mjs';
 import {
   connectWallet as connectWalletImpl,
@@ -67,4 +67,5 @@ export const CohortDapp = Object.freeze({
   getPublicVerification: (opts) => readPublicVerification(opts),
   getReferralState,
   encodeTrialId,
+  configureNetwork,
 });
