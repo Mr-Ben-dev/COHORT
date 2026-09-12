@@ -14,7 +14,7 @@ Public Compact 0.31.1 circuit artifacts (not wallet secrets) are served at same-
 
 Gold path (Preprod, contract `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc`):
 
-Browser → 1AM `getProvingProvider` → `submitCallTx` (2026-09-12, live Render): txId `000657e4fb84d31e2426814305fca09a4af4b0abcf24417b176420eae0aa3a9867`, txHash `3b1624e9cc8c17808f67cb5c52244f197fe57c0c820c75ef5beb7e18b8bf1590`, indexer **proven=2**. The prior Node SDK prove (`00e53324…`) is not this path.
+Designer UI (`https://cohort-web-orcin.vercel.app`) → 1AM `connect('preprod')` in the Connect click → `getProvingProvider` → `submitCallTx` (2026-09-13, NCT07153614 typed subset): txId `002eae475d5850831fa0bc57d4e7fc179f44bda724ead7697475bae7371dc24c35`, txHash `0e8b61cbeb1d4b044743f8512b1d1bebb4d048d4dde091af5ce992ba701a4bd0`, indexer `proveEligible` **SUCCESS** in block 2523192, **proven=3**. Prior same-origin stub prove (2026-09-12, live Render): txId `000657e4fb84d31e2426814305fca09a4af4b0abcf24417b176420eae0aa3a9867`, txHash `3b1624e9cc8c17808f67cb5c52244f197fe57c0c820c75ef5beb7e18b8bf1590`, then proven=2. The Node SDK prove (`00e53324…`) is not this path.
 
 1. Install **1AM** and sync Preprod with tNIGHT + DUST. Do not use a hosted proof-server.
 2. Open the designer UI `https://cohort-web-orcin.vercel.app` (or the same-origin stub `https://cohort-y4zr.onrender.com/`). COHORT never draws the 1AM Approve UI on the page.
