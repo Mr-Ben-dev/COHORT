@@ -367,6 +367,7 @@ async function prove() {
     `Submitted on Midnight. txId=${result.txId || 'n/a'} txHash=${result.txHash || 'n/a'} proven=${result.proven ?? 'pending indexer'}. The COHORT server only received public {trialId, txHash, contractAddress, networkId}.`,
     'ok',
   );
+  await loadPublicChain().catch(() => {});
 }
 
 document.getElementById('parse-fhir').addEventListener('click', parseFhirLocally);

@@ -14,6 +14,8 @@ Public Compact 0.31.1 circuit artifacts (not wallet secrets) are served at same-
 
 Gold path (Preprod, contract `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc`):
 
+Browser → 1AM `getProvingProvider` → `submitCallTx` (2026-09-12, live Render): txId `000657e4fb84d31e2426814305fca09a4af4b0abcf24417b176420eae0aa3a9867`, txHash `3b1624e9cc8c17808f67cb5c52244f197fe57c0c820c75ef5beb7e18b8bf1590`, indexer **proven=2**. The prior Node SDK prove (`00e53324…`) is not this path.
+
 1. Install **1AM** and sync Preprod with tNIGHT + DUST. Do not use a hosted proof-server.
 2. Open `https://cohort-y4zr.onrender.com/`. COHORT never draws the 1AM Approve UI on the page.
 3. Close the 1AM Transactions dashboard. Click **Connect Midnight wallet**, then click the 1AM toolbar icon and **Approve COHORT**. After connect, 1AM may ask again via `hintUsage` for proving/submit. If the icon still opens balances/Transactions, reload 1AM at `chrome://extensions`, refresh, and retry. The balance screen is not the connect dialog.
