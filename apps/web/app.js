@@ -125,17 +125,41 @@ async function connectWallet() {
     );
     return;
   }
+  const preferred =
+    apis.find((a) => a.name === '1am' || a.api?.rdns === 'com.midnight.1am' || a.api?.name === '1AM') ||
+    apis.find((a) => typeof a.api?.connect === 'function') ||
+    apis[0];
   const networkId = state.config?.networkId || 'preprod';
+  if (typeof preferred.api.connect !== 'function') {
+    status('Wallet connector has no connect(). COHORT will not generate a fake transaction.', 'bad');
+    return;
+  }
+  // connect() must start in this click turn. An extra await before it drops the user gesture.
   status('Connecting 1AM via connect(preprod)… approve the wallet popup.', '');
-  const connected = await CohortDapp.connectWallet({ networkId });
-  state.wallet = connected.api;
-  state.apiName = connected.apiName || '1am';
-  const proving = typeof connected.api?.getProvingProvider === 'function';
-  const dust = connected.dust;
-  const dustLabel = dust?.balance != null ? String(dust.balance) : 'unknown';
+  const pending = preferred.api.connect(networkId);
+  const enabled = await pending;
+  state.wallet = enabled;
+  state.apiName = preferred.api?.name || preferred.name;
+  const proving = typeof enabled.getProvingProvider === 'function';
+  if (!proving) {
+    status(
+      'Connected wallet does not expose getProvingProvider. Use 1AM, or run Lace with a proof-server on YOUR machine. COHORT will not generate a fake transaction.',
+      'bad',
+    );
+    return;
+  }
+  let dustLabel = 'unknown';
+  if (typeof enabled.getDustBalance === 'function') {
+    try {
+      const dust = await enabled.getDustBalance();
+      dustLabel = dust?.balance != null ? String(dust.balance) : 'unknown';
+    } catch {
+      dustLabel = 'unavailable';
+    }
+  }
   status(
-    `Connected ${state.apiName}. In-browser proving: ${proving ? 'yes' : 'no — Lace requires a user-local proof-server, never a COHORT proof-server'}. DUST: ${dustLabel}.`,
-    proving ? 'ok' : 'warn',
+    `Connected ${state.apiName}. In-browser proving: yes. DUST: ${dustLabel}.`,
+    'ok',
   );
 }
 

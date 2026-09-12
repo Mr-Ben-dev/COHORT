@@ -65,7 +65,7 @@ test('browser-equivalent network sniff against local origin', async (t) => {
   assert.match(appSrc, /getProvingProvider/);
   assert.match(appSrc, /will not generate a fake transaction/);
   assert.match(appSrc, /CohortDapp\.proveEligibility/);
-  assert.match(appSrc, /CohortDapp\.connectWallet/);
+  assert.match(appSrc, /preferred\.api\.connect\(networkId\)/);
   assert.equal(appSrc.includes('preferred.api.enable()'), false);
 });
 
