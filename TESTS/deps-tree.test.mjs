@@ -29,10 +29,11 @@ function installedVersions(name) {
   return versions;
 }
 
-test('CohortDapp Phase 1 surface throws NOT_IMPLEMENTED', () => {
-  assert.throws(() => CohortDapp.proveEligibility(), (err) => {
+test('CohortDapp proveEligibility does not invent a transaction', async () => {
+  await assert.rejects(() => CohortDapp.proveEligibility({ facts: { age: 31, condition: true, medication: false } }), (err) => {
     assert.equal(err instanceof CohortError, true);
-    assert.equal(err.code, ErrorCode.NOT_IMPLEMENTED);
+    assert.notEqual(err.code, undefined);
+    assert.equal(err.txHash, undefined);
     return true;
   });
 });

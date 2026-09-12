@@ -2,6 +2,7 @@ import { CohortError, ErrorCode } from './errors.mjs';
 import { PUBLIC_NETWORK_PINS } from './pins.mjs';
 import { PROVE_ELIGIBLE_CLAIMS } from './claims.mjs';
 import { readPublicVerification } from './public-state.mjs';
+import { proveEligibility as proveEligibilityImpl } from './prove.mjs';
 import {
   connectWallet as connectWalletImpl,
   disconnectWallet as disconnectWalletImpl,
@@ -36,7 +37,7 @@ export const CohortDapp = Object.freeze({
   getTrials: () => notImplemented('getTrials'),
   getTrial: () => notImplemented('getTrial'),
   checkEligibility: () => notImplemented('checkEligibility'),
-  proveEligibility: () => notImplemented('proveEligibility'),
+  proveEligibility: (input) => proveEligibilityImpl(input),
   getProofStatus: () => notImplemented('getProofStatus'),
   getTransactionStatus: () => notImplemented('getTransactionStatus'),
   getPublicVerification: (opts) => readPublicVerification(opts),
