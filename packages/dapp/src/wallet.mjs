@@ -50,6 +50,17 @@ export async function connectWallet({ networkId = 'preprod', preferred = '1am' }
   if (typeof api.getConnectionStatus === 'function') {
     status = await Promise.resolve(api.getConnectionStatus());
   }
+  if (typeof api.hintUsage === 'function') {
+    await api.hintUsage([
+      'getProvingProvider',
+      'getDustBalance',
+      'getShieldedAddresses',
+      'getUnshieldedAddress',
+      'getConfiguration',
+      'balanceUnsealedTransaction',
+      'submitTransaction',
+    ]);
+  }
   const resolvedNetwork = status.networkId || networkId;
   configureNetwork(resolvedNetwork);
   const proving = typeof api.getProvingProvider === 'function';
