@@ -38,7 +38,7 @@ export function PrivacyIndicator({
             Your answers stay on this device.
           </p>
           <p className="text-lilac-mist">
-            COHORT does not receive your medical record — only the verified
+            COHORT does not receive your medical record. Only the verified
             result is ever shared.
           </p>
         </div>

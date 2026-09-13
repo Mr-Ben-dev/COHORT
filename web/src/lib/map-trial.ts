@@ -1,5 +1,6 @@
 import type { Trial } from "@/domain/types";
 import type { OfficialTrial } from "@/lib/cohort-dapp";
+import { formatAgeRange } from "@/lib/format-age";
 
 /**
  * Maps the live /api/trials typed subset onto the visual Trial contract.
@@ -64,12 +65,12 @@ export function mapOfficialTrial(t: OfficialTrial): Trial {
           "The proof covers the supported typed criteria only (age bounds and mapped flags). Free-text eligibility is not proven.",
         kind: "boolean",
         match: "min",
-        publicLabel: "Typed subset only — not free-text eligibility",
+        publicLabel: "Typed subset only, not free-text eligibility",
         hint: "This is not a lab value. Confirm you understand the circuit does not prove free-text criteria.",
       },
     },
     criteriaHighlights: [
-      { id: "age", label: `Ages ${t.minAge}–${t.maxAge}`, kind: "age" },
+      { id: "age", label: formatAgeRange(t.minAge, t.maxAge), kind: "age" },
       { id: "condition", label: conditionLabel, kind: "condition" },
       {
         id: "medication",

@@ -33,7 +33,7 @@ export interface TrialLocation {
 /** A single public eligibility rule, shown on cards + detail pages. */
 export interface PublicCriterion {
   id: string;
-  /** Human-readable, e.g. "Ages 18–65" */
+  /** Human-readable, e.g. "Ages 18-65" */
   label: string;
   kind: "age" | "condition" | "medication" | "clinical" | "commitment";
 }

@@ -4,6 +4,7 @@ import type {
   EligibilityResult,
   PrivateEligibilityInput,
 } from "@/domain/types";
+import { formatAgeRange } from "@/lib/format-age";
 
 /**
  * Local typed-subset preview only. Not a proof.
@@ -35,9 +36,9 @@ class LocalEligibilityService implements EligibilityService {
     const ageOk = input.age! >= ageMin && input.age! <= ageMax;
     outcomes.push({
       criterionId: "age",
-      label: `Ages ${ageMin}–${ageMax}`,
+      label: formatAgeRange(ageMin, ageMax),
       satisfied: ageOk,
-      hint: `This typed subset enrolls ages ${ageMin}–${ageMax}.`,
+      hint: `${formatAgeRange(ageMin, ageMax)} on the public typed subset.`,
     });
 
     const conditionOk = input.hasCondition === true;

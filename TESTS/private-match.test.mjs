@@ -54,3 +54,13 @@ test('profile view stays on-device and does not mention a server medical record'
   assert.equal(src.includes('fetch('), false);
   assert.equal(src.includes('localStorage'), false);
 });
+
+test('public age labels hide the Uint8 255 sentinel and use a hyphen', () => {
+  const src = fs.readFileSync(path.join(root, 'web/src/lib/format-age.ts'), 'utf8');
+  assert.match(src, /maxAge >= 255/);
+  assert.match(src, /Ages \$\{minAge\}\+/);
+  assert.match(src, /Ages \$\{minAge\}-\$\{maxAge\}/);
+  assert.equal(src.includes('–'), false);
+  const mapSrc = fs.readFileSync(path.join(root, 'web/src/lib/map-trial.ts'), 'utf8');
+  assert.match(mapSrc, /formatAgeRange\(t\.minAge, t\.maxAge\)/);
+});
