@@ -45,7 +45,7 @@ export function ProfileView() {
         </p>
         <h1
           id="profile-heading"
-          className="mt-3 text-[28px] font-semibold text-cloud-white sm:text-heading-sm"
+          className="mt-4 text-heading font-semibold text-balance text-cloud-white sm:text-heading-lg"
         >
           These facts stay on this device.
         </h1>

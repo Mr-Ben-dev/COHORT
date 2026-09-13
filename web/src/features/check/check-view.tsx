@@ -146,7 +146,7 @@ export function CheckView({ trialId }: { trialId: string }) {
           <p className="text-caption font-semibold uppercase tracking-[0.16em] text-clinical-cyan">
             Private check
           </p>
-          <h1 className="mt-3 text-[26px] font-semibold text-cloud-white sm:text-heading-sm">
+          <h1 className="mt-4 text-heading font-semibold text-balance text-cloud-white">
             Let&apos;s check privately.
           </h1>
           <p className="mt-3 text-body text-pearl/80">

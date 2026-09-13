@@ -127,7 +127,7 @@ export function MyProofsView() {
         </p>
         <h1
           id="proofs-heading"
-          className="mt-3 text-[28px] font-semibold text-cloud-white sm:text-heading-sm"
+          className="mt-4 text-heading font-semibold text-balance text-cloud-white sm:text-heading-lg"
         >
           Your proofs.
         </h1>

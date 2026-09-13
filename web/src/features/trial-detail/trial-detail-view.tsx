@@ -160,7 +160,7 @@ export function TrialDetailView({ trialId }: { trialId: string }) {
         </div>
         <h1
           id="trial-detail-heading"
-          className="mt-4 text-[26px] font-semibold text-cloud-white sm:text-heading-sm"
+          className="mt-4 text-heading font-semibold text-balance text-cloud-white"
         >
           {trial.title}
         </h1>

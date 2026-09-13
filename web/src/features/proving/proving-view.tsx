@@ -186,7 +186,7 @@ export function ProvingView({ trialId }: { trialId: string }) {
 
         <motion.header {...fadeUp()} className="mt-6">
           <PrivacyIndicator variant="chip" />
-          <h1 className="mt-5 text-[26px] font-semibold text-cloud-white sm:text-heading-sm">
+          <h1 className="mt-5 text-heading font-semibold text-balance text-cloud-white">
             Checking your eligibility privately…
           </h1>
           {trial && (

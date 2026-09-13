@@ -13,6 +13,12 @@ import type { MatchKind, Trial } from "@/domain/types";
 import { isProfileReady, matchTrial } from "@/lib/private-match";
 import { cn } from "@/lib/utils";
 
+/** 255 is the circuit's Uint8 sentinel for "no maximum age posted". */
+function ageLabel(trial: Trial): string {
+  const { ageMin, ageMax } = trial.policy;
+  return ageMax >= 255 ? `${ageMin}+ yrs` : `${ageMin}–${ageMax} yrs`;
+}
+
 function locationLabel(trial: Trial): string {
   const loc = trial.locations[0];
   if (loc?.remote) return "Remote · Telehealth";
@@ -85,13 +91,20 @@ function TrialCard({ trial, index }: { trial: Trial; index: number }) {
 
       <div className="relative flex flex-wrap items-center justify-between gap-2">
         <StatusPill status={trial.status} />
-        <Tag tone="violet">{trial.condition}</Tag>
+        {trial.phase && trial.phase.toUpperCase() !== "NA" ? (
+          <Tag tone="violet">{trial.phase}</Tag>
+        ) : null}
       </div>
 
-      <h3 className="relative mt-4 line-clamp-3 text-subheading font-semibold text-cloud-white">
+      {/* The title carries the card; the condition is context under it,
+       * clamped so a long sponsor-mapped label cannot outweigh it. */}
+      <h3 className="relative mt-4 line-clamp-3 text-heading-sm font-semibold text-balance text-cloud-white">
         {trial.title}
       </h3>
-      <p className="relative mt-2 font-mono text-caption tracking-wide text-lilac-mist">
+      <p className="relative mt-2.5 line-clamp-1 text-body-sm text-lilac-mist">
+        {trial.condition}
+      </p>
+      <p className="relative mt-1 font-mono text-caption tracking-wide text-lilac-mist/70">
         {trial.id}
       </p>
 
@@ -99,9 +112,7 @@ function TrialCard({ trial, index }: { trial: Trial; index: number }) {
         <div className="flex items-center gap-2">
           <Users className="h-4 w-4 shrink-0 text-lilac-mist" aria-hidden="true" />
           <dt className="sr-only">Age range</dt>
-          <dd>
-            {trial.policy.ageMin}–{trial.policy.ageMax} yrs
-          </dd>
+          <dd>{ageLabel(trial)}</dd>
         </div>
         <div className="flex items-center gap-2">
           <MapPin className="h-4 w-4 shrink-0 text-lilac-mist" aria-hidden="true" />
@@ -258,7 +269,7 @@ export function TrialsView() {
         </p>
         <h1
           id="trials-heading"
-          className="mt-3 text-[28px] font-semibold text-cloud-white sm:text-heading-sm"
+          className="mt-4 text-heading font-semibold text-balance text-cloud-white sm:text-heading-lg"
         >
           Find trials for me.
         </h1>

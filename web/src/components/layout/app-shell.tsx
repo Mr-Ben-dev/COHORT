@@ -43,6 +43,40 @@ function viewKey(view: View): string {
   }
 }
 
+/**
+ * Product views used to sit on flat indigo, which read as a generic
+ * dashboard next to the landing page. They now share the landing's
+ * atmosphere — veil, dot grid, film grain, and two ambient pools — so
+ * discovery through verification feels like one continuous product.
+ */
+function ProductCanvas({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative isolate min-h-[70vh] overflow-hidden">
+      <div
+        className="bg-hero-veil pointer-events-none absolute inset-0 -z-10"
+        aria-hidden="true"
+      />
+      <div
+        className="bg-dots pointer-events-none absolute inset-0 -z-10 opacity-35"
+        aria-hidden="true"
+      />
+      <div
+        className="bg-noise pointer-events-none absolute inset-0 -z-10"
+        aria-hidden="true"
+      />
+      <div
+        className="glow-blob glow-blob-veil pointer-events-none absolute -top-24 left-1/2 -z-10 h-[380px] w-[min(94%,860px)] -translate-x-1/2 opacity-55"
+        aria-hidden="true"
+      />
+      <div
+        className="glow-blob glow-blob-cyan pointer-events-none absolute top-[38%] left-[82%] -z-10 h-64 w-64 opacity-35"
+        aria-hidden="true"
+      />
+      {children}
+    </div>
+  );
+}
+
 function ViewScreen({ view }: { view: View }) {
   switch (view.name) {
     case "home":
@@ -148,7 +182,13 @@ export function AppShell() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           >
-            <ViewScreen view={view} />
+            {view.name === "home" ? (
+              <ViewScreen view={view} />
+            ) : (
+              <ProductCanvas>
+                <ViewScreen view={view} />
+              </ProductCanvas>
+            )}
           </motion.div>
         </AnimatePresence>
       </main>

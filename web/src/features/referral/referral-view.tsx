@@ -76,7 +76,7 @@ export function ReferralView({ checkId }: { checkId: string }) {
             <p className="text-caption font-semibold uppercase tracking-[0.16em] text-clinical-cyan">
               Referral
             </p>
-            <h1 className="mt-3 text-[26px] font-semibold text-cloud-white sm:text-heading-sm">
+            <h1 className="mt-4 text-heading font-semibold text-balance text-cloud-white">
               Creating the referral commitment…
             </h1>
             <p className="mt-3 text-body text-pearl/80">
@@ -139,7 +139,7 @@ export function ReferralView({ checkId }: { checkId: string }) {
           <p className="text-caption font-semibold uppercase tracking-[0.16em] text-clinical-cyan">
             Referral
           </p>
-          <h1 className="mt-3 text-[26px] font-semibold text-cloud-white sm:text-heading-sm">
+          <h1 className="mt-4 text-heading font-semibold text-balance text-cloud-white">
             Referral commitment created
           </h1>
           <p className="mt-3 text-body text-pearl/80">
