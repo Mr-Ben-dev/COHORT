@@ -105,3 +105,38 @@ test('Vercel mobile viewport: trial check is usable without a fake wallet', asyn
     await browser.close();
   }
 });
+
+test('Vercel: private profile finds potential matches without posting facts', async () => {
+  const browser = await launch();
+  const page = await browser.newPage();
+  const leaked = [];
+  page.on('request', (req) => {
+    const url = req.url();
+    const post = req.postData() || '';
+    if (/[?&]age=/.test(url) || /"age"\s*:/.test(post) || post.includes('"31"')) {
+      leaked.push(`${req.method()} ${url}`.slice(0, 200));
+    }
+  });
+  try {
+    await page.goto(VERCEL_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.getByRole('navigation', { name: 'Main navigation' }).waitFor({ timeout: 30000 });
+    await page.getByRole('button', { name: 'My Profile', exact: true }).click();
+    await page.getByRole('heading', { name: /These facts stay on your device/i }).waitFor({ timeout: 15000 });
+    await page.locator('#profile-age').fill('31');
+    await page.getByRole('group', { name: 'Mapped condition flag' }).getByRole('button', { name: 'Yes' }).click();
+    await page.getByRole('group', { name: 'Excluded medication flag' }).getByRole('button', { name: 'No' }).click();
+    await page.getByRole('button', { name: 'Find trials for me' }).click();
+    await page.getByRole('heading', { name: /Find trials for me/i }).waitFor({ timeout: 20000 });
+    const body = await page.innerText('body');
+    assert.match(body, /Potential match/i);
+    assert.doesNotMatch(body, /Site received/i);
+    const store = await page.evaluate(() => JSON.stringify({
+      local: { ...localStorage },
+      session: { ...sessionStorage },
+    }));
+    assert.equal(store.includes('31'), false);
+    assert.equal(leaked.length, 0, leaked.join('\n'));
+  } finally {
+    await browser.close();
+  }
+});
