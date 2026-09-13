@@ -12,7 +12,7 @@ test('wallet discovery accepts connector 4.x and rejects other majors', () => {
   assert.match(src, /window\.midnight/);
   assert.match(src, /Never SVG/);
   assert.match(src, /mnLace/);
-  assert.match(src, /1am/);
+  assert.match(src, /kind === \"1AM\" \|\| typeof api.getProvingProvider/);
 });
 
 test('wallet preference is the only localStorage write and is not a medical fact', () => {

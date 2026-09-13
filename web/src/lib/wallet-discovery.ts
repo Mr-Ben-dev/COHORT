@@ -90,7 +90,7 @@ export function discoverWallets(): DiscoveredWallet[] {
       apiVersion: typeof api.apiVersion === "string" ? api.apiVersion : "unknown",
       kind,
       compatible: apiVersionCompatible(api.apiVersion),
-      canProveInBrowser: typeof api.getProvingProvider === "function",
+      canProveInBrowser: kind === "1AM" || typeof api.getProvingProvider === "function",
     });
   }
   return out.sort((a, b) => {
