@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils";
 
 /**
  * Top-level site navigation — transparent bar over the Deep Iris canvas.
- * The product is deliberately tiny: Home · Find Trials · How It Works · My Proofs.
+ * The product is deliberately tiny: Home · Find Trials · Profile · My Proofs.
  */
 
-type NavKey = "home" | "trials" | "how" | "proofs";
+type NavKey = "home" | "trials" | "profile" | "proofs";
 
 function activeKey(view: View): NavKey {
   switch (view.name) {
@@ -27,6 +27,8 @@ function activeKey(view: View): NavKey {
     case "referral":
     case "verification":
       return "trials";
+    case "profile":
+      return "profile";
     case "proofs":
       return "proofs";
     default:
@@ -58,8 +60,8 @@ export function SiteNav() {
       case "trials":
         navigate({ name: "trials" });
         break;
-      case "how":
-        navigate({ name: "home" }, { scroll: "#how-it-works" });
+      case "profile":
+        navigate({ name: "profile" });
         break;
       case "proofs":
         navigate({ name: "proofs" });
@@ -73,7 +75,7 @@ export function SiteNav() {
   const links: { key: NavKey; label: string }[] = [
     { key: "home", label: "Home" },
     { key: "trials", label: "Find Trials" },
-    { key: "how", label: "How It Works" },
+    { key: "profile", label: "My Profile" },
     { key: "proofs", label: "My Proofs" },
   ];
 
@@ -93,7 +95,7 @@ export function SiteNav() {
         <button
           onClick={() => go("home")}
           className="rounded-node outline-none focus-visible:ring-2 focus-visible:ring-clinical-cyan"
-          aria-label="COHORT — home"
+          aria-label="COHORT home"
         >
           <CohortLogo />
         </button>

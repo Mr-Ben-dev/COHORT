@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -72,8 +72,17 @@ export function CheckView({ trialId }: { trialId: string }) {
   const trial = useCohortStore((s) => s.trials.find((t) => t.id === trialId));
   const input = useCohortStore((s) => s.inputs[trialId]);
   const setAnswer = useCohortStore((s) => s.setAnswer);
+  const applyProfileToTrial = useCohortStore((s) => s.applyProfileToTrial);
   const startCheck = useCohortStore((s) => s.startCheck);
   const reduce = useReducedMotion();
+
+  useEffect(() => {
+    applyProfileToTrial(trialId);
+  }, [trialId, applyProfileToTrial]);
+
+  useEffect(() => {
+    if (typeof input?.age === "number") setAgeDraft(String(input.age));
+  }, [input?.age]);
 
   /* Draft strings keep typed decimals ("7.") from being rewritten mid-entry. */
   const [ageDraft, setAgeDraft] = useState(() =>

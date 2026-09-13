@@ -1,7 +1,7 @@
 /** Shared Playwright helpers for the designer UI on Vercel or local Next. */
 
 function trialsHeading(page) {
-  return page.getByRole('heading', { name: /Find a clinical trial/i });
+  return page.getByRole('heading', { name: /Find (a clinical trial|trials for me)/i });
 }
 
 function visibleFindATrial(page) {

@@ -129,6 +129,27 @@ export interface PrivateEligibilityInput {
   clinicalValue?: number | boolean;
 }
 
+/**
+ * Session-only private facts for repeat matching.
+ * Memory only. Never localStorage, never POSTed, never in URLs.
+ */
+export interface PrivateProfile {
+  age?: number;
+  hasCondition?: boolean;
+  /** "yes" | "no" mapped medication flag */
+  medication?: "yes" | "no";
+  /** User acknowledges the circuit does not prove free-text criteria. */
+  typedSubsetAck?: boolean;
+}
+
+export type MatchKind = "unknown" | "none" | "potential" | "verified";
+
+export interface PotentialMatch {
+  kind: MatchKind;
+  /** Local-only reasons. Never include the user's age or flags. */
+  reasons: string[];
+}
+
 /* ────────────────────────────────────────────────────────────
  * Eligibility evaluation (computed locally on-device)
  * ──────────────────────────────────────────────────────────── */

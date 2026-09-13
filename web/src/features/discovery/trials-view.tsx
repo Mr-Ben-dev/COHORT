@@ -2,14 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Clock, MapPin, Microscope, Search, Users } from "lucide-react";
+import { MapPin, Microscope, Search, Users } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PillButton } from "@/components/brand/pill-button";
 import { StatusPill, Tag } from "@/components/brand/status-pill";
 import { EmptyStateArt } from "@/components/artwork/empty-state-art";
 import { useCohortStore } from "@/state/cohort-store";
-import type { Trial } from "@/domain/types";
+import type { MatchKind, Trial } from "@/domain/types";
+import { isProfileReady, matchTrial } from "@/lib/private-match";
 import { cn } from "@/lib/utils";
 
 function locationLabel(trial: Trial): string {
@@ -20,9 +21,31 @@ function locationLabel(trial: Trial): string {
 
 /* ── Trial card ─────────────────────────────────────────────── */
 
+function matchTone(kind: MatchKind): "mint" | "cyan" | "lilac" {
+  if (kind === "verified") return "mint";
+  if (kind === "potential") return "cyan";
+  return "lilac";
+}
+
+function matchLabel(kind: MatchKind): string {
+  if (kind === "verified") return "Verified eligibility";
+  if (kind === "potential") return "Potential match";
+  if (kind === "none") return "Not a typed match";
+  return "Add private facts";
+}
+
 function TrialCard({ trial, index }: { trial: Trial; index: number }) {
   const navigate = useCohortStore((s) => s.navigate);
+  const profile = useCohortStore((s) => s.profile);
+  const checks = useCohortStore((s) => s.checks);
   const reduce = useReducedMotion();
+  const verifiedIds = new Set(
+    Object.values(checks)
+      .filter((c) => c.proof.status === "verified")
+      .map((c) => c.trialId),
+  );
+  const match = matchTrial(profile, trial, verifiedIds);
+  const featured = match.kind === "potential" || match.kind === "verified";
 
   return (
     <motion.article
@@ -34,43 +57,61 @@ function TrialCard({ trial, index }: { trial: Trial; index: number }) {
         delay: Math.min(index * 0.06, 0.3),
         ease: [0.22, 1, 0.36, 1] as const,
       }}
-      whileHover={reduce ? undefined : { y: -4 }}
-      className="group relative flex flex-col rounded-card border border-iris-border bg-cloud-white/[0.06] p-5 text-left transition-colors duration-300 hover:border-lilac-mist/60"
+      whileHover={reduce ? undefined : { y: -6 }}
+      className={cn(
+        "group relative flex flex-col rounded-card border p-6 text-left transition-[border-color,box-shadow,transform] duration-300",
+        featured
+          ? "border-clinical-cyan/45 bg-cloud-white/[0.08] shadow-[0_18px_40px_-24px_rgba(92,255,177,0.45)] hover:border-mint-vital/50"
+          : "border-iris-border bg-cloud-white/[0.06] hover:border-lilac-mist/60",
+      )}
     >
-      <div className="flex flex-wrap items-center gap-2">
-        <Tag tone="violet">{trial.category}</Tag>
-        <Tag tone="lilac">{trial.phase}</Tag>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <StatusPill status={trial.status} />
+        <Tag tone="violet">{trial.condition}</Tag>
       </div>
 
-      <h3 className="mt-4 line-clamp-2 text-subheading font-semibold text-cloud-white">
+      <h3 className="mt-4 line-clamp-3 text-subheading font-semibold text-cloud-white">
         {trial.title}
       </h3>
+      <p className="mt-2 text-caption text-lilac-mist">{trial.id}</p>
 
-      <div className="mt-3">
-        <StatusPill status={trial.status} />
+      <div className="mt-4 grid grid-cols-2 gap-3 text-body-sm text-pearl/85">
+        <p className="flex items-center gap-2">
+          <Users className="h-4 w-4 shrink-0 text-lilac-mist" aria-hidden="true" />
+          {trial.policy.ageMin}–{trial.policy.ageMax}
+        </p>
+        <p className="flex items-center gap-2">
+          <MapPin className="h-4 w-4 shrink-0 text-lilac-mist" aria-hidden="true" />
+          <span className="truncate">{locationLabel(trial)}</span>
+        </p>
       </div>
 
-      <ul className="mt-4 space-y-2">
-        <li className="flex items-center gap-2.5 text-body-sm text-pearl/80">
-          <MapPin className="h-4 w-4 shrink-0 text-lilac-mist" aria-hidden="true" />
-          {locationLabel(trial)}
-        </li>
-        <li className="flex items-center gap-2.5 text-body-sm text-pearl/80">
-          <Users className="h-4 w-4 shrink-0 text-lilac-mist" aria-hidden="true" />
-          Ages {trial.policy.ageMin}–{trial.policy.ageMax}
-        </li>
-        <li className="flex items-center gap-2.5 text-body-sm text-pearl/80">
-          <Clock className="h-4 w-4 shrink-0 text-lilac-mist" aria-hidden="true" />
-          ≈{trial.checkMinutes} min to check
-        </li>
-      </ul>
+      <div className="mt-5 rounded-field border border-iris-border/60 bg-deep-iris/40 p-3">
+        <Tag tone={matchTone(match.kind)}>{matchLabel(match.kind)}</Tag>
+        <p className="mt-2 text-caption text-pearl/75">
+          {match.kind === "verified"
+            ? "Midnight verified the typed match. This is not full protocol eligibility."
+            : match.kind === "potential"
+              ? "Local preview only. Not a cryptographic proof."
+              : match.reasons[0]}
+        </p>
+        {match.kind === "potential" || match.kind === "verified" ? (
+          <ul className="mt-2 flex flex-col gap-1 text-caption text-lilac-mist">
+            {match.reasons.map((reason) => (
+              <li key={reason}>{reason}</li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
 
       <p className="mt-4 flex items-center gap-2 text-caption text-lilac-mist">
         <Microscope className="h-4 w-4 shrink-0" aria-hidden="true" />
         {trial.sponsor}
       </p>
+      <p className="mt-1 text-caption text-lilac-mist">
+        Additional study requirements may apply.
+      </p>
 
-      {/* Stretched card button — opens the trial. The inner CTA sits above it. */}
       <button
         type="button"
         className="absolute inset-0 rounded-card"
@@ -78,11 +119,10 @@ function TrialCard({ trial, index }: { trial: Trial; index: number }) {
         onClick={() => navigate({ name: "trial", trialId: trial.id })}
       />
 
-      <div className="mt-5 flex items-center justify-between gap-3 pt-1">
-        <Tag tone="cyan">Typed subset · self-attested</Tag>
+      <div className="relative z-10 mt-5 flex items-center justify-between gap-3 pt-1">
+        <Tag tone="cyan">Verified against supported criteria</Tag>
         <PillButton
           size="sm"
-          className="relative z-10"
           onClick={(event) => {
             event.stopPropagation();
             navigate({ name: "check", trialId: trial.id });
@@ -104,12 +144,26 @@ export function TrialsView() {
   const trials = useCohortStore((s) => s.trials);
   const status = useCohortStore((s) => s.trialsStatus);
   const ensureTrials = useCohortStore((s) => s.ensureTrials);
+  const profile = useCohortStore((s) => s.profile);
+  const checks = useCohortStore((s) => s.checks);
+  const navigate = useCohortStore((s) => s.navigate);
   const [recruitingOnly, setRecruitingOnly] = useState(false);
+  const [potentialOnly, setPotentialOnly] = useState(false);
   const reduce = useReducedMotion();
 
   useEffect(() => {
     void ensureTrials();
   }, [ensureTrials]);
+
+  const verifiedIds = useMemo(
+    () =>
+      new Set(
+        Object.values(checks)
+          .filter((c) => c.proof.status === "verified")
+          .map((c) => c.trialId),
+      ),
+    [checks],
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -123,8 +177,26 @@ export function TrialsView() {
         ),
       );
     }
+    if (potentialOnly) {
+      list = list.filter((t) => {
+        const kind = matchTrial(profile, t, verifiedIds).kind;
+        return kind === "potential" || kind === "verified";
+      });
+    }
     return list;
-  }, [trials, query, category, recruitingOnly]);
+  }, [trials, query, category, recruitingOnly, potentialOnly, profile, verifiedIds]);
+
+  const matchSummary = useMemo(() => {
+    if (!isProfileReady(profile) || trials.length === 0) return null;
+    let potential = 0;
+    let verified = 0;
+    for (const trial of trials) {
+      const kind = matchTrial(profile, trial, verifiedIds).kind;
+      if (kind === "potential") potential += 1;
+      if (kind === "verified") verified += 1;
+    }
+    return { potential, verified, total: trials.length };
+  }, [profile, trials, verifiedIds]);
 
   const categories = useMemo(() => {
     const set = new Set(trials.map((t) => t.category));
@@ -136,6 +208,7 @@ export function TrialsView() {
   const clearFilters = () => {
     setDiscovery({ query: "", category: "All" });
     setRecruitingOnly(false);
+    setPotentialOnly(false);
   };
 
   const fadeUp = (delay = 0) => ({
@@ -157,12 +230,30 @@ export function TrialsView() {
           id="trials-heading"
           className="mt-3 text-[28px] font-semibold text-cloud-white sm:text-heading-sm"
         >
-          Find a clinical trial.
+          Find trials for me.
         </h1>
         <p className="mt-3 max-w-2xl text-body text-pearl/80">
-          Recruiting studies with public eligibility rules. Checks run
-          privately on your device.
+          Public recruiting studies. Potential match is a local preview.
+          Verified eligibility is a Midnight proof.
         </p>
+        {!isProfileReady(profile) ? (
+          <PillButton
+            className="mt-5"
+            variant="ghost"
+            onClick={() => navigate({ name: "profile" })}
+          >
+            Add private facts
+          </PillButton>
+        ) : matchSummary ? (
+          <p className="mt-5 text-body-sm text-pearl/75">
+            {matchSummary.potential} potential match
+            {matchSummary.potential === 1 ? "" : "es"}
+            {matchSummary.verified
+              ? ` and ${matchSummary.verified} verified`
+              : ""}{" "}
+            of {matchSummary.total} public studies. Local preview, not a proof.
+          </p>
+        ) : null}
       </motion.header>
 
       {/* Controls */}
@@ -223,6 +314,19 @@ export function TrialsView() {
             />
             Recruiting only
           </button>
+          <button
+            type="button"
+            aria-pressed={potentialOnly}
+            onClick={() => setPotentialOnly((v) => !v)}
+            className={cn(
+              "inline-flex min-h-11 items-center gap-2 rounded-pill px-4 py-2 text-body-sm font-medium transition-colors",
+              potentialOnly
+                ? "bg-iris-pulse text-cloud-white"
+                : "border border-iris-border text-lilac-mist hover:border-lilac-mist/50 hover:text-cloud-white",
+            )}
+          >
+            Potential matches
+          </button>
         </div>
       </motion.div>
 
@@ -241,11 +345,11 @@ export function TrialsView() {
           className="mt-8 rounded-card border border-iris-border bg-cloud-white/[0.06] p-8 text-center"
         >
           <h2 className="text-subheading font-semibold text-cloud-white">
-            Trial data didn&apos;t load.
+            Trial data is temporarily unavailable.
           </h2>
           <p className="mt-2 text-body-sm text-pearl/70">
-            The public study listing couldn&apos;t be reached. Check your
-            connection and try again.
+            The public study listing could not be reached. COHORT will not
+            substitute fake trials.
           </p>
           <PillButton className="mt-6" onClick={() => void ensureTrials()}>
             Try again
@@ -270,7 +374,7 @@ export function TrialsView() {
                 No studies match your filters.
               </h2>
               <p className="mt-2 max-w-sm text-body-sm text-pearl/70">
-                Try a different condition or search term — or clear your
+                Try a different condition or search term, or clear your
                 filters to see every listed study.
               </p>
               <PillButton variant="ghost" className="mt-6" onClick={clearFilters}>

@@ -11,6 +11,7 @@ import {
   FlaskConical,
   Minus,
   Send,
+  Share2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { PillButton } from "@/components/brand/pill-button";
@@ -102,7 +103,7 @@ export function ResultView({ checkId }: { checkId: string }) {
               At least one eligibility requirement was not satisfied.
             </p>
             <p className="mt-2 text-body-sm text-lilac-mist">
-              Your answers stay on this device — nothing was shared.
+              Your answers stay on this device. Nothing was shared.
             </p>
             <p className="mt-2 text-body-sm text-pearl/70">
               No wallet was connected and no transaction was created.
@@ -120,7 +121,7 @@ export function ResultView({ checkId }: { checkId: string }) {
               id="private-hints-heading"
               className="text-caption font-semibold uppercase tracking-[0.16em] text-mint-vital"
             >
-              Private — visible only on your device
+              Private. Visible only on your device
             </h2>
             <ul className="mt-4 space-y-4">
               {unsatisfied.map((outcome) => (
@@ -182,18 +183,14 @@ export function ResultView({ checkId }: { checkId: string }) {
             <Check className="h-9 w-9 text-mint-vital" />
           </motion.div>
           <h1 className="mt-6 text-heading-sm font-semibold text-mint-vital sm:text-heading">
-            Eligible
+            Eligibility verified
           </h1>
           <p className="mt-3 text-body text-pearl/85">
-            Your eligibility was verified privately.
+            Your record stayed with you.
           </p>
           <p className="mt-2 text-body-sm text-pearl/70">
-            The proof covers the supported typed criteria only. Source:
-            self-attested facts on this device — not an EHR or issuer.
-          </p>
-          <p className="mt-2 text-body-sm text-pearl/60">
-            Your medical facts were used to prove the trial criteria. They
-            were not sent to the COHORT server.
+            Supported typed criteria only. Self-attested on this device,
+            not an EHR or issuer.
           </p>
         </motion.header>
 
@@ -224,24 +221,35 @@ export function ResultView({ checkId }: { checkId: string }) {
             <RecordRow icon={EyeOff} label="Nullifier">
               <span className="text-clinical-cyan">{check.proof.nullifier}</span>
             </RecordRow>
-            <RecordRow icon={Send} label="Referral status">
-              {check.referral?.status === "sealed" ? (
-                <span className="text-mint-vital">Sealed</span>
-              ) : check.referral?.status === "requested" ? (
-                <span className="text-lilac-mist">Waiting for confirmation</span>
+            <RecordRow icon={Send} label="Referral">
+              {check.proof.status === "verified" ? (
+                <span className="text-mint-vital">Commitment created</span>
               ) : (
-                <span className="text-lilac-mist">Not requested</span>
+                <span className="text-lilac-mist">Not available yet</span>
+              )}
+            </RecordRow>
+            <RecordRow icon={Share2} label="Shared with a site">
+              {check.referral ? (
+                <span className="text-cloud-white">Public qualification posted</span>
+              ) : (
+                <span className="text-lilac-mist">Not shared</span>
               )}
             </RecordRow>
           </dl>
           <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-iris-border/50 pt-5">
             <PrivacyIndicator variant="chip" />
             <p className="text-caption text-lilac-mist">
-              Your answers remain on this device — they are not part of this
+              Your answers remain on this device. They are not part of this
               record.
             </p>
           </div>
         </motion.section>
+
+        <motion.p {...fadeUp(0.18)} className="mt-6 text-body-sm text-pearl/75">
+          Would you like to share your verified qualification with the study
+          site? The site does not receive your private facts. There is no
+          live site inbox. Sharing posts a public-safe record only.
+        </motion.p>
 
         <motion.div {...fadeUp(0.22)} className="mt-8 flex flex-wrap gap-3">
           {!check.referral && (
@@ -249,22 +257,24 @@ export function ResultView({ checkId }: { checkId: string }) {
               size="lg"
               onClick={() => void requestReferral(checkId)}
             >
-              Share public qualification
+              Share qualification
             </PillButton>
           )}
           <PillButton
             size="lg"
             variant="ghost"
-            onClick={() => navigate({ name: "verification", checkId })}
+            onClick={() =>
+              window.open(trial.studyUrl, "_blank", "noopener,noreferrer")
+            }
           >
-            View public verification
+            Open study
           </PillButton>
           <PillButton
             size="lg"
             variant="quiet"
             onClick={() => navigate({ name: "trials" })}
           >
-            Find more trials
+            Keep private
           </PillButton>
         </motion.div>
       </div>

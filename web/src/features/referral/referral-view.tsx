@@ -10,7 +10,7 @@ import { ReferralHandoffArt } from "@/components/artwork/referral-handoff-art";
 import { useCohortStore } from "@/state/cohort-store";
 
 function formatStamp(iso: string | undefined): string {
-  return iso ? format(new Date(iso), "MMM d, yyyy · h:mm a") : "—";
+  return iso ? format(new Date(iso), "MMM d, yyyy · h:mm a") : "Not yet";
 }
 
 function ReferralField({
@@ -76,11 +76,11 @@ export function ReferralView({ checkId }: { checkId: string }) {
               Referral
             </p>
             <h1 className="mt-3 text-[26px] font-semibold text-cloud-white sm:text-heading-sm">
-              Sealing your referral…
+              Creating the referral commitment…
             </h1>
             <p className="mt-3 text-body text-pearl/80">
-              The site receives a verified eligibility result — not your
-              medical record.
+              Posting a public-safe qualification only. There is no live
+              site inbox.
             </p>
           </motion.header>
 
@@ -98,7 +98,7 @@ export function ReferralView({ checkId }: { checkId: string }) {
               </span>
               <div>
                 <p className="text-body font-semibold text-cloud-white">
-                  Sealing referral commitment…
+                  Creating referral commitment…
                 </p>
                 <p className="mt-1 text-body-sm text-pearl/70">
                   This usually takes a moment.
@@ -139,11 +139,11 @@ export function ReferralView({ checkId }: { checkId: string }) {
             Referral
           </p>
           <h1 className="mt-3 text-[26px] font-semibold text-cloud-white sm:text-heading-sm">
-            Your referral is sealed.
+            Referral commitment created
           </h1>
           <p className="mt-3 text-body text-pearl/80">
-            The site receives a verified eligibility result — not your
-            medical record.
+            A public qualification was posted. There is no live site inbox.
+            The study site does not automatically receive this.
           </p>
         </motion.header>
 
@@ -167,7 +167,7 @@ export function ReferralView({ checkId }: { checkId: string }) {
             </motion.span>
             <div>
               <p className="text-subheading font-semibold text-mint-vital">
-                Referral sealed
+                Referral commitment created
               </p>
               <p className="mt-0.5 text-caption text-lilac-mist">
                 {formatStamp(referral.sealedAt)}
@@ -181,7 +181,7 @@ export function ReferralView({ checkId }: { checkId: string }) {
               {trial.id} · {trial.condition}
             </ReferralField>
             <ReferralField label="Payment">
-              None on this contract — uniqueness token only
+              None on this contract. Uniqueness token only.
             </ReferralField>
             <ReferralField label="Public reference">
               <span className="text-clinical-cyan">{referral.publicRef}</span>

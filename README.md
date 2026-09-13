@@ -12,7 +12,9 @@ Non-visual DApp interface (future `web` folder): `packages/dapp`. `npm test` inc
 
 Public Compact 0.31.1 circuit artifacts (not wallet secrets) are served at same-origin `/zk/keys`, `/zk/zkir`, and `/zk/compiler`. FetchZkConfigProvider should use `{origin}/zk/`. The hosted `.prover` file is a circuit proving key, not a seed.
 
-Product: **private trial matching + verified eligibility + a public qualification record**. Not a medical-records warehouse. Not a paid referral market (escrow is coming next). Facts are self-attested typed witnesses; the circuit does not prove EHR authenticity.
+Product: **private trial matching + verified eligibility + a user-controlled public qualification**. Not a medical-records warehouse. Not a paid referral market (escrow is coming next). Facts are self-attested typed witnesses; the circuit does not prove EHR authenticity.
+
+A private profile lives in page memory only. It lets you find potential matches across public ClinicalTrials.gov typed policies, then run a real Midnight proof. Potential match is a local preview. Verified eligibility is a Preprod transaction. Sharing posts a public-safe qualification. There is no live site inbox.
 
 Gold path (Preprod, contract `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc`):
 

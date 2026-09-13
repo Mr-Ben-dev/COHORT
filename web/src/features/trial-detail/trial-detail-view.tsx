@@ -23,7 +23,8 @@ import { StatusPill, Tag } from "@/components/brand/status-pill";
 import { PrivacyIndicator } from "@/components/privacy/privacy-indicator";
 import { BackLink } from "@/components/layout/back-link";
 import { useCohortStore } from "@/state/cohort-store";
-import type { PublicCriterion, Trial } from "@/domain/types";
+import type { EligibilityCheck, PrivateProfile, PublicCriterion, Trial } from "@/domain/types";
+import { matchTrial } from "@/lib/private-match";
 
 const CRITERIA_ICONS: Record<PublicCriterion["kind"], LucideIcon> = {
   age: Calendar,
@@ -56,10 +57,52 @@ function DetailSkeleton() {
   );
 }
 
+function MatchPanel({
+  trial,
+  profile,
+  checks,
+}: {
+  trial: Trial;
+  profile: PrivateProfile;
+  checks: Record<string, EligibilityCheck>;
+}) {
+  const verifiedIds = new Set(
+    Object.values(checks)
+      .filter((c) => c.proof.status === "verified")
+      .map((c) => c.trialId),
+  );
+  const match = matchTrial(profile, trial, verifiedIds);
+  const title =
+    match.kind === "verified"
+      ? "Verified eligibility"
+      : match.kind === "potential"
+        ? "Potential match"
+        : match.kind === "none"
+          ? "Not a typed match"
+          : "Why you might fit";
+  return (
+    <div className="rounded-field border border-iris-border/60 bg-deep-iris/40 p-4">
+      <p className="text-caption font-semibold uppercase tracking-[0.16em] text-clinical-cyan">
+        {title}
+      </p>
+      <ul className="mt-3 flex flex-col gap-1.5 text-caption text-pearl/80">
+        {match.reasons.map((reason) => (
+          <li key={reason}>{reason}</li>
+        ))}
+      </ul>
+      <p className="mt-3 text-caption text-lilac-mist">
+        A potential match is not a proof. Check privately to verify on Midnight.
+      </p>
+    </div>
+  );
+}
+
 export function TrialDetailView({ trialId }: { trialId: string }) {
   const trial = useCohortStore((s) => s.trials.find((t) => t.id === trialId));
   const status = useCohortStore((s) => s.trialsStatus);
   const navigate = useCohortStore((s) => s.navigate);
+  const profile = useCohortStore((s) => s.profile);
+  const checks = useCohortStore((s) => s.checks);
   const reduce = useReducedMotion();
 
   const fadeUp = (delay = 0) => ({
@@ -188,7 +231,8 @@ export function TrialDetailView({ trialId }: { trialId: string }) {
               })}
             </ul>
             <p className="mt-6 border-t border-iris-border/50 pt-5 text-caption text-lilac-mist">
-              Full protocol available on the public study listing.
+              Verified against supported criteria only. Additional study
+              requirements may apply.
             </p>
           </motion.section>
         </div>
@@ -205,6 +249,7 @@ export function TrialDetailView({ trialId }: { trialId: string }) {
           />
           <div className="relative space-y-5 rounded-card border border-iris-border bg-cloud-white/[0.06] p-6">
             <PrivacyIndicator variant="banner" />
+            <MatchPanel trial={trial} profile={profile} checks={checks} />
             <p className="text-caption text-lilac-mist">
               ≈{trial.checkMinutes} min · answers stay on your device
             </p>
@@ -212,7 +257,7 @@ export function TrialDetailView({ trialId }: { trialId: string }) {
               className="w-full"
               onClick={() => navigate({ name: "check", trialId: trial.id })}
             >
-              Check eligibility privately
+              Check privately
             </PillButton>
             <a
               href={trial.studyUrl}

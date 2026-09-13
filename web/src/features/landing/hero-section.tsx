@@ -109,9 +109,8 @@ export function HeroSection() {
               {...fadeUp(0.26)}
               className="mt-7 max-w-md text-subheading text-pearl/85"
             >
-              Find trials you may qualify for without handing over your record.
-              When you prove, Midnight verifies the typed match. A site can
-              open the public qualification — not your dossier.
+              Find trials without handing over your record. When you
+              qualify, you choose what to share.
             </motion.p>
 
             <motion.div

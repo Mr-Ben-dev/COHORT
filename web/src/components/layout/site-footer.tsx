@@ -74,10 +74,7 @@ export function SiteFooter() {
 
   const productLinks: FooterLink[] = [
     { label: "Find trials", onClick: () => navigate({ name: "trials" }) },
-    {
-      label: "How it works",
-      onClick: () => navigate({ name: "home" }, { scroll: "#how-it-works" }),
-    },
+    { label: "My profile", onClick: () => navigate({ name: "profile" }) },
     { label: "My proofs", onClick: () => navigate({ name: "proofs" }) },
   ];
 
@@ -205,7 +202,7 @@ export function SiteFooter() {
               </svg>
             </div>
             <p className="mt-5 max-w-xs text-body-sm text-cloud-white/70">
-              Privacy-first clinical-trial matching — prove you qualify,
+              Privacy-first clinical-trial matching. Prove you qualify,
               keep your record.
             </p>
             <PillButton

@@ -1615,7 +1615,7 @@ const STEPS: StepDef[] = [
         you may <Accent>qualify</Accent> for.
       </span>,
     ],
-    body: "Browse publicly listed recruiting studies — condition, phase, location, and time commitment up front. Public ClinicalTrials.gov criteria, filtered on your device. No account, no profile.",
+    body: "Browse publicly listed recruiting studies. Public ClinicalTrials.gov criteria, filtered on your device. No COHORT account. Your facts stay here.",
     link: { label: "See the live trials list", view: { name: "trials" } },
     art: TrialDiscoveryArt,
   },

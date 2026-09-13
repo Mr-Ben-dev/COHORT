@@ -14,6 +14,7 @@ import { ResultView } from "@/features/result/result-view";
 import { ReferralView } from "@/features/referral/referral-view";
 import { VerificationView } from "@/features/verification/verification-view";
 import { MyProofsView } from "@/features/proofs/my-proofs-view";
+import { ProfileView } from "@/features/profile/profile-view";
 
 function viewKey(view: View): string {
   switch (view.name) {
@@ -35,6 +36,8 @@ function viewKey(view: View): string {
       return `verification-${view.checkId}`;
     case "proofs":
       return "proofs";
+    case "profile":
+      return "profile";
   }
 }
 
@@ -58,6 +61,8 @@ function ViewScreen({ view }: { view: View }) {
       return <VerificationView checkId={view.checkId} />;
     case "proofs":
       return <MyProofsView />;
+    case "profile":
+      return <ProfileView />;
   }
 }
 

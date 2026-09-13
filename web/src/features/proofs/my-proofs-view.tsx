@@ -44,15 +44,17 @@ function ProofCard({ check, index }: { check: EligibilityCheck; index: number })
 
       <div className="mt-3 flex flex-wrap gap-2">
         {check.proof.status === "verified" ? (
-          <Tag tone="mint">Verified</Tag>
+          <Tag tone="mint">Verified eligibility</Tag>
         ) : (
-          <Tag tone="lilac">Local preview only</Tag>
+          <Tag tone="lilac">Potential match only</Tag>
         )}
         {eligible ? (
           check.referral ? (
-            <Tag tone="mint">Referral sealed</Tag>
+            <Tag tone="cyan">Public qualification posted</Tag>
+          ) : check.proof.status === "verified" ? (
+            <Tag tone="mint">Referral commitment created</Tag>
           ) : (
-            <Tag tone="lilac">No referral</Tag>
+            <Tag tone="lilac">Not shared</Tag>
           )
         ) : (
           <Tag tone="lilac">Not eligible</Tag>
@@ -79,7 +81,7 @@ function ProofCard({ check, index }: { check: EligibilityCheck; index: number })
             size="sm"
             onClick={() => void requestReferral(check.id)}
           >
-            Share public qualification
+            Share qualification
           </PillButton>
         )}
       </div>
@@ -123,7 +125,7 @@ export function MyProofsView() {
           Your proofs.
         </h1>
         <p className="mt-3 max-w-2xl text-body text-pearl/80">
-          Everything you&apos;ve verified — and what you can do next.
+          Where you have already proven eligibility. Public-safe data only.
         </p>
       </motion.header>
 
@@ -162,7 +164,7 @@ export function MyProofsView() {
                 <span className="h-2.5 w-2.5 rounded-full bg-clinical-cyan" />
               </span>
               <p className="min-w-0 flex-1 text-body-sm text-pearl/80">
-                Check in progress — {activeProving.trialId}
+                Check in progress for {activeProving.trialId}
               </p>
               <PillButton
                 size="sm"

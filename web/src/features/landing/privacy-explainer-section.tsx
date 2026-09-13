@@ -87,8 +87,8 @@ export function PrivacyExplainerSection() {
             <span>stays yours.</span>
           </LineReveal>
           <p className="mt-5 text-body text-pearl/80">
-            One picture worth remembering: your facts never cross the line —
-            only the proof does.
+            Private facts stay on the left. The proof sits in the middle.
+            Verified eligibility is public. The facts never become the record.
           </p>
         </motion.div>
 
@@ -111,14 +111,14 @@ export function PrivacyExplainerSection() {
               aria-hidden="true"
             />
             <p className="text-caption font-semibold uppercase tracking-[0.18em] text-lilac-mist">
-              Your health data
+              Your private health facts
             </p>
             <ul className="mt-6 space-y-4">
               {[
                 { label: "Age", value: "•••" },
                 { label: "Conditions", value: "•••" },
                 { label: "Medications", value: "•••" },
-                { label: "Lab values", value: "•••" },
+                { label: "Free-text notes", value: "•••" },
               ].map((row) => (
                 <li
                   key={row.label}
@@ -185,7 +185,7 @@ export function PrivacyExplainerSection() {
               aria-hidden="true"
             />
             <p className="text-caption font-semibold uppercase tracking-[0.18em] text-mint-vital">
-              Public result
+              Verified eligibility
             </p>
             <ul className="mt-6 space-y-4">
               <li className="flex items-center justify-between rounded-field border border-iris-border/50 bg-deep-iris/40 px-4 py-3">
@@ -194,7 +194,7 @@ export function PrivacyExplainerSection() {
               </li>
               <li className="flex items-center justify-between rounded-field border border-iris-border/50 bg-deep-iris/40 px-4 py-3">
                 <span className="text-body-sm text-pearl/75">Trial</span>
-                <span className="text-body-sm font-semibold text-cloud-white">NCT06218473</span>
+                <span className="text-body-sm font-semibold text-cloud-white">NCT07153614</span>
               </li>
               <li className="flex items-center justify-between rounded-field border border-iris-border/50 bg-deep-iris/40 px-4 py-3">
                 <span className="text-body-sm text-pearl/75">Nullifier</span>
@@ -206,7 +206,7 @@ export function PrivacyExplainerSection() {
               </li>
             </ul>
             <p className="glow-cyan mt-6 inline-flex items-center gap-2 rounded-pill border border-clinical-cyan/40 bg-clinical-cyan/10 px-4 py-2 text-caption font-semibold text-clinical-cyan">
-              Only what the site needs
+              Facts never become this record
             </p>
           </motion.div>
         </div>
@@ -215,7 +215,7 @@ export function PrivacyExplainerSection() {
         <motion.div {...reveal(0.3)} className="mt-12 text-center">
           <p className="text-heading-sm font-semibold text-cloud-white">
             <span className="glow-mint text-mint-vital">Verified</span>
-            <span className="text-pearl/50"> — without </span>
+            <span className="text-pearl/50"> without </span>
             <span className="relative text-lilac-mist">
               revealed
               <svg

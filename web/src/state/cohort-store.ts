@@ -4,6 +4,7 @@ import { create } from "zustand";
 import type {
   EligibilityCheck,
   PrivateEligibilityInput,
+  PrivateProfile,
   ProofStage,
   Trial,
   WalletProvider,
@@ -17,6 +18,7 @@ import {
   walletService,
 } from "@/services";
 import { factsFromInput } from "@/lib/map-trial";
+import { inputFromProfile, isProfileReady } from "@/lib/private-match";
 import { humanError } from "@/lib/human-error";
 import { preloadCohortDapp } from "@/lib/cohort-dapp";
 
@@ -29,7 +31,8 @@ export type View =
   | { name: "result"; checkId: string }
   | { name: "referral"; checkId: string }
   | { name: "verification"; checkId: string }
-  | { name: "proofs" };
+  | { name: "proofs" }
+  | { name: "profile" };
 
 export type TrialsStatus = "idle" | "loading" | "ready" | "error";
 
@@ -53,6 +56,7 @@ interface CohortState {
   trialsStatus: TrialsStatus;
   wallet: WalletState;
   discovery: DiscoveryState;
+  profile: PrivateProfile;
 
   inputs: Record<string, PrivateEligibilityInput>;
   checks: Record<string, EligibilityCheck>;
@@ -63,6 +67,8 @@ interface CohortState {
   goBack: () => void;
   ensureTrials: () => Promise<void>;
   setDiscovery: (partial: Partial<DiscoveryState>) => void;
+  setProfile: (partial: Partial<PrivateProfile>) => void;
+  applyProfileToTrial: (trialId: string) => void;
   setAnswer: (trialId: string, partial: Partial<PrivateEligibilityInput>) => void;
   connectWallet: (provider: WalletProvider) => Promise<void>;
   connectAndProve: (provider: WalletProvider) => Promise<void>;
@@ -98,6 +104,7 @@ export const useCohortStore = create<CohortState>((set, get) => ({
   trialsStatus: "idle",
   wallet: { status: "disconnected" },
   discovery: { query: "", category: "All" },
+  profile: {},
 
   inputs: {},
   checks: {},
@@ -125,7 +132,15 @@ export const useCohortStore = create<CohortState>((set, get) => ({
     set({ trialsStatus: "loading" });
     try {
       const trials = await trialService.listTrials();
-      set({ trials, trialsStatus: "ready" });
+      const { profile } = get();
+      const seeded = isProfileReady(profile) ? inputFromProfile(profile) : null;
+      const inputs = { ...get().inputs };
+      if (seeded) {
+        for (const trial of trials) {
+          inputs[trial.id] = { ...seeded, ...inputs[trial.id] };
+        }
+      }
+      set({ trials, trialsStatus: "ready", inputs });
     } catch {
       set({ trialsStatus: "error" });
     }
@@ -134,13 +149,48 @@ export const useCohortStore = create<CohortState>((set, get) => ({
   setDiscovery: (partial) =>
     set((state) => ({ discovery: { ...state.discovery, ...partial } })),
 
+  setProfile: (partial) =>
+    set((state) => {
+      const profile = { ...state.profile, ...partial };
+      const seeded = isProfileReady(profile) ? inputFromProfile(profile) : null;
+      const inputs = { ...state.inputs };
+      if (seeded) {
+        for (const trial of state.trials) {
+          inputs[trial.id] = { ...inputs[trial.id], ...seeded };
+        }
+      }
+      return { profile, inputs };
+    }),
+
+  applyProfileToTrial: (trialId) =>
+    set((state) => {
+      if (!isProfileReady(state.profile)) return state;
+      const seeded = inputFromProfile(state.profile);
+      return {
+        inputs: {
+          ...state.inputs,
+          [trialId]: { ...seeded, ...state.inputs[trialId] },
+        },
+      };
+    }),
+
   setAnswer: (trialId, partial) =>
-    set((state) => ({
-      inputs: {
-        ...state.inputs,
-        [trialId]: { ...state.inputs[trialId], ...partial },
-      },
-    })),
+    set((state) => {
+      const nextInput = { ...state.inputs[trialId], ...partial };
+      const profile = { ...state.profile };
+      if (typeof nextInput.age === "number") profile.age = nextInput.age;
+      if (typeof nextInput.hasCondition === "boolean") {
+        profile.hasCondition = nextInput.hasCondition;
+      }
+      if (nextInput.medication === "yes" || nextInput.medication === "no") {
+        profile.medication = nextInput.medication;
+      }
+      if (nextInput.clinicalValue === true) profile.typedSubsetAck = true;
+      return {
+        inputs: { ...state.inputs, [trialId]: nextInput },
+        profile,
+      };
+    }),
 
   connectWallet: async (provider) => {
     set({ wallet: { status: "connecting", provider } });
@@ -191,7 +241,7 @@ export const useCohortStore = create<CohortState>((set, get) => ({
         proof: {
           publicRef: "none",
           fullRef: "none",
-          nullifier: "Not submitted — local preview only",
+          nullifier: "Not submitted. Local preview only.",
           status: "ineligible",
           verifiedAt: at,
           network: "Midnight Preprod",
