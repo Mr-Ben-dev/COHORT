@@ -28,6 +28,7 @@ test('wallet preference is the only localStorage write and is not a medical fact
 test('Lace proving fail-closed copy is present', () => {
   const picker = fs.readFileSync(path.join(root, 'web/src/features/proving/wallet-picker.tsx'), 'utf8');
   assert.match(picker, /connectAndProve\(row\.id\)/);
+  assert.match(picker, /Lace cannot generate this proof/);
   const store = fs.readFileSync(path.join(root, 'web/src/state/cohort-store.ts'), 'utf8');
   assert.match(store, /Proof support for this flow is unavailable in the current Lace environment/);
   assert.match(store, /Lace connected/);

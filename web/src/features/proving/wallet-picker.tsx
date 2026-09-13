@@ -9,6 +9,7 @@ import { ChevronDown } from "lucide-react";
 import { discoverWallets, type DiscoveredWallet } from "@/lib/wallet-discovery";
 import type { WalletProvider } from "@/domain/types";
 import { useCohortStore } from "@/state/cohort-store";
+import { cn } from "@/lib/utils";
 
 function WalletGlyph({ wallet }: { wallet: DiscoveredWallet }) {
   if (wallet.iconSrc) {
@@ -78,7 +79,12 @@ export function WalletPicker() {
         After 1AM Connect, approve COHORT from the toolbar icon. Lace may open
         an authorization popup.
       </p>
-      {wallet.status === "permission-required" ? (
+      {wallet.status === "permission-required" && wallet.provider === "Lace" ? (
+        <p className="mt-2 text-body-sm text-clinical-cyan" role="status">
+          Last connected wallet was Lace. Lace cannot generate this proof
+          in-browser. Use 1AM, then approve COHORT from the toolbar icon.
+        </p>
+      ) : wallet.status === "permission-required" ? (
         <p className="mt-2 text-body-sm text-clinical-cyan" role="status">
           Previously selected wallet: {wallet.label}. One click reconnects it.
         </p>
@@ -94,7 +100,12 @@ export function WalletPicker() {
           return (
             <div
               key={row.id}
-              className="flex items-center gap-4 rounded-field border border-iris-border bg-deep-iris/50 p-4"
+              className={cn(
+                "flex items-center gap-4 rounded-field border p-4",
+                row.id === "1AM"
+                  ? "border-mint-vital/40 bg-mint-vital/5"
+                  : "border-iris-border bg-deep-iris/50",
+              )}
             >
               <IconNode tone="lilac">
                 {live ? <WalletGlyph wallet={live} /> : <Wallet className="h-5 w-5" aria-hidden="true" />}
