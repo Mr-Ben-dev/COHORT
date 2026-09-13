@@ -40,19 +40,31 @@ export function RotatingWord({
   }, [reduce, words.length, interval]);
 
   const word = words[index] ?? words[0] ?? "";
+  const longest = words.reduce(
+    (best, next) => (next.length > best.length ? next : best),
+    words[0] ?? "",
+  );
 
   return (
     <span
-      className={cn("word-flip relative inline-block", className)}
+      className={cn("word-flip relative inline-grid", className)}
       aria-label={label ?? words.join(", ")}
     >
+      <span
+        className="invisible col-start-1 row-start-1 whitespace-nowrap"
+        aria-hidden="true"
+      >
+        {longest}
+      </span>
       {reduce ? (
-        <span aria-hidden="false">{word}</span>
+        <span className="col-start-1 row-start-1" aria-hidden="false">
+          {word}
+        </span>
       ) : (
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={index}
-            className="inline-block"
+            className="col-start-1 row-start-1 inline-block"
             initial={{ rotateX: 90, y: "0.12em", opacity: 0 }}
             animate={{ rotateX: 0, y: 0, opacity: 1 }}
             exit={{ rotateX: -90, y: "-0.12em", opacity: 0 }}

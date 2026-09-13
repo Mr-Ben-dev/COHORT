@@ -73,7 +73,7 @@ export function HeroSection() {
           <HeroCluster className="h-full" />
         </motion.div>
 
-        <div className="relative z-10 mx-auto max-w-xl px-5 pb-8 sm:px-8 lg:mx-0 lg:max-w-[34rem] lg:px-8 lg:pt-6 lg:pb-10 xl:px-12">
+        <div className="relative z-10 w-full min-w-0 px-5 pb-8 sm:px-8 lg:px-8 lg:pt-4 lg:pb-10 lg:pr-12 xl:pr-16">
             {/* The problem, stated before the headline gets to be clever. */}
             <motion.p
               {...fadeUp(0)}
@@ -87,21 +87,24 @@ export function HeroSection() {
             </motion.p>
             <h1
               id="hero-heading"
-              className="text-display font-semibold text-cloud-white"
+              className="font-semibold tracking-[-0.04em] text-cloud-white text-[clamp(2.75rem,6.9vw,6.5rem)] leading-[0.92]"
             >
               <motion.span {...fadeUp(0)} className="block">
-                Making trial eligibility
+                Making trial
+              </motion.span>
+              <motion.span {...fadeUp(0.06)} className="block">
+                eligibility
               </motion.span>
               <motion.span
                 {...fadeUp(0.14)}
-                className="mt-1 block sm:mt-2"
+                className="mt-2 block sm:mt-3"
                 aria-label="private, provable, yours"
               >
                 <WordHighlight className="align-baseline">
                   <RotatingWord
                     words={["private.", "provable.", "yours."]}
                     interval={2800}
-                    className="text-display-word font-semibold"
+                    className="font-semibold tracking-[-0.045em] text-[clamp(3.25rem,9vw,8.25rem)] leading-[0.92]"
                     label="private, provable, yours"
                   />
                 </WordHighlight>
