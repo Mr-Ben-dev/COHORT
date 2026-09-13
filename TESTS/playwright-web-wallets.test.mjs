@@ -70,8 +70,11 @@ async function fillEligible(page) {
 }
 
 async function openWalletModal(page) {
-  await page.getByRole('button', { name: 'Connect wallet' }).first().click();
-  await page.getByRole('dialog', { name: /Connect a wallet/i }).waitFor({ timeout: 10000 });
+  const nav = page.getByRole('navigation', { name: 'Main navigation' });
+  const trigger = nav.getByRole('button', { name: /Connect wallet|Reconnect/i });
+  await trigger.first().waitFor({ timeout: 15000 });
+  await trigger.first().click();
+  await page.getByRole('dialog').waitFor({ timeout: 15000 });
 }
 
 async function connectFromModal(page, index) {
@@ -187,13 +190,13 @@ test('Vercel: hanging UUID Lace connect keeps the picker and does not show 1AM w
     await openCheck(page, VERCEL_URL);
     await fillEligible(page);
     await connectFromModal(page, 1);
-    await page.getByRole('button', { name: /Connecting to Lace · Cancel/i }).first().waitFor({ timeout: 15000 });
+    await page.getByRole('dialog').getByRole('button', { name: 'Cancel', exact: true }).waitFor({ timeout: 15000 });
     const body = await page.innerText('body');
     assert.match(body, /Approve the Lace authorization popup/);
     assert.match(body, /Connect your wallet/);
     assert.doesNotMatch(body, /Still waiting on 1AM/);
     assert.doesNotMatch(body, /Approve in 1AM/);
-    await page.getByRole('button', { name: /Connecting to Lace · Cancel/i }).first().click();
+    await page.getByRole('dialog').getByRole('button', { name: 'Cancel', exact: true }).click();
     await page.getByRole('button', { name: 'Connect wallet' }).first().waitFor({ timeout: 10000 });
     const after = await page.innerText('body');
     assert.match(after, /Connect your wallet/);

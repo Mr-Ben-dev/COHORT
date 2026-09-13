@@ -46,6 +46,7 @@ export function WalletModal() {
   const closeWalletModal = useCohortStore((s) => s.closeWalletModal);
   const connectWallet = useCohortStore((s) => s.connectWallet);
   const connectAndProve = useCohortStore((s) => s.connectAndProve);
+  const cancelConnect = useCohortStore((s) => s.cancelConnect);
   const proving = useCohortStore((s) => s.activeProving);
   const wallet = useCohortStore((s) => s.wallet);
   const [tiles, setTiles] = useState<DiscoveredWallet[]>([]);
@@ -97,6 +98,16 @@ export function WalletModal() {
           approve COHORT from the toolbar icon. Lace may open an authorization
           popup.
         </p>
+        {wallet.status === "connecting" ? (
+          <div className="flex items-center justify-between gap-3 rounded-field border border-clinical-cyan/35 bg-clinical-cyan/10 px-4 py-3">
+            <p className="text-body-sm text-clinical-cyan">
+              Connecting to {wallet.provider}…
+            </p>
+            <PillButton size="sm" variant="ghost" onClick={() => cancelConnect()}>
+              Cancel
+            </PillButton>
+          </div>
+        ) : null}
         <div className="space-y-3">
           {cards.map((row) => {
             const live = row.live;
