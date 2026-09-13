@@ -14,12 +14,11 @@ import { PrivacyIndicator } from "@/components/privacy/privacy-indicator";
 import { BackLink } from "@/components/layout/back-link";
 import { useCohortStore } from "@/state/cohort-store";
 import { preloadCohortDapp } from "@/lib/cohort-dapp";
-import { isOneAmInjected } from "@/services/wallet";
+import { WalletPicker } from "@/features/proving/wallet-picker";
 import {
   PROOF_STAGES,
   PROOF_STAGE_COPY,
   type ProofStage,
-  type WalletProvider,
 } from "@/domain/types";
 import { cn } from "@/lib/utils";
 
@@ -103,16 +102,18 @@ function StageRow({
   );
 }
 
-const WALLET_PROVIDERS: { id: WalletProvider; note: string }[] = [
-  { id: "1AM", note: "Midnight wallet · browser extension (gold path)" },
-  { id: "Lace", note: "Needs a local proof-server — not the COHORT gold path" },
-];
+const WALLET_CHOOSER = new Set([
+  "disconnected",
+  "available",
+  "permission-required",
+  "unavailable",
+  "wrong-network",
+]);
 
 export function ProvingView({ trialId }: { trialId: string }) {
   const activeProving = useCohortStore((s) => s.activeProving);
   const trial = useCohortStore((s) => s.trials.find((t) => t.id === trialId));
   const wallet = useCohortStore((s) => s.wallet);
-  const connectAndProve = useCohortStore((s) => s.connectAndProve);
   const approveWallet = useCohortStore((s) => s.approveWallet);
   const cancelProving = useCohortStore((s) => s.cancelProving);
   const reduce = useReducedMotion();
@@ -131,7 +132,6 @@ export function ProvingView({ trialId }: { trialId: string }) {
    */
   const [lastProving, setLastProving] = useState(activeProving);
   const [slowWallet, setSlowWallet] = useState(false);
-  const [oneAm, setOneAm] = useState<"checking" | "ready" | "missing">("checking");
   const proving = activeProving ?? lastProving;
 
   useEffect(() => {
@@ -142,24 +142,6 @@ export function ProvingView({ trialId }: { trialId: string }) {
     const timer = window.setTimeout(() => setSlowWallet(true), 12000);
     return () => window.clearTimeout(timer);
   }, [wallet.status]);
-
-  useEffect(() => {
-    let ticks = 0;
-    const read = () => {
-      if (isOneAmInjected()) {
-        setOneAm("ready");
-        return true;
-      }
-      ticks += 1;
-      if (ticks >= 20) setOneAm("missing");
-      return false;
-    };
-    if (read()) return;
-    const id = window.setInterval(() => {
-      if (read()) window.clearInterval(id);
-    }, 400);
-    return () => window.clearInterval(id);
-  }, []);
 
   useEffect(
     () =>
@@ -255,75 +237,8 @@ export function ProvingView({ trialId }: { trialId: string }) {
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mt-6 rounded-card border border-iris-border bg-cloud-white/[0.06] p-6 sm:p-8"
           >
-            {wallet.status === "disconnected" ? (
-              <>
-                <h2 className="text-subheading font-semibold text-cloud-white">
-                  Connect your wallet
-                </h2>
-                <p className="mt-2 text-body-sm text-pearl/70">
-                  Choose 1AM to sign the proof — the only confirmation
-                  you&apos;ll make. The 1AM browser extension is the current
-                  gold path on desktop. COHORT will not create a fake wallet.
-                </p>
-                <p className="mt-2 text-body-sm text-pearl/70">
-                  1AM does not open a page popup. After Connect, close the
-                  Transactions dashboard and approve COHORT from the 1AM
-                  toolbar icon. The in-browser proof starts once 1AM
-                  authorizes this page.
-                </p>
-                <p
-                  className="mt-2 text-body-sm text-pearl/70"
-                  role="status"
-                  aria-live="polite"
-                >
-                  {oneAm === "ready"
-                    ? "1AM is injected in this browser. Click Connect, then approve COHORT from the toolbar icon."
-                    : oneAm === "missing"
-                      ? (
-                        <>
-                          1AM is not injected in this tab. Install the desktop
-                          extension from{" "}
-                          <a
-                            href="https://1am.xyz/"
-                            rel="noreferrer"
-                            className="text-clinical-cyan underline-offset-2 hover:underline"
-                          >
-                            1am.xyz
-                          </a>
-                          , hard-refresh, then click Connect. COHORT will not
-                          create a fake wallet.
-                        </>
-                        )
-                      : "Looking for the 1AM extension…"}
-                </p>
-                <div className="mt-5 space-y-3">
-                  {WALLET_PROVIDERS.map((provider) => (
-                    <div
-                      key={provider.id}
-                      className="flex items-center gap-4 rounded-field border border-iris-border bg-deep-iris/50 p-4"
-                    >
-                      <IconNode tone="lilac">
-                        <Wallet className="h-5 w-5" aria-hidden="true" />
-                      </IconNode>
-                      <div className="min-w-0">
-                        <p className="text-body font-medium text-cloud-white">
-                          {provider.id}
-                        </p>
-                        <p className="text-caption text-lilac-mist">
-                          {provider.note}
-                        </p>
-                      </div>
-                      <PillButton
-                        size="sm"
-                        className="ml-auto shrink-0"
-                        onClick={() => void connectAndProve(provider.id)}
-                      >
-                        Connect
-                      </PillButton>
-                    </div>
-                  ))}
-                </div>
-              </>
+            {WALLET_CHOOSER.has(wallet.status) ? (
+              <WalletPicker />
             ) : (
               <>
                 <div className="flex items-center gap-4">

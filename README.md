@@ -14,7 +14,7 @@ Public Compact 0.31.1 circuit artifacts (not wallet secrets) are served at same-
 
 Product: **private trial matching + verified eligibility + a user-controlled public qualification**. Not a medical-records warehouse. Not a paid referral market (escrow is coming next). Facts are self-attested typed witnesses; the circuit does not prove EHR authenticity.
 
-A private profile lives in page memory only. It lets you find potential matches across public ClinicalTrials.gov typed policies, then run a real Midnight proof. Potential match is a local preview. Verified eligibility is a Preprod transaction. Sharing posts a public-safe qualification. There is no live site inbox.
+A private profile is encrypted in this browser origin (IndexedDB + Web Crypto AES-GCM). It is never POSTed. Wallet session preference stores only the selected `rdns`. Potential match is a local preview. Verified eligibility is a Preprod transaction. Sharing posts a public-safe qualification. There is no live site inbox. Lace can connect; this proof path still requires 1AM `getProvingProvider`.
 
 Gold path (Preprod, contract `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc`):
 
@@ -23,7 +23,7 @@ Designer UI (`https://cohort-web-orcin.vercel.app`) → 1AM `connect('preprod')`
 1. Install **1AM** and sync Preprod with tNIGHT + DUST. Do not use a hosted proof-server.
 2. Open the designer UI `https://cohort-web-orcin.vercel.app` (or the same-origin stub `https://cohort-y4zr.onrender.com/`). COHORT never draws the 1AM Approve UI on the page.
 3. Close the 1AM Transactions dashboard. Find a trial → Check privately → **Connect** 1AM, then click the 1AM toolbar icon and **Approve COHORT**. Connect runs `connect('preprod')` in that click, then `submitCallTx` via `getProvingProvider` (in-browser WASM). If the icon still opens balances/Transactions, reload 1AM at `chrome://extensions`, refresh, and retry. The balance screen is not the connect dialog.
-4. Typed private facts stay in page memory only and are never POSTed. Page CSP `connect-src` allows the official Midnight indexer/RPC and 1AM GraphQL (`api-preprod.1am.xyz`); public-state truth stays `indexer.preprod.midnight.network`. Public `/zk` circuit keys are CORS `*` so 1AM can fetch them.
+4. Typed private facts are encrypted in origin-scoped IndexedDB and are never POSTed. Page CSP `connect-src` allows the official Midnight indexer/RPC and 1AM GraphQL (`api-preprod.1am.xyz`); public-state truth stays `indexer.preprod.midnight.network`. Public `/zk` circuit keys are CORS `*` so 1AM can fetch them. Lace is a second connector; if it lacks `getProvingProvider`, COHORT shows Lace connected and refuses a fake proof.
 
 Cursor Chrome DevTools MCP can attach to an already-open Chrome + 1AM profile after MCP authentication (`chrome-devtools-mcp --autoConnect`). A dedicated debug Chrome would not carry the 1AM session. Connect / Approve still stay a real user gesture — CDP must not click Connect (it poisons 1AM). Never extract a 1AM seed.
 

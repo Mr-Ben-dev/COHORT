@@ -130,8 +130,8 @@ export interface PrivateEligibilityInput {
 }
 
 /**
- * Session-only private facts for repeat matching.
- * Memory only. Never localStorage, never POSTed, never in URLs.
+ * Durable private facts for repeat matching.
+ * Encrypted IndexedDB on this origin only. Never POSTed, never in URLs/cookies.
  */
 export interface PrivateProfile {
   age?: number;
@@ -230,7 +230,27 @@ export type WalletProvider = "1AM" | "Lace";
 
 export type WalletState =
   | { status: "disconnected" }
+  | { status: "unavailable" }
+  | {
+      status: "available";
+      provider?: WalletProvider;
+      rdns?: string;
+      label?: string;
+    }
+  | {
+      status: "permission-required";
+      provider: WalletProvider;
+      rdns: string;
+      label: string;
+    }
   | { status: "connecting"; provider: WalletProvider }
+  | { status: "reconnecting"; provider: WalletProvider; label: string }
+  | {
+      status: "wrong-network";
+      provider: WalletProvider;
+      networkId: string;
+      label: string;
+    }
   | {
       status: "connected";
       provider: WalletProvider;
@@ -238,6 +258,8 @@ export type WalletState =
       label: string;
       dust?: "Ready" | "Needs DUST" | "Wallet syncing";
       networkId?: string;
+      rdns?: string;
+      canProve?: boolean;
     }
   | { status: "approving"; provider: WalletProvider; label: string };
 

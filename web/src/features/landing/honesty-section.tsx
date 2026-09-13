@@ -21,7 +21,7 @@ const LIMITS = [
   },
   {
     title: "It doesn't store your record.",
-    body: "There is no COHORT database of medical records to breach. Your answers live on your device for the check, then the proof stands on its own.",
+    body: "There is no COHORT database of medical records to breach. A typed private profile is encrypted in this browser origin. Clearing site data deletes it.",
   },
   {
     title: "It doesn't share your answers.",

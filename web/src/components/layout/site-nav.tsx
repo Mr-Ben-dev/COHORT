@@ -40,6 +40,7 @@ export function SiteNav() {
   const view = useCohortStore((s) => s.view);
   const navigate = useCohortStore((s) => s.navigate);
   const wallet = useCohortStore((s) => s.wallet);
+  const connectWallet = useCohortStore((s) => s.connectWallet);
   const checks = useCohortStore((s) => s.checks);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -144,6 +145,32 @@ export function SiteNav() {
               <span className="pulse-mint h-1.5 w-1.5 rounded-full bg-mint-vital" aria-hidden="true" />
               {wallet.provider} connected
             </span>
+          ) : wallet.status === "permission-required" || wallet.status === "reconnecting" ? (
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 rounded-pill border border-lilac-mist/35 bg-cloud-white/5 px-4 py-2 text-caption font-semibold text-lilac-mist outline-none focus-visible:ring-2 focus-visible:ring-clinical-cyan"
+              onClick={() =>
+                void connectWallet(
+                  "provider" in wallet && wallet.provider === "Lace" ? "Lace" : "1AM",
+                )
+              }
+            >
+              Reconnect wallet
+            </button>
+          ) : wallet.status === "connecting" ? (
+            <span
+              className="inline-flex items-center gap-2 rounded-pill border border-clinical-cyan/35 bg-clinical-cyan/10 px-4 py-2 text-caption font-semibold text-clinical-cyan"
+              role="status"
+            >
+              Connecting
+            </span>
+          ) : wallet.status === "wrong-network" ? (
+            <span
+              className="inline-flex items-center gap-2 rounded-pill border border-lilac-mist/40 px-4 py-2 text-caption font-semibold text-pearl"
+              role="status"
+            >
+              Wrong network
+            </span>
           ) : null}
           <PillButton size="sm" onClick={() => go("trials")}>
             Find a trial
@@ -214,6 +241,25 @@ export function SiteNav() {
                   </button>
                 </li>
               ))}
+              {wallet.status === "connected" || wallet.status === "approving" ? (
+                <li className="px-4 py-2 text-caption font-semibold text-mint-vital">
+                  {wallet.provider} connected
+                </li>
+              ) : wallet.status === "permission-required" || wallet.status === "reconnecting" ? (
+                <li className="pt-1">
+                  <button
+                    type="button"
+                    className="w-full rounded-field px-4 py-3 text-left text-body font-medium text-lilac-mist"
+                    onClick={() =>
+                      void connectWallet(
+                        "provider" in wallet && wallet.provider === "Lace" ? "Lace" : "1AM",
+                      )
+                    }
+                  >
+                    Reconnect wallet
+                  </button>
+                </li>
+              ) : null}
               <li className="pt-2">
                 <PillButton
                   className="w-full"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,11 +16,16 @@ import { cn } from "@/lib/utils";
 export function ProfileView() {
   const profile = useCohortStore((s) => s.profile);
   const setProfile = useCohortStore((s) => s.setProfile);
+  const clearProfile = useCohortStore((s) => s.clearProfile);
   const navigate = useCohortStore((s) => s.navigate);
   const reduce = useReducedMotion();
   const [ageDraft, setAgeDraft] = useState(
     typeof profile.age === "number" ? String(profile.age) : "",
   );
+
+  useEffect(() => {
+    if (typeof profile.age === "number") setAgeDraft(String(profile.age));
+  }, [profile.age]);
 
   const ready = isProfileReady(profile);
   const fadeUp = (delay = 0) => ({
@@ -45,8 +50,9 @@ export function ProfileView() {
           These facts stay on your device.
         </h1>
         <p className="mt-3 max-w-xl text-body text-pearl/80">
-          Use them to find potential matches across trials. This is not a
-          medical record on COHORT servers. Refreshing the browser clears it.
+          Use them to find potential matches across trials. They are encrypted
+          in this browser origin and are never sent to COHORT servers. Clearing
+          site data deletes them.
         </p>
         <div className="mt-4">
           <PrivacyIndicator variant="chip" />
@@ -174,10 +180,26 @@ export function ProfileView() {
         >
           Find trials for me
         </PillButton>
+        <PillButton
+          size="lg"
+          variant="quiet"
+          onClick={() => {
+            setAgeDraft("");
+            void clearProfile();
+          }}
+        >
+          Clear private data
+        </PillButton>
         <Tag tone={ready ? "mint" : "lilac"}>
           {ready ? "Ready for potential matches" : "Add age, condition, and medication"}
         </Tag>
       </motion.div>
+      <p className="mt-4 max-w-xl text-caption text-lilac-mist">
+        Encrypted with Web Crypto AES-GCM. The key stays on this origin as a
+        non-extractable CryptoKey. This is not a wallet seed and not a
+        passphrase. Unlock happens when this site loads. Clearing site data
+        cannot be undone.
+      </p>
     </section>
   );
 }

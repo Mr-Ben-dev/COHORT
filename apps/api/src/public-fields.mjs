@@ -13,6 +13,7 @@ export const PRIVATE_FIELD_NAMES = Object.freeze([
   'seed',
   'mnemonic',
   'patient',
+  'profile',
   'wAge',
   'wCondition',
   'wMedication',

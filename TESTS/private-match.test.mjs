@@ -14,12 +14,15 @@ test('private match reasons never interpolate the user age or flags', () => {
   assert.match(src, /Not a cryptographic proof|local-preview|PotentialMatch/);
 });
 
-test('private profile stays in memory in the designer store', () => {
+test('private profile stays off localStorage in the designer store', () => {
   const src = fs.readFileSync(path.join(root, 'web/src/state/cohort-store.ts'), 'utf8');
   assert.equal(src.includes('localStorage'), false);
   assert.equal(src.includes('sessionStorage'), false);
+  assert.equal(src.includes('indexedDB'), false);
   assert.match(src, /setProfile/);
   assert.match(src, /PrivateProfile/);
+  assert.match(src, /hydrateLocalState/);
+  assert.match(src, /savePrivateProfile/);
 });
 
 test('trial cards distinguish potential match from verified eligibility', () => {
@@ -53,6 +56,8 @@ test('profile view stays on-device and does not mention a server medical record'
   assert.match(src, /Find trials for me/);
   assert.equal(src.includes('fetch('), false);
   assert.equal(src.includes('localStorage'), false);
+  assert.match(src, /Clear private data/);
+  assert.match(src, /Web Crypto AES-GCM/);
 });
 
 test('public age labels hide the Uint8 255 sentinel and use a hyphen', () => {

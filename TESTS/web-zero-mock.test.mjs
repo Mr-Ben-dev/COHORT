@@ -29,11 +29,11 @@ test('designer web production path does not import fixture trials or simulated w
   assert.match(fs.readFileSync(path.join(webSrc, 'services/wallet.ts'), 'utf8'), /isOneAmInjected/);
   assert.match(fs.readFileSync(path.join(webSrc, 'state/cohort-store.ts'), 'utf8'), /connectAndProve/);
   assert.match(
-    fs.readFileSync(path.join(webSrc, 'features/proving/proving-view.tsx'), 'utf8'),
-    /connectAndProve\(provider\.id\)/,
+    fs.readFileSync(path.join(webSrc, 'features/proving/wallet-picker.tsx'), 'utf8'),
+    /connectAndProve\(row\.id\)/,
   );
   assert.match(
-    fs.readFileSync(path.join(webSrc, 'features/proving/proving-view.tsx'), 'utf8'),
+    fs.readFileSync(path.join(webSrc, 'features/proving/wallet-picker.tsx'), 'utf8'),
     /does not open a page popup/,
   );
   assert.match(fs.readFileSync(path.join(webSrc, 'services/proof.ts'), 'utf8'), /proveEligibility/);

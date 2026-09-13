@@ -15,6 +15,7 @@ const PRIVATE_FIELD_NAMES = new Set([
   "seed",
   "mnemonic",
   "patient",
+  "profile",
   "wAge",
   "wCondition",
   "wMedication",

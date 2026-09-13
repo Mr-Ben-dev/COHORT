@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { SiteNav } from "@/components/layout/site-nav";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { useCohortStore, type View } from "@/state/cohort-store";
+import { pollConnectionOrNull } from "@/services/wallet";
 import { LandingPage } from "@/features/landing/landing-page";
 import { TrialsView } from "@/features/discovery/trials-view";
 import { TrialDetailView } from "@/features/trial-detail/trial-detail-view";
@@ -75,6 +76,46 @@ export function AppShell() {
   const view = useCohortStore((s) => s.view);
   const pendingScroll = useCohortStore((s) => s.pendingScroll);
   const ensureTrials = useCohortStore((s) => s.ensureTrials);
+  const hydrateLocalState = useCohortStore((s) => s.hydrateLocalState);
+  const refreshWalletPresence = useCohortStore((s) => s.refreshWalletPresence);
+  const disconnectWallet = useCohortStore((s) => s.disconnectWallet);
+  const wallet = useCohortStore((s) => s.wallet);
+
+  useEffect(() => {
+    void hydrateLocalState();
+  }, [hydrateLocalState]);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      refreshWalletPresence();
+    }, 4000);
+    return () => window.clearInterval(id);
+  }, [refreshWalletPresence]);
+
+  useEffect(() => {
+    if (wallet.status !== "connected") return;
+    let cancelled = false;
+    const id = window.setInterval(() => {
+      void pollConnectionOrNull().then((st) => {
+        if (cancelled) return;
+        if (st === "disconnected") disconnectWallet();
+        if (st === "wrong-network") {
+          useCohortStore.setState({
+            wallet: {
+              status: "wrong-network",
+              provider: wallet.status === "connected" ? wallet.provider : "1AM",
+              networkId: "unknown",
+              label: "Wrong network",
+            },
+          });
+        }
+      });
+    }, 8000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+    };
+  }, [wallet, disconnectWallet]);
 
   // Warm the public trial data as soon as the user leaves the landing page.
   useEffect(() => {

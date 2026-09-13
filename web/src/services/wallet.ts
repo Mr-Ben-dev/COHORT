@@ -1,129 +1,169 @@
 "use client";
 
 import type { WalletProvider, WalletState } from "@/domain/types";
+import {
+  discoverWallets,
+  findInjected,
+  isOneAmInjected,
+  type DiscoveredWallet,
+} from "@/lib/wallet-discovery";
+import { clearPreferredRdns, readPreferredRdns, writePreferredRdns } from "@/lib/wallet-preference";
 import { humanError } from "@/lib/human-error";
 
 export interface WalletService {
   connect(provider: WalletProvider): Promise<Extract<WalletState, { status: "connected" }>>;
   getConnectedApi(): ConnectedWalletApi | null;
   disconnect(): void;
+  forgetPreference(): void;
+  snapshot(): WalletSnapshot;
 }
-
-type MidnightInjected = {
-  connect?: (networkId: string) => Promise<ConnectedWalletApi>;
-  name?: string;
-  rdns?: string;
-  getProvingProvider?: unknown;
-};
 
 export type ConnectedWalletApi = {
   getProvingProvider?: () => unknown;
-  getConnectionStatus?: () => Promise<{ networkId?: string } | Record<string, unknown>>;
+  getConnectionStatus?: () => Promise<{ status?: string; networkId?: string } | Record<string, unknown>>;
+  getConfiguration?: () => Promise<{
+    indexerUri?: string;
+    indexerWsUri?: string;
+    proverServerUri?: string;
+    nodeUri?: string;
+    networkId?: string;
+  }>;
   hintUsage?: (methods: string[]) => Promise<void>;
-  getDustBalance?: () => Promise<{ balance?: bigint } | null>;
+  getDustBalance?: () => Promise<{ balance?: bigint; cap?: bigint } | null>;
+  getUnshieldedBalances?: () => Promise<unknown>;
+};
+
+export type WalletSnapshot = {
+  wallets: DiscoveredWallet[];
+  preferredRdns: string | null;
 };
 
 let connectedApi: ConnectedWalletApi | null = null;
 
-function midnightGlobal(): Record<string, MidnightInjected> | null {
-  if (typeof window === "undefined") return null;
-  const w = window as unknown as { midnight?: Record<string, MidnightInjected> };
-  return w.midnight && typeof w.midnight === "object" ? w.midnight : null;
+function asProvider(kind: DiscoveredWallet["kind"]): WalletProvider {
+  return kind === "Lace" ? "Lace" : "1AM";
 }
 
-function pick1Am(): MidnightInjected | null {
-  const midnight = midnightGlobal();
-  if (!midnight) return null;
-  return (
-    midnight["1am"] ||
-    Object.values(midnight).find((api) => api?.rdns === "com.midnight.1am") ||
-    Object.values(midnight).find((api) => typeof api?.connect === "function") ||
-    null
-  );
+function isPreprod(networkId: string): boolean {
+  const n = networkId.toLowerCase();
+  return n === "preprod" || n === "undeployed";
 }
 
-/** True only for the 1AM connector, not Lace or an unknown tile. */
-export function isOneAmInjected(): boolean {
-  const midnight = midnightGlobal();
-  if (!midnight) return false;
-  const one =
-    midnight["1am"] || Object.values(midnight).find((api) => api?.rdns === "com.midnight.1am");
-  return Boolean(one && typeof one.connect === "function");
-}
+export { isOneAmInjected, discoverWallets };
 
-class OneAmWalletService implements WalletService {
+class ConnectorWalletService implements WalletService {
+  snapshot(): WalletSnapshot {
+    return { wallets: discoverWallets(), preferredRdns: readPreferredRdns() };
+  }
+
   connect(provider: WalletProvider): Promise<Extract<WalletState, { status: "connected" }>> {
-    if (provider === "Lace") {
-      return Promise.reject(
-        Object.assign(new Error("Lace does not expose getProvingProvider."), {
-          code: "WALLET_NO_PROVING",
-          publicMessage:
-            "Lace cannot generate this proof in-browser. Use 1AM. COHORT will not send your facts to a hosted prover.",
-        }),
-      );
-    }
-
-    const injected = pick1Am();
+    const injected = findInjected(provider);
     if (!injected || typeof injected.connect !== "function") {
       return Promise.reject(
         Object.assign(new Error("No Midnight DApp Connector is injected."), {
           code: "WALLET_UNAVAILABLE",
           publicMessage:
-            "No Midnight wallet was found. Install 1AM to continue. COHORT will not create a fake wallet.",
+            provider === "Lace"
+              ? "Lace is not injected in this tab. Install the Midnight Lace extension from lace.io, then refresh."
+              : "No Midnight wallet was found. Install 1AM to continue. COHORT will not create a fake wallet.",
+        }),
+      );
+    }
+    if (injected.apiVersion && !String(injected.apiVersion).startsWith("4.")) {
+      return Promise.reject(
+        Object.assign(new Error("Unsupported wallet API version."), {
+          code: "WALLET_UNAVAILABLE",
+          publicMessage: "This wallet API version is not supported. COHORT expects DApp Connector 4.x.",
         }),
       );
     }
 
-    // Call connect() in this click, before any await.
+    const rdns =
+      typeof injected.rdns === "string" && injected.rdns
+        ? injected.rdns
+        : provider === "Lace"
+          ? "io.lace.midnight"
+          : "com.midnight.1am";
+
     const pending = injected.connect("preprod");
     return pending.then(async (api) => {
-      connectedApi = api;
-      if (typeof api.getProvingProvider !== "function") {
-        connectedApi = null;
-        throw Object.assign(new Error("Connected wallet has no getProvingProvider."), {
-          code: "WALLET_NO_PROVING",
-          publicMessage:
-            "This wallet cannot generate the proof in-browser. Use 1AM. COHORT will not send your facts to a hosted prover.",
-        });
-      }
-      if (typeof api.hintUsage === "function") {
-        await api.hintUsage([
+      connectedApi = api as ConnectedWalletApi;
+      if (typeof connectedApi.hintUsage === "function") {
+        await connectedApi.hintUsage([
           "getProvingProvider",
           "getDustBalance",
           "getShieldedAddresses",
           "getUnshieldedAddress",
+          "getUnshieldedBalances",
           "getConfiguration",
+          "getConnectionStatus",
           "balanceUnsealedTransaction",
           "submitTransaction",
         ]);
       }
-      let dust: Extract<WalletState, { status: "connected" }>["dust"] = "Wallet syncing";
-      if (typeof api.getDustBalance === "function") {
+
+      let networkId = "preprod";
+      let connectionStatus = "connected";
+      if (typeof connectedApi.getConnectionStatus === "function") {
+        const status = await connectedApi.getConnectionStatus();
+        if (status && typeof status === "object") {
+          if ("networkId" in status && status.networkId) networkId = String(status.networkId);
+          if ("status" in status && status.status) connectionStatus = String(status.status);
+        }
+      }
+      if (connectionStatus !== "connected") {
+        connectedApi = null;
+        throw Object.assign(new Error("Wallet is not connected."), {
+          code: "WALLET_UNAVAILABLE",
+          publicMessage: "The wallet did not stay connected. Approve COHORT, then try again.",
+        });
+      }
+      if (typeof connectedApi.getConfiguration === "function") {
         try {
-          const bal = await api.getDustBalance();
+          const cfg = await connectedApi.getConfiguration();
+          if (cfg?.networkId) networkId = String(cfg.networkId);
+        } catch {
+          /* some wallets expose status but not configuration */
+        }
+      }
+      if (!isPreprod(networkId)) {
+        connectedApi = null;
+        throw Object.assign(new Error("Wrong network."), {
+          code: "WALLET_WRONG_NETWORK",
+          publicMessage: `This wallet is on ${networkId}, not Preprod. Switch the wallet to Preprod, then reconnect.`,
+        });
+      }
+
+      const canProve = typeof connectedApi.getProvingProvider === "function";
+      let dust: Extract<WalletState, { status: "connected" }>["dust"] = "Wallet syncing";
+      if (typeof connectedApi.getDustBalance === "function") {
+        try {
+          const bal = await connectedApi.getDustBalance();
           if (bal && typeof bal === "object" && bal.balance === 0n) dust = "Needs DUST";
           else if (bal && typeof bal === "object") dust = "Ready";
         } catch {
           dust = "Wallet syncing";
         }
       }
-      let networkId = "preprod";
-      if (typeof api.getConnectionStatus === "function") {
-        try {
-          const status = await api.getConnectionStatus();
-          if (status && typeof status === "object" && "networkId" in status && status.networkId) {
-            networkId = String(status.networkId);
-          }
-        } catch {
-          /* keep preprod pin */
-        }
-      }
+
+      writePreferredRdns(rdns);
+      const label =
+        provider === "Lace"
+          ? canProve
+            ? `Lace · ${dust}`
+            : "Lace connected"
+          : dust === "Ready"
+            ? "1AM · Ready"
+            : `1AM · ${dust}`;
+
       return {
         status: "connected" as const,
-        provider: "1AM" as const,
-        label: dust === "Ready" ? "1AM · Ready" : `1AM · ${dust}`,
+        provider,
+        label,
         dust,
         networkId,
+        rdns,
+        canProve,
       };
     });
   }
@@ -135,7 +175,30 @@ class OneAmWalletService implements WalletService {
   disconnect() {
     connectedApi = null;
   }
+
+  forgetPreference() {
+    connectedApi = null;
+    clearPreferredRdns();
+  }
 }
 
-export const walletService: WalletService = new OneAmWalletService();
+export const walletService: WalletService = new ConnectorWalletService();
 export { humanError };
+
+export async function pollConnectionOrNull(): Promise<"connected" | "disconnected" | "wrong-network"> {
+  const api = connectedApi;
+  if (!api || typeof api.getConnectionStatus !== "function") {
+    return connectedApi ? "connected" : "disconnected";
+  }
+  try {
+    const status = await api.getConnectionStatus();
+    const st = status && typeof status === "object" && "status" in status ? String(status.status) : "";
+    const networkId =
+      status && typeof status === "object" && "networkId" in status ? String(status.networkId || "") : "";
+    if (st && st !== "connected") return "disconnected";
+    if (networkId && !isPreprod(networkId)) return "wrong-network";
+    return "connected";
+  } catch {
+    return "disconnected";
+  }
+}

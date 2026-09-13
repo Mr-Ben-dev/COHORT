@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
 import { openCheck } from './playwright-web-helpers.mjs';
+import { dumpOriginPrivacy, assertNoPrivateFactsInOrigin } from './playwright-storage-audit.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const webDir = path.join(root, 'web');
@@ -95,16 +96,8 @@ test('Playwright: designer UI does not send PATIENT_A age to COHORT APIs', async
   assert.equal(postTrials.status, 400);
   assert.equal(postTrials.text.includes('31'), false);
 
-  const storage = await page.evaluate(() => ({
-    href: location.href,
-    cookie: document.cookie,
-    local: { ...localStorage },
-    session: { ...sessionStorage },
-  }));
-  assert.equal(storage.href.includes(String(PATIENT_A)), false);
-  assert.equal(storage.cookie.includes(String(PATIENT_A)), false);
-  assert.equal(JSON.stringify(storage.local).includes(String(PATIENT_A)), false);
-  assert.equal(JSON.stringify(storage.session).includes(String(PATIENT_A)), false);
+  const storage = await dumpOriginPrivacy(page);
+  assertNoPrivateFactsInOrigin(storage, [PATIENT_A]);
 });
 
 const VERCEL_URL = process.env.PLAYWRIGHT_WEB_URL || 'https://cohort-web-orcin.vercel.app';
@@ -160,15 +153,8 @@ test('Playwright Vercel: PATIENT_A age never appears on COHORT or Vercel API tra
   assert.equal(postTrials.status, 400);
   assert.equal(postTrials.text.includes('31'), false);
 
-  const storage = await page.evaluate(() => ({
-    href: location.href,
-    cookie: document.cookie,
-    local: { ...localStorage },
-    session: { ...sessionStorage },
-  }));
-  assert.equal(storage.href.includes(String(PATIENT_A)), false);
-  assert.equal(JSON.stringify(storage.local).includes(String(PATIENT_A)), false);
-  assert.equal(JSON.stringify(storage.session).includes(String(PATIENT_A)), false);
+  const storage = await dumpOriginPrivacy(page);
+  assertNoPrivateFactsInOrigin(storage, [PATIENT_A]);
 });
 
 test('Playwright Vercel: PATIENT_B age never appears on COHORT or Vercel API traffic', async (t) => {
@@ -221,13 +207,6 @@ test('Playwright Vercel: PATIENT_B age never appears on COHORT or Vercel API tra
   assert.equal(postTrials.status, 400);
   assert.equal(postTrials.text.includes('52'), false);
 
-  const storage = await page.evaluate(() => ({
-    href: location.href,
-    cookie: document.cookie,
-    local: { ...localStorage },
-    session: { ...sessionStorage },
-  }));
-  assert.equal(storage.href.includes(String(PATIENT_B)), false);
-  assert.equal(JSON.stringify(storage.local).includes(String(PATIENT_B)), false);
-  assert.equal(JSON.stringify(storage.session).includes(String(PATIENT_B)), false);
+  const storage = await dumpOriginPrivacy(page);
+  assertNoPrivateFactsInOrigin(storage, [PATIENT_B]);
 });

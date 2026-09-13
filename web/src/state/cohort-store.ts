@@ -21,6 +21,17 @@ import { factsFromInput } from "@/lib/map-trial";
 import { inputFromProfile, isProfileReady } from "@/lib/private-match";
 import { humanError } from "@/lib/human-error";
 import { preloadCohortDapp } from "@/lib/cohort-dapp";
+import {
+  clearPrivateVault,
+  loadPrivateProfile,
+  loadPublicProofs,
+  savePrivateProfile,
+  savePublicProofs,
+  type PublicProofCacheEntry,
+} from "@/lib/private-vault";
+import { discoverWallets } from "@/lib/wallet-discovery";
+import { readPreferredRdns } from "@/lib/wallet-preference";
+import { pollConnectionOrNull } from "@/services/wallet";
 
 export type View =
   | { name: "home" }
@@ -68,6 +79,9 @@ interface CohortState {
   ensureTrials: () => Promise<void>;
   setDiscovery: (partial: Partial<DiscoveryState>) => void;
   setProfile: (partial: Partial<PrivateProfile>) => void;
+  clearProfile: () => Promise<void>;
+  hydrateLocalState: () => Promise<void>;
+  refreshWalletPresence: () => void;
   applyProfileToTrial: (trialId: string) => void;
   setAnswer: (trialId: string, partial: Partial<PrivateEligibilityInput>) => void;
   connectWallet: (provider: WalletProvider) => Promise<void>;
@@ -83,6 +97,66 @@ interface CohortState {
 
 let provingRunId = 0;
 let proveInFlight = false;
+let persistTimer: number | null = null;
+
+function queueProfilePersist(profile: PrivateProfile) {
+  if (typeof window === "undefined") return;
+  if (persistTimer) window.clearTimeout(persistTimer);
+  persistTimer = window.setTimeout(() => {
+    void savePrivateProfile(profile).catch(() => {});
+  }, 250);
+}
+
+function publicProofsFromChecks(checks: Record<string, EligibilityCheck>): PublicProofCacheEntry[] {
+  return Object.values(checks)
+    .filter((c) => c.proof.status === "verified" && (c.proof.txHash || c.proof.txId))
+    .map((c) => ({
+      trialId: c.trialId,
+      txHash: c.proof.txHash,
+      txId: c.proof.txId,
+      publicRef: c.proof.publicRef,
+      verifiedAt: c.proof.verifiedAt,
+      network: c.proof.network,
+      referralStatus: c.referral
+        ? ("sealed" === c.referral.status ? "shared" : "commitment")
+        : "commitment",
+    }));
+}
+
+function checksFromPublicProofs(rows: PublicProofCacheEntry[]): Record<string, EligibilityCheck> {
+  const checks: Record<string, EligibilityCheck> = {};
+  for (const row of rows) {
+    const id = `pub_${row.trialId}_${(row.txHash || row.txId || row.publicRef).slice(0, 12)}`;
+    checks[id] = {
+      id,
+      trialId: row.trialId,
+      input: {},
+      result: { eligible: true, outcomes: [], evaluatedAt: row.verifiedAt },
+      proof: {
+        publicRef: row.publicRef,
+        fullRef: row.txId || row.txHash || row.publicRef,
+        nullifier: "On-chain uniqueness token (not a medical fact)",
+        status: "verified",
+        verifiedAt: row.verifiedAt,
+        network: row.network,
+        txId: row.txId,
+        txHash: row.txHash,
+      },
+      referral:
+        row.referralStatus === "shared"
+          ? {
+              status: "sealed",
+              siteName: "Study site",
+              bounty: 0,
+              publicRef: row.txHash || row.publicRef,
+              claimStatus: "unclaimed",
+            }
+          : null,
+      createdAt: row.verifiedAt,
+    };
+  }
+  return checks;
+}
 
 function checkId(trialId: string): string {
   return `chk_${trialId.toLowerCase()}_${Date.now().toString(36)}`;
@@ -159,8 +233,70 @@ export const useCohortStore = create<CohortState>((set, get) => ({
           inputs[trial.id] = { ...inputs[trial.id], ...seeded };
         }
       }
+      queueProfilePersist(profile);
       return { profile, inputs };
     }),
+
+  clearProfile: async () => {
+    await clearPrivateVault();
+    set({ profile: {}, inputs: {} });
+  },
+
+  hydrateLocalState: async () => {
+    try {
+      const [profile, publicProofs] = await Promise.all([
+        loadPrivateProfile(),
+        loadPublicProofs(),
+      ]);
+      const restored = publicProofs.length ? checksFromPublicProofs(publicProofs) : {};
+      set((state) => ({
+        profile: profile ?? state.profile,
+        checks: { ...restored, ...state.checks },
+      }));
+    } catch {
+      /* private mode / missing IndexedDB */
+    }
+    get().refreshWalletPresence();
+  },
+
+  refreshWalletPresence: () => {
+    const status = get().wallet.status;
+    if (status === "connected" || status === "connecting" || status === "approving") return;
+    const wallets = discoverWallets();
+    const preferred = readPreferredRdns();
+    const match = preferred
+      ? wallets.find((w) => w.rdns === preferred || w.injectKey === preferred)
+      : wallets.find((w) => w.kind === "1AM") || wallets[0];
+    if (!wallets.length) {
+      set({
+        wallet: preferred
+          ? {
+              status: "unavailable",
+            }
+          : { status: "disconnected" },
+      });
+      return;
+    }
+    if (preferred && match) {
+      set({
+        wallet: {
+          status: "permission-required",
+          provider: match.kind === "Lace" ? "Lace" : "1AM",
+          rdns: match.rdns,
+          label: `Reconnect ${match.name}`,
+        },
+      });
+      return;
+    }
+    set({
+      wallet: {
+        status: "available",
+        provider: match?.kind === "Lace" ? "Lace" : "1AM",
+        rdns: match?.rdns,
+        label: match ? `${match.name} available` : "Wallet available",
+      },
+    });
+  },
 
   applyProfileToTrial: (trialId) =>
     set((state) => {
@@ -186,6 +322,7 @@ export const useCohortStore = create<CohortState>((set, get) => ({
         profile.medication = nextInput.medication;
       }
       if (nextInput.clinicalValue === true) profile.typedSubsetAck = true;
+      queueProfilePersist(profile);
       return {
         inputs: { ...state.inputs, [trialId]: nextInput },
         profile,
@@ -198,6 +335,22 @@ export const useCohortStore = create<CohortState>((set, get) => ({
       const session = await walletService.connect(provider);
       set({ wallet: session });
     } catch (err) {
+      const code =
+        err && typeof err === "object" && "code" in err ? String((err as { code?: string }).code) : "";
+      if (code === "WALLET_WRONG_NETWORK") {
+        set({
+          wallet: {
+            status: "wrong-network",
+            provider,
+            networkId: "unknown",
+            label: "Wrong network",
+          },
+          activeProving: get().activeProving
+            ? { ...get().activeProving!, error: humanError(err) }
+            : get().activeProving,
+        });
+        return;
+      }
       set({
         wallet: { status: "disconnected" },
         activeProving: get().activeProving
@@ -209,12 +362,40 @@ export const useCohortStore = create<CohortState>((set, get) => ({
 
   connectAndProve: async (provider) => {
     await get().connectWallet(provider);
-    if (get().wallet.status !== "connected") return;
+    const wallet = get().wallet;
+    if (wallet.status !== "connected") return;
+    if (wallet.canProve === false) {
+      set({
+        activeProving: get().activeProving
+          ? {
+              ...get().activeProving!,
+              error:
+                "Lace connected. Proof support for this flow is unavailable in the current Lace environment.",
+            }
+          : get().activeProving,
+      });
+      return;
+    }
     await get().approveWallet();
   },
 
   disconnectWallet: () => {
+    const prev = get().wallet;
+    const provider =
+      "provider" in prev && prev.provider ? prev.provider : "1AM";
     walletService.disconnect();
+    const preferred = readPreferredRdns();
+    if (preferred) {
+      set({
+        wallet: {
+          status: "permission-required",
+          provider,
+          rdns: preferred,
+          label: "Reconnect wallet",
+        },
+      });
+      return;
+    }
     set({ wallet: { status: "disconnected" } });
   },
 
@@ -291,7 +472,18 @@ export const useCohortStore = create<CohortState>((set, get) => ({
         activeProving: {
           trialId: proving.trialId,
           stage: "wallet-approval",
-          error: "Connect 1AM first. COHORT will not create a fake wallet.",
+          error: "Connect a wallet first. COHORT will not create a fake wallet.",
+        },
+      });
+      return;
+    }
+    if (state.wallet.canProve === false) {
+      set({
+        activeProving: {
+          trialId: proving.trialId,
+          stage: "wallet-approval",
+          error:
+            "Lace connected. Proof support for this flow is unavailable in the current Lace environment.",
         },
       });
       return;
@@ -373,6 +565,7 @@ export const useCohortStore = create<CohortState>((set, get) => ({
         view: { name: "result", checkId: id },
         history: [...s.history, s.view],
       }));
+      void savePublicProofs(publicProofsFromChecks(get().checks)).catch(() => {});
     } catch (err) {
       if (provingRunId !== runId) return;
       set({
@@ -436,6 +629,7 @@ export const useCohortStore = create<CohortState>((set, get) => ({
           },
         };
       });
+      void savePublicProofs(publicProofsFromChecks(get().checks)).catch(() => {});
     } catch {
       set((s) => {
         const current = s.checks[checkId];
