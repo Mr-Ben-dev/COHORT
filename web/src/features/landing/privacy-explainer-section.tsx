@@ -119,7 +119,7 @@ export function PrivacyExplainerSection() {
                 { label: "Age", value: "•••" },
                 { label: "Conditions", value: "•••" },
                 { label: "Medications", value: "•••" },
-                { label: "Free-text notes", value: "•••" },
+                { label: "Witness secret", value: "•••" },
               ].map((row) => (
                 <li
                   key={row.label}

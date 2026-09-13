@@ -1643,7 +1643,7 @@ const STEPS: StepDef[] = [
         <Accent>proof</Accent> carries the answer.
       </span>,
     ],
-    body: "A zero-knowledge proof is sealed via your Midnight wallet: the eligibility computation is verified without revealing a single fact behind it.",
+    body: "A zero-knowledge proof is sealed via your Midnight wallet. The chain verifies the typed eligibility computation without publishing your age or mapped flags.",
     link: { label: "How zero-knowledge works", anchor: "midnight" },
     art: ProofSealArt,
   },

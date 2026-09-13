@@ -1,168 +1,117 @@
 "use client";
 
-import { useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-  type MotionValue,
-} from "framer-motion";
-import { SectionShell, SectionContent } from "./section-kit";
-import { LineReveal } from "@/components/brand/line-reveal";
+  BadgeCheck,
+  FlaskConical,
+  LockKeyhole,
+  Search,
+  Share2,
+} from "lucide-react";
+import { Eyebrow, SectionShell, SectionContent } from "./section-kit";
 
 /**
- * FOCUS — the measured Impilo statement section.
- * A 124px two-line claim reveals line-by-line ("line-inner") while
- * pinned, and beneath it sits the signature WHITE pill marquee: a
- * 296×54 cloud-white pill, overflow clipped, scrolling "SCROLLING …
- * KEEP SCROLLING" pairs in #5250d9 with a cyan ECG trace between them.
+ * Product story — replaces the old 145vh pinned "focus on the science"
+ * band. Five tight steps, no empty canvas, no crypto-first wording.
  */
 
-const REVEAL_LINE = "Qualify privately. You choose what happens next.";
-const REVEAL_WINDOW: [number, number] = [0.22, 0.68];
-const WORD_SPAN = 0.14;
-
-const MARQUEE_PAIRS = 8;
-
-function ScrollWord({
-  progress,
-  range,
-  reduce,
-  children,
-}: {
-  progress: MotionValue<number>;
-  range: [number, number];
-  reduce: boolean | null;
-  children: string;
-}) {
-  const opacity = useTransform(progress, range, [0.12, 1]);
-  const y = useTransform(progress, range, [14, 0]);
-  if (reduce) {
-    return <span className="inline-block">{children}</span>;
-  }
-  return (
-    <motion.span style={{ opacity, y }} className="inline-block">
-      {children}
-    </motion.span>
-  );
-}
-
-/** One "SCROLLING ⌁ KEEP SCROLLING" pair — the ECG sits between the words. */
-function MarqueePair({ hidden }: { hidden: boolean }) {
-  return (
-    <span className="flex shrink-0 items-center gap-3 px-2" aria-hidden={hidden || undefined}>
-      <span className="whitespace-nowrap text-[13px] font-semibold tracking-[0.02em] text-iris-halo">
-        SCROLLING
-      </span>
-      <svg viewBox="0 0 44 16" className="h-4 w-11 shrink-0" fill="none" aria-hidden="true">
-        <path
-          d="M0 8h12l3-5 4 10 3-5h8l2-3 3 6 2-3h7"
-          stroke="var(--color-clinical-cyan)"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="ecg-dash"
-        />
-      </svg>
-      <span className="whitespace-nowrap text-[13px] font-semibold tracking-[0.02em] text-iris-halo">
-        KEEP SCROLLING
-      </span>
-    </span>
-  );
-}
+const STEPS = [
+  {
+    n: "01",
+    icon: Search,
+    title: "Problem",
+    body: "Sites need eligible patients. Patients should not have to hand over a record to find out if they even qualify.",
+  },
+  {
+    n: "02",
+    icon: LockKeyhole,
+    title: "Private match",
+    body: "Typed trial rules stay public. Your age and mapped flags stay on this device.",
+  },
+  {
+    n: "03",
+    icon: FlaskConical,
+    title: "Midnight proof",
+    body: "1AM proves the typed fit in-browser. The chain sees a nullifier and a counter — not the record.",
+  },
+  {
+    n: "04",
+    icon: BadgeCheck,
+    title: "Qualification",
+    body: "Verified eligibility is a real Preprod transaction. A local preview is only a potential match.",
+  },
+  {
+    n: "05",
+    icon: Share2,
+    title: "You choose next",
+    body: "Keep private, share a public qualification, continue to the official study, or copy a public-safe packet.",
+  },
+] as const;
 
 export function ProblemSection() {
   const reduce = useReducedMotion();
-  const pinRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: pinRef,
-    offset: ["start end", "end start"],
-  });
-
-  const words = REVEAL_LINE.split(" ");
-  const stagger =
-    (REVEAL_WINDOW[1] - REVEAL_WINDOW[0] - WORD_SPAN) /
-    Math.max(words.length - 1, 1);
-  const ranges = words.map((_, i): [number, number] => [
-    REVEAL_WINDOW[0] + i * stagger,
-    REVEAL_WINDOW[0] + i * stagger + WORD_SPAN,
-  ]);
-
   const reveal = (delay: number) => ({
-    initial: reduce ? false : { opacity: 0, y: 24 },
+    initial: reduce ? false : { opacity: 0, y: 16 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: "-80px" },
-    transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] as const },
   });
 
   return (
     <SectionShell
       id="focus"
+      veil
       aria-labelledby="focus-heading"
-      className="overflow-hidden py-0 sm:py-0 lg:py-0"
+      className="overflow-hidden py-16 sm:py-20 lg:py-24"
     >
-      <div ref={pinRef} className="relative lg:h-[145vh]">
-        {/* Content rides high (justify-start + 14vh) so the statement
-            enters view almost as soon as the track appears — no dead
-            canvas between the hero dashboard and the pinned claim. */}
-        <div className="sticky top-0 flex min-h-[84vh] flex-col items-center justify-start pt-[11vh] text-center sm:pt-[10vh] lg:min-h-screen">
-          <SectionContent>
-            <LineReveal
-              as="h2"
-              id="focus-heading"
-              className="text-display-xl font-semibold text-cloud-white"
-              delay={0.1}
-            >
-              <span>Allowing you to focus</span>
-              <span>on the science.</span>
-            </LineReveal>
+      <div
+        className="bg-noise pointer-events-none absolute inset-0"
+        aria-hidden="true"
+      />
+      <SectionContent className="relative">
+        <motion.div {...reveal(0)} className="mx-auto max-w-3xl text-center">
+          <Eyebrow>The product</Eyebrow>
+          <h2
+            id="focus-heading"
+            className="mt-4 text-heading font-semibold text-cloud-white sm:text-heading-lg"
+          >
+            Discover research. Prove your fit. Keep the record.
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-body text-pearl/85">
+            You can discover research opportunities and prove your fit
+            without handing over your medical record.
+          </p>
+        </motion.div>
 
-            <p className="mx-auto mt-8 max-w-2xl text-heading-sm font-medium text-cloud-white/90 sm:mt-10">
-              {words.map((word, i) => (
-                <span key={`${word}-${i}`}>
-                  {i > 0 ? " " : ""}
-                  <ScrollWord
-                    progress={scrollYProgress}
-                    range={ranges[i]}
-                    reduce={reduce}
-                  >
-                    {word}
-                  </ScrollWord>
-                </span>
-              ))}
-            </p>
-
-            <motion.p
-              {...reveal(0.1)}
-              className="mx-auto mt-6 max-w-xl text-body text-pearl/80"
-            >
-            Eligibility checks usually demand the record before the answer
-            exists. COHORT moves the typed check onto the patient&apos;s device
-            and publishes only a qualification signal — so a site can know
-            &quot;eligible&quot; without receiving the dossier.
-            </motion.p>
-
-            {/* The Impilo signature — white pill marquee with ECG trace */}
-            <motion.div
-              {...reveal(0.18)}
-              className="mt-12 flex justify-center"
-            >
-              <div
-                className="marquee-mask grid h-[54px] w-[300px] overflow-hidden rounded-pill bg-cloud-white sm:w-[340px]"
-                role="marquee"
-                aria-label="Keep scrolling for more"
+        <ol className="mx-auto mt-12 grid max-w-5xl gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {STEPS.map((step, i) => {
+            const Icon = step.icon;
+            return (
+              <motion.li
+                key={step.n}
+                {...reveal(0.08 + i * 0.06)}
+                className="rounded-card border border-iris-border bg-cloud-white/[0.06] p-4 text-left"
               >
-                <div className="marquee-track items-center">
-                  {Array.from({ length: MARQUEE_PAIRS }, (_, i) => (
-                    <MarqueePair key={i} hidden={i > 0} />
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </SectionContent>
-        </div>
-      </div>
+                <p className="text-caption font-semibold uppercase tracking-[0.16em] text-clinical-cyan">
+                  {step.n}
+                </p>
+                <span
+                  className="mt-3 flex h-9 w-9 items-center justify-center rounded-full border border-iris-border text-mint-vital"
+                  aria-hidden="true"
+                >
+                  <Icon className="h-4 w-4" />
+                </span>
+                <h3 className="mt-3 text-body font-semibold text-cloud-white">
+                  {step.title}
+                </h3>
+                <p className="mt-2 text-body-sm leading-relaxed text-pearl/75">
+                  {step.body}
+                </p>
+              </motion.li>
+            );
+          })}
+        </ol>
+      </SectionContent>
     </SectionShell>
   );
 }

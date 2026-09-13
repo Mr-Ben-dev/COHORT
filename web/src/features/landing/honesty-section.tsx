@@ -37,7 +37,7 @@ const LIMITS = [
   },
   {
     title: "It doesn't pay a referral bounty.",
-    body: "The live circuit records a uniqueness token, not an escrowed payment. A paid marketplace is coming next — it is not shown as live.",
+    body: "The live circuit records a uniqueness token, not an escrowed payment. A paid marketplace is not live. It ships only if a later circuit can actually hold coins — it is not shown as live today.",
   },
 ];
 

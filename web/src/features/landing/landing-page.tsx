@@ -15,7 +15,7 @@ import { FinalCtaSection } from "./final-cta-section";
 
 /**
  * Landing narrative — the measured Impilo page rhythm (top → bottom):
- *   dark hero → dark FOCUS statement (pinned, scroll word-reveal) →
+ *   dark hero → compact product story (problem → match → proof → next) →
  *   navy steps 01–04 → dark privacy boundary (veiled) →
  *   light white-glove privacy badges → navy trusted-by (public data) →
  *   light integrations (isometric cards) → light honesty rows →

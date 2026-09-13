@@ -24,16 +24,16 @@ const NOW = [
 
 const NEXT = [
   {
-    title: "Issuer-signed health facts",
-    body: "A provider can attest a structured claim. Not live. No fake verified-patient badge.",
+    title: "Site verification console",
+    body: "A research site confirms a public proof on the indexer from trial id + transaction hash. No inbox. No PHI. Not live yet.",
   },
   {
-    title: "EHR / SMART on FHIR",
-    body: "Import stays Coming soon until an authentic issuer exists.",
+    title: "Issuer-signed health facts",
+    body: "Only if a Compact signature check compiles and 1AM can prove it on the then-supported network. No fake verified-patient badge.",
   },
   {
     title: "Escrowed referral marketplace",
-    body: "Sites paying for qualified referrals needs a new circuit. The current contract does not hold bounty.",
+    body: "Needs a new circuit that can actually receive and release coins. The current contract does not hold bounty. Not shown as live.",
   },
 ];
 
@@ -56,7 +56,7 @@ export function ProductLadderSection() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto max-w-2xl text-center"
         >
-          <Eyebrow tone="ink">Available now · Coming next</Eyebrow>
+          <Eyebrow tone="ink">Available now · Next, if it is real</Eyebrow>
           <h2
             id="now-next-heading"
             className="mt-4 text-heading font-semibold text-iris-ink"
@@ -66,7 +66,7 @@ export function ProductLadderSection() {
           <p className="mt-5 text-body text-iris-ink/70">
             The product is private matching, a verified eligibility
             signal, and a user-controlled next step. It is not a
-            medical-records warehouse and not a paid referral market — yet.
+            medical-records warehouse and not a paid referral market.
           </p>
         </motion.div>
 
@@ -95,7 +95,7 @@ export function ProductLadderSection() {
           </div>
           <div>
             <p className="text-caption font-semibold uppercase tracking-[0.16em] text-iris-ink/55">
-              Coming next
+              Next, if it is real
             </p>
             <ul className="mt-4 divide-y divide-iris-ink/[0.16]">
               {NEXT.map((row, i) => (
