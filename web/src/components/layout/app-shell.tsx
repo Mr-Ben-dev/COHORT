@@ -6,6 +6,7 @@ import { SiteNav } from "@/components/layout/site-nav";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { useCohortStore, type View } from "@/state/cohort-store";
 import { pollConnectionOrNull } from "@/services/wallet";
+import { WalletModal } from "@/features/wallet/wallet-modal";
 import { LandingPage } from "@/features/landing/landing-page";
 import { TrialsView } from "@/features/discovery/trials-view";
 import { TrialDetailView } from "@/features/trial-detail/trial-detail-view";
@@ -105,7 +106,7 @@ export function AppShell() {
               status: "wrong-network",
               provider: wallet.status === "connected" ? wallet.provider : "1AM",
               networkId: "unknown",
-              label: "Wrong network",
+              label: "Switch to Preprod",
             },
           });
         }
@@ -137,6 +138,7 @@ export function AppShell() {
   return (
     <div className="flex min-h-screen flex-col bg-deep-iris">
       <SiteNav />
+      <WalletModal />
       <main id="main" className="flex-1">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div

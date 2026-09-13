@@ -52,11 +52,11 @@ test('referral copy never claims a site received the qualification', () => {
 
 test('profile view stays on-device and does not mention a server medical record', () => {
   const src = fs.readFileSync(path.join(root, 'web/src/features/profile/profile-view.tsx'), 'utf8');
-  assert.match(src, /These facts stay on your device/);
+  assert.match(src, /These facts stay on this device/);
   assert.match(src, /Find trials for me/);
   assert.equal(src.includes('fetch('), false);
   assert.equal(src.includes('localStorage'), false);
-  assert.match(src, /Clear private data/);
+  assert.match(src, /Clear private profile\/data/);
   assert.match(src, /Web Crypto AES-GCM/);
 });
 

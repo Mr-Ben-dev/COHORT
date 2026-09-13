@@ -260,6 +260,10 @@ export type WalletState =
       networkId?: string;
       rdns?: string;
       canProve?: boolean;
+      /** Truncated public-safe address for display only */
+      address?: string;
+      /** Hashed local namespace. Never a seed or medical fact. */
+      accountId?: string;
     }
   | { status: "approving"; provider: WalletProvider; label: string };
 

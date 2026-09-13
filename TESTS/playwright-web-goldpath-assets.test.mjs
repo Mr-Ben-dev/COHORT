@@ -114,7 +114,7 @@ test('Vercel proving view preloads dapp without sending private facts', async ()
     });
     assert.equal(loaded, true);
     assert.equal(leaked.length, 0, JSON.stringify(leaked));
-    await page.getByRole('button', { name: 'Connect' }).first().waitFor();
+    await page.getByRole('button', { name: 'Connect wallet' }).first().waitFor();
   } finally {
     await browser.close();
   }

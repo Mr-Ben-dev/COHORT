@@ -243,7 +243,7 @@ export function ProvingView({ trialId }: { trialId: string }) {
               <>
                 {wallet.status === "connected" && wallet.canProve === false ? (
                   <p className="mb-4 text-body-sm text-clinical-cyan" role="status">
-                    Lace connected. Proof support for this flow is unavailable in the current Lace environment.
+                    Connected — proof support for this flow is limited in the current Lace environment.
                   </p>
                 ) : null}
                 {wallet.status === "connecting" && wallet.provider !== "1AM" ? (

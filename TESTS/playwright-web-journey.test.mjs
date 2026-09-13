@@ -42,7 +42,7 @@ test('Vercel: too-young local preview is ineligible and invents no tx', async ()
     assert.doesNotMatch(body, /0x[0-9a-f]{16}/i);
     assert.match(body, /nothing was shared/i);
     assert.match(body, /No wallet was connected/i);
-    assert.equal(await page.getByRole('button', { name: 'Connect' }).count(), 0);
+    assert.equal(await page.getByRole('button', { name: 'Connect', exact: true }).count(), 0);
   } finally {
     await browser.close();
   }
@@ -62,7 +62,7 @@ test('Vercel: eligible preview waits for 1AM and does not fake confirmed', async
     assert.match(body, /Looking for the 1AM|is injected|not injected/i);
     assert.match(body, /Connect/);
     assert.equal(await page.getByRole('heading', { name: /^Eligible$/i }).count(), 0);
-    await page.getByRole('button', { name: 'Connect' }).first().waitFor();
+    await page.getByRole('button', { name: 'Connect wallet' }).first().waitFor();
   } finally {
     await browser.close();
   }
@@ -121,7 +121,7 @@ test('Vercel: private profile finds potential matches without posting facts', as
     await page.goto(VERCEL_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.getByRole('navigation', { name: 'Main navigation' }).waitFor({ timeout: 30000 });
     await page.getByRole('button', { name: 'My Profile', exact: true }).click();
-    await page.getByRole('heading', { name: /These facts stay on your device/i }).waitFor({ timeout: 15000 });
+    await page.getByRole('heading', { name: /These facts stay on this device/i }).waitFor({ timeout: 15000 });
     await page.locator('#profile-age').fill('31');
     await page.getByRole('group', { name: 'Mapped condition flag' }).getByRole('button', { name: 'Yes' }).click();
     await page.getByRole('group', { name: 'Excluded medication flag' }).getByRole('button', { name: 'No' }).click();
@@ -156,7 +156,7 @@ test('Vercel: private profile survives reload without posting facts', async () =
     await page.goto(VERCEL_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.getByRole('navigation', { name: 'Main navigation' }).waitFor({ timeout: 30000 });
     await page.getByRole('button', { name: 'My Profile', exact: true }).click();
-    await page.getByRole('heading', { name: /These facts stay on your device/i }).waitFor({ timeout: 15000 });
+    await page.getByRole('heading', { name: /These facts stay on this device/i }).waitFor({ timeout: 15000 });
     await page.locator('#profile-age').fill('31');
     await page.getByRole('group', { name: 'Mapped condition flag' }).getByRole('button', { name: 'Yes' }).click();
     await page.getByRole('group', { name: 'Excluded medication flag' }).getByRole('button', { name: 'No' }).click();
@@ -164,7 +164,7 @@ test('Vercel: private profile survives reload without posting facts', async () =
     await page.waitForTimeout(600);
     await page.reload({ waitUntil: 'domcontentloaded' });
     await page.getByRole('button', { name: 'My Profile', exact: true }).click();
-    await page.getByRole('heading', { name: /These facts stay on your device/i }).waitFor({ timeout: 15000 });
+    await page.getByRole('heading', { name: /These facts stay on this device/i }).waitFor({ timeout: 15000 });
     await page.waitForFunction(() => {
       const el = document.querySelector('#profile-age');
       return Boolean(el && 'value' in el && el.value === '31');

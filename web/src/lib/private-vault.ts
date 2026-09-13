@@ -7,6 +7,7 @@ import {
   generateVaultKey,
   VAULT_CANARY,
 } from "@/lib/vault-crypto";
+import { sanitizeNamespace } from "@/lib/wallet-account";
 
 const DB_NAME = "cohort-private-v1";
 const DB_VERSION = 1;
@@ -16,6 +17,7 @@ const KEY_ID = "profile-aes";
 const PROFILE_ID = "profile";
 const CANARY_ID = "canary";
 const PROOFS_ID = "public-proofs";
+const ACTIVE_NS_ID = "active-ns";
 
 export type PublicProofCacheEntry = {
   trialId: string;
@@ -26,6 +28,8 @@ export type PublicProofCacheEntry = {
   network: string;
   referralStatus?: "none" | "commitment" | "shared";
 };
+
+let activeNs: string | null = null;
 
 function asBytes(value: unknown): Uint8Array {
   if (value instanceof Uint8Array) return value;
@@ -81,6 +85,21 @@ function idbPut(store: string, id: string, value: unknown): Promise<void> {
   );
 }
 
+function idbDelete(store: string, id: string): Promise<void> {
+  return openDb().then(
+    (db) =>
+      new Promise((resolve, reject) => {
+        const tx = db.transaction(store, "readwrite");
+        tx.objectStore(store).delete(id);
+        tx.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+        tx.onerror = () => reject(tx.error);
+      }),
+  );
+}
+
 function idbClear(): Promise<void> {
   return openDb().then(
     (db) =>
@@ -124,16 +143,74 @@ function allowedProfile(profile: PrivateProfile): PrivateProfile {
   return next;
 }
 
+function profileRecordId(ns = activeNs): string {
+  return ns ? `profile:${ns}` : PROFILE_ID;
+}
+
+function proofsRecordId(ns = activeNs): string {
+  return ns ? `proofs:${ns}` : PROOFS_ID;
+}
+
+export function getVaultNamespace(): string | null {
+  return activeNs;
+}
+
+export function setVaultNamespace(ns: string | null): void {
+  activeNs = sanitizeNamespace(ns);
+}
+
+export async function persistActiveNamespace(ns: string | null): Promise<void> {
+  const next = sanitizeNamespace(ns);
+  activeNs = next;
+  if (!next) {
+    await idbDelete(DATA_STORE, ACTIVE_NS_ID);
+    return;
+  }
+  await idbPut(DATA_STORE, ACTIVE_NS_ID, next);
+}
+
+export async function readActiveNamespace(): Promise<string | null> {
+  try {
+    const stored = await idbGet<unknown>(DATA_STORE, ACTIVE_NS_ID);
+    const next = sanitizeNamespace(typeof stored === "string" ? stored : null);
+    activeNs = next;
+    return next;
+  } catch {
+    return activeNs;
+  }
+}
+
+export async function migrateLegacyIfNeeded(ns: string): Promise<void> {
+  const next = sanitizeNamespace(ns);
+  if (!next) return;
+  const namespacedProfile = await idbGet<unknown>(DATA_STORE, profileRecordId(next));
+  const namespacedProofs = await idbGet<unknown>(DATA_STORE, proofsRecordId(next));
+  if (!namespacedProfile) {
+    const legacy = await idbGet<unknown>(DATA_STORE, PROFILE_ID);
+    if (legacy) {
+      await idbPut(DATA_STORE, profileRecordId(next), legacy);
+      await idbDelete(DATA_STORE, PROFILE_ID);
+    }
+  }
+  if (!namespacedProofs) {
+    const legacy = await idbGet<unknown>(DATA_STORE, PROOFS_ID);
+    if (legacy) {
+      await idbPut(DATA_STORE, proofsRecordId(next), legacy);
+      await idbDelete(DATA_STORE, PROOFS_ID);
+    }
+  }
+}
+
 export async function savePrivateProfile(profile: PrivateProfile): Promise<void> {
   const key = await loadOrCreateKey();
   const payload = allowedProfile(profile);
-  await idbPut(DATA_STORE, PROFILE_ID, await encryptJson(key, payload));
+  await idbPut(DATA_STORE, profileRecordId(), await encryptJson(key, payload));
 }
 
 export async function loadPrivateProfile(): Promise<PrivateProfile | null> {
   try {
     const key = await loadOrCreateKey();
-    const packed = await idbGet<unknown>(DATA_STORE, PROFILE_ID);
+    const packed = await idbGet<unknown>(DATA_STORE, profileRecordId());
     if (!packed) return null;
     const profile = await decryptJson<PrivateProfile>(key, asBytes(packed));
     return allowedProfile(profile);
@@ -152,16 +229,22 @@ export async function savePublicProofs(entries: PublicProofCacheEntry[]): Promis
     network: String(e.network || "Midnight Preprod").slice(0, 40),
     referralStatus: e.referralStatus,
   }));
-  await idbPut(DATA_STORE, PROOFS_ID, safe);
+  await idbPut(DATA_STORE, proofsRecordId(), safe);
 }
 
 export async function loadPublicProofs(): Promise<PublicProofCacheEntry[]> {
-  const rows = await idbGet<PublicProofCacheEntry[]>(DATA_STORE, PROOFS_ID);
+  const rows = await idbGet<PublicProofCacheEntry[]>(DATA_STORE, proofsRecordId());
   return Array.isArray(rows) ? rows : [];
+}
+
+export async function clearCurrentNamespace(): Promise<void> {
+  await idbDelete(DATA_STORE, profileRecordId());
+  await idbDelete(DATA_STORE, proofsRecordId());
 }
 
 export async function clearPrivateVault(): Promise<void> {
   keyMemo = null;
+  activeNs = null;
   await idbClear();
 }
 

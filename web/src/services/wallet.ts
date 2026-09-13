@@ -8,6 +8,7 @@ import {
   type DiscoveredWallet,
 } from "@/lib/wallet-discovery";
 import { clearPreferredRdns, readPreferredRdns, writePreferredRdns } from "@/lib/wallet-preference";
+import { namespaceFromPublicId, readPublicIdFromAddresses, truncatePublicId } from "@/lib/wallet-account";
 import { humanError } from "@/lib/human-error";
 
 export interface WalletService {
@@ -32,6 +33,8 @@ export type ConnectedWalletApi = {
   hintUsage?: (methods: string[]) => Promise<void>;
   getDustBalance?: () => Promise<{ balance?: bigint; cap?: bigint } | null>;
   getUnshieldedBalances?: () => Promise<unknown>;
+  getShieldedAddresses?: () => Promise<unknown>;
+  getUnshieldedAddress?: () => Promise<unknown>;
 };
 
 export type WalletSnapshot = {
@@ -165,17 +168,36 @@ class ConnectorWalletService implements WalletService {
         }
       }
 
+      let publicId = "";
+      if (typeof nextApi.getShieldedAddresses === "function") {
+        try {
+          const addresses = await nextApi.getShieldedAddresses();
+          throwIfStale();
+          publicId = readPublicIdFromAddresses(addresses) || "";
+        } catch (err) {
+          if (err && typeof err === "object" && "code" in err && String((err as { code?: string }).code) === "WALLET_SUPERSEDED") {
+            throw err;
+          }
+        }
+      }
+      if (!publicId && typeof nextApi.getUnshieldedAddress === "function") {
+        try {
+          const unshielded = await nextApi.getUnshieldedAddress();
+          throwIfStale();
+          publicId = readPublicIdFromAddresses(unshielded) || "";
+        } catch (err) {
+          if (err && typeof err === "object" && "code" in err && String((err as { code?: string }).code) === "WALLET_SUPERSEDED") {
+            throw err;
+          }
+        }
+      }
+
       throwIfStale();
       connectedApi = nextApi;
       writePreferredRdns(rdns);
-      const label =
-        provider === "Lace"
-          ? canProve
-            ? `Lace · ${dust}`
-            : "Lace connected"
-          : dust === "Ready"
-            ? "1AM · Ready"
-            : `1AM · ${dust}`;
+      const accountId = await namespaceFromPublicId(rdns, publicId || rdns);
+      const address = publicId ? truncatePublicId(publicId) : undefined;
+      const label = provider === "Lace" ? "Lace" : "1AM";
 
       return {
         status: "connected" as const,
@@ -185,6 +207,8 @@ class ConnectorWalletService implements WalletService {
         networkId,
         rdns,
         canProve,
+        address,
+        accountId,
       };
     });
   }

@@ -47,7 +47,7 @@ export function ProfileView() {
           id="profile-heading"
           className="mt-3 text-[28px] font-semibold text-cloud-white sm:text-heading-sm"
         >
-          These facts stay on your device.
+          These facts stay on this device.
         </h1>
         <p className="mt-3 max-w-xl text-body text-pearl/80">
           Use them to find potential matches across trials. They are encrypted
@@ -188,7 +188,7 @@ export function ProfileView() {
             void clearProfile();
           }}
         >
-          Clear private data
+          Clear private profile/data
         </PillButton>
         <Tag tone={ready ? "mint" : "lilac"}>
           {ready ? "Ready for potential matches" : "Add age, condition, and medication"}
