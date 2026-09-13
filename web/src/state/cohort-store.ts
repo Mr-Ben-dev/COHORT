@@ -337,6 +337,7 @@ export const useCohortStore = create<CohortState>((set, get) => ({
     } catch (err) {
       const code =
         err && typeof err === "object" && "code" in err ? String((err as { code?: string }).code) : "";
+      if (code === "WALLET_SUPERSEDED") return;
       if (code === "WALLET_WRONG_NETWORK") {
         set({
           wallet: {
@@ -582,6 +583,8 @@ export const useCohortStore = create<CohortState>((set, get) => ({
 
   cancelProving: () => {
     provingRunId++;
+    walletService.abandonPendingConnect();
+    walletService.disconnect();
     const trialId = get().activeProving?.trialId;
     const inputs = { ...get().inputs };
     if (trialId) delete inputs[trialId];
@@ -590,7 +593,9 @@ export const useCohortStore = create<CohortState>((set, get) => ({
       pendingEligible: null,
       inputs,
       view: { name: "trials" },
+      wallet: { status: "disconnected" },
     });
+    get().refreshWalletPresence();
   },
 
   requestReferral: async (checkId) => {

@@ -15,6 +15,7 @@ export interface WalletService {
   getConnectedApi(): ConnectedWalletApi | null;
   disconnect(): void;
   forgetPreference(): void;
+  abandonPendingConnect(): void;
   snapshot(): WalletSnapshot;
 }
 
@@ -39,6 +40,7 @@ export type WalletSnapshot = {
 };
 
 let connectedApi: ConnectedWalletApi | null = null;
+let connectSeq = 0;
 
 function asProvider(kind: DiscoveredWallet["kind"]): WalletProvider {
   return kind === "Lace" ? "Lace" : "1AM";
@@ -85,11 +87,20 @@ class ConnectorWalletService implements WalletService {
           ? "io.lace.midnight"
           : "com.midnight.1am";
 
+    const seq = ++connectSeq;
     const pending = injected.connect("preprod");
     return pending.then(async (api) => {
-      connectedApi = api as ConnectedWalletApi;
-      if (typeof connectedApi.hintUsage === "function") {
-        await connectedApi.hintUsage([
+      const throwIfStale = () => {
+        if (seq !== connectSeq) {
+          throw Object.assign(new Error("Wallet connect superseded."), {
+            code: "WALLET_SUPERSEDED",
+          });
+        }
+      };
+      throwIfStale();
+      const nextApi = api as ConnectedWalletApi;
+      if (typeof nextApi.hintUsage === "function") {
+        await nextApi.hintUsage([
           "getProvingProvider",
           "getDustBalance",
           "getShieldedAddresses",
@@ -100,52 +111,62 @@ class ConnectorWalletService implements WalletService {
           "balanceUnsealedTransaction",
           "submitTransaction",
         ]);
+        throwIfStale();
       }
 
       let networkId = "preprod";
       let connectionStatus = "connected";
-      if (typeof connectedApi.getConnectionStatus === "function") {
-        const status = await connectedApi.getConnectionStatus();
+      if (typeof nextApi.getConnectionStatus === "function") {
+        const status = await nextApi.getConnectionStatus();
+        throwIfStale();
         if (status && typeof status === "object") {
           if ("networkId" in status && status.networkId) networkId = String(status.networkId);
           if ("status" in status && status.status) connectionStatus = String(status.status);
         }
       }
       if (connectionStatus !== "connected") {
-        connectedApi = null;
         throw Object.assign(new Error("Wallet is not connected."), {
           code: "WALLET_UNAVAILABLE",
           publicMessage: "The wallet did not stay connected. Approve COHORT, then try again.",
         });
       }
-      if (typeof connectedApi.getConfiguration === "function") {
+      if (typeof nextApi.getConfiguration === "function") {
         try {
-          const cfg = await connectedApi.getConfiguration();
+          const cfg = await nextApi.getConfiguration();
+          throwIfStale();
           if (cfg?.networkId) networkId = String(cfg.networkId);
-        } catch {
+        } catch (err) {
+          if (err && typeof err === "object" && "code" in err && String((err as { code?: string }).code) === "WALLET_SUPERSEDED") {
+            throw err;
+          }
           /* some wallets expose status but not configuration */
         }
       }
       if (!isPreprod(networkId)) {
-        connectedApi = null;
         throw Object.assign(new Error("Wrong network."), {
           code: "WALLET_WRONG_NETWORK",
           publicMessage: `This wallet is on ${networkId}, not Preprod. Switch the wallet to Preprod, then reconnect.`,
         });
       }
 
-      const canProve = typeof connectedApi.getProvingProvider === "function";
+      const canProve = typeof nextApi.getProvingProvider === "function";
       let dust: Extract<WalletState, { status: "connected" }>["dust"] = "Wallet syncing";
-      if (typeof connectedApi.getDustBalance === "function") {
+      if (typeof nextApi.getDustBalance === "function") {
         try {
-          const bal = await connectedApi.getDustBalance();
+          const bal = await nextApi.getDustBalance();
+          throwIfStale();
           if (bal && typeof bal === "object" && bal.balance === 0n) dust = "Needs DUST";
           else if (bal && typeof bal === "object") dust = "Ready";
-        } catch {
+        } catch (err) {
+          if (err && typeof err === "object" && "code" in err && String((err as { code?: string }).code) === "WALLET_SUPERSEDED") {
+            throw err;
+          }
           dust = "Wallet syncing";
         }
       }
 
+      throwIfStale();
+      connectedApi = nextApi;
       writePreferredRdns(rdns);
       const label =
         provider === "Lace"
@@ -176,7 +197,13 @@ class ConnectorWalletService implements WalletService {
     connectedApi = null;
   }
 
+  abandonPendingConnect() {
+    connectSeq += 1;
+    connectedApi = null;
+  }
+
   forgetPreference() {
+    connectSeq += 1;
     connectedApi = null;
     clearPreferredRdns();
   }

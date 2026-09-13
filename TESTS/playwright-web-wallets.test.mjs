@@ -128,3 +128,54 @@ test('Vercel: remembered rdns shows Reconnect without pretending the wallet is c
     await browser.close();
   }
 });
+
+test('Vercel: hanging UUID Lace connect keeps the picker and does not show 1AM waiting copy', async () => {
+  const browser = await launch();
+  const page = await browser.newPage();
+  try {
+    await page.addInitScript(() => {
+      window.midnight = {
+        'de92e046-24e0-416c-a936-be8b5ba38a07': {
+          rdns: 'io.lace.wallet',
+          name: 'lace',
+          apiVersion: '4.0.1',
+          connect() {
+            return new Promise(() => {});
+          },
+        },
+        '1am': {
+          rdns: 'com.midnight.1am',
+          name: '1AM',
+          icon: 'https://1am.xyz/favicon.ico',
+          apiVersion: '4.0.1',
+          getProvingProvider() {
+            return {};
+          },
+          connect(networkId) {
+            return Promise.resolve({
+              getProvingProvider() {
+                return {};
+              },
+              getConnectionStatus: async () => ({ status: 'connected', networkId: networkId || 'preprod' }),
+              getConfiguration: async () => ({ networkId: 'preprod' }),
+              getDustBalance: async () => ({ balance: 1n, cap: 10n }),
+            });
+          },
+        },
+      };
+    });
+    await openCheck(page, VERCEL_URL);
+    await fillEligible(page);
+    await page.getByRole('button', { name: 'Connect' }).nth(1).click();
+    await page.getByText(/Connecting to Lace/i).waitFor({ timeout: 15000 });
+    const body = await page.innerText('body');
+    assert.match(body, /Approve the Lace authorization popup/);
+    assert.match(body, /Connect your wallet/);
+    assert.doesNotMatch(body, /Still waiting on 1AM/);
+    assert.doesNotMatch(body, /Approve in 1AM/);
+    assert.equal(await page.getByRole('button', { name: 'Connect' }).count(), 1);
+    assert.equal(await page.getByRole('button', { name: 'Connecting' }).count(), 1);
+  } finally {
+    await browser.close();
+  }
+});

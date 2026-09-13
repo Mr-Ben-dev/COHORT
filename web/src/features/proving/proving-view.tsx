@@ -238,11 +238,20 @@ export function ProvingView({ trialId }: { trialId: string }) {
             className="mt-6 rounded-card border border-iris-border bg-cloud-white/[0.06] p-6 sm:p-8"
           >
             {WALLET_CHOOSER.has(wallet.status) ||
-            (wallet.status === "connected" && wallet.canProve === false) ? (
+            (wallet.status === "connected" && wallet.canProve === false) ||
+            (wallet.status === "connecting" && wallet.provider !== "1AM") ? (
               <>
                 {wallet.status === "connected" && wallet.canProve === false ? (
                   <p className="mb-4 text-body-sm text-clinical-cyan" role="status">
                     Lace connected. Proof support for this flow is unavailable in the current Lace environment.
+                  </p>
+                ) : null}
+                {wallet.status === "connecting" && wallet.provider !== "1AM" ? (
+                  <p className="mb-4 text-body-sm text-clinical-cyan" role="status">
+                    Connecting to Lace. Approve the Lace authorization popup if
+                    it opened. This proof path still needs in-browser proving,
+                    which Lace does not provide. You can connect 1AM instead.
+                    COHORT will not create a fake proof.
                   </p>
                 ) : null}
                 <WalletPicker />
@@ -264,7 +273,7 @@ export function ProvingView({ trialId }: { trialId: string }) {
                         ? "1AM does not open a page popup. Close the Transactions dashboard, then click the 1AM toolbar icon and approve COHORT. The proof starts after that authorization."
                         : "One confirmation — the proof, not your facts, is what gets signed."}
                     </p>
-                    {slowWallet ? (
+                    {slowWallet && wallet.provider === "1AM" ? (
                       <p className="mt-2 text-body-sm text-pearl/70" role="status">
                         Still waiting on 1AM. Reload the extension at
                         chrome://extensions, hard-refresh this page, then

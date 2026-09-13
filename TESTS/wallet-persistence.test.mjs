@@ -34,4 +34,9 @@ test('Lace proving fail-closed copy is present', () => {
   const proving = fs.readFileSync(path.join(root, 'web/src/features/proving/proving-view.tsx'), 'utf8');
   assert.match(proving, /canProve === false/);
   assert.match(proving, /Proof support for this flow is unavailable in the current Lace environment/);
+  assert.match(proving, /wallet.status === "connecting" && wallet.provider !== "1AM"/);
+  assert.match(proving, /Approve the Lace authorization popup/);
+  const wallet = fs.readFileSync(path.join(root, 'web/src/services/wallet.ts'), 'utf8');
+  assert.match(wallet, /abandonPendingConnect/);
+  assert.match(wallet, /WALLET_SUPERSEDED/);
 });
