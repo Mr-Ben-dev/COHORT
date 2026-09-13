@@ -87,8 +87,9 @@ export function PrivacyExplainerSection() {
             <span>stays yours.</span>
           </LineReveal>
           <p className="mt-5 text-body text-pearl/80">
-            Private facts stay on the left. The proof sits in the middle.
-            Verified eligibility is public. The facts never become the record.
+            Private facts stay on the left. Midnight proves the typed match
+            in the middle. Verified eligibility is public. Then you choose
+            what happens next — the facts never become the record.
           </p>
         </motion.div>
 

@@ -107,10 +107,11 @@ export function HeroSection() {
 
             <motion.p
               {...fadeUp(0.26)}
-              className="mt-7 max-w-md text-subheading text-pearl/85"
+              className="mt-7 max-w-lg text-subheading text-pearl/85"
             >
-              Find trials without handing over your record. When you
-              qualify, you choose what to share.
+              Find trials you may qualify for. Check your fit privately.
+              Prove it on Midnight. Choose what happens next — without
+              handing over your health record.
             </motion.p>
 
             <motion.div

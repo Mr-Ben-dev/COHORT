@@ -32,6 +32,10 @@ const LIMITS = [
     body: "No ads, no data brokerage, no analytics on your answers. The only output is the proof you choose to publish.",
   },
   {
+    title: "It doesn't message the study site for you.",
+    body: "There is no COHORT site inbox. Requesting next-step contact copies a public-safe packet and opens the official study record.",
+  },
+  {
     title: "It doesn't pay a referral bounty.",
     body: "The live circuit records a uniqueness token, not an escrowed payment. A paid marketplace is coming next — it is not shown as live.",
   },

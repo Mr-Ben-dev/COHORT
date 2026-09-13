@@ -2,6 +2,8 @@
 
 Prove clinical-trial eligibility on Midnight without sending your private medical facts to the COHORT server.
 
+Product: **Find trials you may qualify for. Check your fit privately. Prove it on Midnight. Choose what happens next — without handing over your health record.**
+
 This directory is the application + Compact circuit + privacy tests. Operator setup is in **[FINAL_SETUP.md](./FINAL_SETUP.md)** (single setup document).
 
 Pinned public-network stack: Compact **0.31.1** / language **0.23** / compact-runtime **0.16.0** / midnight-js **4.1.1** / DApp Connector **4.0.1** / wallet-sdk **1.2.0** / on-chain runtime **3.0.0** (npm `overrides`). Do not mix Compact 0.34 / ledger 9 / midnight-js 5.x with Preview, Preprod, or Mainnet.
@@ -12,7 +14,7 @@ Non-visual DApp interface (future `web` folder): `packages/dapp`. `npm test` inc
 
 Public Compact 0.31.1 circuit artifacts (not wallet secrets) are served at same-origin `/zk/keys`, `/zk/zkir`, and `/zk/compiler`. FetchZkConfigProvider should use `{origin}/zk/`. The hosted `.prover` file is a circuit proving key, not a seed.
 
-Product: **private trial matching + verified eligibility + a user-controlled public qualification**. Not a medical-records warehouse. Not a paid referral market (escrow is coming next). Facts are self-attested typed witnesses; the circuit does not prove EHR authenticity.
+Product: **private trial matching + verified eligibility + a user-controlled next step** (keep private, share a public qualification, continue to the official study, or copy a public-safe contact packet). Not a medical-records warehouse. Not a paid referral market (escrow is coming next). Facts are self-attested typed witnesses; the circuit does not prove EHR authenticity. There is no live site inbox.
 
 A private profile is encrypted in this browser origin (IndexedDB + Web Crypto AES-GCM). It is never POSTed. Wallet session preference stores only the selected `rdns`. Potential match is a local preview. Verified eligibility is a Preprod transaction. Sharing posts a public-safe qualification. There is no live site inbox. Lace can connect; this proof path still requires 1AM `getProvingProvider`.
 

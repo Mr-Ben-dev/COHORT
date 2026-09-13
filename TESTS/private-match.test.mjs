@@ -35,11 +35,32 @@ test('trial cards distinguish potential match from verified eligibility', () => 
 
 test('result copy does not claim a site received the referral', () => {
   const src = fs.readFileSync(path.join(root, 'web/src/features/result/result-view.tsx'), 'utf8');
+  const handoff = fs.readFileSync(path.join(root, 'web/src/features/result/handoff-actions.tsx'), 'utf8');
   assert.match(src, /Commitment created/);
   assert.match(src, /Not shared/);
   assert.equal(src.includes('Site received'), false);
+  assert.equal(handoff.includes('Site received'), false);
   assert.match(src, /Your record stayed with you/);
   assert.match(src, /Eligibility verified/);
+  assert.match(handoff, /What happens next\?/);
+  assert.match(handoff, /Keep private/);
+  assert.match(handoff, /Share public qualification/);
+  assert.match(handoff, /Continue to the study/);
+  assert.match(handoff, /Request next-step contact/);
+  assert.match(handoff, /no live site inbox/);
+  assert.match(handoff, /does not message sites/);
+});
+
+test('public qualification packet never includes private facts', () => {
+  const src = fs.readFileSync(path.join(root, 'web/src/lib/public-packet.ts'), 'utf8');
+  assert.equal(src.includes('hasCondition'), false);
+  assert.equal(src.includes('medication'), false);
+  assert.equal(src.includes('FHIR'), false);
+  assert.equal(src.includes('witness'), false);
+  assert.equal(src.includes('profile.'), false);
+  assert.match(src, /Trial: \$\{trial\.id\}/);
+  assert.match(src, /Facts: not included/);
+  assert.match(src, /txHash \|\| proof\.txId \|\| proof\.publicRef/);
 });
 
 test('referral copy never claims a site received the qualification', () => {

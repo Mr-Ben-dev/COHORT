@@ -718,7 +718,7 @@ const CARDS = [
   {
     art: LayeredChartsArt,
     title: "Public verification",
-    sub: "Sites confirm the proof on the indexer — they never receive the record.",
+    sub: "Confirm the proof on the indexer, then choose what happens next. Sites never receive the record.",
   },
 ];
 
@@ -756,8 +756,9 @@ export function MidnightSection() {
             <span>It&apos;s a perfect match.</span>
           </LineReveal>
           <p className="mt-5 text-body text-iris-ink/70">
-            Patients keep the record. Midnight verifies the typed match.
-            Sites can confirm the public qualification without seeing facts.
+            Patients keep the record. Midnight verifies the typed match
+            so you can prove eligibility without handing it over. Then
+            you choose what, if anything, to share.
           </p>
         </motion.div>
 

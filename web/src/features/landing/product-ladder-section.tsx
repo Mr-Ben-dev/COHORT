@@ -16,6 +16,10 @@ const NOW = [
     title: "Public qualification",
     body: "Anyone you share the verification record with can confirm eligibility was proven. They cannot recover your facts.",
   },
+  {
+    title: "You choose the next step",
+    body: "Keep private, share a public qualification, continue to ClinicalTrials.gov, or copy a public-safe packet. No inbox, no bounty, no EHR.",
+  },
 ];
 
 const NEXT = [
@@ -60,9 +64,9 @@ export function ProductLadderSection() {
             What is live, and what is not.
           </h2>
           <p className="mt-5 text-body text-iris-ink/70">
-            The product is private matching plus a verified eligibility
-            signal. It is not a medical-records warehouse and not a paid
-            referral market — yet.
+            The product is private matching, a verified eligibility
+            signal, and a user-controlled next step. It is not a
+            medical-records warehouse and not a paid referral market — yet.
           </p>
         </motion.div>
 

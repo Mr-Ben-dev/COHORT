@@ -7,6 +7,7 @@ import { PillButton } from "@/components/brand/pill-button";
 import { Tag } from "@/components/brand/status-pill";
 import { BackLink } from "@/components/layout/back-link";
 import { ReferralHandoffArt } from "@/components/artwork/referral-handoff-art";
+import { HandoffActions } from "@/features/result/handoff-actions";
 import { useCohortStore } from "@/state/cohort-store";
 
 function formatStamp(iso: string | undefined): string {
@@ -143,9 +144,19 @@ export function ReferralView({ checkId }: { checkId: string }) {
           </h1>
           <p className="mt-3 text-body text-pearl/80">
             A public qualification was posted. There is no live site inbox.
-            The study site does not automatically receive this.
+            The study site does not automatically receive this. Choose the
+            real next step.
           </p>
         </motion.header>
+
+        <motion.div {...fadeUp(0.08)} className="mt-8">
+          <HandoffActions
+            trial={trial}
+            check={check}
+            shared
+            onKeepPrivate={() => navigate({ name: "trials" })}
+          />
+        </motion.div>
 
         <motion.div
           {...fadeUp(0.12)}
@@ -198,7 +209,8 @@ export function ReferralView({ checkId }: { checkId: string }) {
         <motion.p {...fadeUp(0.18)} className="mt-5 text-body-sm text-pearl/70">
             The research site can open this public qualification on the
             ledger. They never see the facts behind the proof. This is not
-            a paid referral.
+            a paid referral. Continue to the official study if you want
+            enrollment next.
         </motion.p>
 
         <motion.div {...fadeUp(0.22)} className="mt-8 flex flex-wrap gap-3">
@@ -208,7 +220,7 @@ export function ReferralView({ checkId }: { checkId: string }) {
           >
             View public verification record
           </PillButton>
-          <PillButton onClick={() => navigate({ name: "proofs" })}>
+          <PillButton variant="quiet" onClick={() => navigate({ name: "proofs" })}>
             Go to My Proofs
           </PillButton>
         </motion.div>

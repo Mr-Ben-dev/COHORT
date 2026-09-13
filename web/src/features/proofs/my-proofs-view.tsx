@@ -71,6 +71,12 @@ function ProofCard({ check, index }: { check: EligibilityCheck; index: number })
       <div className="mt-auto flex flex-wrap gap-2.5 pt-5">
         <PillButton
           size="sm"
+          onClick={() => navigate({ name: "result", checkId: check.id })}
+        >
+          Choose next step
+        </PillButton>
+        <PillButton
+          size="sm"
           variant="quiet"
           onClick={() => navigate({ name: "verification", checkId: check.id })}
         >
@@ -79,9 +85,10 @@ function ProofCard({ check, index }: { check: EligibilityCheck; index: number })
         {eligible && !check.referral && (
           <PillButton
             size="sm"
+            variant="ghost"
             onClick={() => void requestReferral(check.id)}
           >
-            Share qualification
+            Share public qualification
           </PillButton>
         )}
       </div>

@@ -19,7 +19,7 @@ import { LineReveal } from "@/components/brand/line-reveal";
  * KEEP SCROLLING" pairs in #5250d9 with a cyan ECG trace between them.
  */
 
-const REVEAL_LINE = "Patients keep their records. Sites get verified answers.";
+const REVEAL_LINE = "Qualify privately. You choose what happens next.";
 const REVEAL_WINDOW: [number, number] = [0.22, 0.68];
 const WORD_SPAN = 0.14;
 

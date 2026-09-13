@@ -17,6 +17,7 @@ import type { LucideIcon } from "lucide-react";
 import { PillButton } from "@/components/brand/pill-button";
 import { PrivacyIndicator } from "@/components/privacy/privacy-indicator";
 import { BackLink } from "@/components/layout/back-link";
+import { HandoffActions } from "@/features/result/handoff-actions";
 import { useCohortStore } from "@/state/cohort-store";
 
 function formatStamp(iso: string): string {
@@ -186,16 +187,28 @@ export function ResultView({ checkId }: { checkId: string }) {
             Eligibility verified
           </h1>
           <p className="mt-3 text-body text-pearl/85">
-            Your record stayed with you.
+            Your record stayed with you. Choose what happens next.
           </p>
           <p className="mt-2 text-body-sm text-pearl/70">
             Supported typed criteria only. Self-attested on this device,
-            not an EHR or issuer.
+            not an EHR or issuer. Potential match is not this result.
           </p>
         </motion.header>
 
+        <motion.div {...fadeUp(0.12)} className="mt-8">
+          <HandoffActions
+            trial={trial}
+            check={check}
+            shared={Boolean(check.referral)}
+            onShare={
+              check.referral ? undefined : () => void requestReferral(checkId)
+            }
+            onKeepPrivate={() => navigate({ name: "trials" })}
+          />
+        </motion.div>
+
         <motion.section
-          {...fadeUp(0.15)}
+          {...fadeUp(0.2)}
           className="mt-8 rounded-card border border-iris-border bg-cloud-white/[0.06] p-6 sm:p-8"
           aria-label="Public record of this check"
         >
@@ -244,39 +257,6 @@ export function ResultView({ checkId }: { checkId: string }) {
             </p>
           </div>
         </motion.section>
-
-        <motion.p {...fadeUp(0.18)} className="mt-6 text-body-sm text-pearl/75">
-          Would you like to share your verified qualification with the study
-          site? The site does not receive your private facts. There is no
-          live site inbox. Sharing posts a public-safe record only.
-        </motion.p>
-
-        <motion.div {...fadeUp(0.22)} className="mt-8 flex flex-wrap gap-3">
-          {!check.referral && (
-            <PillButton
-              size="lg"
-              onClick={() => void requestReferral(checkId)}
-            >
-              Share qualification
-            </PillButton>
-          )}
-          <PillButton
-            size="lg"
-            variant="ghost"
-            onClick={() =>
-              window.open(trial.studyUrl, "_blank", "noopener,noreferrer")
-            }
-          >
-            Open study
-          </PillButton>
-          <PillButton
-            size="lg"
-            variant="quiet"
-            onClick={() => navigate({ name: "trials" })}
-          >
-            Keep private
-          </PillButton>
-        </motion.div>
       </div>
     </section>
   );

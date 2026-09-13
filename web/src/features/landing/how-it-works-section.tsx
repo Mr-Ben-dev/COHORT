@@ -1652,14 +1652,14 @@ const STEPS: StepDef[] = [
     icon: BadgeCheck,
     lines: [
       <span key="a">
-        The site <Mint>verifies</Mint>
+        You <Mint>choose</Mint> what
       </span>,
-      <span key="b">eligibility,</span>,
+      <span key="b">happens next —</span>,
       <span key="c">
         <Mint>never your record.</Mint>
       </span>,
     ],
-    body: "A site you choose can open the public verification record: eligibility proven, typed subset only, facts never included. No payment is attached — the live contract does not hold bounty.",
+    body: "Qualification is not the end. Keep it private, share a public-safe record, continue to the official study, or copy a packet for next-step contact. There is no COHORT inbox and no paid bounty.",
     art: SiteVerifyArt,
   },
 ];
@@ -1694,14 +1694,14 @@ export function HowItWorksSection() {
           delay={0.1}
           className="mt-6 max-w-3xl text-[clamp(2.25rem,4.4vw,3.375rem)] font-semibold leading-[1.03] tracking-[-0.035em] text-cloud-white"
         >
-          <span>Four steps.</span>
+          <span>Qualify. Then you choose.</span>
           <span>
             One <Accent>private proof.</Accent>
           </span>
         </LineReveal>
         <motion.p {...appear(0.45)} className="mt-6 max-w-xl text-body text-lilac-mist/70">
-          From public trial criteria to a public qualification — every step below
-          runs without your record ever leaving your device.
+          From public trial criteria to a verified result you control — every
+          step below runs without your record ever leaving your device.
         </motion.p>
 
         {/* steps 01–04, alternating sides */}
@@ -1735,7 +1735,7 @@ export function HowItWorksSection() {
           aria-label="The eligibility formula"
           className="glass-panel-soft mt-16 rounded-card-elevated p-7 pb-9 sm:mt-24 sm:p-9 sm:pb-11"
         >
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
+          <div className="flex flex-col flex-wrap items-center justify-center gap-4 sm:flex-row sm:gap-5">
             <span className="rounded-pill border border-teal-signal/50 bg-teal-signal/10 px-5 py-3 text-body-sm font-semibold text-cloud-white">
               Public trial criteria
             </span>
@@ -1757,10 +1757,17 @@ export function HowItWorksSection() {
             <span className="glow-mint rounded-pill border border-mint-vital/70 bg-mint-vital/15 px-5 py-3 text-body-sm font-semibold text-mint-vital">
               Verified result
             </span>
+            <ChevronDown
+              className="h-5 w-5 shrink-0 rotate-[-90deg] text-lilac-mist/50 sm:rotate-0"
+              aria-hidden="true"
+            />
+            <span className="rounded-pill border border-clinical-cyan/50 bg-clinical-cyan/10 px-5 py-3 text-body-sm font-semibold text-cloud-white">
+              You choose next
+            </span>
           </div>
           <p className="mt-7 text-center text-body-sm leading-[1.6] text-lilac-mist/65">
             Public rules + private facts → a proof that satisfies both,
-            without ever merging them.{" "}
+            without ever merging them. Then you choose what happens next.{" "}
             <span className="font-semibold text-cloud-white">
               Powered by Midnight.
             </span>
