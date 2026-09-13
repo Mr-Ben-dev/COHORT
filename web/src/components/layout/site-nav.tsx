@@ -19,7 +19,9 @@ type NavKey = "home" | "trials" | "profile" | "proofs";
 function WalletStatus({ variant }: { variant: "desktop" | "mobile" }) {
   const wallet = useCohortStore((s) => s.wallet);
   const connectWallet = useCohortStore((s) => s.connectWallet);
+  const connectAndProve = useCohortStore((s) => s.connectAndProve);
   const cancelConnect = useCohortStore((s) => s.cancelConnect);
+  const proving = useCohortStore((s) => s.activeProving);
   const [oneAm, setOneAm] = useState(false);
 
   useEffect(() => {
@@ -100,7 +102,9 @@ function WalletStatus({ variant }: { variant: "desktop" | "mobile" }) {
           ? "inline-flex items-center gap-2 rounded-pill border border-mint-vital/40 bg-mint-vital/10 px-4 py-2 text-caption font-semibold text-mint-vital outline-none focus-visible:ring-2 focus-visible:ring-clinical-cyan"
           : "w-full rounded-field px-4 py-3 text-left text-body font-medium text-mint-vital"
       }
-      onClick={() => void connectWallet("1AM")}
+      onClick={() =>
+        void (proving ? connectAndProve("1AM") : connectWallet("1AM"))
+      }
     >
       Connect 1AM
     </button>

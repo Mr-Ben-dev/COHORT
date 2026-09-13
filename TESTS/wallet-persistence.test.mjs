@@ -45,4 +45,5 @@ test('Lace proving fail-closed copy is present', () => {
   assert.match(nav, /cancelConnect/);
   assert.match(nav, /Connect 1AM/);
   assert.match(nav, /connectWallet\("1AM"\)/);
+  assert.match(nav, /connectAndProve\("1AM"\)/);
 });
