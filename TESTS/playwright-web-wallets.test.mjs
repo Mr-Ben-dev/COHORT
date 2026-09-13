@@ -70,11 +70,19 @@ async function fillEligible(page) {
 }
 
 async function openWalletModal(page) {
-  const nav = page.getByRole('navigation', { name: 'Main navigation' });
-  const trigger = nav.getByRole('button', { name: /Connect wallet|Reconnect/i });
-  await trigger.first().waitFor({ timeout: 15000 });
-  await trigger.first().click();
-  await page.getByRole('dialog').waitFor({ timeout: 15000 });
+  const trigger = page.getByRole('button', { name: /^(Connect wallet|Reconnect 1AM|Reconnect Lace)$/ }).first();
+  await trigger.waitFor({ timeout: 15000 });
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    await trigger.click({ timeout: 5000 }).catch(() => {});
+    const dialog = page.getByRole('dialog');
+    try {
+      await dialog.waitFor({ state: 'visible', timeout: 4000 });
+      return;
+    } catch {
+      await page.waitForTimeout(400);
+    }
+  }
+  await page.getByRole('dialog').waitFor({ state: 'visible', timeout: 5000 });
 }
 
 async function connectFromModal(page, index) {
