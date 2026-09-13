@@ -5,7 +5,6 @@ import { ArrowRight } from "lucide-react";
 import { PillButton } from "@/components/brand/pill-button";
 import { WordHighlight } from "@/components/brand/word-highlight";
 import { RotatingWord } from "@/components/brand/rotating-word";
-import { HeroPrivacyFlow } from "@/components/artwork/hero-privacy-flow";
 import { HeroCluster } from "@/components/artwork/hero-cluster";
 import { InterfaceDashboard } from "@/components/artwork/interface-dashboard";
 import { useCohortStore } from "@/state/cohort-store";
@@ -64,32 +63,17 @@ export function HeroSection() {
         aria-hidden="true"
       />
 
-      {/* The cluster is anchored to the viewport edge, not to the content
-       * column, so the composition runs off the screen the way the
-       * reference does. It sits behind everything and is decorative. */}
-      <HeroCluster className="pointer-events-none absolute inset-y-0 left-0 hidden w-[46vw] max-w-[720px] md:block lg:w-[42vw]" />
+      <div className="relative grid w-full grid-cols-1 items-start pt-20 sm:pt-16 lg:grid-cols-[auto_minmax(0,1fr)] lg:pt-14">
+        <motion.div
+          initial={reduce ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, delay: 0.08, ease: EASE }}
+          className="pointer-events-none relative h-[min(108vw,400px)] sm:h-[min(62vw,520px)] lg:h-[min(44.5vw,641px)] lg:-mb-16"
+        >
+          <HeroCluster className="h-full" />
+        </motion.div>
 
-      <SectionContent className="relative">
-        <div className="grid items-center gap-12 py-14 sm:py-18 lg:grid-cols-[0.72fr_1fr] lg:gap-10 lg:py-24">
-          {/* Left column is deliberately empty on large screens — the
-           * bleeding cluster occupies it. Below lg the compact privacy
-           * flow carries the visual instead. */}
-          <motion.div
-            initial={reduce ? false : { opacity: 0, scale: 0.96, y: 24 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
-            className="relative order-2 mx-auto w-full max-w-[440px] md:hidden"
-          >
-            <div
-              className="glow-blob glow-blob-lilac left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2"
-              aria-hidden="true"
-            />
-            <HeroPrivacyFlow className="relative" />
-          </motion.div>
-          <div className="hidden md:block" aria-hidden="true" />
-
-          {/* Copy column */}
-          <div className="order-1 max-w-xl lg:order-2">
+        <div className="relative z-10 mx-auto max-w-xl px-5 pb-8 sm:px-8 lg:mx-0 lg:max-w-[34rem] lg:px-8 lg:pt-6 lg:pb-10 xl:px-12">
             {/* The problem, stated before the headline gets to be clever. */}
             <motion.p
               {...fadeUp(0)}
@@ -188,7 +172,6 @@ export function HeroSection() {
             </motion.dl>
           </div>
         </div>
-      </SectionContent>
 
       {/* The hero centerpiece — painted interface dashboard illustration */}
       <SectionContent className="relative pb-8 sm:pb-10 lg:pb-10">

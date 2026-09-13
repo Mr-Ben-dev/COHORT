@@ -248,13 +248,24 @@ function ProofTravelsArt({ reduce }: { reduce: Reduce }) {
           ))}
         </motion.g>
       ))}
-      {/* lock hasp on the device */}
+      {/* lock on the device — hasp plus body, so it reads as a lock
+       * rather than as a stray arch */}
       <motion.path
         d="M 48 108 V 102 A 8 8 0 0 1 64 102 V 108"
         stroke={mint}
         strokeWidth="1.6"
         strokeLinecap="round"
         {...draw(reduce, 0.72, 0.5)}
+      />
+      <motion.rect
+        x="44"
+        y="108"
+        width="24"
+        height="18"
+        rx="5"
+        stroke={mint}
+        strokeWidth="1.6"
+        {...draw(reduce, 0.8, 0.5)}
       />
 
       {/* the boundary the facts never cross */}

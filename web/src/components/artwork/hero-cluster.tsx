@@ -1,387 +1,337 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 /**
- * HERO CLUSTER — the full-height line-art backdrop anchored to the left
- * edge of the hero.
+ * HERO STILL-LIFE — original COHORT clinical line-art.
  *
- * The quality bar here is a hero where the illustration is atmosphere
- * rather than an object: enormous, monoline, low-contrast, and cropped by
- * the viewport so the composition clearly continues past the edge.
- * Everything is COHORT's own vocabulary — a record card whose rows stay
- * masked, a proof seal, a conduit carrying one sealed result out of the
- * cluster, a criteria clipboard — mixed with plain clinical objects so it
- * reads as medicine at a glance rather than as abstract geometry.
+ * Quality bar (measured from a live health-tech hero, not copied):
+ *   • One overlapping still-life, not a row of icons.
+ *   • Lilac hairlines on canvas-colored fills so devices occlude
+ *     each other and read as volume.
+ *   • Dominant object cropped by the left viewport edge.
+ *   • Uniform 1px screen stroke (see .hero-cluster in globals.css).
+ *   • Idle drift of 1–2px, never a bounce.
  *
- * The frame is 420×1080 because the hero column it fills is extremely
- * narrow-portrait (~645×1660). Authoring at that ratio matters: with
- * `slice`, a squarer viewBox gets its width cropped away and the right
- * half of the drawing silently disappears. Anything at negative x is
- * meant to fall off the screen.
- *
- * Strokes draw once on mount, two groups drift on their own idle cycles,
- * and the cluster takes a slow parallax rise as the hero scrolls away.
- * Under prefers-reduced-motion it renders statically at full opacity.
+ * Vocabulary is COHORT's: a vitals tablet the record never leaves,
+ * a stethoscope, a thermometer, capsules, a pulse clip. No proof
+ * seals, locks, or dashboard chrome in this drawing.
  */
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+const FILL = "var(--color-deep-iris)";
+const LINE = "var(--color-lilac-mist)";
+const CABLE = "#6563DA";
+
+const TUBE =
+  "M -28 148 C -8 168, 18 188, 42 198 C 78 212, 92 228, 88 258 C 84 292, 62 318, 78 338 C 96 360, 148 368, 198 352 C 236 338, 258 302, 262 268";
 
 export function HeroCluster({ className }: { className?: string }) {
   const reduce = useReducedMotion();
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const parallax = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
 
-  const line = "var(--color-cloud-white)";
-  const mint = "var(--color-mint-vital)";
-  const cyan = "var(--color-clinical-cyan)";
-
-  /** Stroke draw-in. Long, calm, staggered outward from the record card. */
-  const draw = (delay: number, duration = 1.6, opacity = 0.3) =>
+  const draw = (delay: number, duration = 2.4) =>
     ({
-      initial: reduce ? false : { pathLength: 0, opacity: 0 },
-      animate: { pathLength: 1, opacity },
-      transition: {
-        pathLength: { duration, delay, ease: EASE },
-        opacity: { duration: 0.8, delay },
-      },
+      initial: reduce ? false : { pathLength: 0, opacity: 0.2 },
+      animate: { pathLength: 1, opacity: 1 },
+      transition: { duration, delay, ease: EASE },
     }) as const;
-
-  const fade = (delay: number, opacity = 0.3) =>
-    ({
-      initial: reduce ? false : { opacity: 0 },
-      animate: { opacity },
-      transition: { duration: 1, delay, ease: EASE },
-    }) as const;
-
-  const spin = { transformBox: "fill-box" } as const;
-  const drift = { transformBox: "fill-box", transformOrigin: "center" } as const;
 
   return (
-    <div ref={ref} className={className} aria-hidden="true">
-      <motion.div
-        style={reduce ? undefined : { y: parallax }}
-        className="h-full w-full"
+    <div className={cn("hero-cluster", className)} aria-hidden="true">
+      <svg
+        viewBox="0 0 340 420"
+        preserveAspectRatio="xMinYMid meet"
+        fill="none"
+        overflow="visible"
       >
-        <svg
-          viewBox="0 0 420 1080"
-          preserveAspectRatio="xMinYMid slice"
-          fill="none"
-          className="h-full w-full"
-        >
-          {/* ── conduit: one line threading the whole cluster, carrying a
-               single sealed result down and out to the lock ── */}
+        {/* ── cables, behind the instruments ── */}
+        <g opacity="0.9">
           <motion.path
-            d="M -30 46 C 96 74 158 132 172 216 C 188 314 132 360 146 432 C 162 512 250 546 292 604 C 330 656 330 712 296 756 C 250 814 178 828 156 884 C 138 930 176 986 250 1010"
-            stroke={line}
-            strokeWidth="1.6"
+            d="M -24 36 C 72 58, 168 118, 214 176 C 268 246, 252 322, 198 378"
+            stroke={CABLE}
             strokeLinecap="round"
-            {...draw(0.15, 3, 0.24)}
+            {...draw(0.05, 2.8)}
           />
-
-          {/* ── capsule, tilted off the top-left edge ── */}
-          <g transform="rotate(-34 60 96)">
-            <motion.rect
-              x="-32"
-              y="64"
-              width="184"
-              height="64"
-              rx="32"
-              stroke={line}
-              strokeWidth="1.6"
-              {...draw(0.5, 1.4, 0.26)}
-            />
-            <motion.path
-              d="M 60 64 V 128"
-              stroke={line}
-              strokeWidth="1.4"
-              {...draw(0.9, 0.6, 0.24)}
-            />
-          </g>
-
-          {/* ── thermometer, filling the upper-right gap ── */}
-          <g transform="rotate(22 344 190)">
-            <motion.rect
-              x="326"
-              y="84"
-              width="34"
-              height="188"
-              rx="17"
-              stroke={line}
-              strokeWidth="1.6"
-              {...draw(0.4, 1.6, 0.3)}
-            />
-            <motion.circle
-              cx="343"
-              cy="292"
-              r="28"
-              stroke={line}
-              strokeWidth="1.6"
-              {...draw(0.8, 1, 0.3)}
-            />
-            <motion.path
-              d="M 343 264 V 150"
-              stroke={cyan}
-              strokeWidth="6"
-              strokeLinecap="round"
-              {...draw(1.2, 1.1, 0.42)}
-            />
-            {[128, 154, 180, 206].map((y, i) => (
-              <motion.path
-                key={y}
-                d={`M 360 ${y} H ${i % 2 === 0 ? 382 : 374}`}
-                stroke={line}
-                strokeWidth="1.4"
-                strokeLinecap="round"
-                {...fade(0.95 + i * 0.08, 0.22)}
-              />
-            ))}
-          </g>
-
-          {/* ── the record card: masked rows, cropped by the viewport ── */}
-          <g>
-            <motion.rect
-              x="-170"
-              y="150"
-              width="420"
-              height="470"
-              rx="46"
-              stroke={line}
-              strokeWidth="1.8"
-              {...draw(0.1, 2.2, 0.34)}
-            />
-            {/* identity block — a face and a name that never leave */}
-            <motion.g {...fade(0.55, 0.26)}>
-              <circle
-                cx="-100"
-                cy="232"
-                r="34"
-                stroke={line}
-                strokeWidth="1.6"
-              />
-              <path
-                d="M -44 218 H 96 M -44 250 H 44"
-                stroke={line}
-                strokeWidth="1.4"
-                strokeLinecap="round"
-              />
-            </motion.g>
-            {[314, 382, 450].map((y, i) => (
-              <motion.g key={y} {...fade(0.7 + i * 0.12, 0.28)}>
-                <rect
-                  x="-130"
-                  y={y}
-                  width={i === 2 ? 210 : 268}
-                  height="42"
-                  rx="21"
-                  stroke={line}
-                  strokeWidth="1.4"
-                />
-                {[0, 1, 2, 3, 4].map((d) => (
-                  <circle
-                    key={d}
-                    cx={-96 + d * 28}
-                    cy={y + 21}
-                    r="5"
-                    fill={line}
-                    opacity="0.5"
-                  />
-                ))}
-              </motion.g>
-            ))}
-            {/* the one fact that is allowed to leave the device */}
-            <motion.path
-              d="M -130 540 H 60"
-              stroke={mint}
-              strokeWidth="4"
-              strokeLinecap="round"
-              {...draw(1.5, 1.1, 0.45)}
-            />
-          </g>
-
-          {/* ── proof seal, riding over the card's right edge ── */}
-          <g className={reduce ? undefined : "float-b"} style={drift}>
-            <motion.circle
-              cx="250"
-              cy="404"
-              r="96"
-              stroke={line}
-              strokeWidth="1.6"
-              {...draw(0.35, 2.2, 0.26)}
-            />
-            <motion.circle
-              cx="250"
-              cy="404"
-              r="126"
-              stroke={cyan}
-              strokeWidth="1.4"
-              strokeDasharray="10 18"
-              className={reduce ? undefined : "ring-spin"}
-              style={spin}
-              {...fade(0.9, 0.3)}
-            />
-            <motion.path
-              d="M 216 406 L 240 430 L 288 378"
-              stroke={mint}
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              {...draw(1.2, 1, 0.55)}
-            />
-          </g>
-
-          {/* ── stethoscope: the object that reads as medicine instantly ── */}
-          <g className={reduce ? undefined : "float-a"} style={drift}>
-            <motion.path
-              d="M 4 646 C 4 742 74 788 128 788 C 186 788 244 738 244 664 V 620"
-              stroke={line}
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              {...draw(0.65, 2.4, 0.3)}
-            />
-            <motion.path
-              d="M 4 646 V 602 M 4 602 L -22 578 M 4 602 L 32 578"
-              stroke={line}
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              {...draw(1.05, 1.2, 0.28)}
-            />
-            <motion.circle
-              cx="244"
-              cy="596"
-              r="32"
-              stroke={line}
-              strokeWidth="1.8"
-              {...draw(1.35, 1, 0.32)}
-            />
-            <motion.circle
-              cx="244"
-              cy="596"
-              r="17"
-              stroke={line}
-              strokeWidth="1.4"
-              {...draw(1.55, 0.8, 0.26)}
-            />
-          </g>
-
-          {/* ── ECG thread ── */}
           <motion.path
-            d="M -30 852 H 56 L 72 810 L 94 902 L 114 852 H 176"
-            stroke={cyan}
-            strokeWidth="1.8"
+            d="M -40 58 C 64 72, 188 124, 236 186 C 292 258, 274 336, 214 392"
+            stroke={CABLE}
+            strokeLinecap="round"
+            {...draw(0.12, 2.9)}
+          />
+          <motion.path
+            d="M -48 48 C 70 56, 198 108, 248 168 C 308 242, 292 328, 228 386"
+            stroke={CABLE}
+            strokeLinecap="round"
+            {...draw(0.18, 3)}
+          />
+          <motion.path
+            d="M -32 28 C 80 54, 176 112, 222 172 C 278 244, 264 318, 208 372"
+            stroke={LINE}
+            strokeLinecap="round"
+            {...draw(0.35, 2.6)}
+          />
+        </g>
+
+        {/* ── vitals tablet — the cropped dominant object ── */}
+        <g>
+          {/* cuff wrapping the base */}
+          <path
+            d="M -46 286 H 186 C 214 286, 226 302, 226 322 C 226 346, 208 360, 178 360 H -22 C -46 360, -54 344, -54 324 C -54 302, -46 286, -46 286 Z"
+            fill={FILL}
+            stroke={LINE}
+            strokeLinejoin="round"
+          />
+          <path
+            d="M -38 300 H 178"
+            stroke={LINE}
+            strokeLinecap="round"
+            opacity="0.7"
+          />
+          {[8, 22, 36, 50, 64, 78, 92, 106, 120, 134, 148].map((x) => (
+            <path
+              key={x}
+              d={`M ${x} 308 V ${x % 28 === 8 ? 328 : 322}`}
+              stroke={LINE}
+              strokeLinecap="round"
+            />
+          ))}
+
+          {/* body — double outline for board thickness */}
+          <rect
+            x="-52"
+            y="8"
+            width="252"
+            height="292"
+            rx="28"
+            fill={FILL}
+            stroke={LINE}
+          />
+          <rect
+            x="-48"
+            y="12"
+            width="244"
+            height="284"
+            rx="24"
+            fill={FILL}
+            stroke={LINE}
+          />
+          {/* screen */}
+          <rect
+            x="10"
+            y="26"
+            width="138"
+            height="72"
+            rx="11"
+            fill={FILL}
+            stroke={LINE}
+          />
+          {/* quiet vitals trace inside the screen */}
+          <path
+            d="M 22 64 H 48 L 56 48 L 66 78 L 76 60 H 132"
+            stroke={LINE}
             strokeLinecap="round"
             strokeLinejoin="round"
-            {...draw(1.35, 1.4, 0.4)}
+          />
+        </g>
+
+        {/* ── stethoscope — a filled tube, not a single stroke ── */}
+        <g
+          className={reduce ? undefined : "hero-drift-a"}
+          style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        >
+          {/* ear tubes, cropped by the left edge */}
+          <path
+            d="M -36 118 C -18 128, -4 138, 6 152"
+            stroke={LINE}
+            strokeWidth="8"
+            strokeLinecap="round"
+            data-tube="true"
+          />
+          <path
+            d="M -36 118 C -18 128, -4 138, 6 152"
+            stroke={FILL}
+            strokeWidth="6"
+            strokeLinecap="round"
+            data-tube="true"
+          />
+          <path
+            d="M -22 108 C -4 120, 10 134, 18 150"
+            stroke={LINE}
+            strokeWidth="8"
+            strokeLinecap="round"
+            data-tube="true"
+          />
+          <path
+            d="M -22 108 C -4 120, 10 134, 18 150"
+            stroke={FILL}
+            strokeWidth="6"
+            strokeLinecap="round"
+            data-tube="true"
+          />
+          <path
+            d="M 6 152 C 22 174, 34 188, 42 198"
+            stroke={LINE}
+            strokeWidth="8"
+            strokeLinecap="round"
+            data-tube="true"
+          />
+          <path
+            d="M 6 152 C 22 174, 34 188, 42 198"
+            stroke={FILL}
+            strokeWidth="6"
+            strokeLinecap="round"
+            data-tube="true"
+          />
+          <path
+            d="M 18 150 C 30 168, 38 184, 42 198"
+            stroke={LINE}
+            strokeWidth="8"
+            strokeLinecap="round"
+            data-tube="true"
+          />
+          <path
+            d="M 18 150 C 30 168, 38 184, 42 198"
+            stroke={FILL}
+            strokeWidth="6"
+            strokeLinecap="round"
+            data-tube="true"
           />
 
-          {/* ── criteria clipboard, cropped by the bottom edge ── */}
-          <g className={reduce ? undefined : "float-c"} style={drift}>
-            <motion.rect
-              x="86"
-              y="908"
-              width="286"
-              height="330"
-              rx="42"
-              stroke={line}
-              strokeWidth="1.8"
-              {...draw(0.55, 2, 0.3)}
-            />
-            <motion.rect
-              x="186"
-              y="882"
-              width="92"
-              height="50"
-              rx="19"
-              stroke={line}
-              strokeWidth="1.6"
-              {...draw(0.95, 1, 0.3)}
-            />
-            {[992, 1064].map((y, i) => (
-              <motion.g key={y} {...fade(1.05 + i * 0.14, 0.28)}>
-                <rect
-                  x="126"
-                  y={y}
-                  width="44"
-                  height="44"
-                  rx="14"
-                  stroke={line}
-                  strokeWidth="1.4"
-                />
-                <path
-                  d={`M 194 ${y + 22} H ${i === 1 ? 292 : 336}`}
-                  stroke={line}
-                  strokeWidth="1.4"
-                  strokeLinecap="round"
-                />
-              </motion.g>
-            ))}
-            <motion.path
-              d="M 137 1014 L 147 1024 L 163 1003"
-              stroke={cyan}
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              {...draw(1.55, 0.7, 0.5)}
-            />
-          </g>
+          {/* binaural join */}
+          <circle cx="42" cy="198" r="6" fill={FILL} stroke={LINE} />
 
-          {/* ── the lock the conduit terminates in ── */}
-          <motion.g {...fade(1.7, 0.3)}>
-            <rect
-              x="266"
-              y="782"
-              width="86"
-              height="68"
-              rx="20"
-              stroke={line}
-              strokeWidth="1.6"
-            />
+          {/* tubing ribbon: iris core, lilac edge */}
+          <path
+            d={TUBE}
+            stroke={LINE}
+            strokeWidth="9"
+            strokeLinecap="round"
+            fill="none"
+            data-tube="true"
+          />
+          <path
+            d={TUBE}
+            stroke={FILL}
+            strokeWidth="7"
+            strokeLinecap="round"
+            fill="none"
+            data-tube="true"
+          />
+
+          {/* chestpiece — stacked discs so it sits on the tablet */}
+          <circle cx="262" cy="248" r="34" fill={FILL} stroke={LINE} />
+          <circle cx="262" cy="248" r="24" fill={FILL} stroke={LINE} />
+          <circle cx="262" cy="248" r="13" fill={FILL} stroke={LINE} />
+          <circle cx="262" cy="248" r="5" fill={FILL} stroke={LINE} />
+        </g>
+
+        {/* ── thermometer, laid across the tablet ── */}
+        <g
+          className={reduce ? undefined : "hero-drift-b"}
+          style={{ transformBox: "fill-box", transformOrigin: "center" }}
+          transform="rotate(32.7 204 88)"
+        >
+          <rect
+            x="192"
+            y="4"
+            width="24"
+            height="148"
+            rx="12"
+            fill={FILL}
+            stroke={LINE}
+          />
+          <rect
+            x="196"
+            y="12"
+            width="16"
+            height="136"
+            rx="8"
+            fill={FILL}
+            stroke={LINE}
+          />
+          <circle cx="204" cy="168" r="22" fill={FILL} stroke={LINE} />
+          <circle cx="204" cy="168" r="14" fill={FILL} stroke={LINE} />
+          <path
+            d="M 204 154 V 44"
+            stroke={LINE}
+            strokeLinecap="round"
+            opacity="0.9"
+          />
+          {[36, 52, 68, 84, 100, 116].map((y, i) => (
             <path
-              d="M 287 782 V 764 A 22 22 0 0 1 331 764 V 782"
-              stroke={line}
-              strokeWidth="1.6"
+              key={y}
+              d={`M 216 ${y} H ${i % 2 === 0 ? 232 : 226}`}
+              stroke={LINE}
               strokeLinecap="round"
             />
-            <circle cx="309" cy="812" r="7" stroke={line} strokeWidth="1.6" />
-          </motion.g>
+          ))}
+        </g>
 
-          {/* ── scatter: quiet detail that keeps the large voids alive ── */}
-          {[
-            [352, 470],
-            [46, 372],
-            [368, 690],
-            [92, 216],
-          ].map(([x, y], i) => (
-            <motion.path
-              key={`${x}-${y}`}
-              d={`M ${x - 10} ${y} H ${x + 10} M ${x} ${y - 10} V ${y + 10}`}
-              stroke={line}
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              {...fade(1.5 + i * 0.1, 0.22)}
+        {/* ── capsules ── */}
+        <g
+          className={reduce ? undefined : "hero-drift-c"}
+          style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        >
+          <g transform="rotate(-34 228 108)">
+            <rect
+              x="220"
+              y="84"
+              width="16"
+              height="48"
+              rx="8"
+              fill={FILL}
+              stroke={LINE}
             />
-          ))}
-          {[
-            [386, 566],
-            [36, 942],
-            [330, 916],
-          ].map(([x, y], i) => (
-            <motion.circle
-              key={`${x}-${y}-dot`}
-              cx={x}
-              cy={y}
-              r="4"
-              fill={line}
-              {...fade(1.65 + i * 0.1, 0.25)}
+            <path d="M 220 108 H 236" stroke={LINE} />
+          </g>
+          <g transform="rotate(102 258 142)">
+            <rect
+              x="250"
+              y="118"
+              width="16"
+              height="48"
+              rx="8"
+              fill={FILL}
+              stroke={LINE}
             />
-          ))}
-        </svg>
-      </motion.div>
+            <path d="M 250 142 H 266" stroke={LINE} />
+          </g>
+        </g>
+
+        {/* ── pulse clip, sitting on the tubing ── */}
+        <g
+          className={reduce ? undefined : "hero-drift-d"}
+          style={{ transformBox: "fill-box", transformOrigin: "center" }}
+          transform="rotate(-12 168 348)"
+        >
+          <rect
+            x="128"
+            y="328"
+            width="82"
+            height="48"
+            rx="15"
+            fill={FILL}
+            stroke={LINE}
+          />
+          <rect
+            x="140"
+            y="338"
+            width="40"
+            height="28"
+            rx="8"
+            fill={FILL}
+            stroke={LINE}
+          />
+          <path
+            d="M 192 338 C 212 334, 224 344, 222 358 C 220 370, 206 374, 192 366"
+            fill={FILL}
+            stroke={LINE}
+            strokeLinejoin="round"
+          />
+          <circle cx="150" cy="352" r="3.5" fill={LINE} opacity="0.7" />
+        </g>
+      </svg>
     </div>
   );
 }

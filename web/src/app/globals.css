@@ -484,6 +484,55 @@
     }
   }
 
+  /* Hero still-life: Impilo-scale idle is 1–2px, not a bounce.
+   * Each instrument drifts on its own phase so the cluster breathes. */
+  .hero-drift-a {
+    animation: hero-drift 8.5s ease-in-out infinite;
+  }
+  .hero-drift-b {
+    animation: hero-drift 11s ease-in-out -2.8s infinite;
+  }
+  .hero-drift-c {
+    animation: hero-drift 13.5s ease-in-out -5.4s infinite;
+  }
+  .hero-drift-d {
+    animation: hero-drift 10s ease-in-out -1.6s infinite;
+  }
+  @keyframes hero-drift {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(1.4px, -2.2px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-drift-a,
+    .hero-drift-b,
+    .hero-drift-c,
+    .hero-drift-d {
+      animation: none;
+    }
+  }
+
+  /* Hairline still-life: one screen-pixel stroke at every scale, so
+   * overlapping devices read as a drawing, not a scaled icon. */
+  .hero-cluster {
+    overflow: visible;
+    height: 100%;
+  }
+  .hero-cluster svg {
+    overflow: visible;
+    display: block;
+    height: 100%;
+    width: auto;
+  }
+  .hero-cluster svg [stroke]:not([data-tube]) {
+    vector-effect: non-scaling-stroke;
+    stroke-width: 1px;
+  }
+
   /* Gentle float for hero line-art devices (legacy aliases) */
   .float-soft {
     animation: float-a 7s ease-in-out infinite;
