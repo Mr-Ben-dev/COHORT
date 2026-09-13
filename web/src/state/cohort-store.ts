@@ -365,18 +365,7 @@ export const useCohortStore = create<CohortState>((set, get) => ({
     await get().connectWallet(provider);
     const wallet = get().wallet;
     if (wallet.status !== "connected") return;
-    if (wallet.canProve === false) {
-      set({
-        activeProving: get().activeProving
-          ? {
-              ...get().activeProving!,
-              error:
-                "Lace connected. Proof support for this flow is unavailable in the current Lace environment.",
-            }
-          : get().activeProving,
-      });
-      return;
-    }
+    if (wallet.canProve === false) return;
     await get().approveWallet();
   },
 

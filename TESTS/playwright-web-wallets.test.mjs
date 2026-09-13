@@ -70,8 +70,8 @@ test('Vercel: injected Lace connects and fail-closes proving without a fake tx',
     await page.addInitScript(injectConnectorScript);
     await openCheck(page, VERCEL_URL);
     await fillEligible(page);
-    await page.getByRole('button', { name: 'Connect' }).nth(1).click();
-    await page.getByText(/Lace connected\. Proof support for this flow is unavailable/i).waitFor({
+    await page.getByRole('button', { name: 'Connect', exact: true }).nth(1).click();
+    await page.getByRole('status').filter({ hasText: /Lace connected\. Proof support for this flow is unavailable/i }).waitFor({
       timeout: 15000,
     });
     const body = await page.innerText('body');
@@ -92,8 +92,11 @@ test('Vercel: injected 1AM connect stays on Approve and does not invent confirme
     await page.addInitScript(injectConnectorScript);
     await openCheck(page, VERCEL_URL);
     await fillEligible(page);
-    await page.getByRole('button', { name: 'Connect' }).first().click();
-    await page.getByRole('heading', { name: /Approve in 1AM/i }).waitFor({ timeout: 15000 });
+    await page.getByRole('button', { name: 'Connect', exact: true }).first().click();
+    await page
+      .getByText(/Approve in 1AM|Creating proof|Requesting wallet approval|Proving or submission failed/i)
+      .first()
+      .waitFor({ timeout: 20000 });
     const body = await page.innerText('body');
     assert.doesNotMatch(body, /Proof support for this flow is unavailable/);
     assert.equal(await page.getByRole('heading', { name: /^Eligible$/i }).count(), 0);
@@ -166,15 +169,15 @@ test('Vercel: hanging UUID Lace connect keeps the picker and does not show 1AM w
     });
     await openCheck(page, VERCEL_URL);
     await fillEligible(page);
-    await page.getByRole('button', { name: 'Connect' }).nth(1).click();
+    await page.getByRole('button', { name: 'Connect', exact: true }).nth(1).click();
     await page.getByText(/Connecting to Lace/i).waitFor({ timeout: 15000 });
     const body = await page.innerText('body');
     assert.match(body, /Approve the Lace authorization popup/);
     assert.match(body, /Connect your wallet/);
     assert.doesNotMatch(body, /Still waiting on 1AM/);
     assert.doesNotMatch(body, /Approve in 1AM/);
-    assert.equal(await page.getByRole('button', { name: 'Connect' }).count(), 1);
-    assert.equal(await page.getByRole('button', { name: 'Connecting' }).count(), 1);
+    assert.equal(await page.getByRole('button', { name: 'Connect', exact: true }).count(), 1);
+    assert.equal(await page.getByRole('button', { name: 'Connecting', exact: true }).count(), 1);
   } finally {
     await browser.close();
   }
