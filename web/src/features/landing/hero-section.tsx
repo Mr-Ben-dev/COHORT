@@ -82,6 +82,17 @@ export function HeroSection() {
 
           {/* Copy column */}
           <div className="order-1 max-w-xl lg:order-2">
+            {/* The problem, stated before the headline gets to be clever. */}
+            <motion.p
+              {...fadeUp(0)}
+              className="mb-6 inline-flex items-center gap-2.5 rounded-pill border border-iris-border/70 bg-cloud-white/[0.06] px-4 py-2 text-caption font-semibold uppercase tracking-[0.14em] text-lilac-mist"
+            >
+              <span
+                className="pulse-dot h-1.5 w-1.5 shrink-0 rounded-full bg-clinical-cyan"
+                aria-hidden="true"
+              />
+              Trials ask for your record before they say yes
+            </motion.p>
             <h1
               id="hero-heading"
               className="text-display font-semibold text-cloud-white"
@@ -145,6 +156,28 @@ export function HeroSection() {
                 />
               </motion.a>
             </motion.div>
+
+            {/* Live evidence, not a badge wall — every value below is
+             * checkable on the public Midnight indexer. */}
+            <motion.dl
+              {...fadeUp(0.46)}
+              className="mt-10 grid max-w-lg grid-cols-3 gap-4 border-t border-iris-border/50 pt-6"
+            >
+              {[
+                { t: "Midnight Preprod", d: "Live network" },
+                { t: "In-browser", d: "Proving stays local" },
+                { t: "Public indexer", d: "Verification source" },
+              ].map((stat) => (
+                <div key={stat.t}>
+                  <dt className="text-body-sm font-semibold text-cloud-white">
+                    {stat.t}
+                  </dt>
+                  <dd className="mt-1 text-caption text-lilac-mist">
+                    {stat.d}
+                  </dd>
+                </div>
+              ))}
+            </motion.dl>
           </div>
         </div>
       </SectionContent>

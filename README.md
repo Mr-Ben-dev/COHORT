@@ -329,11 +329,13 @@ Do **not** invent counts. Last recorded full suite:
 
 | Suite | Recorded result | When |
 |---|---|---|
-| `npm test` (repo root) | **104/104** | wallet UX commit `7de94e5` |
-| `TESTS/private-match.test.mjs` | 8/8 | handoff `cd51cb1` |
-| Playwright journey vs production | 5/6 (reload-profile heading flake; not looped) | `cd51cb1` |
+| `npm test` (repo root, full suite) | **105 tests, 105 pass, 0 fail** | 2026-09-13, design/CI pass |
+| Earlier full suite | 104/104 | wallet UX commit `7de94e5` |
 | Hostile `POST /api/referral` `{age:31}` | 400, no echo of `31` | live Render, 2026-09-13 |
-| Playwright privacy (age 31 not on COHORT requests) | PASS in earlier sessions | see `EXECUTION_HISTORY.md` |
+| Preprod indexer `queryContractState` + `ledger()` | `proven >= 2` assertion passes against the live contract | in-suite |
+| On-chain verifier vs repo `zk` vs live `/zk` | byte-identical | in-suite |
+
+The suite is a single `node --test` run covering the Compact circuit, the backend privacy gate, dependency-tree pinning, wallet/vault namespacing, live Render and indexer checks, and Playwright runs against both a local `next start` and production. `web/.next` must exist first (CI builds it; see `.github/workflows/test.yml`).
 
 Contract tests cover Compact asserts, spent-set replay, and two-secret same-trial distinct nullifiers. Wallet tests cover Lace fail-closed proving, reconnect never fake-connected, disconnect keeps encrypted profile, 1AM vs Lace namespace isolation.
 
@@ -417,7 +419,71 @@ timeline
 
 ## Judge Quickstart
 
-Fastest truthful path (desktop Chrome, 1AM installed, Preprod synced with tNIGHT + DUST):
+### A. Run it locally (no wallet needed for the first four steps)
+
+Prerequisites: **Node 22+**, Chrome or Edge installed (Playwright drives the installed browser), git. No Docker, no proof-server, no database.
+
+```bash
+git clone https://github.com/Mr-Ben-dev/COHORT.git
+cd COHORT
+
+# 1. backend + circuit + test deps
+npm ci
+
+# 2. designer UI deps and production build
+#    (the privacy suite starts `next start` against web/.next)
+cd web && npm ci && npm run build && cd ..
+
+# 3. full suite: contract, backend gate, vault, wallet, indexer, Playwright
+npm test
+
+# 4. backend + same-origin stub on http://127.0.0.1:10000
+cp .env.example .env   # Preprod values; no secrets required to read public state
+npm start
+```
+
+The designer UI runs separately:
+
+```bash
+cd web
+npm run dev          # http://localhost:3000
+# or serve the production build: npm start
+```
+
+`web` talks to `NEXT_PUBLIC_COHORT_API_ORIGIN` (defaults to the live Render API), the official Preprod indexer, and your wallet. Nothing private crosses those boundaries.
+
+Inspect public chain state without any wallet:
+
+```bash
+curl https://cohort-y4zr.onrender.com/health
+curl https://cohort-y4zr.onrender.com/api/config
+
+# hostile request — must return 400 and must not echo 31
+curl -X POST https://cohort-y4zr.onrender.com/api/referral \
+  -H 'content-type: application/json' \
+  -d '{"trialId":"NCT07153614","age":31}'
+```
+
+Read the contract's public counters straight from the official indexer:
+
+```bash
+curl -s https://indexer.preprod.midnight.network/api/v4/graphql \
+  -H 'content-type: application/json' \
+  -d '{"query":"{ contractAction(address: \"1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc\") { __typename address state transaction { hash applyStage } } }"}'
+```
+
+Compact toolchain (only needed to recompile the circuit — the repo ships the artifacts):
+
+```bash
+compact update +0.31.1
+compact compile CONTRACT/cohort.compact packages/contract/managed
+```
+
+Do **not** install Compact 0.34 / midnight-js 5.x for this project. Those target ledger 9, which no public network runs.
+
+### B. Run the real proof flow
+
+Desktop Chrome, 1AM installed, Preprod synced with tNIGHT + DUST:
 
 1. Open https://cohort-web-orcin.vercel.app — read the five-step product story under **The product**.
 2. **Find Trials** → open a mapped study (NCT07153614) → **Check privately**. Facts stay local.

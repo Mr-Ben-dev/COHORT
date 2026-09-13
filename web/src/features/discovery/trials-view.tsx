@@ -59,34 +59,65 @@ function TrialCard({ trial, index }: { trial: Trial; index: number }) {
       }}
       whileHover={reduce ? undefined : { y: -6 }}
       className={cn(
-        "group relative flex flex-col rounded-card border p-6 text-left transition-[border-color,box-shadow,transform] duration-300",
+        "group relative flex flex-col overflow-hidden rounded-card border p-6 text-left transition-[border-color,box-shadow,transform] duration-300",
         featured
           ? "border-clinical-cyan/45 bg-cloud-white/[0.08] shadow-[0_18px_40px_-24px_rgba(92,255,177,0.45)] hover:border-mint-vital/50"
           : "border-iris-border bg-cloud-white/[0.06] hover:border-lilac-mist/60",
       )}
     >
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      {/* Match rail — the card's state is readable before any text is. */}
+      <span
+        className={cn(
+          "absolute inset-y-0 left-0 w-[3px] transition-opacity duration-300",
+          match.kind === "verified"
+            ? "bg-mint-vital"
+            : match.kind === "potential"
+              ? "bg-clinical-cyan"
+              : "bg-iris-border opacity-60",
+        )}
+        aria-hidden="true"
+      />
+      {/* Hover wash — light gathers at the top edge on approach. */}
+      <span
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-cloud-white/[0.07] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        aria-hidden="true"
+      />
+
+      <div className="relative flex flex-wrap items-center justify-between gap-2">
         <StatusPill status={trial.status} />
         <Tag tone="violet">{trial.condition}</Tag>
       </div>
 
-      <h3 className="mt-4 line-clamp-3 text-subheading font-semibold text-cloud-white">
+      <h3 className="relative mt-4 line-clamp-3 text-subheading font-semibold text-cloud-white">
         {trial.title}
       </h3>
-      <p className="mt-2 text-caption text-lilac-mist">{trial.id}</p>
+      <p className="relative mt-2 font-mono text-caption tracking-wide text-lilac-mist">
+        {trial.id}
+      </p>
 
-      <div className="mt-4 grid grid-cols-2 gap-3 text-body-sm text-pearl/85">
-        <p className="flex items-center gap-2">
+      <dl className="relative mt-4 grid grid-cols-2 gap-3 text-body-sm text-pearl/85">
+        <div className="flex items-center gap-2">
           <Users className="h-4 w-4 shrink-0 text-lilac-mist" aria-hidden="true" />
-          {trial.policy.ageMin}–{trial.policy.ageMax}
-        </p>
-        <p className="flex items-center gap-2">
+          <dt className="sr-only">Age range</dt>
+          <dd>
+            {trial.policy.ageMin}–{trial.policy.ageMax} yrs
+          </dd>
+        </div>
+        <div className="flex items-center gap-2">
           <MapPin className="h-4 w-4 shrink-0 text-lilac-mist" aria-hidden="true" />
-          <span className="truncate">{locationLabel(trial)}</span>
-        </p>
-      </div>
+          <dt className="sr-only">Location</dt>
+          <dd className="truncate">{locationLabel(trial)}</dd>
+        </div>
+      </dl>
 
-      <div className="mt-5 rounded-field border border-iris-border/60 bg-deep-iris/40 p-3">
+      <div
+        className={cn(
+          "relative mt-5 rounded-field border p-3 transition-colors duration-300",
+          featured
+            ? "border-clinical-cyan/30 bg-deep-iris/50"
+            : "border-iris-border/60 bg-deep-iris/40",
+        )}
+      >
         <Tag tone={matchTone(match.kind)}>{matchLabel(match.kind)}</Tag>
         <p className="mt-2 text-caption text-pearl/75">
           {match.kind === "verified"
@@ -104,12 +135,9 @@ function TrialCard({ trial, index }: { trial: Trial; index: number }) {
         ) : null}
       </div>
 
-      <p className="mt-4 flex items-center gap-2 text-caption text-lilac-mist">
+      <p className="relative mt-4 flex items-center gap-2 text-caption text-lilac-mist">
         <Microscope className="h-4 w-4 shrink-0" aria-hidden="true" />
-        {trial.sponsor}
-      </p>
-      <p className="mt-1 text-caption text-lilac-mist">
-        Additional study requirements may apply.
+        <span className="truncate">{trial.sponsor}</span>
       </p>
 
       <button
@@ -119,8 +147,10 @@ function TrialCard({ trial, index }: { trial: Trial; index: number }) {
         onClick={() => navigate({ name: "trial", trialId: trial.id })}
       />
 
-      <div className="relative z-10 mt-5 flex items-center justify-between gap-3 pt-1">
-        <Tag tone="cyan">Verified against supported criteria</Tag>
+      <div className="relative z-10 mt-auto flex items-center justify-between gap-3 pt-5">
+        <span className="text-caption text-lilac-mist">
+          Typed criteria only
+        </span>
         <PillButton
           size="sm"
           onClick={(event) => {

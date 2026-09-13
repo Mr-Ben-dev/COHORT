@@ -73,11 +73,6 @@ export function VerificationView({ checkId }: { checkId: string }) {
     );
   }
 
-  const claimStatus = record.referral.claimStatus
-    ? record.referral.claimStatus.charAt(0).toUpperCase() +
-      record.referral.claimStatus.slice(1)
-    : "None";
-
   return (
     <section className="mx-auto max-w-[1200px] px-5 py-12 sm:px-8 sm:py-16">
       <div className="mx-auto max-w-3xl">
@@ -136,13 +131,6 @@ export function VerificationView({ checkId }: { checkId: string }) {
                 </span>
               ) : (
                 <span className="text-lilac-mist">None</span>
-              )}
-            </LedgerRow>
-            <LedgerRow icon={Check} label="Claim status">
-              {record.referral.commitment ? (
-                claimStatus
-              ) : (
-                <span className="text-lilac-mist">—</span>
               )}
             </LedgerRow>
           </dl>

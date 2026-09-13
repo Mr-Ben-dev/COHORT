@@ -11,5 +11,11 @@ jobs:
         with:
           node-version: "22"
       - run: npm install
+      # The designer privacy test starts `next start` against web/.next, so the
+      # UI has to be installed and built before the suite runs.
+      - run: npm install
+        working-directory: web
+      - run: npm run build
+        working-directory: web
       - run: npm test
       - run: npm run build

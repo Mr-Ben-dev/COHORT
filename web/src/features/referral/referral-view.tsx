@@ -187,21 +187,20 @@ export function ReferralView({ checkId }: { checkId: string }) {
           </div>
 
           <dl className="mt-6 grid gap-4 sm:grid-cols-2">
-            <ReferralField label="Site">{referral.siteName}</ReferralField>
+            <ReferralField label="Sponsor (public listing)">
+              {referral.siteName}
+            </ReferralField>
             <ReferralField label="Trial">
               {trial.id} · {trial.condition}
             </ReferralField>
             <ReferralField label="Payment">
-              None on this contract. Uniqueness token only.
+              <Tag tone="lilac">None — uniqueness token only</Tag>
             </ReferralField>
             <ReferralField label="Public reference">
               <span className="text-clinical-cyan">{referral.publicRef}</span>
             </ReferralField>
             <ReferralField label="Sealed at">
               {formatStamp(referral.sealedAt)}
-            </ReferralField>
-            <ReferralField label="Claim status">
-              <Tag tone="lilac">No bounty to claim</Tag>
             </ReferralField>
           </dl>
         </motion.div>
