@@ -120,9 +120,9 @@ test('Vercel: remembered rdns shows Reconnect without pretending the wallet is c
     await page.addInitScript(injectConnectorScript);
     await page.goto(VERCEL_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.getByRole('navigation', { name: 'Main navigation' }).waitFor({ timeout: 30000 });
-    await page.getByRole('button', { name: 'Reconnect wallet' }).waitFor({ timeout: 15000 });
+    await page.getByRole('button', { name: /Reconnect (wallet|Lace|1AM)/i }).waitFor({ timeout: 15000 });
     const body = await page.innerText('body');
-    assert.match(body, /Reconnect wallet/);
+    assert.match(body, /Reconnect/);
     assert.doesNotMatch(body, /Lace connected/);
     assert.doesNotMatch(body, /1AM connected/);
     const store = await page.evaluate(() => localStorage.getItem('cohort.wallet.rdns'));
@@ -178,6 +178,11 @@ test('Vercel: hanging UUID Lace connect keeps the picker and does not show 1AM w
     assert.doesNotMatch(body, /Approve in 1AM/);
     assert.equal(await page.getByRole('button', { name: 'Connect', exact: true }).count(), 1);
     assert.equal(await page.getByRole('button', { name: 'Connecting', exact: true }).count(), 1);
+    await page.getByRole('button', { name: /Connecting to Lace · Cancel/i }).first().click();
+    await page.getByRole('button', { name: 'Connect', exact: true }).nth(1).waitFor({ timeout: 10000 });
+    const after = await page.innerText('body');
+    assert.match(after, /Connect your wallet/);
+    assert.doesNotMatch(after, /Connecting to Lace · Cancel/);
   } finally {
     await browser.close();
   }

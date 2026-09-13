@@ -39,4 +39,8 @@ test('Lace proving fail-closed copy is present', () => {
   const wallet = fs.readFileSync(path.join(root, 'web/src/services/wallet.ts'), 'utf8');
   assert.match(wallet, /abandonPendingConnect/);
   assert.match(wallet, /WALLET_SUPERSEDED/);
+  assert.match(store, /cancelConnect/);
+  const nav = fs.readFileSync(path.join(root, 'web/src/components/layout/site-nav.tsx'), 'utf8');
+  assert.match(nav, /Connecting to \{/);
+  assert.match(nav, /cancelConnect/);
 });

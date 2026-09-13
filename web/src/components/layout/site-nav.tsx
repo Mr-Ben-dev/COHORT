@@ -41,6 +41,7 @@ export function SiteNav() {
   const navigate = useCohortStore((s) => s.navigate);
   const wallet = useCohortStore((s) => s.wallet);
   const connectWallet = useCohortStore((s) => s.connectWallet);
+  const cancelConnect = useCohortStore((s) => s.cancelConnect);
   const checks = useCohortStore((s) => s.checks);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -155,15 +156,16 @@ export function SiteNav() {
                 )
               }
             >
-              Reconnect wallet
+              Reconnect {"provider" in wallet && wallet.provider ? wallet.provider : "wallet"}
             </button>
           ) : wallet.status === "connecting" ? (
-            <span
-              className="inline-flex items-center gap-2 rounded-pill border border-clinical-cyan/35 bg-clinical-cyan/10 px-4 py-2 text-caption font-semibold text-clinical-cyan"
-              role="status"
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 rounded-pill border border-clinical-cyan/35 bg-clinical-cyan/10 px-4 py-2 text-caption font-semibold text-clinical-cyan outline-none focus-visible:ring-2 focus-visible:ring-clinical-cyan"
+              onClick={() => cancelConnect()}
             >
-              Connecting
-            </span>
+              Connecting to {"provider" in wallet ? wallet.provider : "wallet"} · Cancel
+            </button>
           ) : wallet.status === "wrong-network" ? (
             <span
               className="inline-flex items-center gap-2 rounded-pill border border-lilac-mist/40 px-4 py-2 text-caption font-semibold text-pearl"
@@ -256,7 +258,17 @@ export function SiteNav() {
                       )
                     }
                   >
-                    Reconnect wallet
+                    Reconnect {"provider" in wallet && wallet.provider ? wallet.provider : "wallet"}
+                  </button>
+                </li>
+              ) : wallet.status === "connecting" ? (
+                <li className="pt-1">
+                  <button
+                    type="button"
+                    className="w-full rounded-field px-4 py-3 text-left text-body font-medium text-clinical-cyan"
+                    onClick={() => cancelConnect()}
+                  >
+                    Connecting to {"provider" in wallet ? wallet.provider : "wallet"} · Cancel
                   </button>
                 </li>
               ) : null}
