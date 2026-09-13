@@ -6,6 +6,7 @@ import { PillButton } from "@/components/brand/pill-button";
 import { WordHighlight } from "@/components/brand/word-highlight";
 import { RotatingWord } from "@/components/brand/rotating-word";
 import { HeroPrivacyFlow } from "@/components/artwork/hero-privacy-flow";
+import { HeroCluster } from "@/components/artwork/hero-cluster";
 import { InterfaceDashboard } from "@/components/artwork/interface-dashboard";
 import { useCohortStore } from "@/state/cohort-store";
 import { SectionContent } from "./section-kit";
@@ -63,15 +64,21 @@ export function HeroSection() {
         aria-hidden="true"
       />
 
+      {/* The cluster is anchored to the viewport edge, not to the content
+       * column, so the composition runs off the screen the way the
+       * reference does. It sits behind everything and is decorative. */}
+      <HeroCluster className="pointer-events-none absolute inset-y-0 left-0 hidden w-[46vw] max-w-[720px] md:block lg:w-[42vw]" />
+
       <SectionContent className="relative">
-        <div className="grid items-center gap-12 py-14 sm:py-18 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14 lg:py-20">
-          {/* Artwork — thin lilac line-art device cluster, floating
-           * on its own blurred atmosphere (no box, just light) */}
+        <div className="grid items-center gap-12 py-14 sm:py-18 lg:grid-cols-[0.72fr_1fr] lg:gap-10 lg:py-24">
+          {/* Left column is deliberately empty on large screens — the
+           * bleeding cluster occupies it. Below lg the compact privacy
+           * flow carries the visual instead. */}
           <motion.div
             initial={reduce ? false : { opacity: 0, scale: 0.96, y: 24 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
-            className="relative order-2 mx-auto w-full max-w-[440px] lg:order-1"
+            className="relative order-2 mx-auto w-full max-w-[440px] md:hidden"
           >
             <div
               className="glow-blob glow-blob-lilac left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2"
@@ -79,6 +86,7 @@ export function HeroSection() {
             />
             <HeroPrivacyFlow className="relative" />
           </motion.div>
+          <div className="hidden md:block" aria-hidden="true" />
 
           {/* Copy column */}
           <div className="order-1 max-w-xl lg:order-2">
