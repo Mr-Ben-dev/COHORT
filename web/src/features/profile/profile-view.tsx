@@ -24,7 +24,7 @@ export function ProfileView() {
   );
 
   useEffect(() => {
-    if (typeof profile.age === "number") setAgeDraft(String(profile.age));
+    setAgeDraft(typeof profile.age === "number" ? String(profile.age) : "");
   }, [profile.age]);
 
   const ready = isProfileReady(profile);

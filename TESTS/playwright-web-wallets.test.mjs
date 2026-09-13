@@ -253,7 +253,8 @@ test('Vercel: 1AM and Lace keep isolated private profiles', async () => {
     await page.waitForTimeout(400);
     await page.getByRole('button', { name: /1AM ● Connected/i }).click();
     await page.getByRole('button', { name: 'Switch wallet' }).click();
-    await page.getByRole('dialog').getByRole('button', { name: 'Connect', exact: true }).nth(1).click();
+    await page.getByRole('dialog').waitFor({ timeout: 10000 });
+    await page.getByRole('dialog').getByRole('button', { name: 'Connect', exact: true }).click();
     await page.getByRole('button', { name: /Lace ● Connected/i }).waitFor({ timeout: 15000 });
     await page.waitForFunction(() => {
       const el = document.querySelector('#profile-age');
@@ -267,7 +268,8 @@ test('Vercel: 1AM and Lace keep isolated private profiles', async () => {
     await page.waitForTimeout(400);
     await page.getByRole('button', { name: /Lace ● Connected/i }).click();
     await page.getByRole('button', { name: 'Switch wallet' }).click();
-    await page.getByRole('dialog').getByRole('button', { name: 'Connect', exact: true }).nth(0).click();
+    await page.getByRole('dialog').waitFor({ timeout: 10000 });
+    await page.getByRole('dialog').getByRole('button', { name: 'Connect', exact: true }).click();
     await page.getByRole('button', { name: /1AM ● Connected/i }).waitFor({ timeout: 15000 });
     await page.waitForFunction(() => {
       const el = document.querySelector('#profile-age');
