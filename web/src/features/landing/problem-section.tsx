@@ -55,126 +55,137 @@ function RecordTravelsArt({ reduce }: { reduce: Reduce }) {
   const stroke = "var(--color-lilac-mist)";
   return (
     <svg
-      viewBox="0 0 168 150"
+      viewBox="0 0 300 140"
       className="h-full w-full"
+      preserveAspectRatio="xMidYMid meet"
       fill="none"
       role="img"
       aria-label="A readable patient record is copied twice as it travels from a person into a reviewer's tray."
     >
       {/* person */}
       <motion.circle
-        cx="24"
-        cy="40"
-        r="8"
+        cx="32"
+        cy="44"
+        r="11"
         stroke={stroke}
-        strokeWidth="1.4"
+        strokeWidth="1.6"
         {...draw(reduce, 0.05, 0.6)}
       />
       <motion.path
-        d="M 10 66 C 10 55 17 51 24 51 C 31 51 38 55 38 66"
+        d="M 13 80 C 13 64 22 58 32 58 C 42 58 51 64 51 80"
         stroke={stroke}
-        strokeWidth="1.4"
+        strokeWidth="1.6"
         strokeLinecap="round"
         {...draw(reduce, 0.16, 0.7)}
       />
 
-      {/* ghost copies behind the record */}
-      <motion.g {...appear(reduce, 0.55, 0)} opacity={0.28}>
-        <rect
-          x="70"
-          y="24"
-          width="46"
-          height="58"
-          rx="5"
-          stroke={stroke}
-          strokeWidth="1.2"
-        />
-        <rect
-          x="64"
-          y="30"
-          width="46"
-          height="58"
-          rx="5"
-          stroke={stroke}
-          strokeWidth="1.2"
-        />
-      </motion.g>
-
-      {/* the record itself — rows stay legible */}
-      <motion.rect
-        x="58"
-        y="36"
-        width="46"
-        height="58"
-        rx="5"
+      {/* handover arrow */}
+      <motion.path
+        d="M 60 62 H 78"
         stroke={stroke}
         strokeWidth="1.5"
-        {...draw(reduce, 0.3, 0.8)}
-      />
-      {[48, 57, 66, 75].map((y, i) => (
-        <motion.path
-          key={y}
-          d={`M 66 ${y} H ${i === 3 ? 88 : 96}`}
-          stroke="var(--color-cyan-soft)"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          {...draw(reduce, 0.5 + i * 0.07, 0.45)}
-        />
-      ))}
-
-      {/* transfer arrows */}
-      <motion.path
-        d="M 42 58 H 54"
-        stroke={stroke}
-        strokeWidth="1.4"
         strokeLinecap="round"
         {...draw(reduce, 0.24, 0.35)}
       />
       <motion.path
-        d="M 108 62 H 122"
+        d="M 73 57 L 79 62 L 73 67"
         stroke={stroke}
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        {...draw(reduce, 0.82, 0.35)}
-      />
-      <motion.path
-        d="M 117 57 L 123 62 L 117 67"
-        stroke={stroke}
-        strokeWidth="1.4"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        {...draw(reduce, 0.9, 0.3)}
+        {...draw(reduce, 0.3, 0.3)}
+      />
+
+      {/* ghost copies behind the record — the duplication problem */}
+      <motion.g {...appear(reduce, 0.62, 0)} opacity={0.3}>
+        <rect
+          x="106"
+          y="20"
+          width="56"
+          height="76"
+          rx="7"
+          stroke={stroke}
+          strokeWidth="1.3"
+        />
+        <rect
+          x="98"
+          y="26"
+          width="56"
+          height="76"
+          rx="7"
+          stroke={stroke}
+          strokeWidth="1.3"
+        />
+      </motion.g>
+
+      {/* the record itself — every row stays legible */}
+      <motion.rect
+        x="90"
+        y="32"
+        width="56"
+        height="76"
+        rx="7"
+        stroke={stroke}
+        strokeWidth="1.7"
+        {...draw(reduce, 0.36, 0.8)}
+      />
+      {[48, 61, 74, 87].map((y, i) => (
+        <motion.path
+          key={y}
+          d={`M 101 ${y} H ${i === 3 ? 126 : 135}`}
+          stroke="var(--color-cyan-soft)"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          {...draw(reduce, 0.56 + i * 0.07, 0.45)}
+        />
+      ))}
+
+      {/* delivery arrow */}
+      <motion.path
+        d="M 170 70 H 190"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        {...draw(reduce, 0.9, 0.35)}
+      />
+      <motion.path
+        d="M 185 65 L 191 70 L 185 75"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...draw(reduce, 0.96, 0.3)}
       />
 
       {/* reviewer tray */}
       <motion.path
-        d="M 126 52 H 158 V 96 H 126 Z"
+        d="M 200 36 H 282 V 108 H 200 Z"
         stroke={stroke}
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         strokeLinejoin="round"
-        {...draw(reduce, 0.95, 0.7)}
+        {...draw(reduce, 1, 0.7)}
       />
-      {[64, 74, 84].map((y, i) => (
+      {[56, 70, 84].map((y, i) => (
         <motion.path
           key={y}
-          d={`M 133 ${y} H 151`}
+          d={`M 213 ${y} H ${i === 2 ? 256 : 269}`}
           stroke={stroke}
-          strokeWidth="1.3"
+          strokeWidth="1.5"
           strokeLinecap="round"
-          opacity="0.7"
-          {...draw(reduce, 1.1 + i * 0.07, 0.4)}
+          opacity="0.72"
+          {...draw(reduce, 1.14 + i * 0.07, 0.4)}
         />
       ))}
 
-      {/* waiting pulse under the tray */}
+      {/* the wait */}
       <motion.path
-        d="M 126 112 H 158"
+        d="M 200 124 H 282"
         stroke={stroke}
-        strokeWidth="1.3"
+        strokeWidth="1.4"
         strokeLinecap="round"
-        strokeDasharray="3 5"
-        opacity="0.55"
-        {...appear(reduce, 1.3, 4)}
+        strokeDasharray="4 7"
+        opacity="0.5"
+        {...appear(reduce, 1.34, 4)}
       />
     </svg>
   );
@@ -189,41 +200,42 @@ function ProofTravelsArt({ reduce }: { reduce: Reduce }) {
   const mint = "var(--color-mint-vital)";
   return (
     <svg
-      viewBox="0 0 168 150"
+      viewBox="0 0 300 140"
       className="h-full w-full"
+      preserveAspectRatio="xMidYMid meet"
       fill="none"
       role="img"
       aria-label="Masked health facts stay on a device behind a boundary line; only a sealed proof crosses to the public side, where a mint verified chip appears."
     >
       {/* device holding masked facts */}
       <motion.rect
-        x="10"
-        y="28"
-        width="52"
-        height="74"
-        rx="8"
+        x="16"
+        y="22"
+        width="80"
+        height="96"
+        rx="11"
         stroke={stroke}
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         {...draw(reduce, 0.05, 0.8)}
       />
-      {[46, 57, 68, 79].map((y, i) => (
+      {[44, 58, 72, 86].map((y, i) => (
         <motion.g key={y} {...appear(reduce, 0.35 + i * 0.07, 4)}>
           <rect
-            x="18"
-            y={y - 4}
-            width="36"
-            height="7"
-            rx="3.5"
+            x="28"
+            y={y - 6}
+            width="56"
+            height="12"
+            rx="6"
             stroke={stroke}
-            strokeWidth="1"
-            opacity="0.5"
+            strokeWidth="1.1"
+            opacity="0.45"
           />
-          {[0, 1, 2].map((d) => (
+          {[0, 1, 2, 3].map((d) => (
             <circle
               key={d}
-              cx={24 + d * 6}
-              cy={y - 0.5}
-              r="1.4"
+              cx={40 + d * 10}
+              cy={y}
+              r="2"
               fill={stroke}
               opacity="0.75"
             />
@@ -232,48 +244,48 @@ function ProofTravelsArt({ reduce }: { reduce: Reduce }) {
       ))}
       {/* lock hasp on the device */}
       <motion.path
-        d="M 30 94 V 90 A 6 6 0 0 1 42 90 V 94"
+        d="M 48 108 V 102 A 8 8 0 0 1 64 102 V 108"
         stroke={mint}
-        strokeWidth="1.4"
+        strokeWidth="1.6"
         strokeLinecap="round"
-        {...draw(reduce, 0.7, 0.5)}
+        {...draw(reduce, 0.72, 0.5)}
       />
 
       {/* the boundary the facts never cross */}
       <motion.path
-        d="M 84 14 V 136"
+        d="M 150 8 V 132"
         stroke="var(--color-clinical-cyan)"
-        strokeWidth="1.2"
-        strokeDasharray="4 6"
+        strokeWidth="1.4"
+        strokeDasharray="5 7"
         opacity="0.75"
-        {...appear(reduce, 0.5, 10)}
+        {...appear(reduce, 0.5, 12)}
       />
 
       {/* proof seal riding the boundary */}
       <motion.circle
-        cx="84"
-        cy="65"
-        r="15"
+        cx="150"
+        cy="66"
+        r="20"
         stroke={mint}
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         {...draw(reduce, 0.75, 0.8)}
       />
       <motion.circle
-        cx="84"
-        cy="65"
-        r="20"
+        cx="150"
+        cy="66"
+        r="27"
         stroke={mint}
-        strokeWidth="1.1"
-        strokeDasharray="5 7"
+        strokeWidth="1.2"
+        strokeDasharray="6 9"
         opacity="0.6"
         className={reduce ? undefined : "ring-spin"}
         style={{ transformBox: "fill-box" }}
         {...appear(reduce, 0.95, 0)}
       />
       <motion.path
-        d="M 78 65 L 82.5 69.5 L 91 60"
+        d="M 141 66 L 147.5 72.5 L 160 59"
         stroke={mint}
-        strokeWidth="2"
+        strokeWidth="2.4"
         strokeLinecap="round"
         strokeLinejoin="round"
         {...draw(reduce, 1.05, 0.4)}
@@ -281,50 +293,50 @@ function ProofTravelsArt({ reduce }: { reduce: Reduce }) {
 
       {/* only the proof crosses */}
       <motion.path
-        d="M 100 65 H 118"
+        d="M 182 66 H 204"
         stroke={mint}
-        strokeWidth="1.4"
+        strokeWidth="1.6"
         strokeLinecap="round"
-        strokeDasharray="4 5"
+        strokeDasharray="5 6"
         opacity="0.85"
         {...appear(reduce, 1.15, 0)}
       />
 
       {/* public side: the verified chip */}
       <motion.rect
-        x="120"
-        y="48"
-        width="40"
-        height="34"
-        rx="6"
+        x="208"
+        y="40"
+        width="76"
+        height="52"
+        rx="9"
         stroke={mint}
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         {...draw(reduce, 1.2, 0.7)}
       />
       <motion.path
-        d="M 128 60 L 133 65 L 143 55"
+        d="M 222 60 L 230 68 L 246 51"
         stroke={mint}
-        strokeWidth="1.8"
+        strokeWidth="2.2"
         strokeLinecap="round"
         strokeLinejoin="round"
         {...draw(reduce, 1.35, 0.4)}
       />
       <motion.path
-        d="M 128 73 H 152"
+        d="M 222 79 H 270"
         stroke={mint}
-        strokeWidth="1.3"
+        strokeWidth="1.5"
         strokeLinecap="round"
         opacity="0.6"
         {...draw(reduce, 1.45, 0.3)}
       />
       {/* nothing else follows it across */}
       <motion.path
-        d="M 120 104 H 160"
+        d="M 208 112 H 284"
         stroke={stroke}
-        strokeWidth="1.2"
+        strokeWidth="1.4"
         strokeLinecap="round"
-        strokeDasharray="3 5"
-        opacity="0.4"
+        strokeDasharray="4 7"
+        opacity="0.38"
         {...appear(reduce, 1.5, 4)}
       />
     </svg>
@@ -389,7 +401,7 @@ function Rail({
 
       <div
         className={[
-          "mt-5 h-[150px] w-full rounded-field border px-3 py-2",
+          "mt-5 aspect-[300/140] w-full rounded-field border p-3",
           vital
             ? "border-mint-vital/20 bg-deep-iris/40"
             : "border-iris-border/50 bg-deep-iris/30",
