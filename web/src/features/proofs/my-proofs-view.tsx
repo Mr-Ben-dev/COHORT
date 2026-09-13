@@ -97,9 +97,9 @@ export function MyProofsView() {
 
   const list = useMemo(
     () =>
-      Object.values(checks).sort((a, b) =>
-        b.createdAt.localeCompare(a.createdAt),
-      ),
+      Object.values(checks)
+        .filter((c) => c.proof.status === "verified" && (c.proof.txHash || c.proof.txId))
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
     [checks],
   );
 
@@ -139,8 +139,8 @@ export function MyProofsView() {
             No proofs yet.
           </h2>
           <p className="mt-2 max-w-sm text-body-sm text-pearl/70">
-            When you complete a private eligibility check, your verified
-            proofs live here.
+            Verified eligibility proofs stay on this device as public-safe
+            metadata. Local potential matches are not proofs.
           </p>
           <PillButton
             className="mt-6"

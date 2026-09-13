@@ -107,11 +107,14 @@ export function WalletPicker() {
               <PillButton
                 size="sm"
                 className="ml-auto shrink-0"
+                disabled={wallet.status === "connected" && wallet.provider === row.id}
                 onClick={() => void connectAndProve(row.id)}
               >
-                {wallet.status === "permission-required" && wallet.provider === row.id
-                  ? "Reconnect"
-                  : "Connect"}
+                {wallet.status === "connected" && wallet.provider === row.id
+                  ? "Connected"
+                  : wallet.status === "permission-required" && wallet.provider === row.id
+                    ? "Reconnect"
+                    : "Connect"}
               </PillButton>
             </div>
           );

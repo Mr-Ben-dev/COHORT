@@ -31,4 +31,7 @@ test('Lace proving fail-closed copy is present', () => {
   const store = fs.readFileSync(path.join(root, 'web/src/state/cohort-store.ts'), 'utf8');
   assert.match(store, /Proof support for this flow is unavailable in the current Lace environment/);
   assert.match(store, /Lace connected/);
+  const proving = fs.readFileSync(path.join(root, 'web/src/features/proving/proving-view.tsx'), 'utf8');
+  assert.match(proving, /canProve === false/);
+  assert.match(proving, /Proof support for this flow is unavailable in the current Lace environment/);
 });

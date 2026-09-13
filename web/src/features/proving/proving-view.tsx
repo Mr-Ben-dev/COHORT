@@ -237,8 +237,16 @@ export function ProvingView({ trialId }: { trialId: string }) {
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mt-6 rounded-card border border-iris-border bg-cloud-white/[0.06] p-6 sm:p-8"
           >
-            {WALLET_CHOOSER.has(wallet.status) ? (
-              <WalletPicker />
+            {WALLET_CHOOSER.has(wallet.status) ||
+            (wallet.status === "connected" && wallet.canProve === false) ? (
+              <>
+                {wallet.status === "connected" && wallet.canProve === false ? (
+                  <p className="mb-4 text-body-sm text-clinical-cyan" role="status">
+                    Lace connected. Proof support for this flow is unavailable in the current Lace environment.
+                  </p>
+                ) : null}
+                <WalletPicker />
+              </>
             ) : (
               <>
                 <div className="flex items-center gap-4">
