@@ -170,7 +170,7 @@ test('Vercel: hanging UUID Lace connect keeps the picker and does not show 1AM w
     await openCheck(page, VERCEL_URL);
     await fillEligible(page);
     await page.getByRole('button', { name: 'Connect', exact: true }).nth(1).click();
-    await page.getByText(/Connecting to Lace/i).waitFor({ timeout: 15000 });
+    await page.getByRole('button', { name: /Connecting to Lace · Cancel/i }).first().waitFor({ timeout: 15000 });
     const body = await page.innerText('body');
     assert.match(body, /Approve the Lace authorization popup/);
     assert.match(body, /Connect your wallet/);
