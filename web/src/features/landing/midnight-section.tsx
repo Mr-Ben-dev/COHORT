@@ -749,7 +749,7 @@ export function MidnightSection() {
           <LineReveal
             as="h2"
             id="midnight-heading"
-            className="mt-4 text-heading-lg font-semibold text-iris-ink"
+            className="mt-4 text-heading font-semibold text-balance text-iris-ink sm:text-heading-lg lg:text-heading-xl"
             delay={0.1}
           >
             <span>Patients, sites, proofs.</span>

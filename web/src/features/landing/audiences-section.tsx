@@ -48,8 +48,9 @@ export function TrustedBySection() {
 
   return (
     <SectionShell
-      tone="dark"
-      className="overflow-hidden bg-navy-canvas"
+      tone="ink"
+      panel
+      className="overflow-hidden"
       aria-labelledby="trusted-by-heading"
     >
       {/* Navy veil + dot grid + film grain, the impilo steps-band treatment */}
@@ -77,7 +78,7 @@ export function TrustedBySection() {
           />
           <h2
             id="trusted-by-heading"
-            className="relative text-heading font-semibold text-cloud-white"
+            className="relative text-heading font-semibold text-balance text-cloud-white sm:text-heading-lg lg:text-heading-xl"
           >
             Built on public trial data.
           </h2>

@@ -2,7 +2,13 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
-import { Eyebrow, SectionShell, SectionContent } from "./section-kit";
+import {
+  Accent,
+  Eyebrow,
+  SectionHeading,
+  SectionShell,
+  SectionContent,
+} from "./section-kit";
 
 /**
  * HONESTY — "What COHORT will never do" on the Pearl light surface,
@@ -71,13 +77,10 @@ export function HonestySection() {
           className="mx-auto max-w-2xl text-center"
         >
           <Eyebrow tone="ink">Honest by design</Eyebrow>
-          <h2
-            id="honesty-heading"
-            className="mt-4 text-heading font-semibold text-iris-ink"
-          >
-            What COHORT will never do.
-          </h2>
-          <p className="mt-5 text-body text-iris-ink/70">
+          <SectionHeading id="honesty-heading" tone="ink" className="mt-4">
+            What COHORT will <Accent tone="iris">never</Accent> do.
+          </SectionHeading>
+          <p className="mt-6 text-body text-iris-ink/70">
             A privacy product that oversells is a privacy product that
             fails. Here is exactly where the guarantee ends.
           </p>

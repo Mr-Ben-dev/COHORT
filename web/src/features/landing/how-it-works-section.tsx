@@ -1590,6 +1590,125 @@ function StepCopy({ step }: { step: StepDef }) {
   );
 }
 
+/**
+ * The steps run against a single pinned stage: the copy column scrolls
+ * through 01–04 while one large drawing holds the right half and cross-
+ * fades as each step takes the centre of the viewport. Below `lg` there
+ * is no stage — each step carries its own drawing inline, which is also
+ * the only copy exposed to assistive tech (the stage is decorative
+ * duplication).
+ */
+function StepsWithStage() {
+  const [active, setActive] = useState(0);
+  const reduce = useReducedMotion();
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const nodes = stepRefs.current.filter(Boolean) as HTMLDivElement[];
+    if (nodes.length === 0 || typeof IntersectionObserver === "undefined") {
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // The step closest to the middle of the viewport owns the stage.
+        let best: { index: number; ratio: number } | null = null;
+        for (const entry of entries) {
+          const index = nodes.indexOf(entry.target as HTMLDivElement);
+          if (index < 0 || !entry.isIntersecting) continue;
+          if (!best || entry.intersectionRatio > best.ratio) {
+            best = { index, ratio: entry.intersectionRatio };
+          }
+        }
+        if (best) setActive(best.index);
+      },
+      { rootMargin: "-40% 0px -40% 0px", threshold: [0, 0.25, 0.5, 1] },
+    );
+    for (const node of nodes) observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="mt-14 sm:mt-20 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] lg:gap-14 xl:gap-20">
+      {/* copy column */}
+      <div className="flex flex-col gap-20 sm:gap-24 lg:gap-0">
+        {STEPS.map((step, i) => {
+          const Art = step.art;
+          return (
+            <div
+              key={step.n}
+              ref={(node) => {
+                stepRefs.current[i] = node;
+              }}
+              className="lg:flex lg:min-h-[86vh] lg:items-center"
+            >
+              <div className="w-full">
+                <StepCopy step={step} />
+                <div className="mt-8 lg:hidden">
+                  <ArtFrame>
+                    <Art />
+                  </ArtFrame>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* pinned stage — the grid item must stretch to the full column
+       * height or the sticky child has nowhere to travel */}
+      <div className="hidden lg:block lg:h-full" aria-hidden="true">
+        <div className="sticky top-24 pt-8">
+          <div className="relative aspect-square w-full overflow-hidden rounded-card-elevated border border-lilac-mist/20 bg-navy-canvas shadow-glow-lg">
+            <div
+              className="bg-dots pointer-events-none absolute inset-0 opacity-30"
+              aria-hidden="true"
+            />
+            {STEPS.map((step, i) => {
+              const Art = step.art;
+              const on = active === i;
+              return (
+                <motion.div
+                  key={step.n}
+                  className="absolute inset-0"
+                  initial={false}
+                  animate={
+                    reduce
+                      ? { opacity: on ? 1 : 0 }
+                      : { opacity: on ? 1 : 0, scale: on ? 1 : 0.965 }
+                  }
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ pointerEvents: "none" }}
+                >
+                  <Art />
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* step ticks — where you are in the flow */}
+          <div className="mt-6 flex items-center gap-3">
+            {STEPS.map((step, i) => (
+              <span key={step.n} className="flex items-center gap-3">
+                <span
+                  className={cn(
+                    "h-1 rounded-pill transition-all duration-500",
+                    active === i
+                      ? "w-10 bg-teal-signal"
+                      : "w-5 bg-lilac-mist/25",
+                  )}
+                />
+              </span>
+            ))}
+            <span className="ml-auto text-caption font-semibold uppercase tracking-[0.18em] text-lilac-mist/60">
+              {STEPS[active]?.n} / {STEPS.length.toString().padStart(2, "0")}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ────────────────────────────────────────────────────────────────────────
  * Section assembly
  * ──────────────────────────────────────────────────────────────────────── */
@@ -1704,27 +1823,8 @@ export function HowItWorksSection() {
           step below runs without your record ever leaving your device.
         </motion.p>
 
-        {/* steps 01–04, alternating sides */}
-        <div className="mt-16 space-y-24 sm:mt-24 sm:space-y-32 lg:space-y-40">
-          {STEPS.map((step, i) => {
-            const Art = step.art;
-            return (
-              <div
-                key={step.n}
-                className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16 xl:gap-24"
-              >
-                <div className={cn(i % 2 === 1 && "lg:order-2")}>
-                  <StepCopy step={step} />
-                </div>
-                <div className={cn(i % 2 === 1 && "lg:order-1")}>
-                  <ArtFrame>
-                    <Art />
-                  </ArtFrame>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        {/* steps 01–04 against a pinned stage */}
+        <StepsWithStage />
 
         {/* the formula: criteria + facts → proof → result — a glass
             panel catching the section light, with balanced internal

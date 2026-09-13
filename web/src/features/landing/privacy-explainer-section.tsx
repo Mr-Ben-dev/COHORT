@@ -80,7 +80,7 @@ export function PrivacyExplainerSection() {
           <LineReveal
             as="h2"
             id="privacy-heading"
-            className="mt-4 text-heading font-semibold text-cloud-white"
+            className="mt-4 text-heading font-semibold text-balance text-cloud-white sm:text-heading-lg lg:text-heading-xl"
             delay={0.05}
           >
             <span>Your record</span>
@@ -275,7 +275,7 @@ export function WhiteGloveSection() {
           <Eyebrow tone="ink">White-glove privacy</Eyebrow>
           <h2
             id="white-glove-heading"
-            className="mt-4 text-heading font-semibold text-iris-ink"
+            className="mt-4 text-heading font-semibold text-balance text-iris-ink sm:text-heading-lg lg:text-heading-xl"
           >
             Privacy, handled end to end.
           </h2>

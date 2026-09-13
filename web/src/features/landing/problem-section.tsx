@@ -3,7 +3,13 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { PillButton } from "@/components/brand/pill-button";
-import { Eyebrow, SectionShell, SectionContent } from "./section-kit";
+import {
+  Accent,
+  Eyebrow,
+  SectionHeading,
+  SectionShell,
+  SectionContent,
+} from "./section-kit";
 import { useCohortStore } from "@/state/cohort-store";
 
 /**
@@ -473,13 +479,10 @@ export function ProblemSection() {
           className="mx-auto max-w-3xl text-center"
         >
           <Eyebrow>The product</Eyebrow>
-          <h2
-            id="focus-heading"
-            className="mt-4 text-heading font-semibold text-cloud-white sm:text-heading-lg"
-          >
-            Two ways to find out if you qualify.
-          </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-body text-pearl/85">
+          <SectionHeading id="focus-heading" size="hero" className="mt-4">
+            Two ways to find out if you <Accent>qualify.</Accent>
+          </SectionHeading>
+          <p className="mx-auto mt-7 max-w-2xl text-subheading text-pearl/85">
             You can discover research opportunities and prove your fit
             without handing over your medical record. One of these paths
             asks for the record first. The other never asks at all.

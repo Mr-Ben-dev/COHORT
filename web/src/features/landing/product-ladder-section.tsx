@@ -1,7 +1,13 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { Eyebrow, SectionShell, SectionContent } from "./section-kit";
+import {
+  Accent,
+  Eyebrow,
+  SectionHeading,
+  SectionShell,
+  SectionContent,
+} from "./section-kit";
 
 const NOW = [
   {
@@ -57,13 +63,10 @@ export function ProductLadderSection() {
           className="mx-auto max-w-2xl text-center"
         >
           <Eyebrow tone="ink">Available now · Next, if it is real</Eyebrow>
-          <h2
-            id="now-next-heading"
-            className="mt-4 text-heading font-semibold text-iris-ink"
-          >
-            What is live, and what is not.
-          </h2>
-          <p className="mt-5 text-body text-iris-ink/70">
+          <SectionHeading id="now-next-heading" tone="ink" className="mt-4">
+            What is <Accent tone="iris">live</Accent>, and what is not.
+          </SectionHeading>
+          <p className="mt-6 text-body text-iris-ink/70">
             The product is private matching, a verified eligibility
             signal, and a user-controlled next step. It is not a
             medical-records warehouse and not a paid referral market.
