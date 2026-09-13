@@ -6,6 +6,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { CohortLogo } from "@/components/brand/logo";
 import { PillButton } from "@/components/brand/pill-button";
 import { useCohortStore, type View } from "@/state/cohort-store";
+import { isOneAmInjected } from "@/lib/wallet-discovery";
 import { cn } from "@/lib/utils";
 
 /**
@@ -14,6 +15,113 @@ import { cn } from "@/lib/utils";
  */
 
 type NavKey = "home" | "trials" | "profile" | "proofs";
+
+function WalletStatus({ variant }: { variant: "desktop" | "mobile" }) {
+  const wallet = useCohortStore((s) => s.wallet);
+  const connectWallet = useCohortStore((s) => s.connectWallet);
+  const cancelConnect = useCohortStore((s) => s.cancelConnect);
+  const [oneAm, setOneAm] = useState(false);
+
+  useEffect(() => {
+    let ticks = 0;
+    const read = () => {
+      setOneAm(isOneAmInjected());
+      ticks += 1;
+      return ticks >= 25;
+    };
+    read();
+    const id = window.setInterval(() => {
+      if (read()) window.clearInterval(id);
+    }, 400);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const provider = "provider" in wallet ? wallet.provider : null;
+  const showConnectOneAm =
+    oneAm &&
+    !(wallet.status === "connected" && provider === "1AM") &&
+    !(wallet.status === "approving" && provider === "1AM") &&
+    !(wallet.status === "connecting" && provider === "1AM");
+
+  const chip =
+    wallet.status === "connected" || wallet.status === "approving" ? (
+      variant === "desktop" ? (
+        <span
+          className="inline-flex items-center gap-2 rounded-pill border border-mint-vital/35 bg-mint-vital/10 px-4 py-2 text-caption font-semibold text-mint-vital"
+          role="status"
+        >
+          <span className="pulse-mint h-1.5 w-1.5 rounded-full bg-mint-vital" aria-hidden="true" />
+          {wallet.provider} connected
+        </span>
+      ) : (
+        <p className="px-4 py-2 text-caption font-semibold text-mint-vital">{wallet.provider} connected</p>
+      )
+    ) : wallet.status === "permission-required" || wallet.status === "reconnecting" ? (
+      <button
+        type="button"
+        className={
+          variant === "desktop"
+            ? "inline-flex items-center gap-2 rounded-pill border border-lilac-mist/35 bg-cloud-white/5 px-4 py-2 text-caption font-semibold text-lilac-mist outline-none focus-visible:ring-2 focus-visible:ring-clinical-cyan"
+            : "w-full rounded-field px-4 py-3 text-left text-body font-medium text-lilac-mist"
+        }
+        onClick={() =>
+          void connectWallet(provider === "Lace" ? "Lace" : "1AM")
+        }
+      >
+        Reconnect {provider || "wallet"}
+      </button>
+    ) : wallet.status === "connecting" ? (
+      <button
+        type="button"
+        className={
+          variant === "desktop"
+            ? "inline-flex items-center gap-2 rounded-pill border border-clinical-cyan/35 bg-clinical-cyan/10 px-4 py-2 text-caption font-semibold text-clinical-cyan outline-none focus-visible:ring-2 focus-visible:ring-clinical-cyan"
+            : "w-full rounded-field px-4 py-3 text-left text-body font-medium text-clinical-cyan"
+        }
+        onClick={() => cancelConnect()}
+      >
+        Connecting to {provider || "wallet"} · Cancel
+      </button>
+    ) : wallet.status === "wrong-network" ? (
+      variant === "desktop" ? (
+        <span className="inline-flex items-center gap-2 rounded-pill border border-lilac-mist/40 px-4 py-2 text-caption font-semibold text-pearl">
+          Wrong network
+        </span>
+      ) : (
+        <p className="px-4 py-2 text-caption font-semibold text-pearl">Wrong network</p>
+      )
+    ) : null;
+
+  const connectOneAm = showConnectOneAm ? (
+    <button
+      type="button"
+      className={
+        variant === "desktop"
+          ? "inline-flex items-center gap-2 rounded-pill border border-mint-vital/40 bg-mint-vital/10 px-4 py-2 text-caption font-semibold text-mint-vital outline-none focus-visible:ring-2 focus-visible:ring-clinical-cyan"
+          : "w-full rounded-field px-4 py-3 text-left text-body font-medium text-mint-vital"
+      }
+      onClick={() => void connectWallet("1AM")}
+    >
+      Connect 1AM
+    </button>
+  ) : null;
+
+  if (variant === "mobile") {
+    return (
+      <>
+        {chip ? <li className="pt-1">{chip}</li> : null}
+        {connectOneAm ? <li className="pt-1">{connectOneAm}</li> : null}
+      </>
+    );
+  }
+
+  return (
+    <>
+      {chip}
+      {connectOneAm}
+    </>
+  );
+}
 
 function activeKey(view: View): NavKey {
   switch (view.name) {
@@ -39,9 +147,6 @@ function activeKey(view: View): NavKey {
 export function SiteNav() {
   const view = useCohortStore((s) => s.view);
   const navigate = useCohortStore((s) => s.navigate);
-  const wallet = useCohortStore((s) => s.wallet);
-  const connectWallet = useCohortStore((s) => s.connectWallet);
-  const cancelConnect = useCohortStore((s) => s.cancelConnect);
   const checks = useCohortStore((s) => s.checks);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -138,42 +243,7 @@ export function SiteNav() {
         </ul>
 
         <div className="hidden items-center gap-3 lg:flex">
-          {wallet.status === "connected" || wallet.status === "approving" ? (
-            <span
-              className="inline-flex items-center gap-2 rounded-pill border border-mint-vital/35 bg-mint-vital/10 px-4 py-2 text-caption font-semibold text-mint-vital"
-              role="status"
-            >
-              <span className="pulse-mint h-1.5 w-1.5 rounded-full bg-mint-vital" aria-hidden="true" />
-              {wallet.provider} connected
-            </span>
-          ) : wallet.status === "permission-required" || wallet.status === "reconnecting" ? (
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-pill border border-lilac-mist/35 bg-cloud-white/5 px-4 py-2 text-caption font-semibold text-lilac-mist outline-none focus-visible:ring-2 focus-visible:ring-clinical-cyan"
-              onClick={() =>
-                void connectWallet(
-                  "provider" in wallet && wallet.provider === "Lace" ? "Lace" : "1AM",
-                )
-              }
-            >
-              Reconnect {"provider" in wallet && wallet.provider ? wallet.provider : "wallet"}
-            </button>
-          ) : wallet.status === "connecting" ? (
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-pill border border-clinical-cyan/35 bg-clinical-cyan/10 px-4 py-2 text-caption font-semibold text-clinical-cyan outline-none focus-visible:ring-2 focus-visible:ring-clinical-cyan"
-              onClick={() => cancelConnect()}
-            >
-              Connecting to {"provider" in wallet ? wallet.provider : "wallet"} · Cancel
-            </button>
-          ) : wallet.status === "wrong-network" ? (
-            <span
-              className="inline-flex items-center gap-2 rounded-pill border border-lilac-mist/40 px-4 py-2 text-caption font-semibold text-pearl"
-              role="status"
-            >
-              Wrong network
-            </span>
-          ) : null}
+          <WalletStatus variant="desktop" />
           <PillButton size="sm" onClick={() => go("trials")}>
             Find a trial
           </PillButton>
@@ -243,35 +313,7 @@ export function SiteNav() {
                   </button>
                 </li>
               ))}
-              {wallet.status === "connected" || wallet.status === "approving" ? (
-                <li className="px-4 py-2 text-caption font-semibold text-mint-vital">
-                  {wallet.provider} connected
-                </li>
-              ) : wallet.status === "permission-required" || wallet.status === "reconnecting" ? (
-                <li className="pt-1">
-                  <button
-                    type="button"
-                    className="w-full rounded-field px-4 py-3 text-left text-body font-medium text-lilac-mist"
-                    onClick={() =>
-                      void connectWallet(
-                        "provider" in wallet && wallet.provider === "Lace" ? "Lace" : "1AM",
-                      )
-                    }
-                  >
-                    Reconnect {"provider" in wallet && wallet.provider ? wallet.provider : "wallet"}
-                  </button>
-                </li>
-              ) : wallet.status === "connecting" ? (
-                <li className="pt-1">
-                  <button
-                    type="button"
-                    className="w-full rounded-field px-4 py-3 text-left text-body font-medium text-clinical-cyan"
-                    onClick={() => cancelConnect()}
-                  >
-                    Connecting to {"provider" in wallet ? wallet.provider : "wallet"} · Cancel
-                  </button>
-                </li>
-              ) : null}
+              <WalletStatus variant="mobile" />
               <li className="pt-2">
                 <PillButton
                   className="w-full"

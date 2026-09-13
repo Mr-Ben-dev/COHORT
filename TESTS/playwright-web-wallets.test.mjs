@@ -121,8 +121,10 @@ test('Vercel: remembered rdns shows Reconnect without pretending the wallet is c
     await page.goto(VERCEL_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.getByRole('navigation', { name: 'Main navigation' }).waitFor({ timeout: 30000 });
     await page.getByRole('button', { name: /Reconnect (wallet|Lace|1AM)/i }).waitFor({ timeout: 15000 });
+    await page.getByRole('button', { name: 'Connect 1AM' }).waitFor({ timeout: 15000 });
     const body = await page.innerText('body');
     assert.match(body, /Reconnect/);
+    assert.match(body, /Connect 1AM/);
     assert.doesNotMatch(body, /Lace connected/);
     assert.doesNotMatch(body, /1AM connected/);
     const store = await page.evaluate(() => localStorage.getItem('cohort.wallet.rdns'));
