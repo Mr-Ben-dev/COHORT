@@ -34,7 +34,7 @@ Public GitHub: [https://github.com/Mr-Ben-dev/COHORT](https://github.com/Mr-Ben-
 23. [Wave 1 — what is actually shipped](#23-wave-1--what-is-actually-shipped)
 24. [Wave 2 — planned](#24-wave-2--planned)
 25. [Wave 3 — planned](#25-wave-3--planned)
-26. [Limitations / honest non-claims](#26-limitations--honest-non-claims)
+26. [Wave 1 scope](#26-wave-1-scope)
 27. [Evidence links](#27-evidence-links)
 28. [License](#28-license)
 
@@ -91,10 +91,10 @@ Verified eligibility means: the official Preprod indexer reports `proveEligible`
 
 ```mermaid
 flowchart LR
-  A[DISCOVER] --> B[PRIVATE MATCH]
-  B --> C[VERIFY]
-  C --> D[QUALIFICATION]
-  D --> E[CONTROLLED HANDOFF]
+  A["DISCOVER"] --> B["PRIVATE MATCH"]
+  B --> C["VERIFY"]
+  C --> D["QUALIFICATION"]
+  D --> E["CONTROLLED HANDOFF"]
 ```
 
 | Step | What the user does | What is private | What becomes public |
@@ -151,21 +151,21 @@ Privacy here is **what an observer can correlate**, not whether one field is hid
 
 ```mermaid
 flowchart TB
-  subgraph private [PRIVATE — device only]
-    Age[age]
-    Cond[condition flag]
-    Med[medication flag]
-    Sk[wSecret]
-    Blind[wBlind]
-    Profile[AES-GCM profile vault]
+  subgraph private["PRIVATE - device only"]
+    Age["age"]
+    Cond["condition flag"]
+    Med["medication flag"]
+    Sk["wSecret"]
+    Blind["wBlind"]
+    Profile["AES-GCM profile vault"]
   end
-  subgraph public [PUBLIC — ledger / indexer / optional share]
-    Nul[spent nullifier]
-    Ref[referral commitment]
-    Cnt[proven counter]
-    Meta[tx hash / circuit name / contract]
+  subgraph public["PUBLIC - ledger and indexer"]
+    Nul["spent nullifier"]
+    Ref["referral commitment"]
+    Cnt["proven counter"]
+    Meta["tx hash / circuit / contract"]
   end
-  private -->|ZK proof, no plaintext| public
+  private -->|"ZK proof, no plaintext"| public
 ```
 
 | Location | Plaintext exists? | Over the network? |
@@ -204,34 +204,34 @@ A lying prover can satisfy the circuit with invented age/flags. Wave 1 says that
 
 ```mermaid
 flowchart TB
-  subgraph browser [Browser]
-    UI[web/ Next.js]
-    Vault[encrypted local profile]
-    Match[local matcher]
+  subgraph browser["Browser"]
+    UI["web Next.js"]
+    Vault["encrypted local profile"]
+    Match["local matcher"]
     UI --> Vault
     UI --> Match
   end
-  subgraph wallet [1AM]
-    WASM[in-browser prover]
+  subgraph wallet["1AM"]
+    WASM["in-browser prover"]
   end
-  subgraph hosts [COHORT hosts]
-    API[Render API + /zk]
-    Vercel[Vercel designer]
+  subgraph hosts["COHORT hosts"]
+    API["Render API and zk keys"]
+    Vercel["Vercel designer"]
   end
-  subgraph midnight [Midnight Preprod]
-    Node[rpc.preprod.midnight.network]
-    Idx[indexer.preprod.midnight.network]
-    C[contract 1d5c2084…29cc]
+  subgraph midnight["Midnight Preprod"]
+    Node["Preprod RPC"]
+    Idx["Preprod indexer"]
+    C["deployed contract"]
   end
-  CT[ClinicalTrials.gov API v2]
+  CT["ClinicalTrials.gov API v2"]
   Vercel --> UI
-  UI -->|public trials / config / referral| API
-  API -->|typed subset| CT
-  Match -->|witnesses never POSTed| WASM
-  WASM -->|proof + public outputs| Node
+  UI -->|"public trials / config / referral"| API
+  API -->|"typed subset"| CT
+  Match -->|"witnesses never POSTed"| WASM
+  WASM -->|"proof and public outputs"| Node
   Node --> C
-  UI -->|queryContractState| Idx
-  API -->|public cache only| Idx
+  UI -->|"queryContractState"| Idx
+  API -->|"public cache only"| Idx
 ```
 
 | Tree | Role |
@@ -260,11 +260,11 @@ sequenceDiagram
   participant N as Preprod
   participant I as Indexer
   U->>UI: typed facts stay in vault
-  U->>W: connect('preprod') in the same click
+  U->>W: connect preprod in the same click
   W->>W: getProvingProvider WASM
   W->>N: submitCallTx proveEligible
   N-->>I: ContractCall
-  UI->>I: queryContractState + ledger()
+  UI->>I: queryContractState and ledger
   I-->>UI: proven / spent / referrals
 ```
 
@@ -354,11 +354,11 @@ Ledger writes after the asserts:
 
 ```mermaid
 flowchart TD
-  Sk[wSecret] --> Nul["persistentHash(['cohort:ref', trialId, sk])"]
-  Sk --> Ref[persistentCommit(sk, wBlind)]
-  Nul -->|disclose + insert| Spent[spent set]
-  Ref -->|disclose + insert| Refs[referrals set]
-  Spent -->|member assert| Replay[same trial + secret rejected]
+  Sk["wSecret"] --> Nul["trial-scoped nullifier"]
+  Sk --> Ref["referral commitment"]
+  Nul -->|"disclose and insert"| Spent["spent set"]
+  Ref -->|"disclose and insert"| Refs["referrals set"]
+  Spent -->|"member assert"| Replay["same trial plus secret rejected"]
 ```
 
 - Domain separation string `"cohort:ref"` prevents cross-protocol nullifier collisions with other DApps that hash a raw secret.
@@ -384,13 +384,13 @@ This is not “the protocol, proven.” It is “the mapped subset, proven.”
 
 ```mermaid
 flowchart LR
-  Click[User click] --> Connect["connect('preprod')"]
-  Connect --> OneAM[1AM ConnectedAPI]
-  OneAM --> GPP[getProvingProvider]
-  GPP --> WASM[in-browser WASM]
-  WASM --> Submit[submitCallTx]
-  Connect --> Lace[Lace ConnectedAPI]
-  Lace --> Limited[proving LIMITED — no getProvingProvider]
+  Click["User click"] --> Connect["connect preprod"]
+  Connect --> OneAM["1AM ConnectedAPI"]
+  OneAM --> GPP["getProvingProvider"]
+  GPP --> WASM["in-browser WASM"]
+  WASM --> Submit["submitCallTx"]
+  Connect --> Lace["Lace ConnectedAPI"]
+  Lace --> Limited["proving limited"]
 ```
 
 - Discover `window.midnight`. No fake wallet tiles.
@@ -477,7 +477,7 @@ curl -s https://indexer.preprod.midnight.network/api/v4/graphql \
 
 ## 19. Tests and security
 
-Last recorded full suite is printed by `npm test` (Node’s `# tests / # pass / # fail`). This documentation pass (2026-09-16): **107 tests, 107 pass, 0 fail, 0 skipped**. Do not inflate that number.
+Last recorded full suite is printed by `npm test` (Node’s `# tests / # pass / # fail`). This documentation pass (2026-09-16): **108 tests, 108 pass, 0 fail, 0 skipped**. Do not inflate that number.
 
 | Area | Files (non-exhaustive) |
 |---|---|
@@ -508,87 +508,73 @@ Must be HTTP 400 and must not echo `31`.
 
 ## 20. Judge quickstart
 
-Prerequisites: **Node.js 22+**, **npm 10+**, git, Chrome or Edge (Playwright uses the installed browser). No Docker, no database, no COHORT proof-server.
+This path needs **no wallet, no secrets, and no private environment**.
 
-Midnight Compact is **not** supported natively on Windows. On Windows use **WSL**. Linux and macOS can install Compact directly. Official install: [Install the toolchain](https://docs.midnight.network/getting-started/installation).
+### Prerequisites
 
-### Windows (PowerShell) — clone, install, test
+- Node.js **22+** and npm **10+**
+- git
+- Chrome or Edge (Playwright drives the installed browser for privacy tests)
+- Compact **0.31.1** ([official install](https://docs.midnight.network/getting-started/installation), same toolchain as [example-hello-world](https://github.com/midnightntwrk/example-hello-world))
 
-```powershell
+Windows: Compact is not native. Use **WSL**. Do not run `C:\Windows\System32\compact.exe` (that is NTFS compression).
+
+### Clone and install
+
+```bash
 git clone https://github.com/Mr-Ben-dev/COHORT.git
 cd COHORT
 npm ci
-cd web; npm ci; npm run build; cd ..
-npm test
+cd web && npm ci && npm run build && cd ..
 ```
 
-`npm ci` requires the committed lockfile. If it is missing on a fork, `npm install` is the fallback.
+`npm ci` uses the committed lockfile. `web/.next` is required before `npm test`.
 
-### Windows — Compact (WSL)
-
-`C:\Windows\System32\compact.exe` is **NTFS compression**. Do not use it.
+### Compact install and version check
 
 ```bash
-# inside WSL
 curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
 source ~/.bashrc
 compact update 0.31.1
 compact compile +0.31.1 --version    # must print 0.31.1
-cd /mnt/d/route/midnight/COHORT      # or your clone path
-npm run compile                      # full ZK. Do not use `--skip-zk`.
 ```
 
-From PowerShell, after WSL Compact is installed:
-
-```powershell
-npm run compile
-npm run judge:verify
-```
-
-### Linux / macOS
+### LOCAL REPRODUCTION
 
 ```bash
-git clone https://github.com/Mr-Ben-dev/COHORT.git
-cd COHORT
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
-source ~/.bashrc   # or ~/.zshrc
-compact update 0.31.1
-compact compile +0.31.1 --version
-npm ci
-cd web && npm ci && npm run build && cd ..
-npm run compile
-npm test
-npm run judge:verify
+npm run compile      # full Compact 0.31.1 ZK compile. Do not use `--skip-zk`.
+npm test             # contract, privacy, runtime tree, live indexer, Playwright
+npm run judge:verify # one report: compile + tests + live Preprod evidence
 ```
 
-Inspect the contract without proving:
+| Command | What it verifies |
+|---|---|
+| `npm run compile` | compiler 0.31.1, language 0.23.0, runtime 0.16.0, prover/verifier/ZKIR, verifier SHA-256 matches Preprod |
+| `npm test` | circuit asserts, backend HTTP 400 gate, onchain-runtime-v3 uniqueness, live indexer `proven >= 2` |
+| `npm run judge:verify` | the same pins plus live Render `/health`, `/zk`, privacy gate, indexer `ledger()` |
+
+### Inspect the contract
 
 ```bash
-# Compact source
 sed -n '1,80p' CONTRACT/cohort.compact
-
-# committed artifacts
 ls -l packages/contract/zk/keys packages/contract/zk/zkir packages/contract/zk/compiler
 ```
 
-Public evidence without a wallet:
+### LIVE PREPROD EVIDENCE
+
+No credentials required.
 
 ```bash
 curl https://cohort-y4zr.onrender.com/health
 curl https://cohort-y4zr.onrender.com/api/config
+curl -s https://indexer.preprod.midnight.network/api/v4/graphql \
+  -H "content-type: application/json" \
+  -d "{\"query\":\"{ contractAction(address: \\\"1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc\\\") { __typename ... on ContractCall { entryPoint } address transaction { hash } } }\"}"
 ```
 
-### Optional live prove
+Documented 1AM gold-path txHash: `da8f79de04a120d7a0c8b433de992b21bee37a234b4af2c717aa16fb84fc1a60`. Explorer: https://preprod.midnightexplorer.com/
 
-Desktop Chrome, 1AM installed, Preprod synced with tNIGHT + DUST:
-
-1. Open https://cohort-web-orcin.vercel.app
-2. Find Trials → NCT07153614 → Check privately. Facts stay local.
-3. Connect wallet → 1AM. Click the 1AM toolbar and **Approve COHORT**.
-4. After SUCCESS, My Proofs shows a public-safe row (not age).
-5. Confirm indexer `proven` on the contract above.
-
-Lace may connect; proving stays limited.
+Optional in-browser prove (not required to score the compile gate): desktop Chrome + 1AM + Preprod DUST on https://cohort-web-orcin.vercel.app
 
 ---
 
@@ -635,12 +621,11 @@ The report prints, with explicit labels:
 
 | Label | Meaning |
 |---|---|
-| REPRODUCED LOCALLY | this machine just compiled, hashed, or tested it |
-| VERIFIED AGAINST PREPROD | live Render / config / `/zk` / privacy gate |
-| INDEXER-VERIFIED | official Preprod indexer `ledger()` or `contractAction` |
+| LOCAL REPRODUCED | this machine just compiled, hashed, or tested it |
+| INDEXER VERIFIED | official Preprod indexer `ledger()` or `contractAction` |
 | COMMITTED EVIDENCE | recorded in this repo; not recreated in this run |
 | PLANNED | Wave 2 / Wave 3 |
-| UNKNOWN | skipped or unavailable |
+| LIVE VERIFIED | live Render `/health`, `/zk`, privacy gate |
 
 It never prints tokens, mnemonics, private keys, private health witnesses, or database credentials.
 
@@ -661,8 +646,8 @@ CI runs: Compact 0.31.1 install → `npm run compile` → `npm test` → `npm ru
 
 ```mermaid
 flowchart LR
-  W1[Wave 1 shipped: patient rail] --> W2[Wave 2 planned: site verifies]
-  W2 --> W3[Wave 3 planned: Mainnet]
+  W1["Wave 1 shipped - patient rail"] --> W2["Wave 2 planned - site verifies"]
+  W2 --> W3["Wave 3 planned - Mainnet"]
 ```
 
 ---
@@ -690,19 +675,9 @@ Explicitly not Wave 2: fake inbox, bounty, EHR authenticity, hosted prover, Main
 
 ---
 
-## 26. Limitations / honest non-claims
+## 26. Wave 1 scope
 
-- Facts are **self-attested**. The circuit proves the predicate over witnesses, not that a hospital issued them.
-- Typed subset only. Free-text protocol language is not proven.
-- `wSex` is unused. Sex criteria are not proven.
-- No live site inbox. Sharing posts a public-safe record; it does not message a coordinator.
-- No bounty / escrow. `referrals` is a uniqueness commitment, not a coin.
-- Lace cannot prove on this gold path.
-- IndexedDB vault is origin-scoped. Clearing site data destroys the profile. There is no server-side recovery.
-- Preprod tNIGHT / DUST are test value. This is not Mainnet.
-- 1AM vendor telemetry / Proof Station: **UNKNOWN**. Gold path assumes in-tab WASM.
-- Gas sponsorship is **not documented**. Users need DUST.
-- Metadata (circuit, contract, timing) is visible to a chain observer.
+This Wave verifies the supported typed subset: age bounds and mapped condition/medication flags against the public `/api/trials` policy. Facts are self-attested. `wSex` is declared and unused. `referrals` is a uniqueness commitment, not a payment. Qualification is an indexer-confirmed Preprod transaction, not enrollment.
 
 ---
 
@@ -722,9 +697,11 @@ Explicitly not Wave 2: fake inbox, bounty, EHR authenticity, hosted prover, Main
 | Explicit disclosure | https://docs.midnight.network/compact/reference/explicit-disclosure |
 | Hello-world compile | https://github.com/midnightntwrk/example-hello-world |
 | Repo | https://github.com/Mr-Ben-dev/COHORT |
+| Topic | `midnightntwrk` |
+| License | Apache-2.0 (`LICENSE`) |
 
 ---
 
 ## 28. License
 
-No SPDX license file is committed. Source is published for Midnight Buildathon evaluation. Compact-generated artifacts under `packages/contract/` are compiler output, not a grant of Midnight Foundation rights beyond their own terms.
+Apache License 2.0. See [`LICENSE`](LICENSE).

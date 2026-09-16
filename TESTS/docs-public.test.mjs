@@ -17,9 +17,21 @@ test('README contains judge compile/test commands and real evidence', () => {
   assert.match(md, /npm run compile/);
   assert.match(md, new RegExp(`compact compile \\+${COMPACT_COMPILER}`));
   assert.match(md, /Do not use `--skip-zk`/);
+  assert.match(md, /Apache License 2\.0/);
+  assert.equal(fs.existsSync(path.join(root, 'LICENSE')), true);
   assert.equal(md.includes(CONTRACT_ADDRESS), true);
   assert.equal(md.includes(GOLD_PATH_TX.txHash), true);
   assert.equal(md.includes(COMPACT_COMPILER), true);
+});
+
+test('README mermaid node labels are GitHub-safe', () => {
+  const md = read('README.md');
+  const blocks = [...md.matchAll(/```mermaid\r?\n([\s\S]*?)```/g)].map((m) => m[1]);
+  assert.ok(blocks.length >= 6, `expected >=6 mermaid blocks, got ${blocks.length}`);
+  for (const [i, block] of blocks.entries()) {
+    assert.equal(/\w+\[[^"\n]*\(/.test(block), false, `block ${i} has unquoted parentheses in a node label`);
+    assert.equal(/\[[^"\n]*'/.test(block), false, `block ${i} has an unquoted apostrophe in a node label`);
+  }
 });
 
 test('public docs do not name competitors', () => {

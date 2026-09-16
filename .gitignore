@@ -4,6 +4,9 @@
 !.env.example
 !.env*.example
 
+# local operator notes — not part of the public submission
+FINAL_SETUP.md
+
 # next / vercel
 .next/
 web/.next/

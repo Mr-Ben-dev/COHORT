@@ -180,12 +180,12 @@ try {
   const compiled = await compileContract({ skipCompile });
   note(
     ok(
-      skipCompile ? 'COMMITTED EVIDENCE' : 'REPRODUCED LOCALLY',
+      skipCompile ? 'COMMITTED EVIDENCE' : 'LOCAL REPRODUCED',
       skipCompile ? 'compile skipped; committed artifacts verified' : 'full compact compile +0.31.1 (not --skip-zk)',
       `verifier ${compiled.committed.verifierSha.slice(0, 12)}…`,
     ),
   );
-  ok('REPRODUCED LOCALLY', 'generated artifacts', `prover ${compiled.committed.proverBytes} bytes, verifier ${compiled.committed.verifierBytes} bytes, zkir+bzkir present`);
+  ok('LOCAL REPRODUCED', 'generated artifacts', `prover ${compiled.committed.proverBytes} bytes, verifier ${compiled.committed.verifierBytes} bytes, zkir+bzkir present`);
   ok('COMMITTED EVIDENCE', 'compiler-info', `${compiled.committed.compilerVersion} / language ${compiled.committed.languageVersion} / runtime ${compiled.committed.runtimeVersion}`);
 } catch (err) {
   note(fail('compact compile', redact(err.message)));
@@ -201,11 +201,11 @@ try {
     fs.readFileSync(path.join(root, 'node_modules/@midnight-ntwrk/onchain-runtime-v3/package.json'), 'utf8'),
   ).version;
   note(compactRt === PUBLIC_NETWORK_PINS.compactRuntime
-    ? ok('REPRODUCED LOCALLY', 'compact-runtime', compactRt)
+    ? ok('LOCAL REPRODUCED', 'compact-runtime', compactRt)
     : fail('compact-runtime', compactRt));
   const onchainVers = lockVersions('@midnight-ntwrk/onchain-runtime-v3');
   note(onchainVers.length === 1 && onchainVers[0] === ONCHAIN_RUNTIME
-    ? ok('REPRODUCED LOCALLY', 'onchain-runtime-v3 unique tree', onchain)
+    ? ok('LOCAL REPRODUCED', 'onchain-runtime-v3 unique tree', onchain)
     : fail('onchain-runtime-v3', onchainVers.join(',')));
   note(ok('COMMITTED EVIDENCE', 'midnight-js pin', MIDNIGHT_JS));
   note(ok('COMMITTED EVIDENCE', 'dapp-connector-api pin', DAPP_CONNECTOR));
@@ -234,7 +234,7 @@ if (skipTests) {
   if (!Number.isFinite(counts.tests)) {
     note(fail('npm test', `could not parse counts; exit ${r.status}`));
   } else if (r.status === 0 && counts.fail === 0) {
-    note(ok('REPRODUCED LOCALLY', 'npm test', `tests ${counts.tests} / pass ${counts.pass} / fail ${counts.fail} / skipped ${counts.skipped}`));
+    note(ok('LOCAL REPRODUCED', 'npm test', `tests ${counts.tests} / pass ${counts.pass} / fail ${counts.fail} / skipped ${counts.skipped}`));
   } else {
     note(fail('npm test', `tests ${counts.tests} / pass ${counts.pass} / fail ${counts.fail} / skipped ${counts.skipped}`));
   }
@@ -246,7 +246,7 @@ ok('COMMITTED EVIDENCE', 'backend private-field allowlist', `${PRIVATE_FIELD_NAM
 ok('COMMITTED EVIDENCE', 'no hosted proof-server', '1AM in-browser WASM; Lace proving is LIMITED');
 const envExample = fs.readFileSync(path.join(root, '.env.example'), 'utf8');
 note(!SECRET_VALUE.test(envExample)
-  ? ok('REPRODUCED LOCALLY', '.env.example has no live tokens', '')
+  ? ok('LOCAL REPRODUCED', '.env.example has no live tokens', '')
   : fail('.env.example', 'looks like a live token'));
 console.log('');
 
@@ -254,11 +254,11 @@ console.log('--- 6. Backend privacy gate (live Render) ---');
 try {
   const health = await fetchJson(`${API_ORIGIN}/health`);
   note(health.ok && health.json?.status === 'ok'
-    ? ok('VERIFIED AGAINST PREPROD', 'GET /health', API_ORIGIN)
+    ? ok('LIVE VERIFIED', 'GET /health', API_ORIGIN)
     : fail('GET /health', String(health.status)));
   const config = await fetchJson(`${API_ORIGIN}/api/config`);
   note(config.json?.contractAddress === CONTRACT_ADDRESS
-    ? ok('VERIFIED AGAINST PREPROD', 'GET /api/config contract', CONTRACT_ADDRESS)
+    ? ok('LIVE VERIFIED', 'GET /api/config contract', CONTRACT_ADDRESS)
     : fail('GET /api/config', redact(JSON.stringify(config.json)?.slice(0, 120))));
   const hostile = await fetchJson(`${API_ORIGIN}/api/referral`, {
     method: 'POST',
@@ -266,13 +266,13 @@ try {
   });
   const gate = backendGateResult(hostile);
   note(hostile.status === 400 && !gate.echoed
-    ? ok('VERIFIED AGAINST PREPROD', 'POST /api/referral private fields HTTP 400, no echo', `fields=${(gate.fields || []).join(',')}`)
+    ? ok('LIVE VERIFIED', 'POST /api/referral private fields HTTP 400, no echo', `fields=${(gate.fields || []).join(',')}`)
     : fail('privacy gate', `status ${hostile.status} echoed=${gate.echoed}`));
   const zk = await fetch(`${API_ORIGIN}/zk/keys/${CIRCUIT_ID}.verifier`);
   const zkBuf = Buffer.from(await zk.arrayBuffer());
   const zkSha = crypto.createHash('sha256').update(zkBuf).digest('hex');
   note(zkSha === VERIFIER_SHA256
-    ? ok('VERIFIED AGAINST PREPROD', 'live /zk verifier SHA-256', zkSha)
+    ? ok('LIVE VERIFIED', 'live /zk verifier SHA-256', zkSha)
     : fail('live /zk verifier', zkSha));
 } catch (err) {
   note(fail('live Render', redact(err.message)));
@@ -284,7 +284,7 @@ try {
   const latest = await indexerLatest();
   const action = latest.json?.data?.contractAction;
   if (action?.transaction?.hash) {
-    note(ok('INDEXER-VERIFIED', 'latest contractAction', `${action.entryPoint || action.__typename} hash=${action.transaction.hash}`));
+    note(ok('INDEXER VERIFIED', 'latest contractAction', `${action.entryPoint || action.__typename} hash=${action.transaction.hash}`));
     if (action.entryPoint && action.entryPoint !== CIRCUIT_ID) {
       note(fail('latest entryPoint', action.entryPoint));
     }
@@ -292,11 +292,11 @@ try {
     note(fail('indexer contractAction', redact(JSON.stringify(latest.json).slice(0, 180))));
   }
   const { verification, deployed } = await indexerLedger();
-  note(ok('INDEXER-VERIFIED', 'queryContractState + ledger()', `proven=${verification.proven} spent=${verification.spentCount} referrals=${verification.referralCount}`));
+  note(ok('INDEXER VERIFIED', 'queryContractState + ledger()', `proven=${verification.proven} spent=${verification.spentCount} referrals=${verification.referralCount}`));
   const localVerifier = fs.readFileSync(zkArtifactPaths().verifier);
   const onchain = Buffer.from(deployed.verifierKey);
   note(onchain.equals(localVerifier)
-    ? ok('INDEXER-VERIFIED', 'on-chain verifier equals committed keys', VERIFIER_SHA256)
+    ? ok('INDEXER VERIFIED', 'on-chain verifier equals committed keys', VERIFIER_SHA256)
     : fail('on-chain verifier mismatch', ''));
   if (verification.proven < 2) {
     note(fail('proven counter', `expected >= 2, got ${verification.proven}`));
@@ -330,6 +330,6 @@ if (failed === 0) {
 } else {
   console.log(`RESULT: FAIL — ${failed} check(s) failed.`);
 }
-console.log('Labels: REPRODUCED LOCALLY | VERIFIED AGAINST PREPROD | INDEXER-VERIFIED | COMMITTED EVIDENCE | PLANNED | UNKNOWN');
+console.log('Labels: LOCAL REPRODUCED | INDEXER VERIFIED | COMMITTED EVIDENCE | PLANNED | LIVE VERIFIED');
 console.log('============================================================');
 process.exit(failed === 0 ? 0 : 1);

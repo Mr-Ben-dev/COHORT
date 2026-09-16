@@ -258,7 +258,7 @@ if (isMain) {
     console.log(`prover bytes:     ${result.committed.proverBytes}`);
     console.log(`witnesses:        ${result.committed.witnesses.join(', ')}`);
     console.log(`ledger:           ${result.committed.ledger.join(', ')}`);
-    console.log('STATUS: REPRODUCED LOCALLY (artifacts match committed Preprod verifier)');
+    console.log('STATUS: LOCAL REPRODUCED (artifacts match committed Preprod verifier)');
   } catch (err) {
     console.error(err.message || err);
     process.exit(1);
