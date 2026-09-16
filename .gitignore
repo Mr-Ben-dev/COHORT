@@ -38,6 +38,7 @@ playwright-report/
 managed/**/keys/
 **/*.seed
 **/*.mnemonic
+packages/contract/.compile-out/
 
 # Public Compact circuit artifacts (not wallet secrets)
 !packages/contract/zk/

@@ -10,12 +10,25 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Install Compact 0.31.1
+        run: |
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.compact/bin" >> "$GITHUB_PATH"
+      - name: Pin Compact compiler 0.31.1
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.compact/bin:$PATH"
+          compact update 0.31.1
+          compact compile +0.31.1 --version
       - run: npm install
-      # The designer privacy test starts `next start` against web/.next, so the
-      # UI has to be installed and built before the suite runs.
+      # Playwright privacy tests start `next start` against web/.next.
       - run: npm install
         working-directory: web
       - run: npm run build
         working-directory: web
+      - name: Full Compact compile (not --skip-zk)
+        run: npm run compile
       - run: npm test
+      - name: Judge verification
+        run: npm run judge:verify -- --skip-compile --skip-tests
       - run: npm run build

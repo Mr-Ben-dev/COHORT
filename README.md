@@ -1,112 +1,221 @@
 # COHORT
 
-Prove clinical-trial eligibility on Midnight without handing over your medical record.
+Prove a typed clinical-trial eligibility predicate on Midnight Preprod without handing over a medical record.
 
 **Find trials you may qualify for. Check your fit privately. Prove it on Midnight. Choose what happens next.**
 
-This directory is the application, Compact circuit, privacy tests, and live Preprod evidence. Operator setup is in `FINAL_SETUP.md` (local). The Wave 2 / Wave 3 roadmap is in `WAVES_2_3_MASTER_PLAN.md` (local). Among markdown files, **this README is the only document that ships to GitHub.**
+Live designer: [https://cohort-web-orcin.vercel.app](https://cohort-web-orcin.vercel.app)  
+Public GitHub: [https://github.com/Mr-Ben-dev/COHORT](https://github.com/Mr-Ben-dev/COHORT)
+
+## Contents
+
+1. [COHORT in one minute](#1-cohort-in-one-minute)
+2. [The problem](#2-the-problem)
+3. [The solution](#3-the-solution)
+4. [Product flow](#4-product-flow)
+5. [Why Midnight](#5-why-midnight)
+6. [Privacy model](#6-privacy-model)
+7. [Threat model](#7-threat-model)
+8. [System architecture](#8-system-architecture)
+9. [End-to-end proof flow](#9-end-to-end-proof-flow)
+10. [Compact contract](#10-compact-contract)
+11. [Circuit semantics](#11-circuit-semantics)
+12. [Public vs private state](#12-public-vs-private-state)
+13. [Nullifier, commitment, replay protection](#13-nullifier-commitment-replay-protection)
+14. [ClinicalTrials.gov integration](#14-clinicaltrialsgov-integration)
+15. [Wallet architecture](#15-wallet-architecture)
+16. [Backend privacy boundary](#16-backend-privacy-boundary)
+17. [Deployment](#17-deployment)
+18. [On-chain evidence](#18-on-chain-evidence)
+19. [Tests and security](#19-tests-and-security)
+20. [Judge quickstart](#20-judge-quickstart)
+21. [Full Compact compile](#21-full-compact-compile)
+22. [Judge verification CLI](#22-judge-verification-cli)
+23. [Wave 1 — what is actually shipped](#23-wave-1--what-is-actually-shipped)
+24. [Wave 2 — planned](#24-wave-2--planned)
+25. [Wave 3 — planned](#25-wave-3--planned)
+26. [Limitations / honest non-claims](#26-limitations--honest-non-claims)
+27. [Evidence links](#27-evidence-links)
+28. [License](#28-license)
 
 ---
 
-## Why COHORT Exists
+## 1. COHORT in one minute
 
-Clinical-trial recruitment still asks patients to hand a record to a vendor so a site can learn whether they even qualify. That is the wrong trust boundary. The patient learns nothing until PHI has already left the device. Sites drown in unqualified leads. Sponsors pay for screening that should have happened locally.
+COHORT is a privacy-preserving clinical-trial **recruitment rail**.
 
-COHORT is a **privacy-preserving recruitment rail**, not a medical-records warehouse and not a ZK calculator:
+Public study rules come from ClinicalTrials.gov API v2, reduced to a **hand-mapped typed subset**. Patient facts stay on the device. Midnight verifies a Compact circuit, `proveEligible`, over those facts. The chain receives a trial-scoped nullifier, a blinded referral commitment, and a counter — not an age, not a condition flag, not a record.
 
-**DISCOVER → PRIVATE MATCH → VERIFY → QUALIFICATION → CONTROLLED HANDOFF → REAL NEXT STEP**
+The Wave 1 gold path is real: 1AM in-browser WASM proving, `submitCallTx` on **Preprod**, official indexer as truth. The contract was not redeployed for copy or UI work. Facts are **self-attested**. Sites still run their own screening.
 
-Jay (Midnight workshop) named the healthcare marketplace job: discover, opt in, **selectively disclose a fact**. COHORT does that for typed trial eligibility. It does not certify that the patient’s facts are medically true. Sites still run their own screening.
-
----
-
-## Why Privacy Changes the Product
-
-A normal Web2 screener is a database with a form on top. The vendor sees age, condition flags, medications, and often a record dump, then tells the site “eligible.” That creates:
-
-- a PHI store to breach
-- a vendor who can lie about eligibility
-- a patient who cannot prove fit without surrendering the record
-- a site that cannot verify the claim without seeing the facts
-
-COHORT inverts that. Typed trial rules stay **public**. Patient facts stay **on the device**. Midnight verifies the predicate. The public record is a nullifier, a referral commitment, and a counter. Sharing is a user choice of **public-safe** fields only. There is no live site inbox and no bounty.
-
-Privacy here is not “one field is hidden.” It is **what an observer can correlate**: circuit name, contract, disclosed ledger writes, timing, and one-proof-per-trial uniqueness. Age and mapped flags are not among those writes.
-
----
-
-## Why Midnight
-
-Midnight is required because the product needs **private witnesses + public integrity** in one transaction:
-
-| Primitive | How COHORT uses it |
+| Item | Value |
 |---|---|
-| Dual-ledger | Public `spent` / `referrals` / `proven` vs witnesses that never leave the prover |
-| Witnesses | `wAge`, `wCondition`, `wMedication`, `wSecret`, `wBlind` (`wSex` is declared and **unused**) |
-| Circuits | `proveEligible` asserts typed bounds, then uniqueness |
-| `disclose()` | Lets a hash cross into public ledger state. It does **not** publish the witness. Official Compact docs: disclose only allows a value to cross a public boundary |
-| `persistentHash` / `persistentCommit` | Nullifier `H("cohort:ref", trialId, sk)` and referral commitment `Commit(sk, blind)` with a **fresh** blind |
-| Indexer | Source of truth for `proven`, spent membership, and tx SUCCESS |
+| Network | Midnight Preprod (ledger 8) |
+| Contract | `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc` |
+| Circuit | `proveEligible` |
+| Compact | compiler **0.31.1**, language **0.23**, compact-runtime **0.16.0** |
+| Verifier SHA-256 | `5af3b4b2ed345f711c5ff87367cfb0049732701c5a5336d51234b2a95fe32ab1` |
+| Documented 1AM gold-path txHash | `da8f79de04a120d7a0c8b433de992b21bee37a234b4af2c717aa16fb84fc1a60` |
+| Judge command | `npm run compile` then `npm test` then `npm run judge:verify` |
 
-COHORT does **not** host a proof-server. Witnesses in the clear at a vendor prover would recreate the Web2 trust boundary.
+---
 
-Public-network pin (official support matrix, re-checked 2026-09-13 — Preview / Preprod / **Mainnet**, ledger 8):
+## 2. The problem
+
+Clinical-trial recruitment still asks a patient to hand a record to a vendor so a site can learn whether they even qualify. That is the wrong trust boundary.
+
+- The patient learns nothing until PHI has already left the device.
+- The vendor accumulates a breach target.
+- The site still has to read unqualified leads.
+- Nobody in that loop needs the record to compute a typed eligibility predicate. They need one bit, plus a way to verify it.
+
+A Web2 screener is a database with a form on top. The operator can see the facts, and the site has to trust the operator. That is not a recruitment rail. It is a PHI store.
+
+---
+
+## 3. The solution
+
+COHORT inverts the boundary.
+
+1. Trial policy stays **public** (typed age bounds and mapped flags from a ClinicalTrials.gov subset).
+2. Patient facts stay **local** (AES-GCM IndexedDB, per-wallet namespace).
+3. Midnight verifies the predicate in zero knowledge.
+4. The public record is hashes and a counter.
+5. The patient chooses a **truthful next step**. There is no live site inbox and no bounty.
+
+Verified eligibility means: the official Preprod indexer reports `proveEligible` success against the deployed contract. It does not mean enrollment, medical truth, or HIPAA compliance.
+
+---
+
+## 4. Product flow
+
+```mermaid
+flowchart LR
+  A[DISCOVER] --> B[PRIVATE MATCH]
+  B --> C[VERIFY]
+  C --> D[QUALIFICATION]
+  D --> E[CONTROLLED HANDOFF]
+```
+
+| Step | What the user does | What is private | What becomes public |
+|---|---|---|---|
+| Discover | Browse mapped recruiting studies | nothing required | NCT id, sponsor, typed bounds |
+| Private match | Enter age / mapped flags locally | age, flags, vault | nothing |
+| Verify | Connect 1AM, Approve in the toolbar | witnesses, WASM proof inputs | circuit name, contract, disclosed hashes |
+| Qualification | See indexer-confirmed result | facts stay in the vault | tx hash/id, `proven++` |
+| Handoff | Keep / share public packet / open official study | facts never posted | optional `{trialId, txHash, contractAddress, networkId}` |
+
+Local preview is labeled **not a proof**. A green UI badge is not qualification. Qualification is an indexer-confirmed transaction.
+
+---
+
+## 5. Why Midnight
+
+The product needs **private witnesses and public integrity in one transaction**. That is Compact’s job.
+
+| Primitive | COHORT use |
+|---|---|
+| Dual ledger | Public `spent` / `referrals` / `proven` versus witnesses that never leave the prover |
+| Witnesses | `wAge`, `wCondition`, `wMedication`, `wSecret`, `wBlind`. `wSex` is declared and **unused** |
+| Circuit | `proveEligible` asserts typed bounds, then uniqueness |
+| `disclose()` | Compiler acknowledgement that a **hash** may cross into ledger state. Official Compact docs: `disclose()` does not publish a value by itself; the value becomes public only when it crosses a ledger write / exported return |
+| `persistentHash` | Trial-scoped nullifier `H(["cohort:ref", trialId, sk])` |
+| `persistentCommit` | Referral commitment `Commit(sk, blind)` with a fresh blind |
+| Indexer | Source of truth for counters and tx success |
+
+COHORT does **not** host a proof-server. A vendor prover that sees witnesses in the clear recreates the Web2 trust boundary. 1AM proves in-browser. Lace may connect; it has no `getProvingProvider`, so proving is fail-closed.
+
+Official public-network pin, re-checked 2026-09-16 against the [Midnight support matrix](https://docs.midnight.network/relnotes/support-matrix) (Preview / Preprod / **Mainnet**, ledger 8):
 
 | Component | Version |
 |---|---|
 | Compact compile | **0.31.1** |
 | Compact language | **0.23** |
 | compact-runtime | **0.16.0** |
+| Compact JS | 2.5.1 |
 | midnight-js | **4.1.1** |
 | DApp Connector | **4.0.1** |
 | wallet-sdk | **1.2.0 exact** |
 | on-chain runtime | **3.0.0** |
-| proof-server (Lace local only) | **8.1.0** |
+| proof-server image (Lace local only) | **8.1.0** |
 | Indexer | Preview 4.3.5 / Preprod+Mainnet **4.3.3-hotfix** |
 | Node | 1.0.2 |
 
-Do **not** mix Compact 0.34 / language 0.26 / compact-runtime 0.19 / midnight-js 5.x `unwrapV9` / ledger 9 with Preview, Preprod, or Mainnet. Those are a different ledger. There is no ledger-8 → ledger-9 state migration. Re-read [the support matrix](https://docs.midnight.network/relnotes/support-matrix) before any future compile.
+Do **not** mix Compact **0.34** / language **0.26** / compact-runtime **0.19** / midnight-js **5.x** `unwrapV9` / ledger **9** with Preview, Preprod, or Mainnet. Those target a ledger that is not deployed on public nets. There is no ledger-8 → ledger-9 state migration. Re-read the matrix before any future compile.
 
 ---
 
-## Product Flow
+## 6. Privacy model
 
-```mermaid
-flowchart LR
-  A[Discover<br/>public CT.gov subset] --> B[Private match<br/>on device]
-  B --> C[Verify<br/>1AM WASM prove]
-  C --> D[Qualification<br/>real Preprod tx]
-  D --> E[Controlled handoff]
-  E --> F[Keep private]
-  E --> G[Share public record]
-  E --> H[Official study URL]
-  E --> I[Copy public packet]
-```
-
-1. **Discover** — recruiting studies from ClinicalTrials.gov API v2, filtered to a **hand-mapped typed subset**.
-2. **Private match** — age and mapped flags stay in origin IndexedDB (AES-GCM). A local preview is only a **potential match**.
-3. **Verify** — 1AM `connect('preprod')` in the Connect click → `getProvingProvider` → in-browser WASM → `submitCallTx`. COHORT never draws the 1AM Approve UI.
-4. **Qualification** — verified means indexer `proveEligible` SUCCESS, not a UI badge.
-5. **Handoff** — keep private / share `{trialId, txHash, contractAddress, networkId}` / continue to the official study / copy that public packet. There is no COHORT inbox and no paid bounty.
-
----
-
-## Architecture
+Privacy here is **what an observer can correlate**, not whether one field is hidden.
 
 ```mermaid
 flowchart TB
-  subgraph browser [User browser]
-    UI[web/ Next.js designer]
-    Vault[IndexedDB AES-GCM vault]
-    Match[Local typed matcher]
+  subgraph private [PRIVATE — device only]
+    Age[age]
+    Cond[condition flag]
+    Med[medication flag]
+    Sk[wSecret]
+    Blind[wBlind]
+    Profile[AES-GCM profile vault]
+  end
+  subgraph public [PUBLIC — ledger / indexer / optional share]
+    Nul[spent nullifier]
+    Ref[referral commitment]
+    Cnt[proven counter]
+    Meta[tx hash / circuit name / contract]
+  end
+  private -->|ZK proof, no plaintext| public
+```
+
+| Location | Plaintext exists? | Over the network? |
+|---|---|---|
+| DOM / accessibility tree on the local device | yes, while the form is filled | no |
+| IndexedDB `cohort-private-v1` AES-GCM, key `profile:<ns>` | ciphertext at rest | no |
+| localStorage | only `cohort.wallet.rdns` | no medical facts |
+| Render / Vercel HTTP | no — private field names return HTTP 400 | public trial metadata, `/zk` keys, optional public referral |
+| 1AM WASM prover | witnesses in the wallet process | proof + public outputs to Preprod |
+| Official indexer | disclosed ledger fields only | GraphQL public state |
+| COHORT proof-server | **does not exist** | n/a |
+
+`POST /api/referral` may store only: `trialId`, `commitment`, `txHash`, `contractAddress`, `networkId`, `nullifier`. Keys such as `age`, `condition`, `fhir`, `witness`, `secret`, `blind`, `profile` are rejected with **HTTP 400** and are not echoed.
+
+Nullifiers are domain-separated with `pad(32, "cohort:ref")` plus `trialId`. A fresh `wBlind` is minted per proof so referral commitments do not collapse. Reusing a blind across trials collapses the public `referrals` set — Compact test I covers that, and the application mints a new blind.
+
+What this does **not** claim: HIPAA, EHR authenticity, full-protocol eligibility, enrollment, zero metadata leakage, or 100% privacy. A chain observer still sees circuit name, contract, disclosed hashes, and timing.
+
+---
+
+## 7. Threat model
+
+Aligned with Midnight’s three-adversary model ([security best practices](https://docs.midnight.network/guides/security-best-practices)):
+
+| Adversary | What they see | COHORT control |
+|---|---|---|
+| Chain observer | entry point, contract, disclosed ledger writes, timing | only hashes and a counter are disclosed; age/flags are not ledger fields |
+| Malicious prover | they choose every witness | circuit `assert`s are the only constraint; facts are self-attested |
+| Off-chain operator | whatever you send them | backend allowlist; no witnesses on COHORT hosts; no hosted prover |
+
+A lying prover can satisfy the circuit with invented age/flags. Wave 1 says that out loud. Issuer signatures are Wave 2/3 **gates**, not shipped features.
+
+---
+
+## 8. System architecture
+
+```mermaid
+flowchart TB
+  subgraph browser [Browser]
+    UI[web/ Next.js]
+    Vault[encrypted local profile]
+    Match[local matcher]
     UI --> Vault
     UI --> Match
   end
   subgraph wallet [1AM]
-    WASM[In-browser proving WASM]
+    WASM[in-browser prover]
   end
-  subgraph cohort [COHORT hosts]
-    API[Render API + /zk keys]
+  subgraph hosts [COHORT hosts]
+    API[Render API + /zk]
     Vercel[Vercel designer]
   end
   subgraph midnight [Midnight Preprod]
@@ -117,248 +226,475 @@ flowchart TB
   CT[ClinicalTrials.gov API v2]
   Vercel --> UI
   UI -->|public trials / config / referral| API
-  API -->|typed subset only| CT
+  API -->|typed subset| CT
   Match -->|witnesses never POSTed| WASM
   WASM -->|proof + public outputs| Node
   Node --> C
-  UI -->|queryContractState / tx| Idx
-  API -->|GET public state| Idx
+  UI -->|queryContractState| Idx
+  API -->|public cache only| Idx
 ```
 
-- Visual product: `web/` (Next.js) at `https://cohort-web-orcin.vercel.app`
-- Same-origin stub + API: `apps/web` + `apps/api` at `https://cohort-y4zr.onrender.com`
-- Circuit: `CONTRACT/cohort.compact` → `packages/contract`
-- Non-visual DApp helpers: `packages/dapp`
-- `npm test` includes a dependency-tree guard that fails if two `onchain-runtime-v3` versions appear
-
----
-
-## Privacy Architecture
-
-### PRIVATE (device only)
-
-Age, mapped condition/medication flags, `wSecret`, `wBlind`, any FHIR paste parsed in-browser, the AES-GCM profile vault (`cohort-private-v1`, namespaced per wallet). Never POSTed. Never in `localStorage`.
-
-### PUBLIC (ledger / indexer / optional share)
-
-Entry point `proveEligible`, contract address, trial id (as a public circuit argument), nullifier inserted into `spent`, referral commitment inserted into `referrals`, `proven` counter, transaction hash/id, block time. Optional `POST /api/referral` may store only:
-
-`trialId`, `commitment`, `txHash`, `contractAddress`, `networkId`, `nullifier`
-
-Private field names (`age`, `condition`, `fhir`, `witness`, `secret`, `profile`, …) return **HTTP 400** and are not echoed.
-
-### OFF-CHAIN allowed
-
-Public ClinicalTrials.gov typed subset; public `/zk` proving/verifier keys (circuit keys, not seeds); indexer GraphQL; 1AM GraphQL (`api-preprod.1am.xyz`) for wallet session — **not** as the source of public-state truth.
-
-`localStorage` may hold only `cohort.wallet.rdns`.
-
----
-
-## Threat Model
-
-| Adversary | What we defend | Residual / non-claim |
-|---|---|---|
-| Chain / indexer observer | No age or flags in ledger writes | Sees circuit name, contract, disclosed hashes, timing, uniqueness per trial |
-| Compromised COHORT backend | Private POSTs 400; indexer is truth | Can lie about trial **metadata**; mitigate with NCT + ClinicalTrials.gov source URL |
-| Malicious prover | Circuit `assert`s + `spent` uniqueness | Self-attested facts can be lies. We do not prove EHR authenticity |
-| Malicious verifier / site | They only receive a public packet | Social engineering off-app |
-| Replay | Nullifier `H("cohort:ref", trialId, sk)` in `spent` | Same secret + same trial cannot prove twice |
-| Linkability across trials | Distinct nullifiers; fresh `wBlind` on referral commit | If `sk` leaks, all trials link. Keep `sk` in the vault |
-| Hosted prover | Gold path is 1AM in-tab WASM | User-enabled 1AM Proof Station is UNKNOWN — disclose if used |
-| Lace | Connect is allowed | No `getProvingProvider` → proving **LIMITED**, no fake tx |
-
-We do **not** claim HIPAA compliance, 100% privacy, medical truth, or that `wSex` / `sexCriterion` is proven.
-
----
-
-## Smart Contract
-
-Live Preprod address:
-
-`1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc`
-
-`proveEligible` verifier (`midnight:verifier-key[v6]`) SHA-256:
-
-`5af3b4b2ed345f711c5ff87367cfb0049732701c5a5336d51234b2a95fe32ab1`
-
-Matches on-chain `ContractState.operation('proveEligible').verifierKey`, repo `packages/contract/zk`, and live `/zk`. **No cosmetic redeploy.**
-
-### Circuit purpose
-
-Prove a typed eligibility predicate for one trial, once per secret, and leave a public uniqueness token plus a blinded referral commitment.
-
-### Public inputs
-
-`trialId`, `minAge`, `maxAge`, `requireCondition`, `forbidMedication`
-
-### Witnesses
-
-| Witness | Used? |
+| Tree | Role |
 |---|---|
-| `wAge` | yes — `Uint<8>` bounds |
-| `wSex` | **declared, unused** |
-| `wCondition` | yes — if `requireCondition` |
-| `wMedication` | yes — if `forbidMedication` |
-| `wSecret` | yes — nullifier + commit |
-| `wBlind` | yes — `persistentCommit` (must be fresh) |
+| `CONTRACT/cohort.compact` | Compact source |
+| `packages/contract/zk/` | committed prover / verifier / ZKIR |
+| `packages/contract/managed/cohort/contract/` | generated JS used by midnight-js |
+| `packages/dapp/` | wallet, prove, indexer helpers |
+| `apps/api/` | public API + privacy gate |
+| `web/` | designer UI |
+| `TESTS/` | `node --test` suite |
+| `scripts/compile-contract.mjs` | full Compact compile |
+| `scripts/judge-verify.mjs` | judge report |
 
-### Public outputs / ledger
-
-- `spent: Set<Bytes<32>>` — disclosed nullifier
-- `referrals: Set<Bytes<32>>` — disclosed commitment
-- `proven: Counter` — increment 1
-
-### Nullifier
-
-`persistentHash(["cohort:ref", trialId, sk])` — domain-separated, per trial.
-
-### Replay protection
-
-`assert(!spent.member(disclose(nul)))` then `spent.insert`.
-
-### Non-claims
-
-No escrow, no site inbox, no issuer signature, no `postTrial`, no sex check, no free-text protocol, no EHR authenticity.
+`npm test` includes a dependency-tree guard: a second `@midnight-ntwrk/onchain-runtime-v3` version fails the suite.
 
 ---
 
-## ClinicalTrials Integration
+## 9. End-to-end proof flow
 
-- Source: `https://clinicaltrials.gov/api/v2/studies`
-- Hand-mapped NCT ids in `apps/api/src/trials.mjs` (`TRIAL_MAPPINGS`)
-- Mapped: public min/max age, `sexCriterion` (displayed, **not proven**), sponsor-mapped condition/medication flags
-- **Not** mapped into Compact: pregnancy, language, ECOG, QTc, washouts, anticoagulants, incision type, or any free-text inclusion/exclusion
-- Why free-text is excluded: an LLM-to-Compact pipeline would invent constraints the circuit cannot honestly prove
+```mermaid
+sequenceDiagram
+  participant U as User
+  participant UI as COHORT UI
+  participant W as 1AM
+  participant N as Preprod
+  participant I as Indexer
+  U->>UI: typed facts stay in vault
+  U->>W: connect('preprod') in the same click
+  W->>W: getProvingProvider WASM
+  W->>N: submitCallTx proveEligible
+  N-->>I: ContractCall
+  UI->>I: queryContractState + ledger()
+  I-->>UI: proven / spent / referrals
+```
 
-Gold-path study used in live proves: **NCT07153614**.
-
----
-
-## Wallet Architecture
-
-| Wallet | Connect | Prove |
-|---|---|---|
-| **1AM** (`rdns` `com.midnight.1am`) | `connect('preprod')` in the user click | Gold path: `getProvingProvider` → WASM → `submitCallTx` |
-| **Lace** | Connector v4, may connect | **LIMITED** — no `getProvingProvider`. Fail closed. Do not fake a proof. Local proof-server `8.1.0` is the user’s machine, not COHORT |
-
-- Navbar **Connect wallet** opens a modal of discovered `window.midnight` injections. COHORT never CDP-clicks Connect (it poisons 1AM).
-- Reload never fake-connects. It shows **Reconnect 1AM** / **Reconnect Lace**.
-- Official DApp Connector has **no `disconnect()`**. App disconnect is local session teardown. It does **not** delete the encrypted profile.
-- “Clear private data” clears the current wallet namespace only. 1AM vs Lace vaults are isolated.
-- Seeds and viewing keys never touch COHORT.
-
----
-
-## Proving Architecture
-
-1. User gesture: Connect / Prove.
-2. 1AM in-browser Halo2/BLS12-381 WASM (`@midnight-ntwrk/midnight-js-dapp-connector-proof-provider` on midnight-js **4.1.1**).
-3. Public circuit keys from same-origin `/zk` (CORS `*` so 1AM can fetch). The hosted `.prover` file is a circuit proving key, **not a seed**.
+1. Local witness object `{ age, condition, medication }` plus freshly minted `wSecret` / `wBlind`.
+2. Compact circuit `proveEligible` with public args bound to `/api/trials` (user-typed bounds are rejected).
+3. ZK proof in 1AM WASM (Halo2 / BLS12-381 via midnight-js **4.1.1** `dapp-connector-proof-provider`).
 4. `submitCallTx` to Preprod.
-5. UI treats eligibility as verified only after indexer confirmation.
-
-Witnesses never go to Render or Vercel. Do not stand up a COHORT-hosted proof-server.
+5. UI waits for indexer confirmation. It does not invent a `txHash`.
 
 ---
 
-## Backend
+## 10. Compact contract
+
+| Field | Value |
+|---|---|
+| Path | `CONTRACT/cohort.compact` |
+| `pragma language_version` | `0.23` |
+| Compiler used to produce committed keys | **0.31.1** |
+| Generated info | `packages/contract/zk/compiler/contract-info.json` |
+| Circuits | one exported circuit, `proveEligible` (`proof: true`, `pure: false`) |
+| Address | `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc` |
+| Why not redeployed | Wave 1 evidence is this address. Copy, UI, and documentation changes do not justify a new verifier |
+
+Compile shape matches official hello-world: `compact compile <src> <out>` producing `compiler/`, `contract/`, `keys/`, `zkir/`. Do not use `--skip-zk`.
+
+Witness `wSex` is declared in Compact and **absent** from generated `contract-info.json` witnesses — the compiler stripped it because the circuit never calls it. Do not advertise sexCriterion as proven.
+
+---
+
+## 11. Circuit semantics
+
+```text
+proveEligible(
+  trialId: Bytes<32>,          // public
+  minAge: Uint<8>,             // public
+  maxAge: Uint<8>,             // public
+  requireCondition: Boolean,   // public
+  forbidMedication: Boolean    // public
+): Boolean
+```
+
+| Witness | Used? | Role |
+|---|---|---|
+| `wAge(): Uint<8>` | yes | compared to `[minAge, maxAge]` |
+| `wCondition(): Boolean` | yes | asserted if `requireCondition` |
+| `wMedication(): Boolean` | yes | asserted false if `forbidMedication` |
+| `wSecret(): Bytes<32>` | yes | nullifier + commitment material |
+| `wBlind(): Bytes<32>` | yes | commitment blinding |
+| `wSex(): Uint<8>` | **no** | declared, unused |
+
+Assertions:
+
+- `age >= minAge` (`"too young"`)
+- `age <= maxAge` (`"too old"`)
+- if `requireCondition`: `cond` (`"missing condition"`)
+- if `forbidMedication`: `!med` (`"medication excluded"`)
+- `!spent.member(disclose(nul))` (`"already proven this trial"`)
+
+Ledger writes after the asserts:
+
+- `spent.insert(disclose(nul))`
+- `referrals.insert(disclose(referral))`
+- `proven.increment(1)`
+- return `true`
+
+**Proves:** typed age bounds, mapped condition/medication flags versus public policy, trial-scoped nullifier uniqueness, referral commitment insert, counter increment.
+
+**Does not prove:** medical-record authenticity, EHR/FHIR integrity, issuer attestation, `wSex`, pregnancy/ECOG/labs/washouts/language/geography/free-text criteria, unique-human (only uniqueness of `(wSecret, trialId)`), that public bounds match ClinicalTrials.gov (the application binds args to `/api/trials`; the circuit trusts those public args).
+
+---
+
+## 12. Public vs private state
+
+| Public (ledger) | Private (witness / device) |
+|---|---|
+| `spent: Set<Bytes<32>>` | `wAge`, `wCondition`, `wMedication` |
+| `referrals: Set<Bytes<32>>` | `wSecret`, `wBlind` |
+| `proven: Counter` | AES-GCM profile, any FHIR paste parsed in-browser |
+| circuit arguments (`trialId`, bounds, flags) | — |
+| tx metadata | — |
+
+`GET /api/public-state` is an in-memory **cache** of optional shares. Tests label it `notIndexerTruth`. `CohortDapp.getPublicVerification()` uses midnight-js `indexerPublicDataProvider.queryContractState` + generated `ledger()`.
+
+---
+
+## 13. Nullifier, commitment, replay protection
+
+```mermaid
+flowchart TD
+  Sk[wSecret] --> Nul["persistentHash(['cohort:ref', trialId, sk])"]
+  Sk --> Ref[persistentCommit(sk, wBlind)]
+  Nul -->|disclose + insert| Spent[spent set]
+  Ref -->|disclose + insert| Refs[referrals set]
+  Spent -->|member assert| Replay[same trial + secret rejected]
+```
+
+- Domain separation string `"cohort:ref"` prevents cross-protocol nullifier collisions with other DApps that hash a raw secret.
+- Same secret + same `trialId` is Compact-F (`already proven this trial`). Compact test J: two secrets, same trial, `proven=2`, distinct nullifiers.
+- Different `trialId` values produce distinct nullifiers for the same secret (test G).
+- Application mints a new 32-byte secret/blind unless supplied. Live replay of a supplied secret remains a circuit reject, not a UI skip.
+
+---
+
+## 14. ClinicalTrials.gov integration
+
+`GET /api/trials` pulls recruiting studies from ClinicalTrials.gov API v2 and keeps a **typed subset**: NCT id, sponsor, min/max age, mapped condition/medication flags, plus an explicit mapping disclaimer.
+
+- Free-text inclusion/exclusion language is **not** compiled into Compact.
+- Circuit args must match the served policy. `bindOfficialTrial` rejects user-typed bounds (`ErrorCode.UNSUPPORTED_CRITERIA`).
+- Gold-path study used in live proves: **NCT07153614** (minAge 18, maxAge 80, requireCondition true, forbidMedication true).
+
+This is not “the protocol, proven.” It is “the mapped subset, proven.”
+
+---
+
+## 15. Wallet architecture
+
+```mermaid
+flowchart LR
+  Click[User click] --> Connect["connect('preprod')"]
+  Connect --> OneAM[1AM ConnectedAPI]
+  OneAM --> GPP[getProvingProvider]
+  GPP --> WASM[in-browser WASM]
+  WASM --> Submit[submitCallTx]
+  Connect --> Lace[Lace ConnectedAPI]
+  Lace --> Limited[proving LIMITED — no getProvingProvider]
+```
+
+- Discover `window.midnight`. No fake wallet tiles.
+- 1AM (`rdns=com.midnight.1am`) is the gold path. Connect is **click-synchronous**. Approve is the **toolbar**, not an in-page popup. Tests must not CDP-click Connect.
+- Lace may connect. Proving fail-closes. Do not proxy a hosted prover.
+- Official DApp Connector has no `disconnect()`. App disconnect drops in-memory ConnectedAPI only.
+- Vault keys `profile:<ns>` / `proofs:<ns>` from SHA-256(rdns + public address). Reload never fake-connects; it shows Reconnect.
+- DUST `balance === 0n` fails closed with no invented `txHash`.
+
+COHORT never draws the 1AM Approve UI and never hosts Proof Station.
+
+---
+
+## 16. Backend privacy boundary
 
 Render origin: `https://cohort-y4zr.onrender.com`
 
 | Endpoint | Accepts | Rejects |
 |---|---|---|
 | `GET /health` | — | `{ "status": "ok" }` |
-| `GET /api/config` | — | public network + contract address |
+| `GET /api/config` | — | public network + contract |
 | `GET /api/trials` | — | typed subset + mapping disclaimer |
 | `GET /api/trials/:id` | known NCT | 404 unknown |
-| `GET /api/public-state` | — | last public referral events (no PHI) |
-| `POST /api/referral` | public keys listed above | private fields **400**, extra keys **400** |
+| `GET /api/public-state` | — | last public referral events |
+| `POST /api/referral` | public keys listed in §6 | private fields **400**, extra keys **400** |
 | `GET /zk/*` | public circuit artifacts | path escape **403** |
 
-Privacy boundary: `assertPublicOnly` + `PUBLIC_REFERRAL_KEYS`. CORS allowlist includes the Vercel designer origin.
+`.prover` is a circuit proving key, not a wallet seed. `/zk` sends `Access-Control-Allow-Origin: *` so 1AM can fetch keys. Traversal of `/zk/../.env` is forbidden.
+
+Page CSP `connect-src` allows official Midnight indexer/RPC and 1AM GraphQL. Public-state **truth** stays `indexer.preprod.midnight.network`.
 
 ---
 
-## Indexer / On-Chain Evidence
-
-Contract (Preprod): `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc`
-
-Indexer GraphQL: `https://indexer.preprod.midnight.network/api/v4/graphql`
-
-Explorer: [preprod.midnightexplorer.com](https://preprod.midnightexplorer.com/) · [1AM Preprod](https://explorer.1am.xyz/?network=preprod)
-
-Latest recorded gold-path **browser** prove (2026-09-13, NCT07153614, user 1AM Approve — not CDP-clicked):
-
-| Field | Value |
-|---|---|
-| txHash | `da8f79de04a120d7a0c8b433de992b21bee37a234b4af2c717aa16fb84fc1a60` |
-| txId | `002000dc2327f9391931cb5747f2e1f36480bb948634913ddcacc411cddea0d31d` |
-| Indexer after tx | **proven=6** / spentCount=6 / referralCount=6 |
-
-Earlier real proves (do not treat Node SDK as the browser path):
-
-| Path | txHash | then proven |
-|---|---|---|
-| Designer 1AM (utility-upgrade) | `97308434388cdba0a83eec487a1cee3645b7eead9c8836ce457c3de84132e1c8` | 5 (block 2524713) |
-| Designer 1AM (honesty pass) | `40527ba6332a5953533d696c5ebc090ed1f168a84f00e53ac02d2251b68c4276` | 4 (block 2523970) |
-| Designer 1AM | `0e8b61cbeb1d4b044743f8512b1d1bebb4d048d4dde091af5ce992ba701a4bd0` | 3 (block 2523192) |
-| Same-origin stub 1AM | `3b1624e9cc8c17808f67cb5c52244f197fe57c0c820c75ef5beb7e18b8bf1590` | 2 |
-| Node SDK (not browser gold path) | `00e53324…` | historical only |
-
----
-
-## Deployment
+## 17. Deployment
 
 | Surface | URL |
 |---|---|
 | Designer UI | https://cohort-web-orcin.vercel.app |
 | API + stub | https://cohort-y4zr.onrender.com |
 | Health | https://cohort-y4zr.onrender.com/health |
+| Public state cache | https://cohort-y4zr.onrender.com/api/public-state |
 | GitHub | https://github.com/Mr-Ben-dev/COHORT |
 
-Vercel project `cohort-web`, `rootDirectory` `web`, `NEXT_PUBLIC_COHORT_API_ORIGIN=https://cohort-y4zr.onrender.com`. Never put GitHub / Render / Vercel tokens in `NEXT_PUBLIC_` / `VITE_` vars.
-
-Page CSP `connect-src` allows official Midnight indexer/RPC and 1AM GraphQL. Public-state truth stays `indexer.preprod.midnight.network`.
+Vercel project `cohort-web`, `rootDirectory` `web`, `NEXT_PUBLIC_COHORT_API_ORIGIN=https://cohort-y4zr.onrender.com`. Never put GitHub / Render / Vercel tokens in `NEXT_PUBLIC_` / `VITE_` variables.
 
 ---
 
-## Testing
+## 18. On-chain evidence
 
-Do **not** invent counts. Last recorded full suite:
+Contract: `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc`  
+Indexer: https://indexer.preprod.midnight.network/api/v4/graphql  
+Explorer: https://preprod.midnightexplorer.com/  
+Verifier SHA-256: `5af3b4b2ed345f711c5ff87367cfb0049732701c5a5336d51234b2a95fe32ab1`  
+On-chain verifier, repo `packages/contract/zk/keys/proveEligible.verifier`, and live `/zk` are byte-identical (`midnight:verifier-key[v6]:`).
 
-| Suite | Recorded result | When |
+**Primary documented browser gold path** (1AM Approve, not CDP-clicked, NCT07153614, 2026-09-13):
+
+| Field | Value | Status |
 |---|---|---|
-| `npm test` (repo root, full suite) | **105 tests, 105 pass, 0 fail** | 2026-09-13, design/CI pass |
-| Earlier full suite | 104/104 | wallet UX commit `7de94e5` |
-| Hostile `POST /api/referral` `{age:31}` | 400, no echo of `31` | live Render, 2026-09-13 |
-| Preprod indexer `queryContractState` + `ledger()` | `proven >= 2` assertion passes against the live contract | in-suite |
-| On-chain verifier vs repo `zk` vs live `/zk` | byte-identical | in-suite |
+| txHash | `da8f79de04a120d7a0c8b433de992b21bee37a234b4af2c717aa16fb84fc1a60` | COMMITTED EVIDENCE |
+| txId | `002000dc2327f9391931cb5747f2e1f36480bb948634913ddcacc411cddea0d31d` | COMMITTED EVIDENCE |
+| Indexer after that tx | proven=6 / spent=6 / referrals=6 | COMMITTED EVIDENCE |
 
-The suite is a single `node --test` run covering the Compact circuit, the backend privacy gate, dependency-tree pinning, wallet/vault namespacing, live Render and indexer checks, and Playwright runs against both a local `next start` and production. `web/.next` must exist first (CI builds it; see `.github/workflows/test.yml`).
+**Live indexer** (re-read 2026-09-16): `ledger()` returned **proven=7 / spent=7 / referrals=7**. Latest `contractAction` is `ContractCall` `proveEligible` with txHash `4c11a6ba7f5faa05c3b108f453b5f7b8d281c6746fdbc614d936bda862f8dca5`. That later transaction is **INDEXER-VERIFIED**. This repository does not have a recorded browser session for it; do not treat it as a recreated gold-path demo.
 
-Contract tests cover Compact asserts, spent-set replay, and two-secret same-trial distinct nullifiers. Wallet tests cover Lace fail-closed proving, reconnect never fake-connected, disconnect keeps encrypted profile, 1AM vs Lace namespace isolation.
+Earlier real proves (do not treat the Node SDK tx as the browser path):
 
-1AM Approve is a **manual** wallet click. Tests must not CDP-click Connect.
+| What | txHash | then proven | extra |
+|---|---|---|---|
+| Designer 1AM (handoff) | `97308434388cdba0a83eec487a1cee3645b7eead9c8836ce457c3de84132e1c8` | 5 | txId `00cc4e46…9599d9`, block 2524713 |
+| Designer 1AM (honesty pass) | `40527ba6332a5953533d696c5ebc090ed1f168a84f00e53ac02d2251b68c4276` | 4 | txId `003e8f36…0f4692c1`, block 2523970 |
+| Designer 1AM | `0e8b61cbeb1d4b044743f8512b1d1bebb4d048d4dde091af5ce992ba701a4bd0` | 3 | block 2523192 |
+| Stub 1AM | `3b1624e9cc8c17808f67cb5c52244f197fe57c0c820c75ef5beb7e18b8bf1590` | 2 | txId `000657e4…3a9867` |
+
+Inspect public state without a wallet:
+
+```bash
+curl -s https://indexer.preprod.midnight.network/api/v4/graphql \
+  -H "content-type: application/json" \
+  -d "{\"query\":\"{ contractAction(address: \\\"1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc\\\") { __typename ... on ContractCall { entryPoint } address transaction { hash } } }\"}"
+```
 
 ---
 
-## Security / Privacy Verification
+## 19. Tests and security
 
-- Network: typed age never appears on Render or Vercel requests
-- Storage: medical facts not in cookies / localStorage / URL
-- Backend: private-field rejection with field names, no value echo
-- Ledger: `ledger()` counters and spent set; witnesses absent
-- Dependency pin: compact-runtime 0.16.0, midnight-js 4.1.1, wallet-sdk 1.2.0 exact, `onchain-runtime-v3` 3.0.0 via npm `overrides`
-- Verifier key SHA-256 pin above
+Last recorded full suite is printed by `npm test` (Node’s `# tests / # pass / # fail`). This documentation pass (2026-09-16): **107 tests, 107 pass, 0 fail, 0 skipped**. Do not inflate that number.
+
+| Area | Files (non-exhaustive) |
+|---|---|
+| Compact / circuit | `TESTS/contract.test.mjs` (eligible, age bounds, flags, replay, domain-separated nullifiers, blinds, two-secret same trial, no age in output, `wSex` unused) |
+| Gold path / binding | `TESTS/gold-path.test.mjs`, `TESTS/prove.test.mjs` |
+| Artifacts | `TESTS/zk-artifacts.test.mjs` |
+| Runtime tree | `TESTS/deps-tree.test.mjs` |
+| Backend privacy | `TESTS/backend-gate.test.mjs`, `TESTS/privacy.test.mjs`, `TESTS/adversarial.test.mjs`, `TESTS/logging.test.mjs` |
+| Live indexer / Render | `TESTS/public-state.test.mjs`, `TESTS/render-privacy.test.mjs`, `TESTS/e2e-network.test.mjs`, `TESTS/headers.test.mjs` |
+| Vault / wallet | `TESTS/vault-crypto.test.mjs`, `TESTS/wallet*.test.mjs` |
+| Playwright | local `next start` and production privacy / journey / wallets |
+| Secrets | `TESTS/secrets.test.mjs` |
+| Public docs | `TESTS/docs-public.test.mjs` |
+
+`web/.next` must exist first (CI builds it). 1AM Approve is a **manual** wallet click.
+
+Hostile live check:
+
+```bash
+curl -X POST https://cohort-y4zr.onrender.com/api/referral \
+  -H "content-type: application/json" \
+  -d "{\"trialId\":\"NCT07153614\",\"age\":31}"
+```
+
+Must be HTTP 400 and must not echo `31`.
 
 ---
 
-## Current Limitations
+## 20. Judge quickstart
+
+Prerequisites: **Node.js 22+**, **npm 10+**, git, Chrome or Edge (Playwright uses the installed browser). No Docker, no database, no COHORT proof-server.
+
+Midnight Compact is **not** supported natively on Windows. On Windows use **WSL**. Linux and macOS can install Compact directly. Official install: [Install the toolchain](https://docs.midnight.network/getting-started/installation).
+
+### Windows (PowerShell) — clone, install, test
+
+```powershell
+git clone https://github.com/Mr-Ben-dev/COHORT.git
+cd COHORT
+npm ci
+cd web; npm ci; npm run build; cd ..
+npm test
+```
+
+`npm ci` requires the committed lockfile. If it is missing on a fork, `npm install` is the fallback.
+
+### Windows — Compact (WSL)
+
+`C:\Windows\System32\compact.exe` is **NTFS compression**. Do not use it.
+
+```bash
+# inside WSL
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
+source ~/.bashrc
+compact update 0.31.1
+compact compile +0.31.1 --version    # must print 0.31.1
+cd /mnt/d/route/midnight/COHORT      # or your clone path
+npm run compile                      # full ZK. Do not use `--skip-zk`.
+```
+
+From PowerShell, after WSL Compact is installed:
+
+```powershell
+npm run compile
+npm run judge:verify
+```
+
+### Linux / macOS
+
+```bash
+git clone https://github.com/Mr-Ben-dev/COHORT.git
+cd COHORT
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
+source ~/.bashrc   # or ~/.zshrc
+compact update 0.31.1
+compact compile +0.31.1 --version
+npm ci
+cd web && npm ci && npm run build && cd ..
+npm run compile
+npm test
+npm run judge:verify
+```
+
+Inspect the contract without proving:
+
+```bash
+# Compact source
+sed -n '1,80p' CONTRACT/cohort.compact
+
+# committed artifacts
+ls -l packages/contract/zk/keys packages/contract/zk/zkir packages/contract/zk/compiler
+```
+
+Public evidence without a wallet:
+
+```bash
+curl https://cohort-y4zr.onrender.com/health
+curl https://cohort-y4zr.onrender.com/api/config
+```
+
+### Optional live prove
+
+Desktop Chrome, 1AM installed, Preprod synced with tNIGHT + DUST:
+
+1. Open https://cohort-web-orcin.vercel.app
+2. Find Trials → NCT07153614 → Check privately. Facts stay local.
+3. Connect wallet → 1AM. Click the 1AM toolbar and **Approve COHORT**.
+4. After SUCCESS, My Proofs shows a public-safe row (not age).
+5. Confirm indexer `proven` on the contract above.
+
+Lace may connect; proving stays limited.
+
+---
+
+## 21. Full Compact compile
+
+Reference: [example-hello-world](https://github.com/midnightntwrk/example-hello-world) uses `compact compile hello-world.compact managed/hello-world` and expects `circuit "…" (k=…, rows=…)`. COHORT’s wrapper is the same compiler invocation, pinned, and then checks the verifier against the Preprod key.
+
+```bash
+compact compile +0.31.1 --version          # 0.31.1
+npm run compile                            # writes packages/contract/.compile-out, compares SHA-256
+```
+
+Equivalent raw command (from repo root, Compact 0.31.1 on PATH, zkir available):
+
+```bash
+compact compile +0.31.1 CONTRACT/cohort.compact packages/contract/.compile-out
+```
+
+Do not use `--skip-zk`. A skip-zk build will fail the prover-size check (`proveEligible.prover` is 5,208,715 bytes).
+
+Expected pins after a successful full compile:
+
+| Artifact | SHA-256 / version |
+|---|---|
+| `proveEligible.verifier` | `5af3b4b2ed345f711c5ff87367cfb0049732701c5a5336d51234b2a95fe32ab1` |
+| `proveEligible.prover` | `5a31f2a515988e959ab5e6200abc41a11dc805d66f929f3c8ea89e6daa88e385` |
+| `compiler-version` | `0.31.1` |
+| `language-version` | `0.23.0` |
+| `runtime-version` | `0.16.0` |
+
+If a fresh compile disagrees with those hashes, **stop**. That output is not the deployed Preprod contract. Do not copy it over `packages/contract/zk/`.
+
+---
+
+## 22. Judge verification CLI
+
+```bash
+npm run judge:verify
+```
+
+Flags: `--skip-compile` (verify committed artifacts only), `--skip-tests` (if you already ran `npm test`).
+
+The report prints, with explicit labels:
+
+| Label | Meaning |
+|---|---|
+| REPRODUCED LOCALLY | this machine just compiled, hashed, or tested it |
+| VERIFIED AGAINST PREPROD | live Render / config / `/zk` / privacy gate |
+| INDEXER-VERIFIED | official Preprod indexer `ledger()` or `contractAction` |
+| COMMITTED EVIDENCE | recorded in this repo; not recreated in this run |
+| PLANNED | Wave 2 / Wave 3 |
+| UNKNOWN | skipped or unavailable |
+
+It never prints tokens, mnemonics, private keys, private health witnesses, or database credentials.
+
+CI runs: Compact 0.31.1 install → `npm run compile` → `npm test` → `npm run judge:verify -- --skip-compile --skip-tests`.
+
+---
+
+## 23. Wave 1 — what is actually shipped
+
+- Compact `proveEligible` on Preprod, address unchanged
+- 1AM browser gold path with indexer-confirmed transactions (documented through proven=6; live counter may be higher — see §18)
+- ClinicalTrials.gov typed subset with mapping disclaimers
+- Origin encrypted profile, per-wallet namespace
+- Backend that refuses private fields
+- Designer UI: Find Trials / My Profile / My Proofs
+- Qualification handoff: keep / share public record / official study / public packet
+- Judge compile + verification CLI
+
+```mermaid
+flowchart LR
+  W1[Wave 1 shipped: patient rail] --> W2[Wave 2 planned: site verifies]
+  W2 --> W3[Wave 3 planned: Mainnet]
+```
+
+---
+
+## 24. Wave 2 — planned
+
+**Not implemented.** Do not treat the following as current capabilities.
+
+- Site verification console: paste trial id + tx hash; official indexer is truth; no PHI
+- Optional challenge-bound proof only if Compact 0.31.1 compiles it and 1AM can prove it (new address; Wave 1 contract kept as evidence)
+- Issuer-signed facts only if `secp256k1EcdsaVerify` (or the then-current stdlib verify) compiles **and** 1AM WASM can prove it
+
+Explicitly not Wave 2: fake inbox, bounty, EHR authenticity, hosted prover, Mainnet, Compact 0.34 on public nets.
+
+---
+
+## 25. Wave 3 — planned
+
+**Not implemented.** Re-read the official support matrix the day work starts.
+
+- If Mainnet is still ledger 8 / Compact 0.31.1, deploy a **new Mainnet address** of the then-current circuit. Do not transplant Preprod state.
+- Production monitoring, incident rollback (UI prove flag off; contract is immutable), security review
+- Site verification against the Mainnet indexer
+- Issuer / escrow only when actually supported and demonstrated on that net
+
+---
+
+## 26. Limitations / honest non-claims
 
 - Facts are **self-attested**. The circuit proves the predicate over witnesses, not that a hospital issued them.
 - Typed subset only. Free-text protocol language is not proven.
-- `wSex` is unused. Do not advertise sexCriterion as proven.
+- `wSex` is unused. Sex criteria are not proven.
 - No live site inbox. Sharing posts a public-safe record; it does not message a coordinator.
 - No bounty / escrow. `referrals` is a uniqueness commitment, not a coin.
 - Lace cannot prove on this gold path.
@@ -366,158 +702,29 @@ Contract tests cover Compact asserts, spent-set replay, and two-secret same-tria
 - Preprod tNIGHT / DUST are test value. This is not Mainnet.
 - 1AM vendor telemetry / Proof Station: **UNKNOWN**. Gold path assumes in-tab WASM.
 - Gas sponsorship is **not documented**. Users need DUST.
+- Metadata (circuit, contract, timing) is visible to a chain observer.
 
 ---
 
-## Wave 1 — What We Built
+## 27. Evidence links
 
-- Compact `proveEligible` on Preprod, address unchanged
-- 1AM browser gold path with real indexer-confirmed transactions through **proven=6**
-- ClinicalTrials.gov typed subset, honest mapping disclaimers
-- Origin encrypted profile, per-wallet namespace
-- Backend that refuses private fields
-- Designer UI: Find Trials / My Profile / My Proofs
-- Qualification handoff: keep / share public record / official study / public packet
-- Landing copy that states the product in seconds, then the privacy boundary, then the non-claims
-
----
-
-## Wave 2 — What We Will Build
-
-Plan only (`WAVES_2_3_MASTER_PLAN.md`). **Not implemented in this commit.**
-
-Deepen the two-sided rail without fake infrastructure:
-
-- **Site verification console** — paste NCT + txHash; indexer confirms `proveEligible` SUCCESS. No inbox, no PHI.
-- Optional **challenge-bound** circuit only if Compact 0.31.1 compiles it and 1AM can prove it (new address, Wave 1 contract kept as evidence).
-- Issuer signatures only if `secp256k1EcdsaVerify` (or the then-current stdlib verify) compiles **and** 1AM WASM can prove it. Until then, keep saying self-attested.
-- Richer typed matching still typed-subset only.
-
-Explicitly not Wave 2: fake inbox, bounty, EHR authenticity, C2C, hosted prover, Mainnet.
-
----
-
-## Wave 3 — Mainnet
-
-Plan only. Re-read the official support matrix **the day implementation starts**. If Mainnet is still ledger 8 / Compact 0.31.1, deploy a **new Mainnet address** of the then-current circuit. Do not transplant Preprod state.
-
-Then: production monitoring, incident rollback (UI prove flag off; contract is immutable), DUST documented as user-held, site console against the Mainnet indexer. Escrow and issuer credentials ship **only** with live cryptographic evidence.
-
----
-
-## Roadmap
-
-```mermaid
-timeline
-  title COHORT product rail
-  Wave 1 (shipped) : Discover + private match + 1AM prove + qualification + truthful handoff
-  Wave 2 (planned) : Site can verify a public proof : optional challenge-bound circuit if it compiles
-  Wave 3 (planned) : Mainnet deploy of whatever passed gates : issuer or escrow only with evidence
-```
-
----
-
-## Judge Quickstart
-
-### A. Run it locally (no wallet needed for the first four steps)
-
-Prerequisites: **Node 22+**, Chrome or Edge installed (Playwright drives the installed browser), git. No Docker, no proof-server, no database.
-
-```bash
-git clone https://github.com/Mr-Ben-dev/COHORT.git
-cd COHORT
-
-# 1. backend + circuit + test deps
-npm ci
-
-# 2. designer UI deps and production build
-#    (the privacy suite starts `next start` against web/.next)
-cd web && npm ci && npm run build && cd ..
-
-# 3. full suite: contract, backend gate, vault, wallet, indexer, Playwright
-npm test
-
-# 4. backend + same-origin stub on http://127.0.0.1:10000
-cp .env.example .env   # Preprod values; no secrets required to read public state
-npm start
-```
-
-The designer UI runs separately:
-
-```bash
-cd web
-npm run dev          # http://localhost:3000
-# or serve the production build: npm start
-```
-
-`web` talks to `NEXT_PUBLIC_COHORT_API_ORIGIN` (defaults to the live Render API), the official Preprod indexer, and your wallet. Nothing private crosses those boundaries.
-
-Inspect public chain state without any wallet:
-
-```bash
-curl https://cohort-y4zr.onrender.com/health
-curl https://cohort-y4zr.onrender.com/api/config
-
-# hostile request — must return 400 and must not echo 31
-curl -X POST https://cohort-y4zr.onrender.com/api/referral \
-  -H 'content-type: application/json' \
-  -d '{"trialId":"NCT07153614","age":31}'
-```
-
-Read the contract's public counters straight from the official indexer:
-
-```bash
-curl -s https://indexer.preprod.midnight.network/api/v4/graphql \
-  -H 'content-type: application/json' \
-  -d '{"query":"{ contractAction(address: \"1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc\") { __typename address state transaction { hash applyStage } } }"}'
-```
-
-Compact toolchain (only needed to recompile the circuit — the repo ships the artifacts):
-
-```bash
-compact update +0.31.1
-compact compile CONTRACT/cohort.compact packages/contract/managed
-```
-
-Do **not** install Compact 0.34 / midnight-js 5.x for this project. Those target ledger 9, which no public network runs.
-
-### B. Run the real proof flow
-
-Desktop Chrome, 1AM installed, Preprod synced with tNIGHT + DUST:
-
-1. Open https://cohort-web-orcin.vercel.app — read the five-step product story under **The product**.
-2. **Find Trials** → open a mapped study (NCT07153614) → **Check privately**. Facts stay local.
-3. Navbar **Connect wallet** → 1AM. Click the 1AM toolbar and **Approve COHORT**. Do not expect an in-page Approve popup.
-4. After SUCCESS, **My Proofs** shows a public-safe row (trial, shortened id, date — not age).
-5. **What happens next?** — Keep private, share public qualification, continue to ClinicalTrials.gov, or copy the public packet.
-6. Confirm chain truth: indexer `proven` / spent / referrals on contract `1d5c2084…29cc`. Hostile `POST /api/referral` with `{ "age": 31 }` must 400.
-
-If 1AM opens balances instead of Approve: reload the extension at `chrome://extensions`, refresh COHORT, retry. The balance screen is not the connect dialog.
-
-Lace may connect; proving stays limited.
-
----
-
-## Evidence
-
-| Item | Value |
+| Item | Link / value |
 |---|---|
 | Designer | https://cohort-web-orcin.vercel.app |
 | API health | https://cohort-y4zr.onrender.com/health |
+| API config | https://cohort-y4zr.onrender.com/api/config |
+| Verifier over HTTP | https://cohort-y4zr.onrender.com/zk/keys/proveEligible.verifier |
 | Contract | `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc` |
-| Latest browser txHash | `da8f79de04a120d7a0c8b433de992b21bee37a234b4af2c717aa16fb84fc1a60` |
-| Latest browser txId | `002000dc2327f9391931cb5747f2e1f36480bb948634913ddcacc411cddea0d31d` |
-| Indexer (as of that prove) | proven=6 spent=6 referral=6 |
-| Verifier SHA-256 | `5af3b4b2ed345f711c5ff87367cfb0049732701c5a5336d51234b2a95fe32ab1` |
+| Indexer | https://indexer.preprod.midnight.network/api/v4/graphql |
+| Explorer | https://preprod.midnightexplorer.com/ |
+| Support matrix | https://docs.midnight.network/relnotes/support-matrix |
+| Compact install | https://docs.midnight.network/getting-started/installation |
+| Explicit disclosure | https://docs.midnight.network/compact/reference/explicit-disclosure |
+| Hello-world compile | https://github.com/midnightntwrk/example-hello-world |
 | Repo | https://github.com/Mr-Ben-dev/COHORT |
 
-### Clean machine
+---
 
-Node **22+**. From this directory (no hosted proof-server, no Compact 0.34 / midnight-js 5.x / `unwrapV9`):
+## 28. License
 
-```
-npm ci
-npm test
-```
-
-Then install **1AM**, sync Preprod with tNIGHT + DUST, and open the designer URL above.
+No SPDX license file is committed. Source is published for Midnight Buildathon evaluation. Compact-generated artifacts under `packages/contract/` are compiler output, not a grant of Midnight Foundation rights beyond their own terms.
