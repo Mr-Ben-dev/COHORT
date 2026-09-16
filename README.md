@@ -5,7 +5,9 @@ Prove a typed clinical-trial eligibility predicate on Midnight Preprod without h
 **Find trials you may qualify for. Check your fit privately. Prove it on Midnight. Choose what happens next.**
 
 Live designer: [https://cohort-web-orcin.vercel.app](https://cohort-web-orcin.vercel.app)  
-Public GitHub: [https://github.com/Mr-Ben-dev/COHORT](https://github.com/Mr-Ben-dev/COHORT)
+Public GitHub: [https://github.com/Mr-Ben-dev/COHORT](https://github.com/Mr-Ben-dev/COHORT)  
+Wave 1 slides: [Google Slides deck](https://docs.google.com/presentation/d/1rh8v0kRFcEy3liyNkhEAiIQjt-M1qDuC/edit?usp=sharing&ouid=106789465777329337053&rtpof=true&sd=true)  
+Demo video: [YouTube](https://youtu.be/PLnJ0M-3hxs)
 
 ## Contents
 
@@ -685,6 +687,8 @@ This Wave verifies the supported typed subset: age bounds and mapped condition/m
 
 | Item | Link / value |
 |---|---|
+| Wave 1 slides | https://docs.google.com/presentation/d/1rh8v0kRFcEy3liyNkhEAiIQjt-M1qDuC/edit?usp=sharing&ouid=106789465777329337053&rtpof=true&sd=true |
+| Demo video | https://youtu.be/PLnJ0M-3hxs |
 | Designer | https://cohort-web-orcin.vercel.app |
 | API health | https://cohort-y4zr.onrender.com/health |
 | API config | https://cohort-y4zr.onrender.com/api/config |
