@@ -103,7 +103,7 @@ attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolea
 |---|---|---|---|---|---|
 | E1 | Video script ≤4min (mission in first 30s, new delta on screen) | SQUAD E | DONE | docs/video-script.md (new, committed 179b425) | tx hashes/addresses marked [FILL AFTER DEPLOY]; blockers cleared — script works on simulator tier if deploy misses shoot day |
 | E2 | Deck outline (real numbers only, sourced) | — | DONE | docs/deck-outline.md (new) | DOMAIN-RESEARCH.md |
-| E3 | What-changed + submission pack draft (new hashes only when available) | SQUAD E | DONE | `docs/what-changed.md` (new, committed), `docs/submission-pack-draft.md` (new, committed), `STATUS.md` (this row) | tx hashes/addresses remain `[FILL AFTER DEPLOY]` — new circuits undeployed; new verifier SHAs pinned in working tree (`docs/verifier-keys.md`, `scripts/judge-pins.mjs`, B5 row pending integrator commit) |
+| E3 | What-changed + submission pack draft (new hashes only when available) | SQUAD E | DONE | `docs/what-changed.md` (new, committed), `docs/submission-pack-draft.md` (new, committed), `STATUS.md` (this row) | tx hashes/addresses remain `[FILL AFTER DEPLOY]` — new circuits undeployed; new verifier SHAs pinned and committed (`docs/verifier-keys.md`, `scripts/judge-pins.mjs`, 2016b45/dc97e10) |
 
 ## Integrator log
 - 2026-10-19 ~05:05: scale-up received; STATUS.md created; token verified (44ch, chmod 600).
