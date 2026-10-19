@@ -69,8 +69,8 @@ await esbuild.build({
   define: {
     'process.env.NODE_ENV': '"production"',
     'process.env.MIDNIGHT_NETWORK': '"preprod"',
-    'process.env.MIDNIGHT_INDEXER_URL': '"https://indexer.preprod.midnight.network/api/v4/graphql"',
-    'process.env.MIDNIGHT_INDEXER_WS_URL': '"wss://indexer.preprod.midnight.network/api/v4/graphql/ws"',
+    'process.env.MIDNIGHT_INDEXER_URL': '"https://midnight-preprod.blockfrost.io/api/v0"',
+    'process.env.MIDNIGHT_INDEXER_WS_URL': '"wss://midnight-preprod.blockfrost.io/api/v0/ws"',
   },
   plugins: [
     polyfillNode({

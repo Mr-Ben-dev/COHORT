@@ -27757,7 +27757,7 @@ init_dirname();
 init_buffer2();
 init_process2();
 
-// wasm-bindgen:D:\route\midnight\COHORT\node_modules\@midnight-ntwrk\onchain-runtime-v3\midnight_onchain_runtime_wasm_bg.wasm
+// wasm-bindgen:/home/hatch/workspace/cohort-build/node_modules/@midnight-ntwrk/onchain-runtime-v3/midnight_onchain_runtime_wasm_bg.wasm
 var midnight_onchain_runtime_wasm_bg_exports2 = {};
 __export(midnight_onchain_runtime_wasm_bg_exports2, {
   __externref_drop_slice: () => __externref_drop_slice,
@@ -30718,7 +30718,7 @@ function __wbindgen_init_externref_table() {
   ;
 }
 
-// wasm-bindgen:D:\route\midnight\COHORT\node_modules\@midnight-ntwrk\onchain-runtime-v3\midnight_onchain_runtime_wasm_bg.wasm
+// wasm-bindgen:/home/hatch/workspace/cohort-build/node_modules/@midnight-ntwrk/onchain-runtime-v3/midnight_onchain_runtime_wasm_bg.wasm
 var __wasmResponse = await fetch(new URL("./midnight_onchain_runtime_wasm_bg.wasm", import.meta.url));
 if (!__wasmResponse.ok) {
   throw new Error("Failed to fetch midnight_onchain_runtime_wasm_bg.wasm: " + __wasmResponse.status);
@@ -31255,7 +31255,7 @@ init_dirname();
 init_buffer2();
 init_process2();
 
-// wasm-bindgen:D:\route\midnight\COHORT\node_modules\@midnight-ntwrk\ledger-v8\midnight_ledger_wasm_bg.wasm
+// wasm-bindgen:/home/hatch/workspace/cohort-build/node_modules/@midnight-ntwrk/ledger-v8/midnight_ledger_wasm_bg.wasm
 var midnight_ledger_wasm_bg_exports2 = {};
 __export(midnight_ledger_wasm_bg_exports2, {
   __externref_drop_slice: () => __externref_drop_slice2,
@@ -42193,7 +42193,7 @@ function VerifierKeyRemove_() {
   return VerifierKeyRemove;
 }
 
-// wasm-bindgen:D:\route\midnight\COHORT\node_modules\@midnight-ntwrk\ledger-v8\midnight_ledger_wasm_bg.wasm
+// wasm-bindgen:/home/hatch/workspace/cohort-build/node_modules/@midnight-ntwrk/ledger-v8/midnight_ledger_wasm_bg.wasm
 var __wasmResponse2 = await fetch(new URL("./midnight_ledger_wasm_bg.wasm", import.meta.url));
 if (!__wasmResponse2.ok) {
   throw new Error("Failed to fetch midnight_ledger_wasm_bg.wasm: " + __wasmResponse2.status);
@@ -68149,6 +68149,52 @@ function env3(name2, fallback = "") {
   return fallback;
 }
 
+// packages/dapp/src/blockfrost.mjs
+init_dirname();
+init_buffer2();
+init_process2();
+var BLOCKFROST_INDEXER_HOST = "midnight-preprod.blockfrost.io";
+var BLOCKFROST_RPC_HOST = "rpc.midnight-preprod.blockfrost.io";
+var BLOCKFROST_INDEXER_URL = "https://midnight-preprod.blockfrost.io/api/v0";
+var BLOCKFROST_INDEXER_WS_URL = "wss://midnight-preprod.blockfrost.io/api/v0/ws";
+function blockfrostProjectId() {
+  return String(env3("BLOCKFROST_PROJECT_ID", "") || "").trim();
+}
+function blockfrostTokenConfigured() {
+  return blockfrostProjectId().length > 0;
+}
+function isBlockfrostUrl(url2) {
+  try {
+    const host2 = new URL(url2).hostname;
+    return host2 === BLOCKFROST_INDEXER_HOST || host2 === BLOCKFROST_RPC_HOST;
+  } catch {
+    return false;
+  }
+}
+function withProjectId(url2) {
+  if (!url2 || typeof url2 !== "string") return url2;
+  try {
+    if (!isBlockfrostUrl(url2)) return url2;
+    const u = new URL(url2);
+    if (u.searchParams.has("project_id")) return url2;
+    const token = blockfrostProjectId();
+    if (!token) return url2;
+    u.searchParams.set("project_id", token);
+    return u.toString();
+  } catch {
+    return url2;
+  }
+}
+function blockfrostIndexerUrl() {
+  return withProjectId(BLOCKFROST_INDEXER_URL);
+}
+function blockfrostIndexerWsUrl() {
+  return withProjectId(BLOCKFROST_INDEXER_WS_URL);
+}
+function blockfrostTokenMissingReason() {
+  return "indexer token not configured (set BLOCKFROST_PROJECT_ID)";
+}
+
 // packages/dapp/src/public-state.mjs
 function configureNetwork(networkId = "preprod") {
   setNetworkId(networkId);
@@ -68158,12 +68204,17 @@ function createPublicDataProvider({ indexerUrl, indexerWsUrl }) {
   if (!indexerUrl || !indexerWsUrl) {
     throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, "Indexer URLs are required for public state.");
   }
+  indexerUrl = withProjectId(indexerUrl);
+  indexerWsUrl = withProjectId(indexerWsUrl);
+  if (isBlockfrostUrl(indexerUrl) && !blockfrostTokenConfigured()) {
+    throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, blockfrostTokenMissingReason());
+  }
   return indexerPublicDataProvider(indexerUrl, indexerWsUrl);
 }
 async function readPublicVerification({
   contractAddress = PROVE_ELIGIBLE_CLAIMS.contractAddress,
-  indexerUrl = env3("MIDNIGHT_INDEXER_URL", "https://indexer.preprod.midnight.network/api/v4/graphql"),
-  indexerWsUrl = env3("MIDNIGHT_INDEXER_WS_URL", "wss://indexer.preprod.midnight.network/api/v4/graphql/ws"),
+  indexerUrl = env3("MIDNIGHT_INDEXER_URL", blockfrostIndexerUrl()),
+  indexerWsUrl = env3("MIDNIGHT_INDEXER_WS_URL", blockfrostIndexerWsUrl()),
   networkId = env3("MIDNIGHT_NETWORK", "preprod")
 } = {}) {
   configureNetwork(networkId);
@@ -71992,7 +72043,7 @@ function isMidnightPublicIndexer(url2) {
   if (!url2) return false;
   try {
     const host2 = new URL(url2).hostname;
-    return host2 === "indexer.preprod.midnight.network" || host2 === "indexer.preview.midnight.network" || host2 === "indexer.mainnet.midnight.network";
+    return host2 === "indexer.preprod.midnight.network" || host2 === "indexer.preview.midnight.network" || host2 === "indexer.mainnet.midnight.network" || host2 === "midnight-preprod.blockfrost.io";
   } catch {
     return false;
   }
@@ -72078,8 +72129,8 @@ async function createCallProviders(input) {
   const walletAndMidnight = connectorWalletProviders(api, shieldedAddresses);
   const accountId = String(shieldedAddresses.shieldedCoinPublicKey || "cohort-session");
   const password = sessionStoragePassword();
-  let indexerUrl = input.indexerUrl || env3("MIDNIGHT_INDEXER_URL", "https://indexer.preprod.midnight.network/api/v4/graphql");
-  let indexerWsUrl = input.indexerWsUrl || env3("MIDNIGHT_INDEXER_WS_URL", "wss://indexer.preprod.midnight.network/api/v4/graphql/ws");
+  let indexerUrl = input.indexerUrl || env3("MIDNIGHT_INDEXER_URL", blockfrostIndexerUrl());
+  let indexerWsUrl = input.indexerWsUrl || env3("MIDNIGHT_INDEXER_WS_URL", blockfrostIndexerWsUrl());
   if (typeof api.getConfiguration === "function") {
     try {
       const cfg = await api.getConfiguration();
@@ -72088,6 +72139,8 @@ async function createCallProviders(input) {
     } catch {
     }
   }
+  indexerUrl = withProjectId(indexerUrl);
+  indexerWsUrl = withProjectId(indexerWsUrl);
   const privateStateProvider = levelPrivateStateProvider({
     midnightDbName: isNode2() ? `midnight-level-db-cohort-${Date.now()}` : "midnight-level-db-cohort",
     privateStoragePasswordProvider: () => password,
@@ -72354,8 +72407,8 @@ init_buffer2();
 init_process2();
 async function getTransactionStatus({
   txId,
-  indexerUrl = env3("MIDNIGHT_INDEXER_URL", "https://indexer.preprod.midnight.network/api/v4/graphql"),
-  indexerWsUrl = env3("MIDNIGHT_INDEXER_WS_URL", "wss://indexer.preprod.midnight.network/api/v4/graphql/ws"),
+  indexerUrl = env3("MIDNIGHT_INDEXER_URL", blockfrostIndexerUrl()),
+  indexerWsUrl = env3("MIDNIGHT_INDEXER_WS_URL", blockfrostIndexerWsUrl()),
   networkId = env3("MIDNIGHT_NETWORK", "preprod")
 } = {}) {
   if (!txId) {

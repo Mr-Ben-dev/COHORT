@@ -16,7 +16,7 @@ test('security headers present on health and HTML', async (t) => {
   assert.match(health.headers['content-security-policy'] || '', /frame-ancestors 'none'/);
   assert.match(health.headers['content-security-policy'] || '', /wasm-unsafe-eval/);
   assert.match(health.headers['content-security-policy'] || '', /api-preprod\.1am\.xyz/);
-  assert.match(health.headers['content-security-policy'] || '', /indexer\.preprod\.midnight\.network/);
+  assert.match(health.headers['content-security-policy'] || '', /midnight-preprod\.blockfrost\.io/);
   assert.ok(health.headers['strict-transport-security']);
 
   const html = await request(url, '/');

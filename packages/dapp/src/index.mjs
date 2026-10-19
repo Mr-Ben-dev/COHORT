@@ -18,6 +18,17 @@ export { CohortError, ErrorCode } from './errors.mjs';
 export { ProveLifecycle, assertPrivateFactsShape } from './types.mjs';
 export { PROVE_ELIGIBLE_CLAIMS } from './claims.mjs';
 export { readPublicVerification, configureNetwork, createPublicDataProvider } from './public-state.mjs';
+export {
+  BLOCKFROST_INDEXER_URL,
+  BLOCKFROST_INDEXER_WS_URL,
+  BLOCKFROST_RPC_URL,
+  blockfrostIndexerUrl,
+  blockfrostIndexerWsUrl,
+  blockfrostRpcUrl,
+  blockfrostTokenConfigured,
+  isBlockfrostUrl,
+  withProjectId,
+} from './blockfrost.mjs';
 export { discoverWallets } from './wallet.mjs';
 export { encodeTrialId } from './encoding.mjs';
 export { bindOfficialTrial } from './prove.mjs';

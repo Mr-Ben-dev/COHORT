@@ -1,11 +1,12 @@
 import { CohortError, ErrorCode } from './errors.mjs';
 import { configureNetwork, createPublicDataProvider } from './public-state.mjs';
 import { env } from './env.mjs';
+import { blockfrostIndexerUrl, blockfrostIndexerWsUrl } from './blockfrost.mjs';
 
 export async function getTransactionStatus({
   txId,
-  indexerUrl = env('MIDNIGHT_INDEXER_URL', 'https://indexer.preprod.midnight.network/api/v4/graphql'),
-  indexerWsUrl = env('MIDNIGHT_INDEXER_WS_URL', 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws'),
+  indexerUrl = env('MIDNIGHT_INDEXER_URL', blockfrostIndexerUrl()),
+  indexerWsUrl = env('MIDNIGHT_INDEXER_WS_URL', blockfrostIndexerWsUrl()),
   networkId = env('MIDNIGHT_NETWORK', 'preprod'),
 } = {}) {
   if (!txId) {

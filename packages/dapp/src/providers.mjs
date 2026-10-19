@@ -9,12 +9,18 @@ import { createPublicDataProvider } from './public-state.mjs';
 import { sessionStoragePassword } from './encoding.mjs';
 import { PROVE_ELIGIBLE_CLAIMS } from './claims.mjs';
 import { env } from './env.mjs';
+import { blockfrostIndexerUrl, blockfrostIndexerWsUrl, withProjectId } from './blockfrost.mjs';
 
 function isNode() {
   return typeof process !== 'undefined' && Boolean(process.versions?.node);
 }
 
-/** Public-state truth is the official Midnight indexer, not 1AM's wallet GraphQL. */
+/**
+ * Public-state truth is the official Midnight indexer, not 1AM's wallet
+ * GraphQL. Blockfrost operates the official Preprod/Mainnet indexer + RPC
+ * (midnight-preprod.blockfrost.io); the retired legacy Preprod hosts are
+ * kept in the allowlist as a truth check, not a blocklist.
+ */
 export function isMidnightPublicIndexer(url) {
   if (!url) return false;
   try {
@@ -22,7 +28,8 @@ export function isMidnightPublicIndexer(url) {
     return (
       host === 'indexer.preprod.midnight.network' ||
       host === 'indexer.preview.midnight.network' ||
-      host === 'indexer.mainnet.midnight.network'
+      host === 'indexer.mainnet.midnight.network' ||
+      host === 'midnight-preprod.blockfrost.io'
     );
   } catch {
     return false;
@@ -117,8 +124,8 @@ export async function createCallProviders(input) {
   const accountId = String(shieldedAddresses.shieldedCoinPublicKey || 'cohort-session');
   const password = sessionStoragePassword();
 
-  let indexerUrl = input.indexerUrl || env('MIDNIGHT_INDEXER_URL', 'https://indexer.preprod.midnight.network/api/v4/graphql');
-  let indexerWsUrl = input.indexerWsUrl || env('MIDNIGHT_INDEXER_WS_URL', 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws');
+  let indexerUrl = input.indexerUrl || env('MIDNIGHT_INDEXER_URL', blockfrostIndexerUrl());
+  let indexerWsUrl = input.indexerWsUrl || env('MIDNIGHT_INDEXER_WS_URL', blockfrostIndexerWsUrl());
   if (typeof api.getConfiguration === 'function') {
     try {
       const cfg = await api.getConfiguration();
@@ -128,6 +135,9 @@ export async function createCallProviders(input) {
       // keep env defaults — 1AM may advertise api-*.1am.xyz, which is not indexer-as-truth
     }
   }
+  // Blockfrost needs ?project_id=<token> on every call; attach it when configured.
+  indexerUrl = withProjectId(indexerUrl);
+  indexerWsUrl = withProjectId(indexerWsUrl);
 
   const privateStateProvider = levelPrivateStateProvider({
     midnightDbName: isNode() ? `midnight-level-db-cohort-${Date.now()}` : 'midnight-level-db-cohort',

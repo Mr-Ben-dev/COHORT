@@ -4,6 +4,14 @@ import { ledger as contractLedger } from '../../contract/managed/cohort/contract
 import { CohortError, ErrorCode } from './errors.mjs';
 import { PROVE_ELIGIBLE_CLAIMS } from './claims.mjs';
 import { env } from './env.mjs';
+import {
+  blockfrostIndexerUrl,
+  blockfrostIndexerWsUrl,
+  blockfrostTokenConfigured,
+  blockfrostTokenMissingReason,
+  isBlockfrostUrl,
+  withProjectId,
+} from './blockfrost.mjs';
 
 export function configureNetwork(networkId = 'preprod') {
   setNetworkId(networkId);
@@ -14,13 +22,18 @@ export function createPublicDataProvider({ indexerUrl, indexerWsUrl }) {
   if (!indexerUrl || !indexerWsUrl) {
     throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, 'Indexer URLs are required for public state.');
   }
+  indexerUrl = withProjectId(indexerUrl);
+  indexerWsUrl = withProjectId(indexerWsUrl);
+  if (isBlockfrostUrl(indexerUrl) && !blockfrostTokenConfigured()) {
+    throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, blockfrostTokenMissingReason());
+  }
   return indexerPublicDataProvider(indexerUrl, indexerWsUrl);
 }
 
 export async function readPublicVerification({
   contractAddress = PROVE_ELIGIBLE_CLAIMS.contractAddress,
-  indexerUrl = env('MIDNIGHT_INDEXER_URL', 'https://indexer.preprod.midnight.network/api/v4/graphql'),
-  indexerWsUrl = env('MIDNIGHT_INDEXER_WS_URL', 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws'),
+  indexerUrl = env('MIDNIGHT_INDEXER_URL', blockfrostIndexerUrl()),
+  indexerWsUrl = env('MIDNIGHT_INDEXER_WS_URL', blockfrostIndexerWsUrl()),
   networkId = env('MIDNIGHT_NETWORK', 'preprod'),
 } = {}) {
   configureNetwork(networkId);
@@ -45,8 +58,8 @@ export async function readPublicVerification({
 /** On-chain proveEligible verifier key from the deployed Preprod contract. */
 export async function readDeployedVerifierKey({
   contractAddress = PROVE_ELIGIBLE_CLAIMS.contractAddress,
-  indexerUrl = env('MIDNIGHT_INDEXER_URL', 'https://indexer.preprod.midnight.network/api/v4/graphql'),
-  indexerWsUrl = env('MIDNIGHT_INDEXER_WS_URL', 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws'),
+  indexerUrl = env('MIDNIGHT_INDEXER_URL', blockfrostIndexerUrl()),
+  indexerWsUrl = env('MIDNIGHT_INDEXER_WS_URL', blockfrostIndexerWsUrl()),
   networkId = env('MIDNIGHT_NETWORK', 'preprod'),
   circuitId = 'proveEligible',
 } = {}) {

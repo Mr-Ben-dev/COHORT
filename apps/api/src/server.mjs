@@ -5,6 +5,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { getPublicTrials, getTrial, knownTrialId } from './trials.mjs';
 import { assertPublicOnly, PUBLIC_REFERRAL_KEYS, findPrivateFields } from './public-fields.mjs';
 import { publicLog, redact } from './redact.mjs';
+import { ContractState } from '@midnight-ntwrk/midnight-js-protocol/compact-runtime';
+import { ledger as cohortLedger } from '../../../packages/contract/managed/cohort/contract/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WEB_DIR = path.resolve(__dirname, '../../web');
@@ -40,7 +42,7 @@ function securityHeaders(res, extra = {}) {
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
     'X-Frame-Options': 'DENY',
     'Content-Security-Policy':
-      "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; connect-src 'self' https://indexer.preprod.midnight.network https://indexer.preview.midnight.network https://indexer.mainnet.midnight.network https://rpc.preprod.midnight.network https://rpc.preview.midnight.network https://rpc.mainnet.midnight.network wss://indexer.preprod.midnight.network wss://indexer.preview.midnight.network wss://indexer.mainnet.midnight.network https://api-preprod.1am.xyz https://api-preview.1am.xyz https://api.1am.xyz wss://api-preprod.1am.xyz wss://api-preview.1am.xyz wss://api.1am.xyz; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+      "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; connect-src 'self' https://midnight-preprod.blockfrost.io https://indexer.preview.midnight.network https://indexer.mainnet.midnight.network https://rpc.midnight-preprod.blockfrost.io https://rpc.preview.midnight.network https://rpc.mainnet.midnight.network wss://midnight-preprod.blockfrost.io wss://indexer.preview.midnight.network wss://indexer.mainnet.midnight.network https://api-preprod.1am.xyz https://api-preview.1am.xyz https://api.1am.xyz wss://api-preprod.1am.xyz wss://api-preview.1am.xyz wss://api.1am.xyz; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
     'Cache-Control': cache || 'no-store',
     ...httpExtra,
   };
@@ -122,9 +124,52 @@ function readJson(req) {
   });
 }
 
+const HEX_ADDRESS = /^[0-9a-fA-F]+$/;
+
+/**
+ * Read the live contract ledger from the Blockfrost-operated Midnight
+ * indexer (GraphQL POST, same schema as the retired official endpoint).
+ * Mirrors packages/dapp/src/public-state.mjs: the indexer returns a
+ * hex-encoded ContractState; ContractState.deserialize gives .data and the
+ * generated ledger() decodes the public fields.
+ */
+async function fetchBlockfrostPublicLedger({ indexerUrl, contractAddress }) {
+  if (!contractAddress || !HEX_ADDRESS.test(contractAddress)) {
+    const err = new Error('contract address not configured');
+    err.status = 503;
+    throw err;
+  }
+  const query = `{ contractAction(address: "${contractAddress}") { state } }`;
+  const res = await fetch(indexerUrl, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ query }),
+  });
+  if (!res.ok) {
+    const err = new Error(`indexer HTTP ${res.status}`);
+    err.status = 502;
+    throw err;
+  }
+  const json = await res.json();
+  if (Array.isArray(json.errors) && json.errors.length) {
+    const err = new Error(json.errors[0]?.message || 'indexer GraphQL error');
+    err.status = 502;
+    throw err;
+  }
+  const hex = json.data?.contractAction?.state;
+  if (!hex || !HEX_ADDRESS.test(hex)) {
+    const err = new Error('indexer returned no contract state');
+    err.status = 502;
+    throw err;
+  }
+  const state = ContractState.deserialize(Buffer.from(hex, 'hex'));
+  return cohortLedger(state.data);
+}
+
 function publicConfig() {
   return {
     networkId: process.env.MIDNIGHT_NETWORK || 'preprod',
+    indexerTokenConfigured: Boolean((process.env.BLOCKFROST_PROJECT_ID || '').trim()),
     indexerUrl: process.env.MIDNIGHT_INDEXER_URL || '',
     indexerWsUrl: process.env.MIDNIGHT_INDEXER_WS_URL || '',
     nodeUrl: process.env.MIDNIGHT_NODE_URL || '',
@@ -180,11 +225,48 @@ function handleApiFactory(publicEvents) {
   }
 
   if (url.pathname === '/api/public-state' && req.method === 'GET') {
-    return send(res, 200, {
-      contractAddress: process.env.COHORT_CONTRACT_ADDRESS || '',
-      networkId: process.env.MIDNIGHT_NETWORK || 'preprod',
+    const contractAddress = process.env.COHORT_CONTRACT_ADDRESS || '';
+    const networkId = process.env.MIDNIGHT_NETWORK || 'preprod';
+    const token = (process.env.BLOCKFROST_PROJECT_ID || '').trim();
+    const base = {
+      contractAddress,
+      networkId,
+      proven: null,
+      spentCount: null,
+      referralCount: null,
       events: publicEvents.slice(-50),
-    });
+    };
+    if (!token) {
+      // Graceful degradation: no fake numbers, clearly labeled.
+      return send(res, 200, {
+        ...base,
+        source: 'unavailable',
+        reason: 'indexer token not configured (set BLOCKFROST_PROJECT_ID)',
+      });
+    }
+    try {
+      const rawIndexer = process.env.MIDNIGHT_INDEXER_URL || 'https://midnight-preprod.blockfrost.io/api/v0';
+      const sep = rawIndexer.includes('?') ? '&' : '?';
+      const indexerUrl = rawIndexer.includes('project_id=')
+        ? rawIndexer
+        : `${rawIndexer}${sep}project_id=${encodeURIComponent(token)}`;
+      const pub = await fetchBlockfrostPublicLedger({ indexerUrl, contractAddress });
+      return send(
+        res,
+        200,
+        {
+          ...base,
+          source: 'blockfrost-preprod',
+          proven: Number(pub.proven.toString()),
+          spentCount: Number(pub.spent.size().toString()),
+          referralCount: Number(pub.referrals.size().toString()),
+        },
+        'public, max-age=60',
+      );
+    } catch (err) {
+      publicLog('public-state indexer failed', { error: redact(String(err?.message || err)) });
+      return send(res, 502, { ...base, source: 'blockfrost-preprod', error: 'indexer query failed' });
+    }
   }
 
   if (url.pathname === '/api/referral' && req.method === 'POST') {

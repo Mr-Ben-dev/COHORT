@@ -12,10 +12,15 @@ export const COHORT_CONTRACT_ADDRESS =
   process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ||
   "1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc";
 
+// Blockfrost operates the official Preprod indexer (old midnight.network
+// Preprod hosts are shut down). Calls need ?project_id=<token> from
+// BLOCKFROST_PROJECT_ID — never a NEXT_PUBLIC_* variable; the wallet's
+// getConfiguration() indexer URIs or an explicit MIDNIGHT_INDEXER_URL
+// (with ?project_id=) supply it at runtime.
 export const MIDNIGHT_INDEXER_URL =
   process.env.NEXT_PUBLIC_INDEXER_URL ||
-  "https://indexer.preprod.midnight.network/api/v4/graphql";
+  "https://midnight-preprod.blockfrost.io/api/v0";
 
 export const MIDNIGHT_INDEXER_WS_URL =
   process.env.NEXT_PUBLIC_INDEXER_WS_URL ||
-  "wss://indexer.preprod.midnight.network/api/v4/graphql/ws";
+  "wss://midnight-preprod.blockfrost.io/api/v0/ws";

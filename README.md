@@ -422,7 +422,7 @@ Render origin: `https://cohort-y4zr.onrender.com`
 
 `.prover` is a circuit proving key, not a wallet seed. `/zk` sends `Access-Control-Allow-Origin: *` so 1AM can fetch keys. Traversal of `/zk/../.env` is forbidden.
 
-Page CSP `connect-src` allows official Midnight indexer/RPC and 1AM GraphQL. Public-state **truth** stays `indexer.preprod.midnight.network`.
+Page CSP `connect-src` allows the Blockfrost-operated Midnight indexer/RPC and 1AM GraphQL. Public-state **truth** stays the official Preprod indexer, now at `midnight-preprod.blockfrost.io` (every call needs `?project_id=$BLOCKFROST_PROJECT_ID`).
 
 ---
 
@@ -443,7 +443,7 @@ Vercel project `cohort-web`, `rootDirectory` `web`, `NEXT_PUBLIC_COHORT_API_ORIG
 ## 18. On-chain evidence
 
 Contract: `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc`  
-Indexer: https://indexer.preprod.midnight.network/api/v4/graphql  
+Indexer (Blockfrost Preprod, GraphQL — requires `?project_id=$BLOCKFROST_PROJECT_ID`): https://midnight-preprod.blockfrost.io/api/v0  
 Explorer: https://preprod.midnightexplorer.com/  
 Verifier SHA-256: `5af3b4b2ed345f711c5ff87367cfb0049732701c5a5336d51234b2a95fe32ab1`  
 On-chain verifier, repo `packages/contract/zk/keys/proveEligible.verifier`, and live `/zk` are byte-identical (`midnight:verifier-key[v6]:`).
@@ -470,7 +470,9 @@ Earlier real proves (do not treat the Node SDK tx as the browser path):
 Inspect public state without a wallet:
 
 ```bash
-curl -s https://indexer.preprod.midnight.network/api/v4/graphql \
+# Blockfrost operates the official Preprod indexer (same GraphQL schema).
+# A project token is required: create a Midnight Preprod project at blockfrost.io.
+curl -s "https://midnight-preprod.blockfrost.io/api/v0?project_id=$BLOCKFROST_PROJECT_ID" \
   -H "content-type: application/json" \
   -d "{\"query\":\"{ contractAction(address: \\\"1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc\\\") { __typename ... on ContractCall { entryPoint } address transaction { hash } } }\"}"
 ```
@@ -564,12 +566,14 @@ ls -l packages/contract/zk/keys packages/contract/zk/zkir packages/contract/zk/c
 
 ### LIVE PREPROD EVIDENCE
 
-No credentials required.
+Render endpoints need no credentials. Indexer verification needs a Blockfrost project token (`BLOCKFROST_PROJECT_ID`).
 
 ```bash
 curl https://cohort-y4zr.onrender.com/health
 curl https://cohort-y4zr.onrender.com/api/config
-curl -s https://indexer.preprod.midnight.network/api/v4/graphql \
+# Blockfrost operates the official Preprod indexer (same GraphQL schema).
+# A project token is required: create a Midnight Preprod project at blockfrost.io.
+curl -s "https://midnight-preprod.blockfrost.io/api/v0?project_id=$BLOCKFROST_PROJECT_ID" \
   -H "content-type: application/json" \
   -d "{\"query\":\"{ contractAction(address: \\\"1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc\\\") { __typename ... on ContractCall { entryPoint } address transaction { hash } } }\"}"
 ```
@@ -694,7 +698,7 @@ This Wave verifies the supported typed subset: age bounds and mapped condition/m
 | API config | https://cohort-y4zr.onrender.com/api/config |
 | Verifier over HTTP | https://cohort-y4zr.onrender.com/zk/keys/proveEligible.verifier |
 | Contract | `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc` |
-| Indexer | https://indexer.preprod.midnight.network/api/v4/graphql |
+| Indexer | https://midnight-preprod.blockfrost.io/api/v0 (`?project_id=$BLOCKFROST_PROJECT_ID` required) |
 | Explorer | https://preprod.midnightexplorer.com/ |
 | Support matrix | https://docs.midnight.network/relnotes/support-matrix |
 | Compact install | https://docs.midnight.network/getting-started/installation |

@@ -90,7 +90,7 @@ Squad E / E2. Status: DRAFT for the Wave-3 pitch deck. Every hard number traces 
 
 - **Network:** Midnight Preprod (ledger 8)
 - **Contract address (Wave 1, `proveEligible`):** `1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc`
-- **Explorer:** https://preprod.midnightexplorer.com/ — **Indexer (truth):** https://indexer.preprod.midnight.network/api/v4/graphql
+- **Explorer:** https://preprod.midnightexplorer.com/ — **Indexer (truth, Blockfrost Preprod — requires `?project_id=$BLOCKFROST_PROJECT_ID`):** https://midnight-preprod.blockfrost.io/api/v0
 - **Documented 1AM gold-path tx:** `da8f79de04a120d7a0c8b433de992b21bee37a234b4af2c717aa16fb84fc1a60` (NCT07153614, 2026-09-13; COMMITTED EVIDENCE in repo §18)
 - **Wave-3 circuits (`attest*`, `proveAttested`) contract address:** `[FILL AFTER DEPLOY]` — new contract; Wave-1 address kept as evidence, never overwritten.
 - **Wave-3 attestation txs / verifier SHA of the new circuit:** `[FILL AFTER DEPLOY]`

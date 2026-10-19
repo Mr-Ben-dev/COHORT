@@ -37,7 +37,7 @@ import { PRIVATE_FIELD_NAMES } from '../apps/api/src/public-fields.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-const SECRET_KEY = /^(GITHUB_TOKEN|GH_TOKEN|RENDER_API_KEY|VERCEL_API_TOKEN|MIDNIGHT_.*SEED|.*PRIVATE_KEY|.*MNEMONIC|.*PASSWORD|DATABASE_URL)$/i;
+const SECRET_KEY = /^(GITHUB_TOKEN|GH_TOKEN|RENDER_API_KEY|VERCEL_API_TOKEN|MIDNIGHT_.*SEED|.*PRIVATE_KEY|.*MNEMONIC|.*PASSWORD|DATABASE_URL|BLOCKFROST_PROJECT_ID)$/i;
 const SECRET_VALUE = /(ghp_[A-Za-z0-9]{8,}|github_pat_[A-Za-z0-9_]{8,}|rnd_[A-Za-z0-9]{8,}|vcp_[A-Za-z0-9]{8,}|sk_live_|BEGIN OPENSSH)/;
 
 function redact(value) {
@@ -109,9 +109,16 @@ function parseTestCounts(output) {
   return { tests, pass, fail: failCount, skipped };
 }
 
+/** Blockfrost requires ?project_id=<token>; never hardcode the token. */
+function indexerUrlWithToken(url) {
+  const token = (process.env.BLOCKFROST_PROJECT_ID || '').trim();
+  if (!token || url.includes('project_id=')) return url;
+  return `${url}${url.includes('?') ? '&' : '?'}project_id=${encodeURIComponent(token)}`;
+}
+
 async function indexerLatest() {
   const query = `{ contractAction(address: "${CONTRACT_ADDRESS}") { __typename ... on ContractCall { entryPoint } address transaction { hash } } }`;
-  return fetchJson(INDEXER_URL, { method: 'POST', body: { query } });
+  return fetchJson(indexerUrlWithToken(INDEXER_URL), { method: 'POST', body: { query } });
 }
 
 async function indexerLedger() {

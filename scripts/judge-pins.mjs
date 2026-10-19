@@ -18,9 +18,13 @@ export const VERIFIER_SHA256 = '5af3b4b2ed345f711c5ff87367cfb0049732701c5a5336d5
 export const PROVER_SHA256 = '5a31f2a515988e959ab5e6200abc41a11dc805d66f929f3c8ea89e6daa88e385';
 export const PROVER_MIN_BYTES = 1_000_000;
 
-export const INDEXER_URL = 'https://indexer.preprod.midnight.network/api/v4/graphql';
-export const INDEXER_WS_URL = 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws';
-export const NODE_URL = 'https://rpc.preprod.midnight.network';
+// Blockfrost operates the official Preprod indexer/RPC (the retired official
+// Preprod hosts were shut down, HTTP 410). The Blockfrost project token is
+// NEVER stored here — it comes from the BLOCKFROST_PROJECT_ID env var,
+// appended as ?project_id=<token> at the call site.
+export const INDEXER_URL = 'https://midnight-preprod.blockfrost.io/api/v0';
+export const INDEXER_WS_URL = 'wss://midnight-preprod.blockfrost.io/api/v0/ws';
+export const NODE_URL = 'https://rpc.midnight-preprod.blockfrost.io';
 export const EXPLORER_URL = 'https://preprod.midnightexplorer.com/';
 export const API_ORIGIN = 'https://cohort-y4zr.onrender.com';
 export const WEB_ORIGIN = 'https://cohort-web-orcin.vercel.app';
