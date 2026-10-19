@@ -51,7 +51,7 @@
 | B2 | Demo issuer key-ceremony script | 44ab66df | RUNNING — script written + tested (clean exit 2 pre-B1); polling for B1 interface | scripts/issuer-ceremony.mjs (new), .gitignore (+scripts/.issuer-secret.json) | B1 contract interface (issuerIdOf/attestationOf/ISSUER_ID placeholder not yet in contract) |
 | B3 | Simulator happy-path tests | — | NOT STARTED | TESTS/attest-happy.test.mjs | waits for B1 |
 | B4 | Refusal/adversarial tests | — | NOT STARTED | TESTS/attest-adversarial.test.mjs | waits for B1 |
-| B5 | Full-ZK compile + verifier SHA record + pins update | — | NOT STARTED | scripts/ | waits for B1 |
+| B5 | Full-ZK compile + verifier SHA record + pins update | 6f153b59 (B5) | DONE | docs/verifier-keys.md (new), scripts/judge-pins.mjs (additive pins + verifyAllVerifierKeys()) | proveEligible verifier SHA byte-identical to Wave-1 pin; 3 new circuits pinned, undeployed |
 | B6 | Proof-server measurement | — | NOT STARTED | — | waits for B5 |
 | B7 | dapp wiring for new circuits | — | NOT STARTED | packages/dapp/src/attest.mjs (new) | waits for B1 |
 | B8 | Circuit documentation | B8 subagent (parent-orchestrator task) | DONE | `docs/circuits.md` (new, committed), `STATUS.md` (this row) | none — wrote from `CONTRACT/cohort.compact` as implemented + B1 interface spec (both circuits, issuer-attested trio, trust boundary, mermaid flow; honesty sections: self-asserted Wave-1 inputs, demo-grade issuer gate, circuit cannot prove medical-record authenticity) |
@@ -86,7 +86,7 @@ attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolea
 | C4 | Proof-of-execution counter wiring (attestationsVerified → API → UI) | — | NOT STARTED | apps/api, web | B1, A7 |
 | C5 | Judge credential files + try-it-yourself doc | — | NOT STARTED | TESTS/judge-credentials/, docs/try-it.md | B2 (ceremony) |
 | C6 | managed/ commit verification + CI green | — | NOT STARTED | .github/ | — |
-| C7 | Honest non-claims README section + pinning tests | — | NOT STARTED | README.md, TESTS/non-claims.test.mjs | waits for A8 |
+| C7 | Honest non-claims README section + pinning tests | 9c68e5cc | DONE (tests 6/6 green) | docs/honest-non-claims.md, TESTS/non-claims.test.mjs, package.json (test script) | README merge by integrator (A8 owns README.md curl sections) |
 
 ## SQUAD D — Product depth
 | # | Task | Worker | Status | Files touched | Blockers |
