@@ -55,7 +55,11 @@ async function getReferralState(opts = {}) {
     throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, 'Optional public referral cache is unavailable.');
   }
   const body = await res.json();
-  return { ...body, source: 'cohort-memory-cache', notIndexerTruth: true };
+  // The referral cache is labeled cache, never indexer truth: strip every
+  // indexer-truth field (counters, contract address, block height) so callers
+  // cannot mistake the cache for the chain. Only the event log is cached.
+  const { events } = body;
+  return { events: Array.isArray(events) ? events : [], source: 'cohort-memory-cache', notIndexerTruth: true };
 }
 
 /**

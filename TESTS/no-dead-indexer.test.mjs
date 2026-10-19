@@ -39,6 +39,9 @@ const SKIP_DIRS = new Set([
   'TESTS',
 ]);
 const SKIP_FILES = new Set(['package-lock.json']);
+// docs/what-changed.md is the historical record OF this migration — it names
+// the retired hosts in past tense ("was shut down"). History is not rewritten.
+const SKIP_PATHS = new Set([path.join('docs', 'what-changed.md')]);
 
 // Deliberate survivors: isMidnightPublicIndexer() in
 // packages/dapp/src/providers.mjs keeps the retired hostnames in its
@@ -57,6 +60,8 @@ function* walk(dir) {
     }
     if (!ent.isFile()) continue;
     if (SKIP_FILES.has(ent.name)) continue;
+    const rel = path.relative(root, path.join(dir, ent.name));
+    if (SKIP_PATHS.has(rel)) continue;
     if (ent.name.startsWith('.env') && ent.name !== '.env.example') continue; // local untracked env
     yield path.join(dir, ent.name);
   }
