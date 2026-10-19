@@ -1,0 +1,10 @@
+{
+  "label": "DEMO — synthetic data, not a real patient",
+  "age": 42,
+  "condition": true,
+  "medication": false,
+  "holderSecretHex": "3c1b254d13e337c82d8047b8ddc312d3e68f29bec8ac88a53ade75e60649cc8a",
+  "nonceHex": "a01219791b3bfe3df195efcbea24dd2443a32f35d30b53db5391441a566d97c8",
+  "attestationHex": "92c12cf06313e6907505fd919b44e6f09362326cb0eaebadb654f0c05199c29a",
+  "trialId": "NCT07153614"
+}

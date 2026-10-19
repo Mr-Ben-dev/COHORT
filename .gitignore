@@ -70,3 +70,4 @@ ENVIRONMENT/install-wsl-stack.sh
 ENVIRONMENT/pin-compact.sh
 TOOLS/
 preprod-result.json
+scripts/.issuer-secret.json
