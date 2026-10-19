@@ -47,15 +47,27 @@ test('Playwright Chromium: PATIENT_A/B ages stay off COHORT origin traffic and s
   });
 
   await page.goto(url, { waitUntil: 'domcontentloaded' });
+  // app.js is a deferred module: domcontentloaded can fire before it runs.
+  // Wait until it has booted (trial buttons rendered, chain-status updated,
+  // or a boot error surfaced) before filling/clicking — otherwise the click
+  // can land before handlers are attached and #status never updates.
+  await page.waitForFunction(
+    () =>
+      document.querySelectorAll('#trials button').length > 0 ||
+      Boolean(document.getElementById('status')?.textContent?.trim()) ||
+      !document.getElementById('chain-status')?.textContent?.includes('Loading'),
+    null,
+    { timeout: 60000 },
+  );
   await page.fill('#age', String(PATIENT_A));
   await page.selectOption('#condition', 'true');
   await page.selectOption('#medication', 'false');
   await page.click('#prove');
-  // 120s: in-browser ZK proving under a fully parallel suite on a shared VM
-  // can take far longer than the 30s default; the timeout guards liveness,
-  // not privacy (all privacy assertions below are timeout-independent).
+  // Fail-closed path is synchronous after click (no wallet -> immediate
+  // status); the timeout below is liveness only, privacy assertions after
+  // it are timeout-independent.
   await page.waitForFunction(() => Boolean(document.getElementById('status')?.textContent?.trim()), null, {
-    timeout: 120000,
+    timeout: 60000,
   });
 
   const storage = await page.evaluate(() => ({
