@@ -43,15 +43,30 @@ export function findPrivateFields(value: unknown, path = ""): string[] {
   return hits;
 }
 
+/** Upstream timeout so a hung API/Blockfrost hop fails fast instead of hanging a page forever. */
+const UPSTREAM_TIMEOUT_MS = 30_000;
+
 export async function proxyCohort(path: string, init?: RequestInit): Promise<Response> {
   const url = `${COHORT_API_ORIGIN}${path}`;
-  const res = await fetch(url, {
-    ...init,
-    cache: "no-store",
-    headers: {
-      accept: "application/json",
-      ...(init?.headers || {}),
-    },
-  });
-  return res;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
+  try {
+    const res = await fetch(url, {
+      ...init,
+      cache: "no-store",
+      signal: controller.signal,
+      headers: {
+        accept: "application/json",
+        ...(init?.headers || {}),
+      },
+    });
+    return res;
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new Error(`Upstream request timed out after ${UPSTREAM_TIMEOUT_MS / 1000}s: ${url}`);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
 }

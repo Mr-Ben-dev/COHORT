@@ -42,7 +42,7 @@
 | A5 | Repo-wide dead-URL regression test (`TESTS/no-dead-indexer.test.mjs` + register in package.json) | regression worker | DONE | `TESTS/no-dead-indexer.test.mjs` (new, committed 77fb2ca), root `package.json` test script | fails until A1 migration lands (expected — 8 live files still reference dead hosts, see report) |
 | A6 | Toolchain re-pin + recompile + verifier SHA | integrator (done) | DONE | CONTRACT/cohort.compact (wSex removed, SHA byte-identical) | — |
 | A7 | `/api/public-state` live counters via Blockfrost GraphQL (after A1 finishes server.mjs) | — | NOT STARTED | apps/api/src/server.mjs | waits for A1 |
-| A8 | Keep-alive + loading states + README curl fixes (after A1 finishes README) | — | NOT STARTED | README.md, web components | waits for A1 |
+| A8 | Keep-alive + loading states + README curl fixes (after A1 finishes README) | a8-worker | DONE | scripts/keepalive.mjs (new), docs/keepalive.md (new), render.yaml (keep-alive doc header), README.md (both GraphQL curls: Blockfrost POST + ?project_id env token; public-state block now contractAction{state}), web/src/lib/proxy-cohort.ts (30s upstream timeout), web/src/features/referral/referral-view.tsx (stalled-referral error + retry), web/src/features/proofs/my-proofs-view.tsx (busy state on Share button) | none |
 
 ## SQUAD B — Hero circuit (hash-native)
 | # | Task | Worker | Status | Files touched | Blockers |

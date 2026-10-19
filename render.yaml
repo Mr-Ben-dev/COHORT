@@ -1,3 +1,11 @@
+# render.yaml - COHORT Render blueprint.
+#
+# KEEP-ALIVE: Render's free plan has no native cron jobs, so warm-up is external.
+# scripts/keepalive.mjs pings the health endpoint below plus the Vercel
+# frontend every 10 minutes (see docs/keepalive.md for the three supported
+# scheduling options). Both probes are unauthenticated GETs and the script
+# always exits 0 (failures are logged, never fatal).
+
 services:
   - type: web
     name: cohort

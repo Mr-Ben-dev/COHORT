@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { format } from "date-fns";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { PillButton } from "@/components/brand/pill-button";
 import { Tag } from "@/components/brand/status-pill";
 import { EmptyStateArt } from "@/components/artwork/empty-state-art";
@@ -19,6 +19,9 @@ function ProofCard({ check, index }: { check: EligibilityCheck; index: number })
   const navigate = useCohortStore((s) => s.navigate);
   const requestReferral = useCohortStore((s) => s.requestReferral);
   const reduce = useReducedMotion();
+  /* Busy guard: the referral POST can take a while (indexer round-trip);
+   * without it a double click fires two requests. */
+  const [requesting, setRequesting] = useState(false);
 
   const eligible = check.result.eligible;
 
@@ -86,9 +89,21 @@ function ProofCard({ check, index }: { check: EligibilityCheck; index: number })
           <PillButton
             size="sm"
             variant="ghost"
-            onClick={() => void requestReferral(check.id)}
+            disabled={requesting}
+            onClick={() => {
+              if (requesting) return;
+              setRequesting(true);
+              void requestReferral(check.id).finally(() => setRequesting(false));
+            }}
           >
-            Share public qualification
+            {requesting ? (
+              <span className="inline-flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                Requesting…
+              </span>
+            ) : (
+              "Share public qualification"
+            )}
           </PillButton>
         )}
       </div>

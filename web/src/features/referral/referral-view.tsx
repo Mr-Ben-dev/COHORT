@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { format } from "date-fns";
 import { Check, Loader2 } from "lucide-react";
@@ -30,6 +31,138 @@ function ReferralField({
         {children}
       </dd>
     </div>
+  );
+}
+
+/* ── Requested — the commitment is being sealed ──────────────
+ * The referral POST plus an indexer round-trip can take a while, and the
+ * store deliberately keeps no error state on this branch — so a stalled
+ * request must surface its own honest error and a real retry instead of
+ * spinning forever. */
+function ReferralPending({
+  checkId,
+  siteName,
+}: {
+  checkId: string;
+  siteName: string;
+}) {
+  const requestReferral = useCohortStore((s) => s.requestReferral);
+  const reduce = useReducedMotion();
+  const [stale, setStale] = useState(false);
+  const [retrying, setRetrying] = useState(false);
+
+  useEffect(() => {
+    setStale(false);
+    const id = window.setTimeout(() => setStale(true), 120_000);
+    return () => window.clearTimeout(id);
+  }, [checkId]);
+
+  async function retry() {
+    if (retrying) return;
+    setRetrying(true);
+    setStale(false);
+    try {
+      await requestReferral(checkId);
+    } finally {
+      setRetrying(false);
+    }
+  }
+
+  const fadeUp = (delay = 0) => ({
+    initial: reduce ? false : { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] as const },
+  });
+
+  return (
+    <section className="mx-auto max-w-[1200px] px-5 py-12 sm:px-8 sm:py-16">
+      <div className="mx-auto max-w-2xl">
+        <BackLink label="Back" />
+
+        <motion.header {...fadeUp()} className="mt-6">
+          <p className="text-caption font-semibold uppercase tracking-[0.16em] text-clinical-cyan">
+            Referral
+          </p>
+          <h1 className="mt-4 text-heading font-semibold text-balance text-cloud-white">
+            Creating the referral commitment…
+          </h1>
+          <p className="mt-3 text-body text-pearl/80">
+            Posting a public-safe qualification only. There is no live
+            site inbox.
+          </p>
+        </motion.header>
+
+        <motion.div
+          {...fadeUp(0.1)}
+          className="mt-8 rounded-card border border-iris-border bg-cloud-white/[0.06] p-6 sm:p-8"
+          aria-live="polite"
+        >
+          <div className="flex items-center gap-4">
+            <span
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-mint-vital/40 bg-mint-vital/10"
+              aria-hidden="true"
+            >
+              <Loader2 className="h-6 w-6 animate-spin text-mint-vital" />
+            </span>
+            <div>
+              <p className="text-body font-semibold text-cloud-white">
+                Creating referral commitment…
+              </p>
+              <p className="mt-1 text-body-sm text-pearl/70">
+                This usually takes a moment.
+              </p>
+            </div>
+          </div>
+          <ul className="mt-5 space-y-2 border-t border-iris-border/50 pt-5">
+            {[
+              "Confirming your verified proof reference",
+              `Sealing the commitment for ${siteName}`,
+            ].map((step) => (
+              <li
+                key={step}
+                className="flex items-center gap-2.5 text-body-sm text-pearl/70"
+              >
+                <span
+                  className="h-1.5 w-1.5 rounded-full bg-mint-vital"
+                  aria-hidden="true"
+                />
+                {step}
+              </li>
+            ))}
+          </ul>
+          {stale && (
+            <div
+              className="mt-5 border-t border-iris-border/50 pt-5"
+              role="alert"
+            >
+              <p className="text-body-sm text-pearl/80">
+                The referral request has not finished after 2 minutes — it
+                may have failed or the network may be slow. Your proof is
+                still verified; nothing was sealed.
+              </p>
+              <PillButton
+                className="mt-4"
+                variant="ghost"
+                disabled={retrying}
+                onClick={() => void retry()}
+              >
+                {retrying ? (
+                  <span className="inline-flex items-center gap-2">
+                    <Loader2
+                      className="h-4 w-4 animate-spin"
+                      aria-hidden="true"
+                    />
+                    Retrying…
+                  </span>
+                ) : (
+                  "Try again"
+                )}
+              </PillButton>
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
@@ -67,66 +200,7 @@ export function ReferralView({ checkId }: { checkId: string }) {
 
   /* ── Requested — the commitment is being sealed ────────────── */
   if (referral.status === "requested") {
-    return (
-      <section className="mx-auto max-w-[1200px] px-5 py-12 sm:px-8 sm:py-16">
-        <div className="mx-auto max-w-2xl">
-          <BackLink label="Back" />
-
-          <motion.header {...fadeUp()} className="mt-6">
-            <p className="text-caption font-semibold uppercase tracking-[0.16em] text-clinical-cyan">
-              Referral
-            </p>
-            <h1 className="mt-4 text-heading font-semibold text-balance text-cloud-white">
-              Creating the referral commitment…
-            </h1>
-            <p className="mt-3 text-body text-pearl/80">
-              Posting a public-safe qualification only. There is no live
-              site inbox.
-            </p>
-          </motion.header>
-
-          <motion.div
-            {...fadeUp(0.1)}
-            className="mt-8 rounded-card border border-iris-border bg-cloud-white/[0.06] p-6 sm:p-8"
-            aria-live="polite"
-          >
-            <div className="flex items-center gap-4">
-              <span
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-mint-vital/40 bg-mint-vital/10"
-                aria-hidden="true"
-              >
-                <Loader2 className="h-6 w-6 animate-spin text-mint-vital" />
-              </span>
-              <div>
-                <p className="text-body font-semibold text-cloud-white">
-                  Creating referral commitment…
-                </p>
-                <p className="mt-1 text-body-sm text-pearl/70">
-                  This usually takes a moment.
-                </p>
-              </div>
-            </div>
-            <ul className="mt-5 space-y-2 border-t border-iris-border/50 pt-5">
-              {[
-                "Confirming your verified proof reference",
-                `Sealing the commitment for ${referral.siteName}`,
-              ].map((step) => (
-                <li
-                  key={step}
-                  className="flex items-center gap-2.5 text-body-sm text-pearl/70"
-                >
-                  <span
-                    className="h-1.5 w-1.5 rounded-full bg-mint-vital"
-                    aria-hidden="true"
-                  />
-                  {step}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        </div>
-      </section>
-    );
+    return <ReferralPending checkId={checkId} siteName={referral.siteName} />;
   }
 
   /* ── Sealed — the positive handoff ────────────────────────── */

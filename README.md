@@ -471,10 +471,12 @@ Inspect public state without a wallet:
 
 ```bash
 # Blockfrost operates the official Preprod indexer (same GraphQL schema).
-# A project token is required: create a Midnight Preprod project at blockfrost.io.
-curl -s "https://midnight-preprod.blockfrost.io/api/v0?project_id=$BLOCKFROST_PROJECT_ID" \
+# A project token is required: create a Midnight Preprod project at blockfrost.io,
+# export BLOCKFROST_PROJECT_ID=<your-token> -- the token is read from env, never embedded here.
+# `contractAction { state }` is the same field apps/api/src/server.mjs reads for /api/public-state.
+curl -s -X POST "https://midnight-preprod.blockfrost.io/api/v0?project_id=$BLOCKFROST_PROJECT_ID" \
   -H "content-type: application/json" \
-  -d "{\"query\":\"{ contractAction(address: \\\"1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc\\\") { __typename ... on ContractCall { entryPoint } address transaction { hash } } }\"}"
+  -d "{\"query\":\"{ contractAction(address: \\\"1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc\\\") { state } }\"}"
 ```
 
 ---
@@ -572,8 +574,10 @@ Render endpoints need no credentials. Indexer verification needs a Blockfrost pr
 curl https://cohort-y4zr.onrender.com/health
 curl https://cohort-y4zr.onrender.com/api/config
 # Blockfrost operates the official Preprod indexer (same GraphQL schema).
-# A project token is required: create a Midnight Preprod project at blockfrost.io.
-curl -s "https://midnight-preprod.blockfrost.io/api/v0?project_id=$BLOCKFROST_PROJECT_ID" \
+# A project token is required: create a Midnight Preprod project at blockfrost.io,
+# export BLOCKFROST_PROJECT_ID=<your-token> -- the token is read from env, never embedded here.
+# Same query shape as scripts/judge-verify.mjs's live indexer check.
+curl -s -X POST "https://midnight-preprod.blockfrost.io/api/v0?project_id=$BLOCKFROST_PROJECT_ID" \
   -H "content-type: application/json" \
   -d "{\"query\":\"{ contractAction(address: \\\"1d5c2084222c8abea80bc8228c0c743ca183138e52f404594caa28572e7c29cc\\\") { __typename ... on ContractCall { entryPoint } address transaction { hash } } }\"}"
 ```
