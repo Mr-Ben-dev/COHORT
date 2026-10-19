@@ -1,16 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { listenServer } from '../apps/api/src/server.mjs';
+import { launchWebBrowser } from './playwright-web-helpers.mjs';
 
 const PATIENT_A = 31;
 const PATIENT_B = 52;
 
+// NOTE: ignoreHTTPSErrors is set because CI/VM egress runs behind a
+// TLS-intercepting proxy whose CA is not in Chromium's trust store
+// (curl/node work via SSL_CERT_FILE). It does not weaken any privacy
+// assertion here — no test in this file asserts on TLS validity.
 function launchChromium() {
-  return import('playwright-core').then(({ chromium }) =>
-    chromium.launch({ channel: 'chrome', headless: true }).catch(() =>
-      chromium.launch({ channel: 'msedge', headless: true }),
-    ),
-  );
+  return launchWebBrowser();
 }
 
 test('Playwright Chromium: PATIENT_A/B ages stay off COHORT origin traffic and storage', async (t) => {
@@ -26,7 +27,7 @@ test('Playwright Chromium: PATIENT_A/B ages stay off COHORT origin traffic and s
     server.close();
   });
 
-  const context = await browser.newContext();
+  const context = await browser.newContext({ ignoreHTTPSErrors: true });
   const page = await context.newPage();
   const leaked = [];
   page.on('request', (req) => {
