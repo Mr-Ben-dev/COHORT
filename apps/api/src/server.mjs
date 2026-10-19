@@ -3,6 +3,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { getPublicTrials, getTrial, knownTrialId } from './trials.mjs';
+import {
+  bootCatalog,
+  getTrials as getCatalogTrials,
+  getTrial as getCatalogTrial,
+  getCatalogVersion,
+} from './catalog-pg.mjs';
 import { assertPublicOnly, PUBLIC_REFERRAL_KEYS, findPrivateFields } from './public-fields.mjs';
 import { publicLog, redact } from './redact.mjs';
 import { readLiveLedger, readAttestationCounters } from './blockfrost-live.mjs';
@@ -159,9 +165,10 @@ function handleApiFactory(publicEvents) {
 
   if (url.pathname === '/api/trials' && req.method === 'GET') {
     try {
-      const trials = await getPublicTrials();
+      const trials = await getCatalogTrials({ source: CATALOG.source });
       return send(res, 200, {
         trials,
+        catalogSource: CATALOG.source,
         mapping: 'typed subset only; free-text ClinicalTrials.gov criteria are not proven',
       }, 'public, max-age=300');
     } catch (err) {
@@ -171,13 +178,24 @@ function handleApiFactory(publicEvents) {
 
   if (url.pathname.startsWith('/api/trials/') && req.method === 'GET') {
     const trialId = decodeURIComponent(url.pathname.slice('/api/trials/'.length));
-    if (!knownTrialId(trialId)) return send(res, 404, { error: 'unknown trial' });
+    if (CATALOG.source !== 'db' && !knownTrialId(trialId)) return send(res, 404, { error: 'unknown trial' });
     try {
-      const trial = await getTrial(trialId);
+      const trial = CATALOG.source === 'db'
+        ? await getCatalogTrial(trialId, { source: CATALOG.source })
+        : await getTrial(trialId);
       if (!trial) return send(res, 404, { error: 'unknown trial' });
       return send(res, 200, { trial }, 'public, max-age=300');
     } catch (err) {
       return send(res, err.status || 503, { error: 'clinicaltrials.gov unavailable' });
+    }
+  }
+
+  if (url.pathname === '/api/catalog-version' && req.method === 'GET') {
+    try {
+      const version = await getCatalogVersion({ source: CATALOG.source });
+      return send(res, 200, { version, source: CATALOG.source }, 'public, max-age=300');
+    } catch (err) {
+      return send(res, err.status || 503, { error: 'catalog version unavailable' });
     }
   }
 
@@ -368,9 +386,17 @@ if (process.argv.includes('--check')) {
   process.exit(0);
 }
 
+// Catalog source: 'code' by default; 'db' when --use-db / CATALOG_SOURCE=db.
+// bootCatalog() runs db/schema.sql idempotently on boot when DATABASE_URL is
+// set, and falls back to the in-code catalog (labeled) otherwise.
+const CATALOG = await bootCatalog({ argv: process.argv.slice(2) }).catch((err) => {
+  publicLog('catalog boot failed; using in-code catalog', { error: String(err?.message ?? err) });
+  return { source: 'code', dbConfigured: false };
+});
+
 if (import.meta.url === pathToFileURL(process.argv[1]).href || process.argv[1]?.endsWith('server.mjs')) {
   const server = createServer();
   server.listen(PORT, HOST, () => {
-    publicLog('cohort listening', { host: HOST, port: PORT });
+    publicLog('cohort listening', { host: HOST, port: PORT, catalogSource: CATALOG.source });
   });
 }
