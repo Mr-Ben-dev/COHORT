@@ -34,6 +34,8 @@
 | `packages/dapp/src/wallet/*` | SQUAD D (wallet worker) |
 | `RESEARCH/fhir-spike.md` (new) | SQUAD D (FHIR worker) |
 | `docs/video-script.md`, `docs/deck-outline.md`, `docs/what-changed.md`, `docs/submission-pack.md` (new) | SQUAD E |
+| `scripts/deployer.mjs` (new) | SQUAD F — exclusive |
+| `docs/deployer.md` (new) | SQUAD F — exclusive |
 
 ## SQUAD A — Resurrection
 | # | Task | Worker | Status | Files touched | Blockers |
@@ -113,6 +115,11 @@ initIssuer flow (6/6 and 7/7 green).
 | E1 | Video script ≤4min (mission in first 30s, new delta on screen) | SQUAD E | DONE | docs/video-script.md (new, committed 179b425) | tx hashes/addresses marked [FILL AFTER DEPLOY]; blockers cleared — script works on simulator tier if deploy misses shoot day |
 | E2 | Deck outline (real numbers only, sourced) | — | DONE | docs/deck-outline.md (new) | DOMAIN-RESEARCH.md |
 | E3 | What-changed + submission pack draft (new hashes only when available) | SQUAD E | DONE | `docs/what-changed.md` (new, committed), `docs/submission-pack-draft.md` (new, committed), `STATUS.md` (this row) | tx hashes/addresses remain `[FILL AFTER DEPLOY]` — new circuits undeployed; new verifier SHAs pinned and committed (`docs/verifier-keys.md`, `scripts/judge-pins.mjs`, 2016b45/dc97e10) |
+
+## SQUAD F — Preprod deployer
+| # | Task | Worker | Status | Files touched | Blockers |
+|---|---|---|---|---|---|
+| F1 | `scripts/deployer.mjs` (new): `--check` (read-only: seed-derived dust/night addresses vs `.env`, direct Blockfrost GraphQL `dustGenerationStatus` + `block{height}`, proof-server probe, JSON out, funding-gate verdict) + `--deploy` (chain write: gate re-check, latest `.compile-out` resolution, WalletFacade + midnight-js providers, `deployContract`, indexer truth-gate; UNEXECUTED) | squad-f subagent | DONE (build only; `--check` run live, `--deploy` not run) | `scripts/deployer.mjs` (new), `docs/deployer.md` (new), `STATUS.md` (this row) | Funding gate currently **NO-GO**: `dustGenerationStatus` returns `registered:false` for the deployer's Cardano reward address (indexer height 3043041); proof server `127.0.0.1:6300` not running on this VM. Full wallet-SDK sync path prototyped then abandoned (hung against Blockfrost WS); `--check` uses direct GraphQL per coordinator order. `--deploy` needs explicit confirmation + gate GO + proof server + `COHORT_DEPLOYER_PS_PASSWORD`. |
 
 ## Integrator log
 - 2026-10-19 ~05:05: scale-up received; STATUS.md created; token verified (44ch, chmod 600).
