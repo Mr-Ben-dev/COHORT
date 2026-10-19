@@ -12,6 +12,7 @@ import { MidnightSection } from "./midnight-section";
 import { HonestySection } from "./honesty-section";
 import { ProductLadderSection } from "./product-ladder-section";
 import { FinalCtaSection } from "./final-cta-section";
+import { AttestationCounter } from "@/components/attestation-counter";
 
 /**
  * Landing narrative — the measured Impilo page rhythm (top → bottom):
@@ -30,6 +31,7 @@ export function LandingPage() {
   return (
     <div className="bg-deep-iris">
       <HeroSection />
+      <AttestationCounter />
       <ProblemSection />
       <HowItWorksSection />
       <PrivacyExplainerSection />
