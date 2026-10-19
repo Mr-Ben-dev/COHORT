@@ -67,7 +67,7 @@ proves *over attested attributes*.
   helpers `attestationOf()` / `issuerIdOf()`; `proveEligible` + `trialNullifier`
   **byte-identical to the deployed version** (commit `d828db2` removed the dead
   `wSex` witness; B5 measured the verifier SHA as byte-identical to the Wave-1
-  pin — see `docs/verifier-keys.md`, working tree, pending integrator commit).
+  pin — see `docs/verifier-keys.md`, committed 2016b45/dc97e10).
 - `proveAttested` writes a **program-scoped nullifier**
   `persistentHash(["cohort:attnul", trialId, attestation])` — one qualification
   claim per trial per attested attribute bundle; same predicate asserts as
@@ -170,7 +170,7 @@ Simulator happy-path (B3) and adversarial (B4) tests, proof-server measurement
 | Dead-URL regression test | commit `77fb2ca` |
 | wSex removal, SHA byte-identical | commit `d828db2` |
 | New circuits (attest trio, ledger) | commit `2fea963`; STATUS.md §B1 interface |
-| New verifier SHAs (pinned, undeployed) | `docs/verifier-keys.md` (working tree), `scripts/judge-pins.mjs` (working tree) |
+| New verifier SHAs (pinned, undeployed) | `docs/verifier-keys.md`, `scripts/judge-pins.mjs` (committed 2016b45/dc97e10) |
 | Issuer gate is demo-grade | STATUS.md §B1 deviation 3; `docs/circuits.md` honesty section |
 | Ceremony script | `scripts/issuer-ceremony.mjs` (untracked; B2 RUNNING) |
 | Circuit documentation | commit `d3615bc` (`docs/circuits.md`) |
