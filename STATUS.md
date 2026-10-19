@@ -49,7 +49,7 @@
 |---|---|---|---|---|---|
 | B1 | Contract author: attestations Set, attest(), attestWithAttributes(), proveAttested(), attestationOf(), ISSUER_ID (interface spec in section below) | af979b4e (B1) | DONE | CONTRACT/cohort.compact | none — see deviations in interface spec |
 | B2 | Demo issuer key-ceremony script | 44ab66df | RUNNING — script written + tested (clean exit 2 pre-B1); polling for B1 interface | scripts/issuer-ceremony.mjs (new), .gitignore (+scripts/.issuer-secret.json) | B1 contract interface (issuerIdOf/attestationOf/ISSUER_ID placeholder not yet in contract) |
-| B3 | Simulator happy-path tests | — | NOT STARTED | TESTS/attest-happy.test.mjs | waits for B1 |
+| B3 | Simulator happy-path tests | b3 worker (this run) | DONE — 6 tests, 6 pass, 26 assertions; registered in package.json test script | TESTS/attest-happy.test.mjs (new), root `package.json` test script | none |
 | B4 | Refusal/adversarial tests | — | NOT STARTED | TESTS/attest-adversarial.test.mjs | waits for B1 |
 | B5 | Full-ZK compile + verifier SHA record + pins update | 6f153b59 (B5) | DONE | docs/verifier-keys.md (new), scripts/judge-pins.mjs (additive pins + verifyAllVerifierKeys()) | proveEligible verifier SHA byte-identical to Wave-1 pin; 3 new circuits pinned, undeployed |
 | B6 | Proof-server measurement | — | NOT STARTED | — | waits for B5 |
@@ -81,7 +81,7 @@ attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolea
 | # | Task | Worker | Status | Files touched | Blockers |
 |---|---|---|---|---|---|
 | C1 | Truth gate: poll Blockfrost for ledger effect before UI success | — | NOT STARTED | packages/dapp/src/truth-gate.mjs (new) | token in .env |
-| C2 | No-wallet read path + live/sample badges (site console reads via same-origin proxy) | — | NOT STARTED | web/src/app/verify/* (new) | A7 (public-state) |
+| C2 | No-wallet read path + live/sample badges (site console reads via same-origin proxy) | — | DONE (10/10 tests green, tsc clean) | web/src/lib/cohort-verify.mjs (new), web/src/app/verify/page.tsx + _components/verify-client.tsx + _components/provenance-badge.tsx (new), TESTS/cohort-verify.test.mjs (new) | NOTE: needs same-origin /api/public-state + /api/attestation-counters proxy routes (A1 proxy pattern exists for /api/config); A7's source strings must use "live-onchain" for green badge |
 | C3 | Two-tier demo: in-browser simulator tier + wallet tier | — | NOT STARTED | web/src/app/demo/* (new) | B1 (contract) |
 | C4 | Proof-of-execution counter wiring (attestationsVerified → API → UI) | — | NOT STARTED | apps/api, web | B1, A7 |
 | C5 | Judge credential files + try-it-yourself doc | — | NOT STARTED | TESTS/judge-credentials/, docs/try-it.md | B2 (ceremony) |
@@ -103,7 +103,7 @@ attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolea
 |---|---|---|---|---|---|
 | E1 | Video script ≤4min (mission in first 30s, new delta on screen) | SQUAD E | DONE | docs/video-script.md (new, committed 179b425) | tx hashes/addresses marked [FILL AFTER DEPLOY]; blockers cleared — script works on simulator tier if deploy misses shoot day |
 | E2 | Deck outline (real numbers only, sourced) | — | DONE | docs/deck-outline.md (new) | DOMAIN-RESEARCH.md |
-| E3 | What-changed + submission pack draft (new hashes only when available) | — | NOT STARTED | docs/what-changed.md, docs/submission-pack.md | B5 (new SHAs) |
+| E3 | What-changed + submission pack draft (new hashes only when available) | SQUAD E | DONE | `docs/what-changed.md` (new, committed), `docs/submission-pack-draft.md` (new, committed), `STATUS.md` (this row) | tx hashes/addresses remain `[FILL AFTER DEPLOY]` — new circuits undeployed; new verifier SHAs pinned in working tree (`docs/verifier-keys.md`, `scripts/judge-pins.mjs`, B5 row pending integrator commit) |
 
 ## Integrator log
 - 2026-10-19 ~05:05: scale-up received; STATUS.md created; token verified (44ch, chmod 600).

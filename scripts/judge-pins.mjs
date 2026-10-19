@@ -18,6 +18,53 @@ export const VERIFIER_SHA256 = '5af3b4b2ed345f711c5ff87367cfb0049732701c5a5336d5
 export const PROVER_SHA256 = '5a31f2a515988e959ab5e6200abc41a11dc805d66f929f3c8ea89e6daa88e385';
 export const PROVER_MIN_BYTES = 1_000_000;
 
+/**
+ * Verifier-key pins for the three new Wave-2 circuits (SQUAD B5).
+ * Measured locally from packages/contract/.compile-out/keys/*.verifier
+ * (full-ZK compile, compactc 0.31.1, NO --skip-zk). Recorded in
+ * docs/verifier-keys.md. UNDEPLOYED — pins only, no chain writes.
+ */
+export const ATTEST_VERIFIER_SHA256 = '93f5b746871ad5eb5579e675e1913dc7b5aa830e0cea8ba602aa4e27f1c91303';
+export const ATTEST_WITH_ATTRIBUTES_VERIFIER_SHA256 = '84c89c88fa62c3a1cea7ffbbc67d4f0d0036bc844aff6f74e7d34413047320f4';
+export const PROVE_ATTESTED_VERIFIER_SHA256 = 'a457129525ef3e0458dde077872df02c98d4647d39f278b2d0883f7b11275e13';
+
+/**
+ * All four pinned circuit verifier keys, circuit name -> pinned SHA-256.
+ * VERIFIER_SHA256 (proveEligible) remains the byte-identical Wave-1 pin used
+ * by scripts/compile-contract.mjs and scripts/judge-verify.mjs.
+ */
+export const CIRCUIT_VERIFIER_PINS = Object.freeze({
+  attest: ATTEST_VERIFIER_SHA256,
+  attestWithAttributes: ATTEST_WITH_ATTRIBUTES_VERIFIER_SHA256,
+  proveAttested: PROVE_ATTESTED_VERIFIER_SHA256,
+  proveEligible: VERIFIER_SHA256,
+});
+
+/**
+ * Verify each pinned circuit verifier key against its on-disk .verifier file.
+ * Additive helper: does not alter the existing proveEligible pin logic.
+ * Never throws, never prints secrets.
+ *
+ * @param {string} keysDir - directory holding <circuit>.verifier files,
+ *   e.g. packages/contract/.compile-out/keys/
+ * @returns {Promise<{ ok: boolean, results: Array<{circuit, file, pinned, actual, match}> }>}
+ */
+export async function verifyAllVerifierKeys(keysDir) {
+  const { createHash } = await import('node:crypto');
+  const { readFileSync, existsSync } = await import('node:fs');
+  const { join } = await import('node:path');
+  const results = [];
+  let ok = true;
+  for (const [circuit, pinned] of Object.entries(CIRCUIT_VERIFIER_PINS)) {
+    const file = join(keysDir, `${circuit}.verifier`);
+    const actual = existsSync(file) ? createHash('sha256').update(readFileSync(file)).digest('hex') : null;
+    const match = actual === pinned;
+    if (!match) ok = false;
+    results.push({ circuit, file, pinned, actual, match });
+  }
+  return { ok, results };
+}
+
 // Blockfrost operates the official Preprod indexer/RPC (the retired official
 // Preprod hosts were shut down, HTTP 410). The Blockfrost project token is
 // NEVER stored here — it comes from the BLOCKFROST_PROJECT_ID env var,
