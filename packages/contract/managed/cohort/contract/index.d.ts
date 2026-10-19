@@ -6,10 +6,26 @@ export type Witnesses<PS> = {
   wMedication(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, boolean];
   wSecret(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, Uint8Array];
   wBlind(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, Uint8Array];
+  wHolderSecret(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, Uint8Array];
+  wNonce(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, Uint8Array];
+  wIssuerSecret(context: __compactRuntime.WitnessContext<Ledger, PS>): [PS, Uint8Array];
 }
 
 export type ImpureCircuits<PS> = {
   proveEligible(context: __compactRuntime.CircuitContext<PS>,
+                trialId_0: Uint8Array,
+                minAge_0: bigint,
+                maxAge_0: bigint,
+                requireCondition_0: boolean,
+                forbidMedication_0: boolean): __compactRuntime.CircuitResults<PS, boolean>;
+  attest(context: __compactRuntime.CircuitContext<PS>, attestation_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
+  attestWithAttributes(context: __compactRuntime.CircuitContext<PS>,
+                       age_0: bigint,
+                       cond_0: boolean,
+                       med_0: boolean,
+                       holderSecret_0: Uint8Array,
+                       nonce_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
+  proveAttested(context: __compactRuntime.CircuitContext<PS>,
                 trialId_0: Uint8Array,
                 minAge_0: bigint,
                 maxAge_0: bigint,
@@ -24,13 +40,52 @@ export type ProvableCircuits<PS> = {
                 maxAge_0: bigint,
                 requireCondition_0: boolean,
                 forbidMedication_0: boolean): __compactRuntime.CircuitResults<PS, boolean>;
+  attest(context: __compactRuntime.CircuitContext<PS>, attestation_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
+  attestWithAttributes(context: __compactRuntime.CircuitContext<PS>,
+                       age_0: bigint,
+                       cond_0: boolean,
+                       med_0: boolean,
+                       holderSecret_0: Uint8Array,
+                       nonce_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
+  proveAttested(context: __compactRuntime.CircuitContext<PS>,
+                trialId_0: Uint8Array,
+                minAge_0: bigint,
+                maxAge_0: bigint,
+                requireCondition_0: boolean,
+                forbidMedication_0: boolean): __compactRuntime.CircuitResults<PS, boolean>;
 }
 
 export type PureCircuits = {
+  attestationOf(age_0: bigint,
+                cond_0: boolean,
+                med_0: boolean,
+                holderSecret_0: Uint8Array,
+                nonce_0: Uint8Array): Uint8Array;
+  issuerIdOf(secret_0: Uint8Array): Uint8Array;
 }
 
 export type Circuits<PS> = {
   proveEligible(context: __compactRuntime.CircuitContext<PS>,
+                trialId_0: Uint8Array,
+                minAge_0: bigint,
+                maxAge_0: bigint,
+                requireCondition_0: boolean,
+                forbidMedication_0: boolean): __compactRuntime.CircuitResults<PS, boolean>;
+  attestationOf(context: __compactRuntime.CircuitContext<PS>,
+                age_0: bigint,
+                cond_0: boolean,
+                med_0: boolean,
+                holderSecret_0: Uint8Array,
+                nonce_0: Uint8Array): __compactRuntime.CircuitResults<PS, Uint8Array>;
+  issuerIdOf(context: __compactRuntime.CircuitContext<PS>, secret_0: Uint8Array): __compactRuntime.CircuitResults<PS, Uint8Array>;
+  attest(context: __compactRuntime.CircuitContext<PS>, attestation_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
+  attestWithAttributes(context: __compactRuntime.CircuitContext<PS>,
+                       age_0: bigint,
+                       cond_0: boolean,
+                       med_0: boolean,
+                       holderSecret_0: Uint8Array,
+                       nonce_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
+  proveAttested(context: __compactRuntime.CircuitContext<PS>,
                 trialId_0: Uint8Array,
                 minAge_0: bigint,
                 maxAge_0: bigint,
@@ -52,6 +107,13 @@ export type Ledger = {
     [Symbol.iterator](): Iterator<Uint8Array>
   };
   readonly proven: bigint;
+  attestations: {
+    isEmpty(): boolean;
+    size(): bigint;
+    member(elem_0: Uint8Array): boolean;
+    [Symbol.iterator](): Iterator<Uint8Array>
+  };
+  readonly attestationsVerified: bigint;
 }
 
 export type ContractReferenceLocations = any;
