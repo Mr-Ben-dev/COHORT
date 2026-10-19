@@ -565,6 +565,124 @@ var require_object_inspect = __commonJS({
   }
 });
 
+// node_modules/@midnight-ntwrk/compact-runtime/dist/index.js
+var dist_exports = {};
+__export(dist_exports, {
+  Bytes32Descriptor: () => Bytes32Descriptor,
+  CONTRACT_ADDRESS_BYTE_LENGTH: () => CONTRACT_ADDRESS_BYTE_LENGTH,
+  ChargedState: () => ChargedState,
+  CompactError: () => CompactError,
+  CompactTypeBoolean: () => CompactTypeBoolean,
+  CompactTypeBytes: () => CompactTypeBytes,
+  CompactTypeEnum: () => CompactTypeEnum,
+  CompactTypeField: () => CompactTypeField,
+  CompactTypeJubjubPoint: () => CompactTypeJubjubPoint,
+  CompactTypeMerkleTreeDigest: () => CompactTypeMerkleTreeDigest,
+  CompactTypeMerkleTreePath: () => CompactTypeMerkleTreePath,
+  CompactTypeMerkleTreePathEntry: () => CompactTypeMerkleTreePathEntry,
+  CompactTypeOpaqueString: () => CompactTypeOpaqueString,
+  CompactTypeOpaqueUint8Array: () => CompactTypeOpaqueUint8Array,
+  CompactTypeUnsignedInteger: () => CompactTypeUnsignedInteger,
+  CompactTypeVector: () => CompactTypeVector,
+  ContractAddressDescriptor: () => ContractAddressDescriptor,
+  ContractMaintenanceAuthority: () => ContractMaintenanceAuthority,
+  ContractOperation: () => ContractOperation,
+  ContractState: () => ContractState,
+  CostModel: () => CostModel,
+  DUMMY_ADDRESS: () => DUMMY_ADDRESS,
+  HEX_REGEX_NO_PREFIX: () => HEX_REGEX_NO_PREFIX,
+  MAX_FIELD: () => MAX_FIELD,
+  MaxUint8Descriptor: () => MaxUint8Descriptor,
+  QueryContext: () => QueryContext,
+  QueryResults: () => QueryResults,
+  ShieldedCoinInfoDescriptor: () => ShieldedCoinInfoDescriptor,
+  ShieldedCoinRecipientDescriptor: () => ShieldedCoinRecipientDescriptor,
+  StateBoundedMerkleTree: () => StateBoundedMerkleTree,
+  StateMap: () => StateMap,
+  StateValue: () => StateValue,
+  VmResults: () => VmResults,
+  VmStack: () => VmStack,
+  ZswapCoinPublicKeyDescriptor: () => ZswapCoinPublicKeyDescriptor,
+  addField: () => addField,
+  alignedConcat: () => alignedConcat,
+  assert: () => assert,
+  bigIntModFr: () => bigIntModFr,
+  bigIntToValue: () => bigIntToValue,
+  checkRuntimeVersion: () => checkRuntimeVersion,
+  communicationCommitment: () => communicationCommitment,
+  communicationCommitmentRandomness: () => communicationCommitmentRandomness,
+  constructJubjubPoint: () => constructJubjubPoint,
+  contractDependencies: () => contractDependencies,
+  convertBytesToField: () => convertBytesToField,
+  convertBytesToUint: () => convertBytesToUint,
+  convertFieldToBytes: () => convertFieldToBytes,
+  createCircuitContext: () => createCircuitContext,
+  createConstructorContext: () => createConstructorContext,
+  createWitnessContext: () => createWitnessContext,
+  createZswapInput: () => createZswapInput,
+  createZswapOutput: () => createZswapOutput,
+  decodeCoinPublicKey: () => decodeCoinPublicKey,
+  decodeContractAddress: () => decodeContractAddress,
+  decodeQualifiedShieldedCoinInfo: () => decodeQualifiedShieldedCoinInfo,
+  decodeRawTokenType: () => decodeRawTokenType,
+  decodeRecipient: () => decodeRecipient,
+  decodeShieldedCoinInfo: () => decodeShieldedCoinInfo,
+  decodeUserAddress: () => decodeUserAddress,
+  decodeZswapLocalState: () => decodeZswapLocalState,
+  degradeToTransient: () => degradeToTransient3,
+  dummyContractAddress: () => dummyContractAddress,
+  dummyUserAddress: () => dummyUserAddress,
+  ecAdd: () => ecAdd3,
+  ecMul: () => ecMul3,
+  ecMulGenerator: () => ecMulGenerator3,
+  emptyRunningCost: () => emptyRunningCost,
+  emptyZswapLocalState: () => emptyZswapLocalState,
+  encodeCoinPublicKey: () => encodeCoinPublicKey,
+  encodeContractAddress: () => encodeContractAddress,
+  encodeQualifiedShieldedCoinInfo: () => encodeQualifiedShieldedCoinInfo,
+  encodeRawTokenType: () => encodeRawTokenType,
+  encodeRecipient: () => encodeRecipient,
+  encodeShieldedCoinInfo: () => encodeShieldedCoinInfo,
+  encodeUserAddress: () => encodeUserAddress,
+  encodeZswapLocalState: () => encodeZswapLocalState,
+  entryPointHash: () => entryPointHash,
+  fromHex: () => fromHex,
+  hasCoinCommitment: () => hasCoinCommitment,
+  hashToCurve: () => hashToCurve3,
+  isContractAddress: () => isContractAddress,
+  isEncodedContractAddress: () => isEncodedContractAddress,
+  jubjubPointX: () => jubjubPointX,
+  jubjubPointY: () => jubjubPointY,
+  leafHash: () => leafHash,
+  maxAlignedSize: () => maxAlignedSize,
+  maxField: () => maxField,
+  mulField: () => mulField,
+  ownPublicKey: () => ownPublicKey,
+  persistentCommit: () => persistentCommit3,
+  persistentHash: () => persistentHash3,
+  proofDataIntoSerializedPreimage: () => proofDataIntoSerializedPreimage,
+  queryLedgerState: () => queryLedgerState,
+  rawTokenType: () => rawTokenType,
+  runProgram: () => runProgram,
+  runtimeCoinCommitment: () => runtimeCoinCommitment,
+  sampleContractAddress: () => sampleContractAddress,
+  sampleRawTokenType: () => sampleRawTokenType,
+  sampleSigningKey: () => sampleSigningKey,
+  sampleUserAddress: () => sampleUserAddress,
+  signData: () => signData,
+  signatureVerifyingKey: () => signatureVerifyingKey,
+  signingKeyFromBip340: () => signingKeyFromBip340,
+  subField: () => subField,
+  toHex: () => toHex,
+  transientCommit: () => transientCommit3,
+  transientHash: () => transientHash3,
+  typeError: () => typeError,
+  upgradeFromTransient: () => upgradeFromTransient3,
+  valueToBigInt: () => valueToBigInt,
+  verifySignature: () => verifySignature,
+  versionString: () => versionString
+});
+
 // node_modules/@midnight-ntwrk/compact-runtime/dist/error.js
 var import_object_inspect = __toESM(require_object_inspect(), 1);
 var CompactError = class extends Error {
@@ -3751,6 +3869,83 @@ var checkRuntimeVersion = (expectedRuntimeVersionString) => {
 };
 
 // node_modules/@midnight-ntwrk/compact-runtime/dist/compact-types.js
+var CompactTypeJubjubPoint = {
+  alignment() {
+    return [
+      { tag: "atom", value: { tag: "field" } },
+      { tag: "atom", value: { tag: "field" } }
+    ];
+  },
+  fromValue(value) {
+    const x = value.shift();
+    const y = value.shift();
+    if (x == void 0 || y == void 0) {
+      throw new CompactError("expected JubjubPoint");
+    } else {
+      return {
+        x: valueToBigInt([x]),
+        y: valueToBigInt([y])
+      };
+    }
+  },
+  toValue(value) {
+    return bigIntToValue(value.x).concat(bigIntToValue(value.y));
+  }
+};
+var CompactTypeMerkleTreeDigest = {
+  alignment() {
+    return [{ tag: "atom", value: { tag: "field" } }];
+  },
+  fromValue(value) {
+    const val = value.shift();
+    if (val == void 0) {
+      throw new CompactError("expected MerkleTreeDigest");
+    } else {
+      return { field: valueToBigInt([val]) };
+    }
+  },
+  toValue(value) {
+    return bigIntToValue(value.field);
+  }
+};
+var CompactTypeMerkleTreePathEntry = {
+  alignment() {
+    return CompactTypeMerkleTreeDigest.alignment().concat(CompactTypeBoolean.alignment());
+  },
+  fromValue(value) {
+    const sibling = CompactTypeMerkleTreeDigest.fromValue(value);
+    const goes_left = CompactTypeBoolean.fromValue(value);
+    return {
+      sibling,
+      goes_left
+    };
+  },
+  toValue(value) {
+    return CompactTypeMerkleTreeDigest.toValue(value.sibling).concat(CompactTypeBoolean.toValue(value.goes_left));
+  }
+};
+var CompactTypeMerkleTreePath = class {
+  leaf;
+  path;
+  constructor(n, leaf) {
+    this.leaf = leaf;
+    this.path = new CompactTypeVector(n, CompactTypeMerkleTreePathEntry);
+  }
+  alignment() {
+    return this.leaf.alignment().concat(this.path.alignment());
+  }
+  fromValue(value) {
+    const leaf = this.leaf.fromValue(value);
+    const path = this.path.fromValue(value);
+    return {
+      leaf,
+      path
+    };
+  }
+  toValue(value) {
+    return this.leaf.toValue(value.leaf).concat(this.path.toValue(value.path));
+  }
+};
 var CompactTypeField = {
   alignment() {
     return [{ tag: "atom", value: { tag: "field" } }];
@@ -3765,6 +3960,35 @@ var CompactTypeField = {
   },
   toValue(value) {
     return bigIntToValue(value);
+  }
+};
+var CompactTypeEnum = class {
+  maxValue;
+  length;
+  constructor(maxValue, length) {
+    this.maxValue = maxValue;
+    this.length = length;
+  }
+  alignment() {
+    return [{ tag: "atom", value: { tag: "bytes", length: this.length } }];
+  }
+  fromValue(value) {
+    const val = value.shift();
+    if (val == void 0) {
+      throw new CompactError(`expected Enum[<=${this.maxValue}]`);
+    } else {
+      let res = 0;
+      for (let i = 0; i < val.length; i++) {
+        res += (1 << 8 * i) * val[i];
+      }
+      if (res > this.maxValue) {
+        throw new CompactError(`expected UnsignedInteger[<=${this.maxValue}]`);
+      }
+      return res;
+    }
+  }
+  toValue(value) {
+    return CompactTypeField.toValue(BigInt(value));
   }
 };
 var CompactTypeUnsignedInteger = class {
@@ -3876,11 +4100,106 @@ var CompactTypeBytes = class {
     return [value.slice(0, end)];
   }
 };
+var CompactTypeOpaqueUint8Array = {
+  alignment() {
+    return [{ tag: "atom", value: { tag: "compress" } }];
+  },
+  fromValue(value) {
+    return value.shift();
+  },
+  toValue(value) {
+    return [value];
+  }
+};
+var CompactTypeOpaqueString = {
+  alignment() {
+    return [{ tag: "atom", value: { tag: "compress" } }];
+  },
+  fromValue(value) {
+    return new TextDecoder("utf-8").decode(value.shift());
+  },
+  toValue(value) {
+    return [new TextEncoder().encode(value)];
+  }
+};
 var Bytes32Descriptor = new CompactTypeBytes(32);
 var MaxUint8Descriptor = new CompactTypeUnsignedInteger(18446744073709551615n, 8);
+var ShieldedCoinInfoDescriptor = {
+  alignment() {
+    return Bytes32Descriptor.alignment().concat(Bytes32Descriptor.alignment().concat(MaxUint8Descriptor.alignment()));
+  },
+  fromValue(value) {
+    return {
+      nonce: Bytes32Descriptor.fromValue(value),
+      color: Bytes32Descriptor.fromValue(value),
+      value: MaxUint8Descriptor.fromValue(value)
+    };
+  },
+  toValue(value) {
+    return Bytes32Descriptor.toValue(value.nonce).concat(Bytes32Descriptor.toValue(value.color).concat(MaxUint8Descriptor.toValue(value.value)));
+  }
+};
+var ZswapCoinPublicKeyDescriptor = {
+  alignment() {
+    return Bytes32Descriptor.alignment();
+  },
+  fromValue(value) {
+    return {
+      bytes: Bytes32Descriptor.fromValue(value)
+    };
+  },
+  toValue(value) {
+    return Bytes32Descriptor.toValue(value.bytes);
+  }
+};
+var ContractAddressDescriptor = {
+  alignment() {
+    return Bytes32Descriptor.alignment();
+  },
+  fromValue(value) {
+    return {
+      bytes: Bytes32Descriptor.fromValue(value)
+    };
+  },
+  toValue(value) {
+    return Bytes32Descriptor.toValue(value.bytes);
+  }
+};
+var ShieldedCoinRecipientDescriptor = {
+  alignment() {
+    return CompactTypeBoolean.alignment().concat(ZswapCoinPublicKeyDescriptor.alignment().concat(ContractAddressDescriptor.alignment()));
+  },
+  fromValue(value) {
+    return {
+      is_left: CompactTypeBoolean.fromValue(value),
+      left: ZswapCoinPublicKeyDescriptor.fromValue(value),
+      right: ContractAddressDescriptor.fromValue(value)
+    };
+  },
+  toValue(value) {
+    return CompactTypeBoolean.toValue(value.is_left).concat(ZswapCoinPublicKeyDescriptor.toValue(value.left).concat(ContractAddressDescriptor.toValue(value.right)));
+  }
+};
 
 // node_modules/@midnight-ntwrk/compact-runtime/dist/built-ins.js
 var FIELD_MODULUS = MAX_FIELD + 1n;
+function addField(x, y) {
+  const t = x + y;
+  return t < FIELD_MODULUS ? t : t - FIELD_MODULUS;
+}
+function subField(x, y) {
+  const t = x - y;
+  return t >= 0 ? t : t + FIELD_MODULUS;
+}
+function mulField(x, y) {
+  return x * y % FIELD_MODULUS;
+}
+function transientHash3(rtType, value) {
+  return valueToBigInt(transientHash(rtType.alignment(), rtType.toValue(value)));
+}
+function transientCommit3(rtType, value, opening) {
+  return valueToBigInt(transientCommit(rtType.alignment(), rtType.toValue(value), bigIntToValue(opening)));
+}
 function persistentHash3(rtType, value) {
   const wrapped = persistentHash(rtType.alignment(), rtType.toValue(value))[0];
   const res = new Uint8Array(32);
@@ -3896,6 +4215,95 @@ function persistentCommit3(rtType, value, opening) {
   res.set(wrapped, 0);
   return res;
 }
+function degradeToTransient3(x) {
+  if (x.length != 32) {
+    throw new CompactError("Expected 32-byte string");
+  }
+  return valueToBigInt(degradeToTransient([x]));
+}
+function upgradeFromTransient3(x) {
+  const wrapped = upgradeFromTransient(bigIntToValue(x))[0];
+  const res = new Uint8Array(32);
+  res.set(wrapped, 0);
+  return res;
+}
+function jubjubPointX(pt) {
+  return pt.x;
+}
+function jubjubPointY(pt) {
+  return pt.y;
+}
+function constructJubjubPoint(x, y) {
+  return { x, y };
+}
+function hashToCurve3(rtType, x) {
+  return CompactTypeJubjubPoint.fromValue(hashToCurve(rtType.alignment(), rtType.toValue(x)));
+}
+function ecAdd3(a, b) {
+  return CompactTypeJubjubPoint.fromValue(ecAdd(CompactTypeJubjubPoint.toValue(a), CompactTypeJubjubPoint.toValue(b)));
+}
+function ecMul3(a, b) {
+  return CompactTypeJubjubPoint.fromValue(ecMul(CompactTypeJubjubPoint.toValue(a), bigIntToValue(b)));
+}
+function ecMulGenerator3(b) {
+  return CompactTypeJubjubPoint.fromValue(ecMulGenerator(bigIntToValue(b)));
+}
+function alignedConcat(...values) {
+  const res = { value: [], alignment: [] };
+  for (const value of values) {
+    res.value = res.value.concat(value.value);
+    res.alignment = res.alignment.concat(value.alignment);
+  }
+  return res;
+}
+
+// node_modules/@midnight-ntwrk/compact-runtime/dist/casts.js
+function convertFieldToBytes(n, x, src) {
+  const x_0 = x;
+  const a = new Uint8Array(n);
+  for (let i = 0; i < n; i++) {
+    a[i] = Number(x & 0xffn);
+    x = x / 0x100n;
+    if (x == 0n)
+      return a;
+  }
+  const msg = `range error at ${src}: Field or Uint value ${x_0} does not fit into ${n} bytes`;
+  throw new CompactError(msg);
+}
+function convertBytesToField(n, a, src) {
+  let x = 0n;
+  for (let i = n - 1; i >= 0; i -= 1) {
+    x = x * 0x100n + BigInt(a[i]);
+    if (x > MAX_FIELD) {
+      const msg = `range error at ${src}: byte vector [${Array.from(a.slice(0, n)).join(",")}] exceeds maximum value ${MAX_FIELD} of Field type`;
+      throw new CompactError(msg);
+    }
+  }
+  return x;
+}
+function convertBytesToUint(maxval, n, a, src) {
+  let x = 0n;
+  for (let i = n - 1; i >= 0; i -= 1) {
+    x = x * 0x100n + BigInt(a[i]);
+    if (x > maxval) {
+      const msg = `range error at ${src}: byte vector [${Array.from(a.slice(0, n)).join(",")}] exceeds maximum value ${maxval} of target Uint type`;
+      throw new CompactError(msg);
+    }
+  }
+  return x;
+}
+
+// node_modules/@midnight-ntwrk/compact-runtime/dist/utils.js
+var HEX_REGEX_NO_PREFIX = /^([0-9A-Fa-f]{2})*$/;
+var CONTRACT_ADDRESS_BYTE_LENGTH = 32;
+function isContractAddress(x) {
+  return typeof x === "string" && x.length === CONTRACT_ADDRESS_BYTE_LENGTH * 2 && HEX_REGEX_NO_PREFIX.test(x);
+}
+function isEncodedContractAddress(x) {
+  return typeof x === "object" && x !== null && x !== void 0 && "bytes" in x && x.bytes instanceof Uint8Array && x.bytes.length == CONTRACT_ADDRESS_BYTE_LENGTH;
+}
+var fromHex = (s) => Buffer.from(s, "hex");
+var toHex = (s) => Buffer.from(s).toString("hex");
 
 // node_modules/@midnight-ntwrk/compact-runtime/dist/zswap.js
 var emptyZswapLocalState = (coinPublicKey) => ({
@@ -3909,6 +4317,11 @@ var encodeRecipient = ({ is_left, left, right }) => ({
   left: { bytes: encodeCoinPublicKey(left) },
   right: { bytes: encodeContractAddress(right) }
 });
+var decodeRecipient = ({ is_left, left, right }) => ({
+  is_left,
+  left: decodeCoinPublicKey(left.bytes),
+  right: decodeContractAddress(right.bytes)
+});
 var encodeZswapLocalState = (state) => ({
   coinPublicKey: { bytes: encodeCoinPublicKey(state.coinPublicKey) },
   currentIndex: state.currentIndex,
@@ -3917,6 +4330,53 @@ var encodeZswapLocalState = (state) => ({
     coinInfo: encodeShieldedCoinInfo(coinInfo),
     recipient: encodeRecipient(recipient)
   }))
+});
+var decodeZswapLocalState = (state) => ({
+  coinPublicKey: decodeCoinPublicKey(state.coinPublicKey.bytes),
+  currentIndex: state.currentIndex,
+  inputs: state.inputs.map(decodeQualifiedShieldedCoinInfo),
+  outputs: state.outputs.map(({ coinInfo, recipient }) => ({
+    coinInfo: decodeShieldedCoinInfo(coinInfo),
+    recipient: decodeRecipient(recipient)
+  }))
+});
+function createZswapInput(circuitContext, qualifiedShieldedCoinInfo) {
+  circuitContext.currentZswapLocalState = {
+    ...circuitContext.currentZswapLocalState,
+    inputs: circuitContext.currentZswapLocalState.inputs.concat(qualifiedShieldedCoinInfo)
+  };
+  return [];
+}
+function createCoinCommitment(coinInfo, recipient) {
+  return runtimeCoinCommitment({
+    value: ShieldedCoinInfoDescriptor.toValue(coinInfo),
+    alignment: ShieldedCoinInfoDescriptor.alignment()
+  }, {
+    value: ShieldedCoinRecipientDescriptor.toValue(recipient),
+    alignment: ShieldedCoinRecipientDescriptor.alignment()
+  });
+}
+function createZswapOutput(circuitContext, coinInfo, recipient) {
+  circuitContext.currentQueryContext = circuitContext.currentQueryContext.insertCommitment(Buffer.from(Bytes32Descriptor.fromValue(createCoinCommitment(coinInfo, recipient).value)).toString("hex"), circuitContext.currentZswapLocalState.currentIndex);
+  circuitContext.currentZswapLocalState = {
+    ...circuitContext.currentZswapLocalState,
+    currentIndex: circuitContext.currentZswapLocalState.currentIndex + 1n,
+    outputs: circuitContext.currentZswapLocalState.outputs.concat({
+      coinInfo,
+      recipient
+    })
+  };
+  return [];
+}
+function ownPublicKey(circuitContext) {
+  return circuitContext.currentZswapLocalState.coinPublicKey;
+}
+var hasCoinCommitment = (context, coinInfo, recipient) => context.currentQueryContext.comIndices.has(toHex(Bytes32Descriptor.fromValue(createCoinCommitment(coinInfo, recipient).value)));
+
+// node_modules/@midnight-ntwrk/compact-runtime/dist/constructor-context.js
+var createConstructorContext = (initialPrivateState, coinPublicKey) => ({
+  initialPrivateState,
+  initialZswapLocalState: emptyZswapLocalState(coinPublicKey)
 });
 
 // node_modules/@midnight-ntwrk/compact-runtime/dist/circuit-context.js
@@ -4010,6 +4470,126 @@ function createWitnessContext(ledger2, privateState, contractAddress) {
     contractAddress
   };
 }
+
+// node_modules/@midnight-ntwrk/compact-runtime/dist/contract-dependencies.js
+function isCompactVector(x) {
+  return Array.isArray(x) && x.every((element) => isCompactValue(element));
+}
+function isCompactStruct(x) {
+  return typeof x === "object" && x !== null && x !== void 0 && Object.entries(x).every(([key, value]) => typeof key === "string" && isCompactValue(value));
+}
+function isCompactValue(x) {
+  return isEncodedContractAddress(x) || isCompactVector(x) || isCompactStruct(x);
+}
+var expectedValueError = (expected, actual) => {
+  throw new CompactError(`Expected ${expected} but received ${JSON.stringify(actual)}`);
+};
+function assertIsContractAddress(value) {
+  if (!isEncodedContractAddress(value)) {
+    expectedValueError("contract address", value);
+  }
+}
+function assertIsCompactVector(value) {
+  if (!isCompactVector(value)) {
+    expectedValueError("vector", value);
+  }
+}
+function assertIsCompactStruct(value) {
+  if (!isCompactStruct(value)) {
+    expectedValueError("struct", value);
+  }
+}
+function assertIsCompactValue(x) {
+  if (!isCompactValue(x)) {
+    expectedValueError("Compact value", x);
+  }
+}
+function toCompactValue(x) {
+  assertIsCompactValue(x);
+  return x;
+}
+var compactValueDependencies = (sparseCompactType, compactValue, dependencies) => {
+  if (sparseCompactType.tag == "contractAddress") {
+    assertIsContractAddress(compactValue);
+    dependencies.add(decodeContractAddress(compactValue.bytes));
+  } else if (sparseCompactType.tag == "struct") {
+    assertIsCompactStruct(compactValue);
+    Object.keys(compactValue).forEach((structElementId) => compactValueDependencies(sparseCompactType.elements[structElementId], compactValue[structElementId], dependencies));
+  } else {
+    assertIsCompactVector(compactValue);
+    compactValue.forEach((vectorElement) => compactValueDependencies(sparseCompactType.sparseType, vectorElement, dependencies));
+  }
+};
+var alignedValueToCompactValue = (descriptor, { value }) => toCompactValue(descriptor.fromValue(value));
+var stateValueToCompactValue = (descriptor, stateValue) => alignedValueToCompactValue(descriptor, stateValue.asCell());
+var compactCellDependencies = (sparseCompactCellADT, state, dependencies) => {
+  const { sparseType, descriptor } = sparseCompactCellADT.valueType;
+  compactValueDependencies(sparseType, stateValueToCompactValue(descriptor, state), dependencies);
+};
+var compactArrayLikeADTDependencies = (sparseCompactArrayLikeADT, states, dependencies) => {
+  const { sparseType, descriptor } = sparseCompactArrayLikeADT.valueType;
+  states.forEach((state) => compactValueDependencies(sparseType, stateValueToCompactValue(descriptor, state), dependencies));
+};
+var compactMapADTDependencies = (sparseCompactMapADT, stateMap, dependencies) => {
+  const { keyType, valueType } = sparseCompactMapADT;
+  stateMap.keys().forEach((key) => {
+    if (keyType) {
+      compactValueDependencies(keyType.sparseType, alignedValueToCompactValue(keyType.descriptor, key), dependencies);
+    }
+    if (valueType) {
+      const value = stateMap.get(key);
+      if (!value) {
+        throw new CompactError(`State map ${stateMap.toString(false)} contains key without corresponding value`);
+      }
+      if (valueType.tag == "compactValue") {
+        compactValueDependencies(valueType.sparseType, stateValueToCompactValue(valueType.descriptor, value), dependencies);
+      } else {
+        compactADTDependencies(valueType, value, dependencies);
+      }
+    }
+  });
+};
+function assertCastSucceeded(s, stateValue, expectedCastOutput) {
+  if (!s) {
+    throw new CompactError(`State ${stateValue.toString(false)} cannot be cast to a ${expectedCastOutput}`);
+  }
+}
+var compactADTDependencies = (sparseCompactADT, stateValue, dependencies) => {
+  if (sparseCompactADT.tag == "cell") {
+    compactCellDependencies(sparseCompactADT, stateValue, dependencies);
+  } else if (sparseCompactADT.tag == "map") {
+    const stateMap = stateValue.asMap();
+    assertCastSucceeded(stateMap, stateValue, "map");
+    compactMapADTDependencies(sparseCompactADT, stateMap, dependencies);
+  } else if (sparseCompactADT.tag == "list" || sparseCompactADT.tag == "set") {
+    const states = stateValue.asArray();
+    assertCastSucceeded(states, stateValue, "array");
+    compactArrayLikeADTDependencies(sparseCompactADT, states, dependencies);
+  }
+};
+var castToStateArray = (state) => {
+  const ledgerState = state.asArray();
+  assertCastSucceeded(ledgerState, state, "array");
+  return ledgerState;
+};
+var publicLedgerSegmentsDependencies = (publicLedgerSegments, state, dependencies) => {
+  const ledgerState = castToStateArray(state);
+  Object.keys(publicLedgerSegments.indices).map(parseInt).forEach((idx) => {
+    const referenceLocations = publicLedgerSegments.indices[idx];
+    if ("tag" in referenceLocations && referenceLocations["tag"] === "publicLedgerArray") {
+      publicLedgerSegmentsDependencies(referenceLocations, ledgerState[idx], dependencies);
+    } else {
+      compactADTDependencies(referenceLocations, ledgerState[idx], dependencies);
+    }
+  });
+};
+var contractDependencies = (contractReferenceLocations2, state) => {
+  const dependencies = /* @__PURE__ */ new Set();
+  if (contractReferenceLocations2.indices) {
+    publicLedgerSegmentsDependencies(contractReferenceLocations2, state, dependencies);
+  }
+  return [...dependencies];
+};
 
 // packages/contract/managed/cohort/contract/index.js
 checkRuntimeVersion("0.16.0");
@@ -6051,6 +6631,7 @@ var pureCircuits = {
 var contractReferenceLocations = { tag: "publicLedgerArray", indices: {} };
 export {
   Contract,
+  dist_exports as __compactRuntime,
   contractReferenceLocations,
   ledger,
   pureCircuits

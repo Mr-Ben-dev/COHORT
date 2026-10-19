@@ -112,7 +112,7 @@ await esbuild.build({
 // /dapp/cohort-contract.js — never via relative ../../../packages paths.
 await esbuild.build({
   absWorkingDir: root,
-  entryPoints: [path.join(root, 'packages/contract/managed/cohort/contract/index.js')],
+  entryPoints: [path.join(root, 'packages/contract/browser-entry.mjs')],
   outfile: path.join(designerDappDir, 'cohort-contract.js'),
   bundle: true,
   format: 'esm',

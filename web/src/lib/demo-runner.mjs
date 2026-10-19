@@ -33,7 +33,6 @@
  * Tier 1 path — no fetch, no beacon, no storage.
  */
 
-import * as RT from '@midnight-ntwrk/compact-runtime';
 
 // ---------------------------------------------------------------------------
 // Pure tier metadata — no silent mappings; unknown tiers throw.
@@ -208,18 +207,30 @@ async function loadDappBundle() {
 }
 
 async function loadContractBundle() {
-  // Browser: prebuilt bundle served from web/public/dapp.
+  // Browser: prebuilt bundle served from web/public/dapp. The bundle entry
+  // re-exports __compactRuntime (the runtime it was bundled with).
   if (typeof window !== 'undefined') {
     const mod = await import(/* webpackIgnore: true */ '/dapp/cohort-contract.js');
-    return { mod, source: '/dapp/cohort-contract.js' };
+    return { mod, rtNs: mod.__compactRuntime, source: '/dapp/cohort-contract.js' };
   }
-  // Node (unit tests): the managed build on disk.
+  // Node (unit tests): the managed build on disk, plus the runtime resolved
+  // exactly as the contract resolves it (same module instance — no
+  // dual-package mismatch).
   const target = new URL(
     '../../../packages/contract/managed/cohort/contract/index.js',
     import.meta.url,
   );
   const mod = await import(target.href);
-  return { mod, source: target.href };
+  // Resolve the runtime exactly as the contract resolves it: createRequire
+  // anchored at the contract file (import.meta.resolve ignores its parent
+  // argument on this Node build and would pick web/node_modules instead).
+  // Same file => same module instance => the runtime's internal type checks
+  // pass (no dual-package hazard).
+  const { createRequire } = await import('node:module');
+  const { pathToFileURL } = await import('node:url');
+  const rtPath = createRequire(target.href).resolve('@midnight-ntwrk/compact-runtime');
+  const rtNs = await import(pathToFileURL(rtPath).href);
+  return { mod, rtNs, source: target.href };
 }
 
 function defaultImport(spec) {
@@ -247,7 +258,7 @@ export async function loadContractModule({ importFn = defaultImport } = {}) {
       'Compiled contract module does not export Contract + ledger. Refusing to run.',
     );
   }
-  return { Contract: mod.Contract, ledger: mod.ledger, source: loaded.source };
+  return { Contract: mod.Contract, ledger: mod.ledger, source: loaded.source, __compactRuntime: loaded.rtNs };
 }
 
 /** Circuit names this build actually exposes — feature-detected, never assumed. */
@@ -272,8 +283,22 @@ export function assertCircuit(contractInstance, circuitName) {
 // Simulator boot + circuit run (the shared code path)
 // ---------------------------------------------------------------------------
 
-export function bootSimulator({ Contract }, privateState) {
-  const contract = new Contract(witnessAdapters);
+/** The ONE compact-runtime instance the contract module was built/bundled with. */
+export function runtimeOf(contractModule) {
+  const RT = contractModule?.__compactRuntime;
+  if (!RT || typeof RT.createCircuitContext !== 'function') {
+    throw new DemoRunnerError(
+      'RUNTIME_MISMATCH',
+      'Contract module does not carry its compact-runtime (__compactRuntime). ' +
+        'Refusing to mix runtime copies — the circuit context would fail type checks.',
+    );
+  }
+  return RT;
+}
+
+export function bootSimulator(contractModule, privateState) {
+  const RT = runtimeOf(contractModule);
+  const contract = new contractModule.Contract(witnessAdapters);
   const ctor = contract.initialState(RT.createConstructorContext(privateState, '0'.repeat(64)));
   return { contract, ctor, addr: RT.sampleContractAddress() };
 }
@@ -307,8 +332,9 @@ export function runCircuit({
   args = [],
   priorState = null,
 }) {
-  const { Contract, ledger } = contractModule;
-  const session = bootSimulator({ Contract }, privateState);
+  const { ledger } = contractModule;
+  const RT = runtimeOf(contractModule);
+  const session = bootSimulator(contractModule, privateState);
   assertCircuit(session.contract, circuit);
   const state = priorState ?? session.ctor.currentContractState;
   const ctx = RT.createCircuitContext(session.addr, '0'.repeat(64), state, privateState);
@@ -383,6 +409,7 @@ export function gateProveAttested({ ceremonyComplete = false } = {}) {
  * Any other outcome is reported as inconclusive, never as complete.
  */
 export function probeCeremony(contractModule) {
+  const RT = runtimeOf(contractModule);
   const { Contract } = contractModule;
   let contract;
   try {
