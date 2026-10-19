@@ -5,8 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { getPublicTrials, getTrial, knownTrialId } from './trials.mjs';
 import { assertPublicOnly, PUBLIC_REFERRAL_KEYS, findPrivateFields } from './public-fields.mjs';
 import { publicLog, redact } from './redact.mjs';
-import { ContractState } from '@midnight-ntwrk/midnight-js-protocol/compact-runtime';
-import { ledger as cohortLedger } from '../../../packages/contract/managed/cohort/contract/index.js';
+import { readLiveLedger, readAttestationCounters } from './blockfrost-live.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WEB_DIR = path.resolve(__dirname, '../../web');
@@ -124,48 +123,6 @@ function readJson(req) {
   });
 }
 
-const HEX_ADDRESS = /^[0-9a-fA-F]+$/;
-
-/**
- * Read the live contract ledger from the Blockfrost-operated Midnight
- * indexer (GraphQL POST, same schema as the retired official endpoint).
- * Mirrors packages/dapp/src/public-state.mjs: the indexer returns a
- * hex-encoded ContractState; ContractState.deserialize gives .data and the
- * generated ledger() decodes the public fields.
- */
-async function fetchBlockfrostPublicLedger({ indexerUrl, contractAddress }) {
-  if (!contractAddress || !HEX_ADDRESS.test(contractAddress)) {
-    const err = new Error('contract address not configured');
-    err.status = 503;
-    throw err;
-  }
-  const query = `{ contractAction(address: "${contractAddress}") { state } }`;
-  const res = await fetch(indexerUrl, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ query }),
-  });
-  if (!res.ok) {
-    const err = new Error(`indexer HTTP ${res.status}`);
-    err.status = 502;
-    throw err;
-  }
-  const json = await res.json();
-  if (Array.isArray(json.errors) && json.errors.length) {
-    const err = new Error(json.errors[0]?.message || 'indexer GraphQL error');
-    err.status = 502;
-    throw err;
-  }
-  const hex = json.data?.contractAction?.state;
-  if (!hex || !HEX_ADDRESS.test(hex)) {
-    const err = new Error('indexer returned no contract state');
-    err.status = 502;
-    throw err;
-  }
-  const state = ContractState.deserialize(Buffer.from(hex, 'hex'));
-  return cohortLedger(state.data);
-}
-
 function publicConfig() {
   return {
     networkId: process.env.MIDNIGHT_NETWORK || 'preprod',
@@ -225,48 +182,43 @@ function handleApiFactory(publicEvents) {
   }
 
   if (url.pathname === '/api/public-state' && req.method === 'GET') {
-    const contractAddress = process.env.COHORT_CONTRACT_ADDRESS || '';
+    // SQUAD A7: live on-chain ledger counters via Blockfrost GraphQL.
+    // readLiveLedger() degrades gracefully: counters are null and `source`
+    // says exactly why (no-token-configured / live-onchain-query-failed) —
+    // numbers are never invented.
     const networkId = process.env.MIDNIGHT_NETWORK || 'preprod';
-    const token = (process.env.BLOCKFROST_PROJECT_ID || '').trim();
+    const live = await readLiveLedger();
     const base = {
-      contractAddress,
+      contractAddress: live.contractAddress,
       networkId,
-      proven: null,
-      spentCount: null,
-      referralCount: null,
+      proven: live.proven,
+      spentCount: live.spentSize,
+      referralCount: live.referralsSize,
+      attestationsSize: live.attestationsSize,
+      attestationsVerified: live.attestationsVerified,
+      attestationSource: live.attestationSource,
+      blockHeight: live.blockHeight,
+      source: live.source,
+      reason: live.reason,
+      fetchedAt: live.fetchedAt,
       events: publicEvents.slice(-50),
     };
-    if (!token) {
-      // Graceful degradation: no fake numbers, clearly labeled.
-      return send(res, 200, {
-        ...base,
-        source: 'unavailable',
-        reason: 'indexer token not configured (set BLOCKFROST_PROJECT_ID)',
-      });
+    if (live.source === 'live-onchain') {
+      return send(res, 200, base, 'public, max-age=60');
     }
-    try {
-      const rawIndexer = process.env.MIDNIGHT_INDEXER_URL || 'https://midnight-preprod.blockfrost.io/api/v0';
-      const sep = rawIndexer.includes('?') ? '&' : '?';
-      const indexerUrl = rawIndexer.includes('project_id=')
-        ? rawIndexer
-        : `${rawIndexer}${sep}project_id=${encodeURIComponent(token)}`;
-      const pub = await fetchBlockfrostPublicLedger({ indexerUrl, contractAddress });
-      return send(
-        res,
-        200,
-        {
-          ...base,
-          source: 'blockfrost-preprod',
-          proven: Number(pub.proven.toString()),
-          spentCount: Number(pub.spent.size().toString()),
-          referralCount: Number(pub.referrals.size().toString()),
-        },
-        'public, max-age=60',
-      );
-    } catch (err) {
-      publicLog('public-state indexer failed', { error: redact(String(err?.message || err)) });
-      return send(res, 502, { ...base, source: 'blockfrost-preprod', error: 'indexer query failed' });
+    if (live.source === 'no-token-configured') {
+      // 200 + labeled: an unconfigured indexer is not a server error.
+      return send(res, 200, base, 'no-store');
     }
+    publicLog('public-state indexer failed', { error: redact(String(live.reason || '')) });
+    return send(res, 502, base);
+  }
+
+  if (url.pathname === '/api/attestation-counters' && req.method === 'GET') {
+    // SQUAD A7: Wave-3 attestation counters. Null + labeled while the
+    // Wave-3 contract is undeployed (CONTRACT_ADDRESS_WAVE3 unset).
+    const out = await readAttestationCounters();
+    return send(res, 200, out, 'public, max-age=60');
   }
 
   if (url.pathname === '/api/referral' && req.method === 'POST') {
