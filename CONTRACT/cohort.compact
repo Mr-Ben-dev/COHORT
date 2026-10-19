@@ -6,10 +6,31 @@ witness wCondition(): Boolean;
 witness wMedication(): Boolean;
 witness wSecret(): Bytes<32>;
 witness wBlind(): Bytes<32>;
+witness wHolderSecret(): Bytes<32>;
+witness wNonce(): Bytes<32>;
+witness wIssuerSecret(): Bytes<32>;
 
 export ledger spent: Set<Bytes<32>>;
 export ledger referrals: Set<Bytes<32>>;
 export ledger proven: Counter;
+export ledger attestations: Set<Bytes<32>>;
+export ledger attestationsVerified: Counter;
+
+// ---------------------------------------------------------------------------
+// ISSUER_ID: identity of the demo issuer, installed by the key ceremony.
+//
+// Language 0.23 has no top-level `const`, and 0x-hex literals parse as Uint
+// (capped at Uint<248>), so the value lives here as a 32-byte string using
+// \xNN escapes. The key-ceremony worker replaces the single marked return
+// line below with the 32 \xNN escapes of disclose(demoIssuerSecret).
+// (disclose() is the identity at the value level, so that is the 32 secret
+// bytes.) Zeros are the safe placeholder: finding a preimage is infeasible,
+// so no issuer secret can pass the gate until the ceremony runs.
+// ---------------------------------------------------------------------------
+circuit issuerId(): Bytes<32> {
+  // CEREMONY-REPLACE: ISSUER_ID_BYTES
+  return "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00";
+}
 
 circuit trialNullifier(trialId: Bytes<32>, sk: Bytes<32>): Bytes<32> {
   return persistentHash<Vector<3, Bytes<32>>>([
@@ -43,5 +64,109 @@ export circuit proveEligible(
   const referral = persistentCommit<Bytes<32>>(wSecret(), wBlind());
   referrals.insert(disclose(referral));
   proven.increment(1);
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+// Issuer-attested eligibility (hash-native; no signatures).
+// ---------------------------------------------------------------------------
+
+// Pure helper: binds attributes to a holder. NOTE: disclose() is a compiler
+// permission marker, not a bytes conversion (it is the identity at the value
+// level), so the attribute hash is taken over a typed tuple:
+//   attrsHash = H("cohort:attrs" || age || cond || med)
+//   binding   = H("cohort:holder" || holderSecret || nonce)
+//   return commit(attrsHash, binding)
+export circuit attestationOf(
+  age: Uint<8>,
+  cond: Boolean,
+  med: Boolean,
+  holderSecret: Bytes<32>,
+  nonce: Bytes<32>
+): Bytes<32> {
+  const attrsHash = persistentHash<[Bytes<32>, Uint<8>, Boolean, Boolean]>([
+    pad(32, "cohort:attrs"),
+    age,
+    cond,
+    med
+  ]);
+  const binding = persistentHash<[Bytes<32>, Bytes<32>, Bytes<32>]>([
+    pad(32, "cohort:holder"),
+    holderSecret,
+    nonce
+  ]);
+  return persistentCommit<Bytes<32>>(attrsHash, binding);
+}
+
+// Ceremony helper: returns disclose(secret). disclose() is the identity at
+// the value level, so this returns the 32 secret bytes unchanged. The
+// key-ceremony script calls this to compute the ISSUER_ID value that gets
+// baked into issuerId() above.
+export circuit issuerIdOf(secret: Bytes<32>): Bytes<32> {
+  return disclose(secret);
+}
+
+// Publish a precomputed attestation. Only the issuer (holder of the secret
+// whose disclose() equals the baked-in ISSUER_ID) may call it.
+export circuit attest(attestation: Bytes<32>): Boolean {
+  assert(disclose(wIssuerSecret()) == issuerId(), "not the issuer");
+  assert(!attestations.member(disclose(attestation)), "attestation already published");
+  attestations.insert(disclose(attestation));
+  return true;
+}
+
+// Preferred issuance path: the attestation is computed in-circuit from the
+// raw attributes, so the issuer never needs to agree with anyone on an
+// off-chain hash encoding.
+export circuit attestWithAttributes(
+  age: Uint<8>,
+  cond: Boolean,
+  med: Boolean,
+  holderSecret: Bytes<32>,
+  nonce: Bytes<32>
+): Boolean {
+  assert(disclose(wIssuerSecret()) == issuerId(), "not the issuer");
+  const att = attestationOf(age, cond, med, holderSecret, nonce);
+  assert(!attestations.member(disclose(att)), "attestation already published");
+  attestations.insert(disclose(att));
+  return true;
+}
+
+// Prove eligibility against an issuer attestation. Recomputes the attestation
+// from the holder's witnesses, requires it to be published, enforces a
+// program-scoped (trial, attestation) nullifier so one attestation cannot be
+// reused across trials by the same holder, then runs the same typed
+// predicate as proveEligible.
+export circuit proveAttested(
+  trialId: Bytes<32>,
+  minAge: Uint<8>,
+  maxAge: Uint<8>,
+  requireCondition: Boolean,
+  forbidMedication: Boolean
+): Boolean {
+  const age = wAge();
+  const cond = wCondition();
+  const med = wMedication();
+  const att = attestationOf(age, cond, med, wHolderSecret(), wNonce());
+  assert(attestations.member(disclose(att)), "no issuer attestation for these attributes");
+  const attNul = persistentHash<Vector<3, Bytes<32>>>([
+    pad(32, "cohort:attnul"),
+    trialId,
+    disclose(att)
+  ]);
+  assert(!spent.member(disclose(attNul)), "attestation already used for this trial");
+  assert(age >= minAge, "too young");
+  assert(age <= maxAge, "too old");
+  if (requireCondition) {
+    assert(cond, "missing condition");
+  }
+  if (forbidMedication) {
+    assert(!med, "medication excluded");
+  }
+  spent.insert(disclose(attNul));
+  const referral = persistentCommit<Bytes<32>>(wSecret(), wBlind());
+  referrals.insert(disclose(referral));
+  proven.increment(1);
+  attestationsVerified.increment(1);
   return true;
 }
