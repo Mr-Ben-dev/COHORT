@@ -20,15 +20,23 @@ jobs:
           export PATH="$HOME/.local/bin:$HOME/.compact/bin:$PATH"
           compact update 0.31.1
           compact compile +0.31.1 --version
-      - run: npm install
+      - run: npm ci
       # Playwright privacy tests start `next start` against web/.next.
       - run: npm install
         working-directory: web
       - run: npm run build
         working-directory: web
       - name: Full Compact compile (not --skip-zk)
+        # Full ZK keygen for all circuits is slow; the generous timeout is deliberate.
+        timeout-minutes: 60
         run: npm run compile
-      - run: npm test
+      - name: Test suite
+        timeout-minutes: 45
+        run: npm test
       - name: Judge verification
+        # --skip-compile/--skip-tests: compile and the full suite already ran as
+        # dedicated steps above; re-running inside judge-verify would double the
+        # work and hit its own 180s self-test spawn timeout. Pins and committed
+        # evidence are still verified here.
         run: npm run judge:verify -- --skip-compile --skip-tests
       - run: npm run build
