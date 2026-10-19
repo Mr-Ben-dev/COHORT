@@ -173,31 +173,81 @@ export const witnessAdapters = {
  * specifier at build time, so candidates for builds that may not exist on
  * disk (B1's mid-rebuild .compile-out TS) cannot be listed statically.
  */
-const MANAGED_CONTRACT_SPEC = '../../../packages/contract/managed/cohort/contract/index.js';
+// Browser-safe module loading: web/ code must NEVER import ../../../packages
+// relatively — those paths do not exist when Vercel builds with
+// rootDirectory=web. The prebuilt bundles in web/public/dapp/ are the only
+// sanctioned route: /dapp/cohort-dapp.js (dapp modules) and
+// /dapp/cohort-contract.js (compiled contract, for the in-browser simulator).
+// webpackIgnore keeps Next from resolving these at build time; they load at
+// runtime in the browser. In Node unit tests, callers inject importFn.
+async function loadDappBundle() {
+  // Browser: prebuilt bundle served from web/public/dapp.
+  if (typeof window !== 'undefined') {
+    return import(/* webpackIgnore: true */ '/dapp/cohort-dapp.js');
+  }
+  // Node (unit tests): load the dapp sources from disk. The bundle's named
+  // exports are re-mapped to the source modules they came from.
+  const base = new URL('../../../packages/dapp/src/', import.meta.url);
+  const load = (name) => import(new URL(name, base).href);
+  const wallets = await load('wallets.mjs');
+  const truthGate = await load('truth-gate.mjs');
+  const prove = await load('prove.mjs');
+  const txStatus = await load('tx-status.mjs');
+  const publicState = await load('public-state.mjs');
+  const index = await load('index.mjs');
+  return {
+    ...wallets,
+    ...truthGate,
+    proveEligibilityViaWallet: prove.proveEligibility,
+    CohortDapp: {
+      getTransactionStatus: txStatus.getTransactionStatus,
+      getPublicVerification: publicState.readPublicVerification,
+      ...index.CohortDapp,
+    },
+  };
+}
+
+async function loadContractBundle() {
+  // Browser: prebuilt bundle served from web/public/dapp.
+  if (typeof window !== 'undefined') {
+    const mod = await import(/* webpackIgnore: true */ '/dapp/cohort-contract.js');
+    return { mod, source: '/dapp/cohort-contract.js' };
+  }
+  // Node (unit tests): the managed build on disk.
+  const target = new URL(
+    '../../../packages/contract/managed/cohort/contract/index.js',
+    import.meta.url,
+  );
+  const mod = await import(target.href);
+  return { mod, source: target.href };
+}
 
 function defaultImport(spec) {
-  return import(/* webpackChunkName: "cohort-compiled-contract" */ spec);
+  // spec is a loader key, not a path: 'dapp' | 'contract'
+  if (spec === 'contract') return loadContractBundle();
+  return loadDappBundle();
 }
 
 export async function loadContractModule({ importFn = defaultImport } = {}) {
-  let mod;
+  let loaded;
   try {
-    mod = await importFn(MANAGED_CONTRACT_SPEC);
+    loaded = importFn === defaultImport ? await loadContractBundle() : { mod: await importFn('contract'), source: 'injected-importFn' };
   } catch (err) {
     throw new DemoRunnerError(
       'CONTRACT_LOAD_FAILED',
-      `Could not load the compiled contract (${MANAGED_CONTRACT_SPEC}). ` +
+      `Could not load the compiled contract (/dapp/cohort-contract.js). ` +
         'The B1 rebuild may be mid-flight; retry after it lands.',
       err,
     );
   }
+  const mod = loaded.mod;
   if (typeof mod?.Contract !== 'function' || typeof mod?.ledger !== 'function') {
     throw new DemoRunnerError(
       'CONTRACT_SHAPE',
       'Compiled contract module does not export Contract + ledger. Refusing to run.',
     );
   }
-  return { Contract: mod.Contract, ledger: mod.ledger, source: MANAGED_CONTRACT_SPEC };
+  return { Contract: mod.Contract, ledger: mod.ledger, source: loaded.source };
 }
 
 /** Circuit names this build actually exposes — feature-detected, never assumed. */
@@ -383,9 +433,9 @@ export function probeCeremony(contractModule) {
 // Truth gate — confirm the ledger effect before UI success (Tier 2)
 // ---------------------------------------------------------------------------
 
-const TRUTH_GATE_SPEC = '../../../packages/dapp/src/truth-gate.mjs';
-const TX_STATUS_SPEC = '../../../packages/dapp/src/tx-status.mjs';
-const PUBLIC_STATE_SPEC = '../../../packages/dapp/src/public-state.mjs';
+const TRUTH_GATE_SPEC = 'dapp';
+const TX_STATUS_SPEC = 'dapp';
+const PUBLIC_STATE_SPEC = 'dapp';
 
 /**
  * Load C1's truth-gate module if it has landed. Returns the module or null.
@@ -442,12 +492,12 @@ export async function pollUntil({ check, timeoutMs = 120000, intervalMs = 5000, 
 function defaultDeps() {
   return {
     async getTransactionStatus(args) {
-      const mod = await defaultImport(TX_STATUS_SPEC);
-      return mod.getTransactionStatus(args);
+      const mod = await defaultImport('dapp');
+      return mod.CohortDapp.getTransactionStatus(args);
     },
     async readPublicVerification(args) {
-      const mod = await defaultImport(PUBLIC_STATE_SPEC);
-      return mod.readPublicVerification(args);
+      const mod = await defaultImport('dapp');
+      return mod.CohortDapp.getPublicVerification(args);
     },
   };
 }
@@ -561,8 +611,8 @@ export async function waitForLedgerEffect({
 // Tier 2 wallet entry points (import — never re-implement — wallet detection)
 // ---------------------------------------------------------------------------
 
-const WALLETS_SPEC = '../../../packages/dapp/src/wallets.mjs';
-const PROVE_SPEC = '../../../packages/dapp/src/prove.mjs';
+const WALLETS_SPEC = 'dapp'; // resolved via the prebuilt bundle (see defaultImport)
+const PROVE_SPEC = 'dapp';
 
 /** GeroWallet primary, 1AM fallback. Returns { id, api, ... } from wallets.mjs. */
 export async function connectDemoWallet({ preferred = 'gero', networkId = 'preprod', importFn = defaultImport } = {}) {
@@ -595,6 +645,6 @@ export function geroTrustNote(walletsModule) {
  * touch demo-runner storage, and prove.mjs fail-closes on envelope leaks.
  */
 export async function submitWalletProof({ facts, trialId, wallet, networkId = 'preprod', origin, importFn = defaultImport, onStage } = {}) {
-  const mod = await importFn(PROVE_SPEC);
-  return mod.proveEligibility({ facts, trialId, wallet, networkId, origin, onStage });
+  const mod = await importFn('dapp');
+  return mod.proveEligibilityViaWallet({ facts, trialId, wallet, networkId, origin, onStage });
 }

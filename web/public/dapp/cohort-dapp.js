@@ -46028,7 +46028,7 @@ var formatKeyword = (ast) => getOrElse2(getExpected(ast), () => ast._tag);
 function getBrands(ast) {
   return match2(getBrandAnnotation(ast), {
     onNone: () => "",
-    onSome: (brands) => brands.map((brand2) => ` & Brand<${formatUnknown(brand2)}>`).join("")
+    onSome: (brands) => brands.map((brand3) => ` & Brand<${formatUnknown(brand3)}>`).join("")
   });
 }
 var getOrElseExpected = (ast) => getTitleAnnotation(ast).pipe(orElse2(() => getDescriptionAnnotation(ast)), orElse2(() => getAutoTitleAnnotation(ast)), map3((s) => s + getBrands(ast)));
@@ -46087,8 +46087,8 @@ var nominal = () => {
 var all3 = (...brands) => {
   const either4 = (args2) => {
     let result = right2(args2);
-    for (const brand2 of brands) {
-      const nextResult = brand2.either(args2);
+    for (const brand3 of brands) {
+      const nextResult = brand3.either(args2);
       if (isLeft2(result) && isLeft2(nextResult)) {
         result = left2([...result.left, ...nextResult.left]);
       } else {
@@ -67313,8 +67313,25 @@ var _descriptor_0 = new CompactTypeBytes(32);
 var _descriptor_1 = CompactTypeBoolean;
 var _descriptor_2 = new CompactTypeUnsignedInteger(65535n, 2);
 var _descriptor_3 = new CompactTypeUnsignedInteger(255n, 1);
-var _descriptor_4 = new CompactTypeVector(3, _descriptor_0);
-var _descriptor_5 = new CompactTypeUnsignedInteger(18446744073709551615n, 8);
+var _tuple_0 = class {
+  alignment() {
+    return _descriptor_0.alignment().concat(_descriptor_3.alignment().concat(_descriptor_1.alignment().concat(_descriptor_1.alignment())));
+  }
+  fromValue(value_0) {
+    return [
+      _descriptor_0.fromValue(value_0),
+      _descriptor_3.fromValue(value_0),
+      _descriptor_1.fromValue(value_0),
+      _descriptor_1.fromValue(value_0)
+    ];
+  }
+  toValue(value_0) {
+    return _descriptor_0.toValue(value_0[0]).concat(_descriptor_3.toValue(value_0[1]).concat(_descriptor_1.toValue(value_0[2]).concat(_descriptor_1.toValue(value_0[3]))));
+  }
+};
+var _descriptor_4 = new _tuple_0();
+var _descriptor_5 = new CompactTypeVector(3, _descriptor_0);
+var _descriptor_6 = new CompactTypeUnsignedInteger(18446744073709551615n, 8);
 var _Either_0 = class {
   alignment() {
     return _descriptor_1.alignment().concat(_descriptor_0.alignment().concat(_descriptor_0.alignment()));
@@ -67330,8 +67347,8 @@ var _Either_0 = class {
     return _descriptor_1.toValue(value_0.is_left).concat(_descriptor_0.toValue(value_0.left).concat(_descriptor_0.toValue(value_0.right)));
   }
 };
-var _descriptor_6 = new _Either_0();
-var _descriptor_7 = new CompactTypeUnsignedInteger(340282366920938463463374607431768211455n, 16);
+var _descriptor_7 = new _Either_0();
+var _descriptor_8 = new CompactTypeUnsignedInteger(340282366920938463463374607431768211455n, 16);
 var _ContractAddress_0 = class {
   alignment() {
     return _descriptor_0.alignment();
@@ -67345,7 +67362,7 @@ var _ContractAddress_0 = class {
     return _descriptor_0.toValue(value_0.bytes);
   }
 };
-var _descriptor_8 = new _ContractAddress_0();
+var _descriptor_9 = new _ContractAddress_0();
 var Contract = class {
   witnesses;
   constructor(...args_0) {
@@ -67371,8 +67388,55 @@ var Contract = class {
     if (typeof witnesses_0.wBlind !== "function") {
       throw new CompactError("first (witnesses) argument to Contract constructor does not contain a function-valued field named wBlind");
     }
+    if (typeof witnesses_0.wHolderSecret !== "function") {
+      throw new CompactError("first (witnesses) argument to Contract constructor does not contain a function-valued field named wHolderSecret");
+    }
+    if (typeof witnesses_0.wNonce !== "function") {
+      throw new CompactError("first (witnesses) argument to Contract constructor does not contain a function-valued field named wNonce");
+    }
+    if (typeof witnesses_0.wIssuerSecret !== "function") {
+      throw new CompactError("first (witnesses) argument to Contract constructor does not contain a function-valued field named wIssuerSecret");
+    }
     this.witnesses = witnesses_0;
     this.circuits = {
+      initIssuer: (...args_1) => {
+        if (args_1.length !== 2) {
+          throw new CompactError(`initIssuer: expected 2 arguments (as invoked from Typescript), received ${args_1.length}`);
+        }
+        const contextOrig_0 = args_1[0];
+        const id_0 = args_1[1];
+        if (!(typeof contextOrig_0 === "object" && contextOrig_0.currentQueryContext != void 0)) {
+          typeError(
+            "initIssuer",
+            "argument 1 (as invoked from Typescript)",
+            "cohort.compact line 35 char 1",
+            "CircuitContext",
+            contextOrig_0
+          );
+        }
+        if (!(id_0.buffer instanceof ArrayBuffer && id_0.BYTES_PER_ELEMENT === 1 && id_0.length === 32)) {
+          typeError(
+            "initIssuer",
+            "argument 1 (argument 2 as invoked from Typescript)",
+            "cohort.compact line 35 char 1",
+            "Bytes<32>",
+            id_0
+          );
+        }
+        const context6 = { ...contextOrig_0, gasCost: emptyRunningCost() };
+        const partialProofData = {
+          input: {
+            value: _descriptor_0.toValue(id_0),
+            alignment: _descriptor_0.alignment()
+          },
+          output: void 0,
+          publicTranscript: [],
+          privateTranscriptOutputs: []
+        };
+        const result_0 = this._initIssuer_0(context6, partialProofData, id_0);
+        partialProofData.output = { value: _descriptor_1.toValue(result_0), alignment: _descriptor_1.alignment() };
+        return { result: result_0, context: context6, proofData: partialProofData, gasCost: context6.gasCost };
+      },
       proveEligible: (...args_1) => {
         if (args_1.length !== 6) {
           throw new CompactError(`proveEligible: expected 6 arguments (as invoked from Typescript), received ${args_1.length}`);
@@ -67387,7 +67451,7 @@ var Contract = class {
           typeError(
             "proveEligible",
             "argument 1 (as invoked from Typescript)",
-            "cohort.compact line 23 char 1",
+            "cohort.compact line 49 char 1",
             "CircuitContext",
             contextOrig_0
           );
@@ -67396,7 +67460,7 @@ var Contract = class {
           typeError(
             "proveEligible",
             "argument 1 (argument 2 as invoked from Typescript)",
-            "cohort.compact line 23 char 1",
+            "cohort.compact line 49 char 1",
             "Bytes<32>",
             trialId_0
           );
@@ -67405,7 +67469,7 @@ var Contract = class {
           typeError(
             "proveEligible",
             "argument 2 (argument 3 as invoked from Typescript)",
-            "cohort.compact line 23 char 1",
+            "cohort.compact line 49 char 1",
             "Uint<0..256>",
             minAge_0
           );
@@ -67414,7 +67478,7 @@ var Contract = class {
           typeError(
             "proveEligible",
             "argument 3 (argument 4 as invoked from Typescript)",
-            "cohort.compact line 23 char 1",
+            "cohort.compact line 49 char 1",
             "Uint<0..256>",
             maxAge_0
           );
@@ -67423,7 +67487,7 @@ var Contract = class {
           typeError(
             "proveEligible",
             "argument 4 (argument 5 as invoked from Typescript)",
-            "cohort.compact line 23 char 1",
+            "cohort.compact line 49 char 1",
             "Boolean",
             requireCondition_0
           );
@@ -67432,7 +67496,7 @@ var Contract = class {
           typeError(
             "proveEligible",
             "argument 5 (argument 6 as invoked from Typescript)",
-            "cohort.compact line 23 char 1",
+            "cohort.compact line 49 char 1",
             "Boolean",
             forbidMedication_0
           );
@@ -67458,10 +67522,238 @@ var Contract = class {
         );
         partialProofData.output = { value: _descriptor_1.toValue(result_0), alignment: _descriptor_1.alignment() };
         return { result: result_0, context: context6, proofData: partialProofData, gasCost: context6.gasCost };
+      },
+      attestationOf(context6, ...args_1) {
+        return { result: pureCircuits.attestationOf(...args_1), context: context6 };
+      },
+      issuerIdOf(context6, ...args_1) {
+        return { result: pureCircuits.issuerIdOf(...args_1), context: context6 };
+      },
+      attest: (...args_1) => {
+        if (args_1.length !== 2) {
+          throw new CompactError(`attest: expected 2 arguments (as invoked from Typescript), received ${args_1.length}`);
+        }
+        const contextOrig_0 = args_1[0];
+        const attestation_0 = args_1[1];
+        if (!(typeof contextOrig_0 === "object" && contextOrig_0.currentQueryContext != void 0)) {
+          typeError(
+            "attest",
+            "argument 1 (as invoked from Typescript)",
+            "cohort.compact line 117 char 1",
+            "CircuitContext",
+            contextOrig_0
+          );
+        }
+        if (!(attestation_0.buffer instanceof ArrayBuffer && attestation_0.BYTES_PER_ELEMENT === 1 && attestation_0.length === 32)) {
+          typeError(
+            "attest",
+            "argument 1 (argument 2 as invoked from Typescript)",
+            "cohort.compact line 117 char 1",
+            "Bytes<32>",
+            attestation_0
+          );
+        }
+        const context6 = { ...contextOrig_0, gasCost: emptyRunningCost() };
+        const partialProofData = {
+          input: {
+            value: _descriptor_0.toValue(attestation_0),
+            alignment: _descriptor_0.alignment()
+          },
+          output: void 0,
+          publicTranscript: [],
+          privateTranscriptOutputs: []
+        };
+        const result_0 = this._attest_0(context6, partialProofData, attestation_0);
+        partialProofData.output = { value: _descriptor_1.toValue(result_0), alignment: _descriptor_1.alignment() };
+        return { result: result_0, context: context6, proofData: partialProofData, gasCost: context6.gasCost };
+      },
+      attestWithAttributes: (...args_1) => {
+        if (args_1.length !== 6) {
+          throw new CompactError(`attestWithAttributes: expected 6 arguments (as invoked from Typescript), received ${args_1.length}`);
+        }
+        const contextOrig_0 = args_1[0];
+        const age_0 = args_1[1];
+        const cond_0 = args_1[2];
+        const med_0 = args_1[3];
+        const holderSecret_0 = args_1[4];
+        const nonce_0 = args_1[5];
+        if (!(typeof contextOrig_0 === "object" && contextOrig_0.currentQueryContext != void 0)) {
+          typeError(
+            "attestWithAttributes",
+            "argument 1 (as invoked from Typescript)",
+            "cohort.compact line 127 char 1",
+            "CircuitContext",
+            contextOrig_0
+          );
+        }
+        if (!(typeof age_0 === "bigint" && age_0 >= 0n && age_0 <= 255n)) {
+          typeError(
+            "attestWithAttributes",
+            "argument 1 (argument 2 as invoked from Typescript)",
+            "cohort.compact line 127 char 1",
+            "Uint<0..256>",
+            age_0
+          );
+        }
+        if (!(typeof cond_0 === "boolean")) {
+          typeError(
+            "attestWithAttributes",
+            "argument 2 (argument 3 as invoked from Typescript)",
+            "cohort.compact line 127 char 1",
+            "Boolean",
+            cond_0
+          );
+        }
+        if (!(typeof med_0 === "boolean")) {
+          typeError(
+            "attestWithAttributes",
+            "argument 3 (argument 4 as invoked from Typescript)",
+            "cohort.compact line 127 char 1",
+            "Boolean",
+            med_0
+          );
+        }
+        if (!(holderSecret_0.buffer instanceof ArrayBuffer && holderSecret_0.BYTES_PER_ELEMENT === 1 && holderSecret_0.length === 32)) {
+          typeError(
+            "attestWithAttributes",
+            "argument 4 (argument 5 as invoked from Typescript)",
+            "cohort.compact line 127 char 1",
+            "Bytes<32>",
+            holderSecret_0
+          );
+        }
+        if (!(nonce_0.buffer instanceof ArrayBuffer && nonce_0.BYTES_PER_ELEMENT === 1 && nonce_0.length === 32)) {
+          typeError(
+            "attestWithAttributes",
+            "argument 5 (argument 6 as invoked from Typescript)",
+            "cohort.compact line 127 char 1",
+            "Bytes<32>",
+            nonce_0
+          );
+        }
+        const context6 = { ...contextOrig_0, gasCost: emptyRunningCost() };
+        const partialProofData = {
+          input: {
+            value: _descriptor_3.toValue(age_0).concat(_descriptor_1.toValue(cond_0).concat(_descriptor_1.toValue(med_0).concat(_descriptor_0.toValue(holderSecret_0).concat(_descriptor_0.toValue(nonce_0))))),
+            alignment: _descriptor_3.alignment().concat(_descriptor_1.alignment().concat(_descriptor_1.alignment().concat(_descriptor_0.alignment().concat(_descriptor_0.alignment()))))
+          },
+          output: void 0,
+          publicTranscript: [],
+          privateTranscriptOutputs: []
+        };
+        const result_0 = this._attestWithAttributes_0(
+          context6,
+          partialProofData,
+          age_0,
+          cond_0,
+          med_0,
+          holderSecret_0,
+          nonce_0
+        );
+        partialProofData.output = { value: _descriptor_1.toValue(result_0), alignment: _descriptor_1.alignment() };
+        return { result: result_0, context: context6, proofData: partialProofData, gasCost: context6.gasCost };
+      },
+      proveAttested: (...args_1) => {
+        if (args_1.length !== 6) {
+          throw new CompactError(`proveAttested: expected 6 arguments (as invoked from Typescript), received ${args_1.length}`);
+        }
+        const contextOrig_0 = args_1[0];
+        const trialId_0 = args_1[1];
+        const minAge_0 = args_1[2];
+        const maxAge_0 = args_1[3];
+        const requireCondition_0 = args_1[4];
+        const forbidMedication_0 = args_1[5];
+        if (!(typeof contextOrig_0 === "object" && contextOrig_0.currentQueryContext != void 0)) {
+          typeError(
+            "proveAttested",
+            "argument 1 (as invoked from Typescript)",
+            "cohort.compact line 146 char 1",
+            "CircuitContext",
+            contextOrig_0
+          );
+        }
+        if (!(trialId_0.buffer instanceof ArrayBuffer && trialId_0.BYTES_PER_ELEMENT === 1 && trialId_0.length === 32)) {
+          typeError(
+            "proveAttested",
+            "argument 1 (argument 2 as invoked from Typescript)",
+            "cohort.compact line 146 char 1",
+            "Bytes<32>",
+            trialId_0
+          );
+        }
+        if (!(typeof minAge_0 === "bigint" && minAge_0 >= 0n && minAge_0 <= 255n)) {
+          typeError(
+            "proveAttested",
+            "argument 2 (argument 3 as invoked from Typescript)",
+            "cohort.compact line 146 char 1",
+            "Uint<0..256>",
+            minAge_0
+          );
+        }
+        if (!(typeof maxAge_0 === "bigint" && maxAge_0 >= 0n && maxAge_0 <= 255n)) {
+          typeError(
+            "proveAttested",
+            "argument 3 (argument 4 as invoked from Typescript)",
+            "cohort.compact line 146 char 1",
+            "Uint<0..256>",
+            maxAge_0
+          );
+        }
+        if (!(typeof requireCondition_0 === "boolean")) {
+          typeError(
+            "proveAttested",
+            "argument 4 (argument 5 as invoked from Typescript)",
+            "cohort.compact line 146 char 1",
+            "Boolean",
+            requireCondition_0
+          );
+        }
+        if (!(typeof forbidMedication_0 === "boolean")) {
+          typeError(
+            "proveAttested",
+            "argument 5 (argument 6 as invoked from Typescript)",
+            "cohort.compact line 146 char 1",
+            "Boolean",
+            forbidMedication_0
+          );
+        }
+        const context6 = { ...contextOrig_0, gasCost: emptyRunningCost() };
+        const partialProofData = {
+          input: {
+            value: _descriptor_0.toValue(trialId_0).concat(_descriptor_3.toValue(minAge_0).concat(_descriptor_3.toValue(maxAge_0).concat(_descriptor_1.toValue(requireCondition_0).concat(_descriptor_1.toValue(forbidMedication_0))))),
+            alignment: _descriptor_0.alignment().concat(_descriptor_3.alignment().concat(_descriptor_3.alignment().concat(_descriptor_1.alignment().concat(_descriptor_1.alignment()))))
+          },
+          output: void 0,
+          publicTranscript: [],
+          privateTranscriptOutputs: []
+        };
+        const result_0 = this._proveAttested_0(
+          context6,
+          partialProofData,
+          trialId_0,
+          minAge_0,
+          maxAge_0,
+          requireCondition_0,
+          forbidMedication_0
+        );
+        partialProofData.output = { value: _descriptor_1.toValue(result_0), alignment: _descriptor_1.alignment() };
+        return { result: result_0, context: context6, proofData: partialProofData, gasCost: context6.gasCost };
       }
     };
-    this.impureCircuits = { proveEligible: this.circuits.proveEligible };
-    this.provableCircuits = { proveEligible: this.circuits.proveEligible };
+    this.impureCircuits = {
+      initIssuer: this.circuits.initIssuer,
+      proveEligible: this.circuits.proveEligible,
+      attest: this.circuits.attest,
+      attestWithAttributes: this.circuits.attestWithAttributes,
+      proveAttested: this.circuits.proveAttested
+    };
+    this.provableCircuits = {
+      initIssuer: this.circuits.initIssuer,
+      proveEligible: this.circuits.proveEligible,
+      attest: this.circuits.attest,
+      attestWithAttributes: this.circuits.attestWithAttributes,
+      proveAttested: this.circuits.proveAttested
+    };
   }
   initialState(...args_0) {
     if (args_0.length !== 1) {
@@ -67485,8 +67777,15 @@ var Contract = class {
     stateValue_0 = stateValue_0.arrayPush(StateValue.newNull());
     stateValue_0 = stateValue_0.arrayPush(StateValue.newNull());
     stateValue_0 = stateValue_0.arrayPush(StateValue.newNull());
+    stateValue_0 = stateValue_0.arrayPush(StateValue.newNull());
+    stateValue_0 = stateValue_0.arrayPush(StateValue.newNull());
+    stateValue_0 = stateValue_0.arrayPush(StateValue.newNull());
     state_0.data = new ChargedState(stateValue_0);
+    state_0.setOperation("initIssuer", new ContractOperation());
     state_0.setOperation("proveEligible", new ContractOperation());
+    state_0.setOperation("attest", new ContractOperation());
+    state_0.setOperation("attestWithAttributes", new ContractOperation());
+    state_0.setOperation("proveAttested", new ContractOperation());
     const context6 = createCircuitContext(dummyContractAddress(), constructorContext_0.initialZswapLocalState.coinPublicKey, state_0.data, constructorContext_0.initialPrivateState);
     const partialProofData = {
       input: { value: [], alignment: [] },
@@ -67548,8 +67847,70 @@ var Contract = class {
         { push: {
           storage: true,
           value: StateValue.newCell({
-            value: _descriptor_5.toValue(0n),
-            alignment: _descriptor_5.alignment()
+            value: _descriptor_6.toValue(0n),
+            alignment: _descriptor_6.alignment()
+          }).encode()
+        } },
+        { ins: { cached: false, n: 1 } }
+      ]
+    );
+    queryLedgerState(
+      context6,
+      partialProofData,
+      [
+        { push: {
+          storage: false,
+          value: StateValue.newCell({
+            value: _descriptor_3.toValue(3n),
+            alignment: _descriptor_3.alignment()
+          }).encode()
+        } },
+        { push: {
+          storage: true,
+          value: StateValue.newMap(
+            new StateMap()
+          ).encode()
+        } },
+        { ins: { cached: false, n: 1 } }
+      ]
+    );
+    queryLedgerState(
+      context6,
+      partialProofData,
+      [
+        { push: {
+          storage: false,
+          value: StateValue.newCell({
+            value: _descriptor_3.toValue(4n),
+            alignment: _descriptor_3.alignment()
+          }).encode()
+        } },
+        { push: {
+          storage: true,
+          value: StateValue.newCell({
+            value: _descriptor_6.toValue(0n),
+            alignment: _descriptor_6.alignment()
+          }).encode()
+        } },
+        { ins: { cached: false, n: 1 } }
+      ]
+    );
+    queryLedgerState(
+      context6,
+      partialProofData,
+      [
+        { push: {
+          storage: false,
+          value: StateValue.newCell({
+            value: _descriptor_3.toValue(5n),
+            alignment: _descriptor_3.alignment()
+          }).encode()
+        } },
+        { push: {
+          storage: true,
+          value: StateValue.newCell({
+            value: _descriptor_0.toValue(new Uint8Array(32)),
+            alignment: _descriptor_0.alignment()
           }).encode()
         } },
         { ins: { cached: false, n: 1 } }
@@ -67564,6 +67925,10 @@ var Contract = class {
   }
   _persistentHash_0(value_0) {
     const result_0 = persistentHash3(_descriptor_4, value_0);
+    return result_0;
+  }
+  _persistentHash_1(value_0) {
+    const result_0 = persistentHash3(_descriptor_5, value_0);
     return result_0;
   }
   _persistentCommit_0(value_0, rand_0) {
@@ -67601,7 +67966,7 @@ var Contract = class {
       typeError(
         "wCondition",
         "return value",
-        "cohort.compact line 6 char 1",
+        "cohort.compact line 5 char 1",
         "Boolean",
         result_0
       );
@@ -67620,7 +67985,7 @@ var Contract = class {
       typeError(
         "wMedication",
         "return value",
-        "cohort.compact line 7 char 1",
+        "cohort.compact line 6 char 1",
         "Boolean",
         result_0
       );
@@ -67639,7 +68004,7 @@ var Contract = class {
       typeError(
         "wSecret",
         "return value",
-        "cohort.compact line 8 char 1",
+        "cohort.compact line 7 char 1",
         "Bytes<32>",
         result_0
       );
@@ -67658,6 +68023,25 @@ var Contract = class {
       typeError(
         "wBlind",
         "return value",
+        "cohort.compact line 8 char 1",
+        "Bytes<32>",
+        result_0
+      );
+    }
+    partialProofData.privateTranscriptOutputs.push({
+      value: _descriptor_0.toValue(result_0),
+      alignment: _descriptor_0.alignment()
+    });
+    return result_0;
+  }
+  _wHolderSecret_0(context6, partialProofData) {
+    const witnessContext_0 = createWitnessContext(ledger(context6.currentQueryContext.state), context6.currentPrivateState, context6.currentQueryContext.address);
+    const [nextPrivateState_0, result_0] = this.witnesses.wHolderSecret(witnessContext_0);
+    context6.currentPrivateState = nextPrivateState_0;
+    if (!(result_0.buffer instanceof ArrayBuffer && result_0.BYTES_PER_ELEMENT === 1 && result_0.length === 32)) {
+      typeError(
+        "wHolderSecret",
+        "return value",
         "cohort.compact line 9 char 1",
         "Bytes<32>",
         result_0
@@ -67669,8 +68053,100 @@ var Contract = class {
     });
     return result_0;
   }
+  _wNonce_0(context6, partialProofData) {
+    const witnessContext_0 = createWitnessContext(ledger(context6.currentQueryContext.state), context6.currentPrivateState, context6.currentQueryContext.address);
+    const [nextPrivateState_0, result_0] = this.witnesses.wNonce(witnessContext_0);
+    context6.currentPrivateState = nextPrivateState_0;
+    if (!(result_0.buffer instanceof ArrayBuffer && result_0.BYTES_PER_ELEMENT === 1 && result_0.length === 32)) {
+      typeError(
+        "wNonce",
+        "return value",
+        "cohort.compact line 10 char 1",
+        "Bytes<32>",
+        result_0
+      );
+    }
+    partialProofData.privateTranscriptOutputs.push({
+      value: _descriptor_0.toValue(result_0),
+      alignment: _descriptor_0.alignment()
+    });
+    return result_0;
+  }
+  _wIssuerSecret_0(context6, partialProofData) {
+    const witnessContext_0 = createWitnessContext(ledger(context6.currentQueryContext.state), context6.currentPrivateState, context6.currentQueryContext.address);
+    const [nextPrivateState_0, result_0] = this.witnesses.wIssuerSecret(witnessContext_0);
+    context6.currentPrivateState = nextPrivateState_0;
+    if (!(result_0.buffer instanceof ArrayBuffer && result_0.BYTES_PER_ELEMENT === 1 && result_0.length === 32)) {
+      typeError(
+        "wIssuerSecret",
+        "return value",
+        "cohort.compact line 11 char 1",
+        "Bytes<32>",
+        result_0
+      );
+    }
+    partialProofData.privateTranscriptOutputs.push({
+      value: _descriptor_0.toValue(result_0),
+      alignment: _descriptor_0.alignment()
+    });
+    return result_0;
+  }
+  _initIssuer_0(context6, partialProofData, id_0) {
+    assert3(
+      this._equal_0(
+        _descriptor_0.fromValue(queryLedgerState(
+          context6,
+          partialProofData,
+          [
+            { dup: { n: 0 } },
+            { idx: {
+              cached: false,
+              pushPath: false,
+              path: [
+                {
+                  tag: "value",
+                  value: {
+                    value: _descriptor_3.toValue(5n),
+                    alignment: _descriptor_3.alignment()
+                  }
+                }
+              ]
+            } },
+            { popeq: {
+              cached: false,
+              result: void 0
+            } }
+          ]
+        ).value),
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+      ),
+      "issuer already initialized"
+    );
+    queryLedgerState(
+      context6,
+      partialProofData,
+      [
+        { push: {
+          storage: false,
+          value: StateValue.newCell({
+            value: _descriptor_3.toValue(5n),
+            alignment: _descriptor_3.alignment()
+          }).encode()
+        } },
+        { push: {
+          storage: true,
+          value: StateValue.newCell({
+            value: _descriptor_0.toValue(id_0),
+            alignment: _descriptor_0.alignment()
+          }).encode()
+        } },
+        { ins: { cached: false, n: 1 } }
+      ]
+    );
+    return true;
+  }
   _trialNullifier_0(trialId_0, sk_0) {
-    return this._persistentHash_0([
+    return this._persistentHash_1([
       new Uint8Array([99, 111, 104, 111, 114, 116, 58, 114, 101, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
       trialId_0,
       sk_0
@@ -67833,6 +68309,481 @@ var Contract = class {
     );
     return true;
   }
+  _attestationOf_0(age_0, cond_0, med_0, holderSecret_0, nonce_0) {
+    const attrsHash_0 = this._persistentHash_0([
+      new Uint8Array([99, 111, 104, 111, 114, 116, 58, 97, 116, 116, 114, 115, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+      age_0,
+      cond_0,
+      med_0
+    ]);
+    const binding_0 = this._persistentHash_1([
+      new Uint8Array([99, 111, 104, 111, 114, 116, 58, 104, 111, 108, 100, 101, 114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+      holderSecret_0,
+      nonce_0
+    ]);
+    return this._persistentCommit_0(attrsHash_0, binding_0);
+  }
+  _issuerIdOf_0(secret_0) {
+    return secret_0;
+  }
+  _attest_0(context6, partialProofData, attestation_0) {
+    assert3(
+      this._equal_1(
+        this._wIssuerSecret_0(
+          context6,
+          partialProofData
+        ),
+        _descriptor_0.fromValue(queryLedgerState(
+          context6,
+          partialProofData,
+          [
+            { dup: { n: 0 } },
+            { idx: {
+              cached: false,
+              pushPath: false,
+              path: [
+                {
+                  tag: "value",
+                  value: {
+                    value: _descriptor_3.toValue(5n),
+                    alignment: _descriptor_3.alignment()
+                  }
+                }
+              ]
+            } },
+            { popeq: {
+              cached: false,
+              result: void 0
+            } }
+          ]
+        ).value)
+      ),
+      "not the issuer"
+    );
+    assert3(
+      !_descriptor_1.fromValue(queryLedgerState(
+        context6,
+        partialProofData,
+        [
+          { dup: { n: 0 } },
+          { idx: {
+            cached: false,
+            pushPath: false,
+            path: [
+              {
+                tag: "value",
+                value: {
+                  value: _descriptor_3.toValue(3n),
+                  alignment: _descriptor_3.alignment()
+                }
+              }
+            ]
+          } },
+          { push: {
+            storage: false,
+            value: StateValue.newCell({
+              value: _descriptor_0.toValue(attestation_0),
+              alignment: _descriptor_0.alignment()
+            }).encode()
+          } },
+          "member",
+          { popeq: {
+            cached: true,
+            result: void 0
+          } }
+        ]
+      ).value),
+      "attestation already published"
+    );
+    queryLedgerState(
+      context6,
+      partialProofData,
+      [
+        { idx: {
+          cached: false,
+          pushPath: true,
+          path: [
+            {
+              tag: "value",
+              value: {
+                value: _descriptor_3.toValue(3n),
+                alignment: _descriptor_3.alignment()
+              }
+            }
+          ]
+        } },
+        { push: {
+          storage: false,
+          value: StateValue.newCell({
+            value: _descriptor_0.toValue(attestation_0),
+            alignment: _descriptor_0.alignment()
+          }).encode()
+        } },
+        { push: {
+          storage: true,
+          value: StateValue.newNull().encode()
+        } },
+        { ins: { cached: false, n: 1 } },
+        { ins: { cached: true, n: 1 } }
+      ]
+    );
+    return true;
+  }
+  _attestWithAttributes_0(context6, partialProofData, age_0, cond_0, med_0, holderSecret_0, nonce_0) {
+    assert3(
+      this._equal_2(
+        this._wIssuerSecret_0(
+          context6,
+          partialProofData
+        ),
+        _descriptor_0.fromValue(queryLedgerState(
+          context6,
+          partialProofData,
+          [
+            { dup: { n: 0 } },
+            { idx: {
+              cached: false,
+              pushPath: false,
+              path: [
+                {
+                  tag: "value",
+                  value: {
+                    value: _descriptor_3.toValue(5n),
+                    alignment: _descriptor_3.alignment()
+                  }
+                }
+              ]
+            } },
+            { popeq: {
+              cached: false,
+              result: void 0
+            } }
+          ]
+        ).value)
+      ),
+      "not the issuer"
+    );
+    const att_0 = this._attestationOf_0(
+      age_0,
+      cond_0,
+      med_0,
+      holderSecret_0,
+      nonce_0
+    );
+    assert3(
+      !_descriptor_1.fromValue(queryLedgerState(
+        context6,
+        partialProofData,
+        [
+          { dup: { n: 0 } },
+          { idx: {
+            cached: false,
+            pushPath: false,
+            path: [
+              {
+                tag: "value",
+                value: {
+                  value: _descriptor_3.toValue(3n),
+                  alignment: _descriptor_3.alignment()
+                }
+              }
+            ]
+          } },
+          { push: {
+            storage: false,
+            value: StateValue.newCell({
+              value: _descriptor_0.toValue(att_0),
+              alignment: _descriptor_0.alignment()
+            }).encode()
+          } },
+          "member",
+          { popeq: {
+            cached: true,
+            result: void 0
+          } }
+        ]
+      ).value),
+      "attestation already published"
+    );
+    queryLedgerState(
+      context6,
+      partialProofData,
+      [
+        { idx: {
+          cached: false,
+          pushPath: true,
+          path: [
+            {
+              tag: "value",
+              value: {
+                value: _descriptor_3.toValue(3n),
+                alignment: _descriptor_3.alignment()
+              }
+            }
+          ]
+        } },
+        { push: {
+          storage: false,
+          value: StateValue.newCell({
+            value: _descriptor_0.toValue(att_0),
+            alignment: _descriptor_0.alignment()
+          }).encode()
+        } },
+        { push: {
+          storage: true,
+          value: StateValue.newNull().encode()
+        } },
+        { ins: { cached: false, n: 1 } },
+        { ins: { cached: true, n: 1 } }
+      ]
+    );
+    return true;
+  }
+  _proveAttested_0(context6, partialProofData, trialId_0, minAge_0, maxAge_0, requireCondition_0, forbidMedication_0) {
+    const age_0 = this._wAge_0(context6, partialProofData);
+    const cond_0 = this._wCondition_0(context6, partialProofData);
+    const med_0 = this._wMedication_0(context6, partialProofData);
+    const att_0 = this._attestationOf_0(
+      age_0,
+      cond_0,
+      med_0,
+      this._wHolderSecret_0(
+        context6,
+        partialProofData
+      ),
+      this._wNonce_0(context6, partialProofData)
+    );
+    assert3(
+      _descriptor_1.fromValue(queryLedgerState(
+        context6,
+        partialProofData,
+        [
+          { dup: { n: 0 } },
+          { idx: {
+            cached: false,
+            pushPath: false,
+            path: [
+              {
+                tag: "value",
+                value: {
+                  value: _descriptor_3.toValue(3n),
+                  alignment: _descriptor_3.alignment()
+                }
+              }
+            ]
+          } },
+          { push: {
+            storage: false,
+            value: StateValue.newCell({
+              value: _descriptor_0.toValue(att_0),
+              alignment: _descriptor_0.alignment()
+            }).encode()
+          } },
+          "member",
+          { popeq: {
+            cached: true,
+            result: void 0
+          } }
+        ]
+      ).value),
+      "no issuer attestation for these attributes"
+    );
+    const attNul_0 = this._persistentHash_1([
+      new Uint8Array([99, 111, 104, 111, 114, 116, 58, 97, 116, 116, 110, 117, 108, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+      trialId_0,
+      att_0
+    ]);
+    assert3(
+      !_descriptor_1.fromValue(queryLedgerState(
+        context6,
+        partialProofData,
+        [
+          { dup: { n: 0 } },
+          { idx: {
+            cached: false,
+            pushPath: false,
+            path: [
+              {
+                tag: "value",
+                value: {
+                  value: _descriptor_3.toValue(0n),
+                  alignment: _descriptor_3.alignment()
+                }
+              }
+            ]
+          } },
+          { push: {
+            storage: false,
+            value: StateValue.newCell({
+              value: _descriptor_0.toValue(attNul_0),
+              alignment: _descriptor_0.alignment()
+            }).encode()
+          } },
+          "member",
+          { popeq: {
+            cached: true,
+            result: void 0
+          } }
+        ]
+      ).value),
+      "attestation already used for this trial"
+    );
+    assert3(age_0 >= minAge_0, "too young");
+    assert3(age_0 <= maxAge_0, "too old");
+    if (requireCondition_0) {
+      assert3(cond_0, "missing condition");
+    }
+    if (forbidMedication_0) {
+      assert3(!med_0, "medication excluded");
+    }
+    queryLedgerState(
+      context6,
+      partialProofData,
+      [
+        { idx: {
+          cached: false,
+          pushPath: true,
+          path: [
+            {
+              tag: "value",
+              value: {
+                value: _descriptor_3.toValue(0n),
+                alignment: _descriptor_3.alignment()
+              }
+            }
+          ]
+        } },
+        { push: {
+          storage: false,
+          value: StateValue.newCell({
+            value: _descriptor_0.toValue(attNul_0),
+            alignment: _descriptor_0.alignment()
+          }).encode()
+        } },
+        { push: {
+          storage: true,
+          value: StateValue.newNull().encode()
+        } },
+        { ins: { cached: false, n: 1 } },
+        { ins: { cached: true, n: 1 } }
+      ]
+    );
+    const referral_0 = this._persistentCommit_0(
+      this._wSecret_0(
+        context6,
+        partialProofData
+      ),
+      this._wBlind_0(
+        context6,
+        partialProofData
+      )
+    );
+    queryLedgerState(
+      context6,
+      partialProofData,
+      [
+        { idx: {
+          cached: false,
+          pushPath: true,
+          path: [
+            {
+              tag: "value",
+              value: {
+                value: _descriptor_3.toValue(1n),
+                alignment: _descriptor_3.alignment()
+              }
+            }
+          ]
+        } },
+        { push: {
+          storage: false,
+          value: StateValue.newCell({
+            value: _descriptor_0.toValue(referral_0),
+            alignment: _descriptor_0.alignment()
+          }).encode()
+        } },
+        { push: {
+          storage: true,
+          value: StateValue.newNull().encode()
+        } },
+        { ins: { cached: false, n: 1 } },
+        { ins: { cached: true, n: 1 } }
+      ]
+    );
+    const tmp_0 = 1n;
+    queryLedgerState(
+      context6,
+      partialProofData,
+      [
+        { idx: {
+          cached: false,
+          pushPath: true,
+          path: [
+            {
+              tag: "value",
+              value: {
+                value: _descriptor_3.toValue(2n),
+                alignment: _descriptor_3.alignment()
+              }
+            }
+          ]
+        } },
+        { addi: { immediate: parseInt(valueToBigInt(
+          {
+            value: _descriptor_2.toValue(tmp_0),
+            alignment: _descriptor_2.alignment()
+          }.value
+        )) } },
+        { ins: { cached: true, n: 1 } }
+      ]
+    );
+    const tmp_1 = 1n;
+    queryLedgerState(
+      context6,
+      partialProofData,
+      [
+        { idx: {
+          cached: false,
+          pushPath: true,
+          path: [
+            {
+              tag: "value",
+              value: {
+                value: _descriptor_3.toValue(4n),
+                alignment: _descriptor_3.alignment()
+              }
+            }
+          ]
+        } },
+        { addi: { immediate: parseInt(valueToBigInt(
+          {
+            value: _descriptor_2.toValue(tmp_1),
+            alignment: _descriptor_2.alignment()
+          }.value
+        )) } },
+        { ins: { cached: true, n: 1 } }
+      ]
+    );
+    return true;
+  }
+  _equal_0(x0, y0) {
+    if (!x0.every((x, i) => y0[i] === x)) {
+      return false;
+    }
+    return true;
+  }
+  _equal_1(x0, y0) {
+    if (!x0.every((x, i) => y0[i] === x)) {
+      return false;
+    }
+    return true;
+  }
+  _equal_2(x0, y0) {
+    if (!x0.every((x, i) => y0[i] === x)) {
+      return false;
+    }
+    return true;
+  }
 };
 function ledger(stateOrChargedState) {
   const state = stateOrChargedState instanceof StateValue ? stateOrChargedState : stateOrChargedState.state;
@@ -67875,8 +68826,8 @@ function ledger(stateOrChargedState) {
             { push: {
               storage: false,
               value: StateValue.newCell({
-                value: _descriptor_5.toValue(0n),
-                alignment: _descriptor_5.alignment()
+                value: _descriptor_6.toValue(0n),
+                alignment: _descriptor_6.alignment()
               }).encode()
             } },
             "eq",
@@ -67891,7 +68842,7 @@ function ledger(stateOrChargedState) {
         if (args_0.length !== 0) {
           throw new CompactError(`size: expected 0 arguments, received ${args_0.length}`);
         }
-        return _descriptor_5.fromValue(queryLedgerState(
+        return _descriptor_6.fromValue(queryLedgerState(
           context6,
           partialProofData,
           [
@@ -67926,7 +68877,7 @@ function ledger(stateOrChargedState) {
           typeError(
             "member",
             "argument 1",
-            "cohort.compact line 11 char 1",
+            "cohort.compact line 13 char 1",
             "Bytes<32>",
             elem_0
           );
@@ -67999,8 +68950,8 @@ function ledger(stateOrChargedState) {
             { push: {
               storage: false,
               value: StateValue.newCell({
-                value: _descriptor_5.toValue(0n),
-                alignment: _descriptor_5.alignment()
+                value: _descriptor_6.toValue(0n),
+                alignment: _descriptor_6.alignment()
               }).encode()
             } },
             "eq",
@@ -68015,7 +68966,7 @@ function ledger(stateOrChargedState) {
         if (args_0.length !== 0) {
           throw new CompactError(`size: expected 0 arguments, received ${args_0.length}`);
         }
-        return _descriptor_5.fromValue(queryLedgerState(
+        return _descriptor_6.fromValue(queryLedgerState(
           context6,
           partialProofData,
           [
@@ -68050,7 +69001,7 @@ function ledger(stateOrChargedState) {
           typeError(
             "member",
             "argument 1",
-            "cohort.compact line 12 char 1",
+            "cohort.compact line 14 char 1",
             "Bytes<32>",
             elem_0
           );
@@ -68097,7 +69048,7 @@ function ledger(stateOrChargedState) {
       }
     },
     get proven() {
-      return _descriptor_5.fromValue(queryLedgerState(
+      return _descriptor_6.fromValue(queryLedgerState(
         context6,
         partialProofData,
         [
@@ -68121,6 +69072,182 @@ function ledger(stateOrChargedState) {
           } }
         ]
       ).value);
+    },
+    attestations: {
+      isEmpty(...args_0) {
+        if (args_0.length !== 0) {
+          throw new CompactError(`isEmpty: expected 0 arguments, received ${args_0.length}`);
+        }
+        return _descriptor_1.fromValue(queryLedgerState(
+          context6,
+          partialProofData,
+          [
+            { dup: { n: 0 } },
+            { idx: {
+              cached: false,
+              pushPath: false,
+              path: [
+                {
+                  tag: "value",
+                  value: {
+                    value: _descriptor_3.toValue(3n),
+                    alignment: _descriptor_3.alignment()
+                  }
+                }
+              ]
+            } },
+            "size",
+            { push: {
+              storage: false,
+              value: StateValue.newCell({
+                value: _descriptor_6.toValue(0n),
+                alignment: _descriptor_6.alignment()
+              }).encode()
+            } },
+            "eq",
+            { popeq: {
+              cached: true,
+              result: void 0
+            } }
+          ]
+        ).value);
+      },
+      size(...args_0) {
+        if (args_0.length !== 0) {
+          throw new CompactError(`size: expected 0 arguments, received ${args_0.length}`);
+        }
+        return _descriptor_6.fromValue(queryLedgerState(
+          context6,
+          partialProofData,
+          [
+            { dup: { n: 0 } },
+            { idx: {
+              cached: false,
+              pushPath: false,
+              path: [
+                {
+                  tag: "value",
+                  value: {
+                    value: _descriptor_3.toValue(3n),
+                    alignment: _descriptor_3.alignment()
+                  }
+                }
+              ]
+            } },
+            "size",
+            { popeq: {
+              cached: true,
+              result: void 0
+            } }
+          ]
+        ).value);
+      },
+      member(...args_0) {
+        if (args_0.length !== 1) {
+          throw new CompactError(`member: expected 1 argument, received ${args_0.length}`);
+        }
+        const elem_0 = args_0[0];
+        if (!(elem_0.buffer instanceof ArrayBuffer && elem_0.BYTES_PER_ELEMENT === 1 && elem_0.length === 32)) {
+          typeError(
+            "member",
+            "argument 1",
+            "cohort.compact line 16 char 1",
+            "Bytes<32>",
+            elem_0
+          );
+        }
+        return _descriptor_1.fromValue(queryLedgerState(
+          context6,
+          partialProofData,
+          [
+            { dup: { n: 0 } },
+            { idx: {
+              cached: false,
+              pushPath: false,
+              path: [
+                {
+                  tag: "value",
+                  value: {
+                    value: _descriptor_3.toValue(3n),
+                    alignment: _descriptor_3.alignment()
+                  }
+                }
+              ]
+            } },
+            { push: {
+              storage: false,
+              value: StateValue.newCell({
+                value: _descriptor_0.toValue(elem_0),
+                alignment: _descriptor_0.alignment()
+              }).encode()
+            } },
+            "member",
+            { popeq: {
+              cached: true,
+              result: void 0
+            } }
+          ]
+        ).value);
+      },
+      [Symbol.iterator](...args_0) {
+        if (args_0.length !== 0) {
+          throw new CompactError(`iter: expected 0 arguments, received ${args_0.length}`);
+        }
+        const self_0 = state.asArray()[3];
+        return self_0.asMap().keys().map((elem) => _descriptor_0.fromValue(elem.value))[Symbol.iterator]();
+      }
+    },
+    get attestationsVerified() {
+      return _descriptor_6.fromValue(queryLedgerState(
+        context6,
+        partialProofData,
+        [
+          { dup: { n: 0 } },
+          { idx: {
+            cached: false,
+            pushPath: false,
+            path: [
+              {
+                tag: "value",
+                value: {
+                  value: _descriptor_3.toValue(4n),
+                  alignment: _descriptor_3.alignment()
+                }
+              }
+            ]
+          } },
+          { popeq: {
+            cached: true,
+            result: void 0
+          } }
+        ]
+      ).value);
+    },
+    get issuerId() {
+      return _descriptor_0.fromValue(queryLedgerState(
+        context6,
+        partialProofData,
+        [
+          { dup: { n: 0 } },
+          { idx: {
+            cached: false,
+            pushPath: false,
+            path: [
+              {
+                tag: "value",
+                value: {
+                  value: _descriptor_3.toValue(5n),
+                  alignment: _descriptor_3.alignment()
+                }
+              }
+            ]
+          } },
+          { popeq: {
+            cached: false,
+            result: void 0
+          } }
+        ]
+      ).value);
     }
   };
 }
@@ -68132,8 +69259,91 @@ var _dummyContract = new Contract({
   wCondition: (...args2) => void 0,
   wMedication: (...args2) => void 0,
   wSecret: (...args2) => void 0,
-  wBlind: (...args2) => void 0
+  wBlind: (...args2) => void 0,
+  wHolderSecret: (...args2) => void 0,
+  wNonce: (...args2) => void 0,
+  wIssuerSecret: (...args2) => void 0
 });
+var pureCircuits = {
+  attestationOf: (...args_0) => {
+    if (args_0.length !== 5) {
+      throw new CompactError(`attestationOf: expected 5 arguments (as invoked from Typescript), received ${args_0.length}`);
+    }
+    const age_0 = args_0[0];
+    const cond_0 = args_0[1];
+    const med_0 = args_0[2];
+    const holderSecret_0 = args_0[3];
+    const nonce_0 = args_0[4];
+    if (!(typeof age_0 === "bigint" && age_0 >= 0n && age_0 <= 255n)) {
+      typeError(
+        "attestationOf",
+        "argument 1",
+        "cohort.compact line 86 char 1",
+        "Uint<0..256>",
+        age_0
+      );
+    }
+    if (!(typeof cond_0 === "boolean")) {
+      typeError(
+        "attestationOf",
+        "argument 2",
+        "cohort.compact line 86 char 1",
+        "Boolean",
+        cond_0
+      );
+    }
+    if (!(typeof med_0 === "boolean")) {
+      typeError(
+        "attestationOf",
+        "argument 3",
+        "cohort.compact line 86 char 1",
+        "Boolean",
+        med_0
+      );
+    }
+    if (!(holderSecret_0.buffer instanceof ArrayBuffer && holderSecret_0.BYTES_PER_ELEMENT === 1 && holderSecret_0.length === 32)) {
+      typeError(
+        "attestationOf",
+        "argument 4",
+        "cohort.compact line 86 char 1",
+        "Bytes<32>",
+        holderSecret_0
+      );
+    }
+    if (!(nonce_0.buffer instanceof ArrayBuffer && nonce_0.BYTES_PER_ELEMENT === 1 && nonce_0.length === 32)) {
+      typeError(
+        "attestationOf",
+        "argument 5",
+        "cohort.compact line 86 char 1",
+        "Bytes<32>",
+        nonce_0
+      );
+    }
+    return _dummyContract._attestationOf_0(
+      age_0,
+      cond_0,
+      med_0,
+      holderSecret_0,
+      nonce_0
+    );
+  },
+  issuerIdOf: (...args_0) => {
+    if (args_0.length !== 1) {
+      throw new CompactError(`issuerIdOf: expected 1 argument (as invoked from Typescript), received ${args_0.length}`);
+    }
+    const secret_0 = args_0[0];
+    if (!(secret_0.buffer instanceof ArrayBuffer && secret_0.BYTES_PER_ELEMENT === 1 && secret_0.length === 32)) {
+      typeError(
+        "issuerIdOf",
+        "argument 1",
+        "cohort.compact line 111 char 1",
+        "Bytes<32>",
+        secret_0
+      );
+    }
+    return _dummyContract._issuerIdOf_0(secret_0);
+  }
+};
 
 // packages/dapp/src/env.mjs
 init_dirname();
@@ -68200,25 +69410,25 @@ function configureNetwork(networkId = "preprod") {
   setNetworkId(networkId);
   return networkId;
 }
-function createPublicDataProvider({ indexerUrl, indexerWsUrl }) {
-  if (!indexerUrl || !indexerWsUrl) {
+function createPublicDataProvider({ indexerUrl: indexerUrl2, indexerWsUrl }) {
+  if (!indexerUrl2 || !indexerWsUrl) {
     throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, "Indexer URLs are required for public state.");
   }
-  indexerUrl = withProjectId(indexerUrl);
+  indexerUrl2 = withProjectId(indexerUrl2);
   indexerWsUrl = withProjectId(indexerWsUrl);
-  if (isBlockfrostUrl(indexerUrl) && !blockfrostTokenConfigured()) {
+  if (isBlockfrostUrl(indexerUrl2) && !blockfrostTokenConfigured()) {
     throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, blockfrostTokenMissingReason());
   }
-  return indexerPublicDataProvider(indexerUrl, indexerWsUrl);
+  return indexerPublicDataProvider(indexerUrl2, indexerWsUrl);
 }
 async function readPublicVerification({
   contractAddress = PROVE_ELIGIBLE_CLAIMS.contractAddress,
-  indexerUrl = env3("MIDNIGHT_INDEXER_URL", blockfrostIndexerUrl()),
+  indexerUrl: indexerUrl2 = env3("MIDNIGHT_INDEXER_URL", blockfrostIndexerUrl()),
   indexerWsUrl = env3("MIDNIGHT_INDEXER_WS_URL", blockfrostIndexerWsUrl()),
   networkId = env3("MIDNIGHT_NETWORK", "preprod")
 } = {}) {
   configureNetwork(networkId);
-  const provider = createPublicDataProvider({ indexerUrl, indexerWsUrl });
+  const provider = createPublicDataProvider({ indexerUrl: indexerUrl2, indexerWsUrl });
   const hex = contractAddress.startsWith("0x") ? contractAddress : contractAddress;
   const state = await provider.queryContractState(hex);
   if (!state) {
@@ -72129,17 +73339,17 @@ async function createCallProviders(input) {
   const walletAndMidnight = connectorWalletProviders(api, shieldedAddresses);
   const accountId = String(shieldedAddresses.shieldedCoinPublicKey || "cohort-session");
   const password = sessionStoragePassword();
-  let indexerUrl = input.indexerUrl || env3("MIDNIGHT_INDEXER_URL", blockfrostIndexerUrl());
+  let indexerUrl2 = input.indexerUrl || env3("MIDNIGHT_INDEXER_URL", blockfrostIndexerUrl());
   let indexerWsUrl = input.indexerWsUrl || env3("MIDNIGHT_INDEXER_WS_URL", blockfrostIndexerWsUrl());
   if (typeof api.getConfiguration === "function") {
     try {
       const cfg = await api.getConfiguration();
-      if (isMidnightPublicIndexer(cfg?.indexerUri)) indexerUrl = cfg.indexerUri;
+      if (isMidnightPublicIndexer(cfg?.indexerUri)) indexerUrl2 = cfg.indexerUri;
       if (isMidnightPublicIndexer(cfg?.indexerWsUri)) indexerWsUrl = cfg.indexerWsUri;
     } catch {
     }
   }
-  indexerUrl = withProjectId(indexerUrl);
+  indexerUrl2 = withProjectId(indexerUrl2);
   indexerWsUrl = withProjectId(indexerWsUrl);
   const privateStateProvider = levelPrivateStateProvider({
     midnightDbName: isNode2() ? `midnight-level-db-cohort-${Date.now()}` : "midnight-level-db-cohort",
@@ -72150,7 +73360,7 @@ async function createCallProviders(input) {
   privateStateProvider.setContractAddress(contractAddress);
   return {
     privateStateProvider,
-    publicDataProvider: createPublicDataProvider({ indexerUrl, indexerWsUrl }),
+    publicDataProvider: createPublicDataProvider({ indexerUrl: indexerUrl2, indexerWsUrl }),
     zkConfigProvider,
     proofProvider,
     walletProvider: walletAndMidnight,
@@ -72407,7 +73617,7 @@ init_buffer2();
 init_process2();
 async function getTransactionStatus({
   txId,
-  indexerUrl = env3("MIDNIGHT_INDEXER_URL", blockfrostIndexerUrl()),
+  indexerUrl: indexerUrl2 = env3("MIDNIGHT_INDEXER_URL", blockfrostIndexerUrl()),
   indexerWsUrl = env3("MIDNIGHT_INDEXER_WS_URL", blockfrostIndexerWsUrl()),
   networkId = env3("MIDNIGHT_NETWORK", "preprod")
 } = {}) {
@@ -72415,7 +73625,7 @@ async function getTransactionStatus({
     throw new CohortError(ErrorCode.TX_UNCONFIRMED, "txId is required.");
   }
   configureNetwork(networkId);
-  const provider = createPublicDataProvider({ indexerUrl, indexerWsUrl });
+  const provider = createPublicDataProvider({ indexerUrl: indexerUrl2, indexerWsUrl });
   try {
     const data = await provider.watchForTxData(txId);
     return {
@@ -72452,7 +73662,8 @@ async function getReferralState(opts = {}) {
     throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, "Optional public referral cache is unavailable.");
   }
   const body = await res.json();
-  return { ...body, source: "cohort-memory-cache", notIndexerTruth: true };
+  const { events } = body;
+  return { events: Array.isArray(events) ? events : [], source: "cohort-memory-cache", notIndexerTruth: true };
 }
 var CohortDapp = Object.freeze({
   pins: PUBLIC_NETWORK_PINS,
@@ -72472,8 +73683,331 @@ var CohortDapp = Object.freeze({
   encodeTrialId,
   configureNetwork
 });
+
+// packages/dapp/src/wallets.mjs
+init_dirname();
+init_buffer2();
+init_process2();
+var WALLET_IDS = ["gero", "1am", "lace"];
+var LACE_NO_PROVING_MESSAGE = "Lace is detected, but Lace does not implement in-browser proving: it exposes no getProvingProvider (Docker proof-server path only). COHORT does not route proving flows through Lace.";
+var GERO_CLOUD_PROVING_NOTE = "GeroWallet routes zero-knowledge proving through Gero Cloud by default: witness data leaves the device. For clinical-trial data use Gero's local proof-server switch or 1AM (in-extension proving, witnesses stay local).";
+var GERO_NOT_INSTALLED_MESSAGE = "GeroWallet is not injected in this browser. Install the GeroWallet extension (2.7.x), create or import a Midnight wallet (passkey unlock is supported), then refresh this tab.";
+function midnightGlobal2() {
+  if (typeof globalThis === "undefined") return null;
+  return globalThis.window?.midnight || globalThis.midnight || null;
+}
+function classifyWalletId(injectKey, api) {
+  const hay = `${String(injectKey || "")} ${String(api?.rdns || "")} ${String(api?.name || "")}`.toLowerCase();
+  if (hay.includes("gero")) return "gero";
+  if (injectKey === "1am" || hay.includes("1am") || hay.includes("com.midnight.1am")) return "1am";
+  if (injectKey === "mnLace" || hay.includes("lace") || hay.includes("io.lace")) return "lace";
+  return null;
+}
+function findInjectedWallet(id, midnight) {
+  const mid = midnight === void 0 ? midnightGlobal2() : midnight;
+  if (!mid || typeof mid !== "object") return null;
+  if (id === "lace" && mid.mnLace) return mid.mnLace;
+  for (const [key, api] of Object.entries(mid)) {
+    if (api && typeof api === "object" && classifyWalletId(key, api) === id) return api;
+  }
+  return null;
+}
+function isConnectable(api) {
+  return Boolean(api) && (typeof api.connect === "function" || typeof api.enable === "function");
+}
+function hasProvingHook(api) {
+  return Boolean(api) && typeof api.getProvingProvider === "function";
+}
+function detectWallets({ midnight } = {}) {
+  const mid = midnight === void 0 ? midnightGlobal2() : midnight;
+  const gero = findInjectedWallet("gero", mid);
+  const oneAm = findInjectedWallet("1am", mid);
+  const lace = findInjectedWallet("lace", mid);
+  return [
+    { id: "gero", available: isConnectable(gero), proving: hasProvingHook(gero) },
+    { id: "1am", available: isConnectable(oneAm), proving: hasProvingHook(oneAm) },
+    { id: "lace", available: isConnectable(lace), proving: false }
+  ];
+}
+function preferredWalletId({ midnight } = {}) {
+  const rows = detectWallets({ midnight });
+  const gero = rows[0];
+  const oneAm = rows[1];
+  if (gero.available && gero.proving) return "gero";
+  if (oneAm.available && oneAm.proving) return "1am";
+  return null;
+}
+async function connectGeroWallet({ networkId = "preprod", midnight } = {}) {
+  const mid = midnight === void 0 ? midnightGlobal2() : midnight;
+  const api = findInjectedWallet("gero", mid);
+  if (!isConnectable(api)) {
+    throw new CohortError(ErrorCode.WALLET_UNAVAILABLE, GERO_NOT_INSTALLED_MESSAGE);
+  }
+  const connected = typeof api.connect === "function" ? await api.connect(networkId) : await api.enable();
+  if (!connected || typeof connected !== "object") {
+    throw new CohortError(ErrorCode.WALLET_UNAVAILABLE, "GeroWallet did not return a connected API.");
+  }
+  const proving = typeof connected.getProvingProvider === "function";
+  if (!proving) {
+    throw new CohortError(
+      ErrorCode.WALLET_NO_PROVING,
+      "GeroWallet connected but did not expose getProvingProvider. Use 1AM for this flow."
+    );
+  }
+  return { id: "gero", api: connected, networkId, proving: true, trustNote: GERO_CLOUD_PROVING_NOTE };
+}
+async function connectWallet2(id, { networkId = "preprod", midnight } = {}) {
+  switch (id) {
+    case "gero":
+      return connectGeroWallet({ networkId, midnight });
+    case "1am":
+      return { id: "1am", ...await connectWallet({ networkId, preferred: "1am" }) };
+    case "lace":
+      throw new CohortError(ErrorCode.WALLET_NO_PROVING, LACE_NO_PROVING_MESSAGE);
+    default:
+      throw new CohortError(
+        ErrorCode.WALLET_UNAVAILABLE,
+        `Unknown wallet id '${String(id)}'. Known ids: gero, 1am, lace.`
+      );
+  }
+}
+
+// packages/dapp/src/truth-gate.mjs
+init_dirname();
+init_buffer2();
+init_process2();
+var TRUTH_GATED = Symbol("cohort.truthGated");
+var TRUTH_GATE_DEFAULTS = Object.freeze({
+  pollIntervalMs: 4e3,
+  timeoutMs: 12e4
+});
+var CONTRACT_ACTION_QUERY = `
+query TruthGateContractState($address: HexEncoded!) {
+  contractAction(address: $address) {
+    __typename
+    address
+    state
+    transaction {
+      hash
+      block {
+        height
+      }
+    }
+  }
+}
+`.trim();
+function brand2(result) {
+  Object.defineProperty(result, TRUTH_GATED, {
+    value: true,
+    enumerable: false,
+    writable: false,
+    configurable: false
+  });
+  return result;
+}
+function isClaimedSuccess(result) {
+  return Boolean(
+    result && result[TRUTH_GATED] === true && result.confirmed === true
+  );
+}
+function isClaimedFailure(result) {
+  return Boolean(
+    result && result[TRUTH_GATED] === true && result.confirmed === false
+  );
+}
+function assertClaimedSuccess(result) {
+  if (!isClaimedSuccess(result)) {
+    throw new CohortError(
+      ErrorCode.TX_UNCONFIRMED,
+      "Success UI blocked: no truth-gated ledger confirmation. Await truthGatedCall() and show success only after the on-chain effect is observed.",
+      { cause: result }
+    );
+  }
+  return result;
+}
+function resolveFetch(fetchImpl) {
+  const fn2 = fetchImpl ?? globalThis.fetch;
+  if (typeof fn2 !== "function") {
+    throw new CohortError(
+      ErrorCode.INCOMPATIBLE_RUNTIME,
+      "No fetch implementation available for truth-gate polling."
+    );
+  }
+  return fn2;
+}
+function indexerUrl(indexerUrlOverride) {
+  return indexerUrlOverride ?? env3("MIDNIGHT_INDEXER_URL", blockfrostIndexerUrl());
+}
+function httpError(status, bodyText) {
+  const hint = blockfrostTokenConfigured() ? "" : ` ${blockfrostTokenMissingReason()}.`;
+  return new CohortError(
+    ErrorCode.INDEXER_UNAVAILABLE,
+    `Indexer HTTP ${status}.${hint}`,
+    { cause: new Error(String(bodyText).slice(0, 200)) }
+  );
+}
+async function fetchContractState({
+  contractAddress,
+  fetch: fetchImpl,
+  indexerUrl: indexerUrlOverride
+} = {}) {
+  if (!contractAddress || typeof contractAddress !== "string") {
+    throw new CohortError(ErrorCode.TX_UNCONFIRMED, "contractAddress is required.");
+  }
+  const doFetch = resolveFetch(fetchImpl);
+  const url2 = indexerUrl(indexerUrlOverride);
+  let res;
+  try {
+    res = await doFetch(url2, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: CONTRACT_ACTION_QUERY,
+        variables: { address: contractAddress }
+      })
+    });
+  } catch (err) {
+    throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, "Indexer request failed.", {
+      cause: err
+    });
+  }
+  if (!res || typeof res.ok !== "boolean") {
+    throw new CohortError(
+      ErrorCode.INDEXER_UNAVAILABLE,
+      "Indexer returned an unreadable response."
+    );
+  }
+  if (!res.ok) {
+    const bodyText = await res.text().catch(() => "");
+    throw httpError(res.status, bodyText);
+  }
+  let json;
+  try {
+    json = await res.json();
+  } catch (err) {
+    throw new CohortError(
+      ErrorCode.INDEXER_UNAVAILABLE,
+      "Indexer returned non-JSON.",
+      { cause: err }
+    );
+  }
+  if (json?.errors?.length) {
+    throw new CohortError(
+      ErrorCode.INDEXER_UNAVAILABLE,
+      `Indexer GraphQL error: ${String(json.errors[0]?.message ?? "unknown").slice(0, 200)}`
+    );
+  }
+  const action = json?.data?.contractAction ?? null;
+  if (!action) return null;
+  const tx = action.transaction ?? {};
+  return {
+    contractAddress,
+    actionTypename: action.__typename ?? null,
+    stateHex: typeof action.state === "string" ? action.state : null,
+    transactionHash: typeof tx.hash === "string" ? tx.hash : null,
+    blockHeight: tx.block && Number.isInteger(tx.block.height) ? tx.block.height : null,
+    raw: action
+  };
+}
+var sleep5 = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+async function waitForLedgerEffect({
+  contractAddress,
+  expectedPredicate,
+  txHash = null,
+  pollIntervalMs = TRUTH_GATE_DEFAULTS.pollIntervalMs,
+  timeoutMs = TRUTH_GATE_DEFAULTS.timeoutMs,
+  fetch: fetchImpl,
+  indexerUrl: indexerUrlOverride,
+  onPoll
+} = {}) {
+  if (typeof expectedPredicate !== "function") {
+    throw new CohortError(
+      ErrorCode.TX_UNCONFIRMED,
+      "expectedPredicate must be a function."
+    );
+  }
+  const deadline = Date.now() + Math.max(0, Number(timeoutMs) || 0);
+  let attempts = 0;
+  let lastError = null;
+  for (; ; ) {
+    attempts += 1;
+    let snapshot = null;
+    try {
+      snapshot = await fetchContractState({
+        contractAddress,
+        fetch: fetchImpl,
+        indexerUrl: indexerUrlOverride
+      });
+    } catch (err) {
+      lastError = err;
+    }
+    if (snapshot) {
+      let observed = false;
+      try {
+        observed = Boolean(
+          await expectedPredicate(snapshot, { attempt: attempts, txHash })
+        );
+      } catch (err) {
+        lastError = err;
+      }
+      if (observed) {
+        return brand2({
+          confirmed: true,
+          txHash,
+          observedAtBlock: snapshot.blockHeight,
+          attempts,
+          actionTypename: snapshot.actionTypename,
+          transactionHash: snapshot.transactionHash
+        });
+      }
+    }
+    if (typeof onPoll === "function") {
+      try {
+        await onPoll({ attempt: attempts, snapshot, txHash });
+      } catch {
+      }
+    }
+    if (Date.now() >= deadline) {
+      return brand2({
+        confirmed: false,
+        reason: "timeout",
+        txHash,
+        attempts,
+        lastError: lastError ? String(lastError.message ?? lastError) : null
+      });
+    }
+    const remaining = deadline - Date.now();
+    await sleep5(Math.max(0, Math.min(Number(pollIntervalMs) || 0, remaining)));
+  }
+}
+function normalizeTxHash(submitted) {
+  if (typeof submitted === "string" && submitted.length > 0) return submitted;
+  if (submitted && typeof submitted === "object") {
+    for (const key of ["txHash", "txId", "hash", "identifier"]) {
+      const v = submitted[key];
+      if (typeof v === "string" && v.length > 0) return v;
+    }
+  }
+  return null;
+}
+async function truthGatedCall(txPromise, gateOpts = {}) {
+  const submitted = await txPromise;
+  const txHash = normalizeTxHash(submitted) ?? gateOpts.txHash ?? null;
+  return waitForLedgerEffect({ ...gateOpts, txHash });
+}
 export {
   CohortDapp,
   CohortError,
-  ErrorCode
+  ErrorCode,
+  GERO_CLOUD_PROVING_NOTE,
+  WALLET_IDS,
+  assertClaimedSuccess,
+  connectWallet2 as connectWallet,
+  detectWallets,
+  isClaimedFailure,
+  isClaimedSuccess,
+  preferredWalletId,
+  proveEligibility as proveEligibilityViaWallet,
+  truthGatedCall,
+  waitForLedgerEffect
 };

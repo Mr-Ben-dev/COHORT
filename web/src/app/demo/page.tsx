@@ -342,7 +342,7 @@ function TierTwoCard() {
       walletRef.current = w;
       setWallet({ id: w.id, connectedVia: w.connectedVia });
       if (w.connectedVia === "gero") {
-        const wmod = await import("../../../packages/dapp/src/wallets.mjs");
+        const wmod = await import(/* webpackIgnore: true */ "/dapp/cohort-dapp.js");
         setGeroNote(runner.geroTrustNote(wmod));
       } else {
         setGeroNote(null);

@@ -107,6 +107,25 @@ await esbuild.build({
   ],
 });
 
+// Wave-3: browser bundle of the COMPILED contract (for the in-browser
+// simulator tier). web/ routes load it via webpackIgnore import of
+// /dapp/cohort-contract.js — never via relative ../../../packages paths.
+await esbuild.build({
+  absWorkingDir: root,
+  entryPoints: [path.join(root, 'packages/contract/managed/cohort/contract/index.js')],
+  outfile: path.join(designerDappDir, 'cohort-contract.js'),
+  bundle: true,
+  format: 'esm',
+  platform: 'browser',
+  target: 'es2022',
+  legalComments: 'none',
+  logLevel: 'info',
+  define: {
+    'process.env.NODE_ENV': '"production"',
+  },
+  plugins: [wasmBindgenPlugin(designerDappDir)],
+});
+
 await fs.mkdir(designerDappDir, { recursive: true });
 await fs.copyFile(outFile, path.join(designerDappDir, 'cohort-dapp.js'));
 const wasmNames = ['midnight_onchain_runtime_wasm_bg.wasm', 'midnight_ledger_wasm_bg.wasm'];
