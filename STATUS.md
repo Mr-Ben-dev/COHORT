@@ -53,7 +53,7 @@
 | B4 | Refusal/adversarial tests | b4 worker (this run) | DONE — 7 tests, 7 pass; all 6 refusal paths reject in simulation, labeled demo-issuer; registered in package.json test script | TESTS/attest-adversarial.test.mjs (new), root `package.json` test script, STATUS.md (this row) | none |
 | B5 | Full-ZK compile + verifier SHA record + pins update | 6f153b59 (B5) | DONE | docs/verifier-keys.md (new), scripts/judge-pins.mjs (additive pins + verifyAllVerifierKeys()) | proveEligible verifier SHA byte-identical to Wave-1 pin; 3 new circuits pinned, undeployed |
 | B6 | Proof-server measurement | — | NOT STARTED | — | waits for B5 |
-| B7 | dapp wiring for new circuits | — | NOT STARTED | packages/dapp/src/attest.mjs (new) | waits for B1 |
+| B7 | dapp wiring for new circuits | 63279733 (B7) | DONE | packages/dapp/src/attest.mjs (new), TESTS/attest-dapp.test.mjs (new), STATUS.md (this row) | none — 12 unit tests pass, 3 live paths skipped (need deployed attestation contract + COHORT_ATTEST_CONTRACT_ADDRESS) |
 | B8 | Circuit documentation | B8 subagent (parent-orchestrator task) | DONE | `docs/circuits.md` (new, committed), `STATUS.md` (this row) | none — wrote from `CONTRACT/cohort.compact` as implemented + B1 interface spec (both circuits, issuer-attested trio, trust boundary, mermaid flow; honesty sections: self-asserted Wave-1 inputs, demo-grade issuer gate, circuit cannot prove medical-record authenticity) |
 
 ### B1 contract interface (binding) — AS IMPLEMENTED 2026-10-19 ~05:30 EEST
