@@ -2,7 +2,6 @@ pragma language_version 0.23;
 import CompactStandardLibrary;
 
 witness wAge(): Uint<8>;
-witness wSex(): Uint<8>;
 witness wCondition(): Boolean;
 witness wMedication(): Boolean;
 witness wSecret(): Bytes<32>;
