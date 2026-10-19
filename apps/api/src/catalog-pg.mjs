@@ -26,8 +26,9 @@
  *
  * MIGRATION ON BOOT:
  *  - migrate() runs db/schema.sql (idempotent: CREATE TABLE IF NOT EXISTS)
- *    whenever DATABASE_URL is set. Call bootCatalog() once from the API
- *    entrypoint before serving.
+ *    whenever DATABASE_URL is set — even when the code catalog is selected —
+ *    so the database is always ready. Call bootCatalog() once from the API
+ *    entrypoint before serving (wired in apps/api/src/server.mjs).
  *
  * SECRET HYGIENE: this module never logs or throws env var VALUES. Error and
  * log strings name the variable (e.g. "DATABASE_URL is not set") but never
@@ -38,8 +39,10 @@
  * egress proxy cannot complete the Postgres SSL handshake, so this module
  * CANNOT be live-tested here — first live run happens on Render.
  *
- * SERVER.MJS WIRING (pending — apps/api/src/server.mjs is owned by SQUAD A,
- * do not edit concurrently; apply once A1/A7 clear it):
+ * SERVER.MJS WIRING (done — commit e2a5164; server.mjs calls bootCatalog()
+ * once at startup, '/api/trials' and '/api/trials/:id' use
+ * getTrials/getTrial({ source: CATALOG.source }), and
+ * GET /api/catalog-version serves getCatalogVersion()):
  *
  *   import { bootCatalog, resolveCatalogSource, getTrials, getTrial,
  *            getCatalogVersion } from './catalog-pg.mjs';
@@ -160,13 +163,15 @@ export async function migrate({ env = process.env, pgModule, pool, schemaPath } 
 
 /**
  * Boot helper for the API entrypoint: resolves the catalog source and, when
- * the DB is selected and configured, runs migrate() first. Graceful when
- * DATABASE_URL is absent (falls back to the in-code catalog).
+ * DATABASE_URL is set, runs migrate() first (idempotent). Migration runs
+ * even when the code catalog is selected, so the database is always ready
+ * and flipping CATALOG_SOURCE=db can never serve an unmigrated database.
+ * Graceful when DATABASE_URL is absent (falls back to the in-code catalog).
  */
 export async function bootCatalog({ env = process.env, argv = [], pgModule } = {}) {
   const source = resolveCatalogSource({ argv, env });
   const dbConfigured = isDbConfigured(env);
-  if (source === CATALOG_SOURCES.db && dbConfigured) {
+  if (dbConfigured) {
     await migrate({ env, pgModule });
   }
   return { source, dbConfigured };

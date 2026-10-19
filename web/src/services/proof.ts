@@ -44,9 +44,22 @@ function mapLifecycle(stage: string): ProofStage | null {
   }
 }
 
+/**
+ * Same-origin read of the API's live proven counter (no wallet).
+ * The API attaches the indexer token server-side; the browser never sees it.
+ */
+async function readLiveProven(): Promise<{ proven: number; live: boolean }> {
+  const res = await fetch("/api/public-state", { cache: "no-store" });
+  const body = await res.json().catch(() => ({}));
+  const proven = typeof body?.proven === "number" ? body.proven : null;
+  const live = body?.source === "live-onchain" && proven !== null;
+  return { proven: proven ?? -1, live };
+}
+
 class CohortProofService implements ProofService {
   async prove(input: ProveInput): Promise<ProveResult> {
-    const { CohortDapp } = await loadCohortDapp();
+    const dappMod = await loadCohortDapp();
+    const { CohortDapp } = dappMod;
     input.onStage("preparing");
     const result = await CohortDapp.proveEligibility({
       origin: COHORT_API_ORIGIN,
@@ -61,18 +74,63 @@ class CohortProofService implements ProofService {
       postPublicReferral: true,
       onStage: (stage: string) => {
         const mapped = mapLifecycle(stage);
-        if (mapped) input.onStage(mapped);
+        // TRUTH GATE: the dapp emits CONFIRMED on wallet acceptance
+        // (submission), which is NOT ledger confirmation. Suppress it here —
+        // only the truth gate below may emit "confirmed".
+        if (!mapped || mapped === "confirmed") return;
+        input.onStage(mapped);
       },
     });
-    if (!result?.txId && !result?.txHash) {
+    const txId = result?.txId || result?.txHash || null;
+    if (!txId) {
       throw Object.assign(new Error("submitCallTx returned no transaction identifier."), {
         code: "TX_UNCONFIRMED",
         publicMessage:
           "The network has not confirmed this transaction yet. COHORT will not mark it verified.",
       });
     }
+
+    // TRUTH GATE (packages/dapp/src/truth-gate.mjs): success is reported
+    // only after the proof's ledger effect is OBSERVED on chain — the
+    // contract's proven counter strictly rising above the pre-submit
+    // baseline read from the live API. Wallet acceptance alone never
+    // confirms.
+    const { waitForLedgerEffect, assertClaimedSuccess } = dappMod;
+    if (
+      typeof waitForLedgerEffect !== "function" ||
+      typeof assertClaimedSuccess !== "function"
+    ) {
+      throw Object.assign(
+        new Error("truth gate unavailable in the loaded dapp bundle — refusing to confirm."),
+        { code: "TX_UNCONFIRMED" },
+      );
+    }
+    const baseline = await readLiveProven();
+    if (!baseline.live) {
+      throw Object.assign(
+        new Error(
+          "could not read a live proven-counter baseline from /api/public-state — refusing to confirm without it.",
+        ),
+        { code: "TX_UNCONFIRMED" },
+      );
+    }
+    const gateResult = await waitForLedgerEffect({
+      contractAddress: COHORT_CONTRACT_ADDRESS,
+      txHash: txId,
+      // Same-origin GraphQL passthrough: the API attaches the indexer token
+      // server-side (web/src/app/api/indexer-graphql/route.ts).
+      indexerUrl: "/api/indexer-graphql",
+      pollIntervalMs: 5000,
+      timeoutMs: 180000,
+      expectedPredicate: async () => {
+        const cur = await readLiveProven();
+        return cur.live && cur.proven > baseline.proven;
+      },
+    });
+    assertClaimedSuccess(gateResult); // throws unless the ledger effect was observed
+
     input.onStage("confirmed");
-    return result;
+    return { ...result, source: "truth-gated" };
   }
 }
 

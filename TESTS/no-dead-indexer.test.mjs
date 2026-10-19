@@ -51,6 +51,14 @@ const SKIP_PATHS = new Set([path.join('docs', 'what-changed.md')]);
 // so exactly those comparison lines are exempt — nothing else.
 const ALLOWLIST_LINE = /===\s*['"]indexer\.preprod\.midnight\.network['"]/;
 
+// Deliberate survivors: RETIRED_HOSTS in apps/api/src/blockfrost-live.mjs
+// names the retired hosts in a DENYLIST — indexerUrl() rejects an
+// operator-set MIDNIGHT_INDEXER_URL that points at them and falls back to
+// Blockfrost. Naming a host to reject it is not using it as an endpoint,
+// so exactly those bare string-literal element lines are exempt.
+const DENYLIST_LINE =
+  /^\s*['"](indexer|rpc)\.preprod\.midnight\.network['"],?\s*$/;
+
 function* walk(dir) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
     if (ent.isDirectory()) {
@@ -81,7 +89,9 @@ test('no dead indexer/RPC hosts remain in shipped code/config/docs', () => {
     scanned += 1;
     const lines = text.split('\n');
     for (const re of DEAD) {
-      const bad = lines.filter((line) => re.test(line) && !ALLOWLIST_LINE.test(line));
+      const bad = lines.filter(
+        (line) => re.test(line) && !ALLOWLIST_LINE.test(line) && !DENYLIST_LINE.test(line),
+      );
       if (bad.length) {
         hits.push(
           `${path.relative(root, file)} matches ${re.source} (${bad.length} line(s), e.g. ${bad[0].trim().slice(0, 120)})`,

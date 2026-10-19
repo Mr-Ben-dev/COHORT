@@ -6,6 +6,23 @@
  */
 let loading: Promise<CohortDappModule> | null = null;
 
+export type TruthGateSnapshot = {
+  contractAddress: string;
+  actionTypename: string | null;
+  stateHex: string | null;
+  transactionHash: string | null;
+  blockHeight: number | null;
+  raw: unknown;
+};
+
+export type TruthGateResult = {
+  confirmed: boolean;
+  txHash: string | null;
+  reason?: string;
+  observedAtBlock?: number | null;
+  attempts?: number;
+};
+
 export type CohortDappModule = {
   CohortDapp: {
     proveEligibility: (input: Record<string, unknown>) => Promise<ProveResult>;
@@ -25,6 +42,26 @@ export type CohortDappModule = {
     claims: { contractAddress: string; doesNotProve: string[] };
   };
   ErrorCode?: Record<string, string>;
+  /** Truth gate (packages/dapp/src/truth-gate.mjs) — re-exported by the bundle. */
+  truthGatedCall?: (
+    txPromise: Promise<unknown>,
+    gateOpts?: Record<string, unknown>,
+  ) => Promise<TruthGateResult>;
+  waitForLedgerEffect?: (opts: {
+    contractAddress: string;
+    expectedPredicate: (
+      snapshot: TruthGateSnapshot,
+      ctx: { attempt: number; txHash: string | null },
+    ) => boolean | Promise<boolean>;
+    txHash?: string | null;
+    pollIntervalMs?: number;
+    timeoutMs?: number;
+    indexerUrl?: string;
+    fetch?: typeof fetch;
+    onPoll?: (info: unknown) => void;
+  }) => Promise<TruthGateResult>;
+  assertClaimedSuccess?: (result: unknown) => TruthGateResult;
+  isClaimedSuccess?: (result: unknown) => boolean;
 };
 
 export type OfficialTrial = {

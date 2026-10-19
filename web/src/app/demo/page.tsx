@@ -377,7 +377,9 @@ function TierTwoCard() {
       // TRUTH GATE (C1): the page may only show success after the branded,
       // ledger-observed confirmation. waitForLedgerEffect throws unless the
       // contract's proven counter strictly rose above the pre-submit baseline.
-      const gate = await runner.waitForLedgerEffect({ txId: txId ?? txHash, contractAddress });
+      // indexerUrl: same-origin GraphQL passthrough — the browser bundle never
+      // holds the indexer token; the API attaches it server-side.
+      const gate = await runner.waitForLedgerEffect({ txId: txId ?? txHash, contractAddress, indexerUrl: "/api/indexer-graphql" });
       setRes({
         stage: "confirmed",
         txHash,

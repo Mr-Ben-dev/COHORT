@@ -89,6 +89,25 @@ test('live: alt counter key spellings are accepted', async () => {
   });
 });
 
+test('live: real /api/attestation-counters shape (attestationsSize) is accepted', async () => {
+  // Regression: the server returns { attestationsSize, attestationsVerified }
+  // (apps/api/src/blockfrost-live.mjs); the client must not demote to sample.
+  const fetchImpl = stubFetch({
+    '/api/public-state': { body: LIVE_BODY({ proven: 12, referralCount: 5 }) },
+    '/api/attestation-counters': {
+      body: LIVE_BODY({ attestationsSize: 9, attestationsVerified: 7, wave3Deployed: true }),
+    },
+  });
+  const r = await fetchVerifyState({ fetchImpl });
+  assert.equal(r.provenance, 'live-onchain');
+  assert.deepEqual(r.counters, {
+    proven: 12,
+    attestationCount: 9,
+    attestationsVerified: 7,
+    referralCount: 5,
+  });
+});
+
 // ── no-token → sample badge ────────────────────────────────────────────────
 
 test('source no-token-configured -> provenance sample-data with sample numbers and a reason', async () => {

@@ -68,6 +68,35 @@ export function isBlockfrostGraphqlUrl(url) {
   }
 }
 
+/**
+ * Hostnames of the retired official Midnight Preprod indexer/RPC
+ * (shut down 2026-10-09, HTTP 410). An operator-set MIDNIGHT_INDEXER_URL
+ * that still points at them is treated as unset: the env var is honored
+ * only when it does NOT name a retired host. This keeps a stale deployment
+ * (e.g. Render env predating the Blockfrost migration) serving live data
+ * instead of querying a dead endpoint.
+ */
+const RETIRED_HOSTS = new Set([
+  'indexer.preprod.midnight.network',
+  'rpc.preprod.midnight.network',
+]);
+
+/** Retired official Preprod hosts (denylist — named only to be rejected). */
+export { RETIRED_HOSTS };
+
+function envIndexerBase() {
+  const fromEnv = String(process.env.MIDNIGHT_INDEXER_URL || '').trim();
+  if (!fromEnv) return '';
+  let host = '';
+  try {
+    host = new URL(fromEnv).hostname.toLowerCase();
+  } catch {
+    return ''; // not a parseable URL — do not use it
+  }
+  if (RETIRED_HOSTS.has(host)) return ''; // retired host — fall back
+  return fromEnv;
+}
+
 function validAddress(v) {
   return typeof v === 'string' && HEX.test(v) ? v : '';
 }
@@ -82,8 +111,13 @@ export function wave3ContractAddress() {
   return validAddress((process.env.CONTRACT_ADDRESS_WAVE3 || '').trim());
 }
 
+/** Effective indexer base URL actually used for reads — WITHOUT the token. */
+export function indexerBaseUrl() {
+  return envIndexerBase() || BLOCKFROST_GRAPHQL_URL;
+}
+
 export function indexerUrl() {
-  return withProjectId(process.env.MIDNIGHT_INDEXER_URL || BLOCKFROST_GRAPHQL_URL);
+  return withProjectId(indexerBaseUrl());
 }
 
 /** Scrub the token out of any string before it touches logs or responses. */

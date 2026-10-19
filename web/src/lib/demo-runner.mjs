@@ -542,6 +542,18 @@ function defaultDeps() {
  *    the proven counter strictly above baseline.
  *
  * deps: { getTransactionStatus, readPublicVerification, ledgerFn } — injectable for tests.
+ * @param {object} [opts]
+ * @param {string|null} [opts.txId]
+ * @param {string} [opts.contractAddress]
+ * @param {number|null} [opts.baselineProven]
+ * @param {object|null} [opts.deps]
+ * @param {Function} [opts.importFn]
+ * @param {number} [opts.timeoutMs]
+ * @param {number} [opts.intervalMs]
+ * @param {object|null} [opts.truthGate]
+ * @param {string} [opts.indexerUrl] - override indexer URL (e.g. the
+ *   same-origin '/api/indexer-graphql' passthrough in browsers, where the
+ *   bundle must never hold the indexer token).
  */
 export async function waitForLedgerEffect({
   txId,
@@ -552,6 +564,7 @@ export async function waitForLedgerEffect({
   timeoutMs = 180000,
   intervalMs = 5000,
   truthGate = undefined, // inject the loaded module (or null) in tests
+  indexerUrl = undefined,
 } = {}) {
   if (!txId) {
     throw new DemoRunnerError('TRUTH_GATE_NO_TX', 'No transaction id to confirm — nothing was submitted.');
@@ -575,6 +588,7 @@ export async function waitForLedgerEffect({
       txHash: txId,
       timeoutMs,
       pollIntervalMs: intervalMs,
+      ...(indexerUrl ? { indexerUrl } : {}),
       expectedPredicate: ({ stateHex }) => {
         if (!stateHex) return false;
         return Number(ledgerFn(stateHex).proven.toString()) > baseline;

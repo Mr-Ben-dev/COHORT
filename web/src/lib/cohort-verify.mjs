@@ -183,7 +183,11 @@ export async function fetchVerifyState(options = {}) {
 
   const proven = toCounter(ps.proven);
   const referralCount = toCounter(ps.referralCount);
-  const attestationCount = toCounter(ac.attestationCount ?? ac.attestations);
+  // Server shape is { attestationsSize, attestationsVerified } (see
+  // apps/api/src/blockfrost-live.mjs); older spellings kept for tolerance.
+  const attestationCount = toCounter(
+    ac.attestationCount ?? ac.attestations ?? ac.attestationsSize,
+  );
   const attestationsVerified = toCounter(
     ac.attestationsVerified ?? ac.verifiedCount,
   );

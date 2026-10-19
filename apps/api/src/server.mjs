@@ -11,7 +11,7 @@ import {
 } from './catalog-pg.mjs';
 import { assertPublicOnly, PUBLIC_REFERRAL_KEYS, findPrivateFields } from './public-fields.mjs';
 import { publicLog, redact } from './redact.mjs';
-import { readLiveLedger, readAttestationCounters } from './blockfrost-live.mjs';
+import { readLiveLedger, readAttestationCounters, indexerBaseUrl as effectiveIndexerBaseUrl } from './blockfrost-live.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WEB_DIR = path.resolve(__dirname, '../../web');
@@ -133,7 +133,9 @@ function publicConfig() {
   return {
     networkId: process.env.MIDNIGHT_NETWORK || 'preprod',
     indexerTokenConfigured: Boolean((process.env.BLOCKFROST_PROJECT_ID || '').trim()),
-    indexerUrl: process.env.MIDNIGHT_INDEXER_URL || '',
+    // Effective URL actually used for indexer reads (retired hosts in the
+    // env are ignored — see blockfrost-live.mjs). Token-free base only.
+    indexerUrl: effectiveIndexerBaseUrl(),
     indexerWsUrl: process.env.MIDNIGHT_INDEXER_WS_URL || '',
     nodeUrl: process.env.MIDNIGHT_NODE_URL || '',
     contractAddress: process.env.COHORT_CONTRACT_ADDRESS || '',
@@ -237,6 +239,61 @@ function handleApiFactory(publicEvents) {
     // Wave-3 contract is undeployed (CONTRACT_ADDRESS_WAVE3 unset).
     const out = await readAttestationCounters();
     return send(res, 200, out, 'public, max-age=60');
+  }
+
+  if (url.pathname === '/api/indexer-graphql' && req.method === 'POST') {
+    // Narrow, read-only GraphQL passthrough for the browser truth gate.
+    // The browser bundle never holds BLOCKFROST_PROJECT_ID, so the gate's
+    // indexer reads (truth-gate.mjs fetchContractState) go through here;
+    // the token is attached server-side and never leaves the server.
+    // Abuse guard: only contractAction reads are forwarded (the truth
+    // gate's fixed query shape); arbitrary GraphQL is rejected.
+    let body;
+    try {
+      body = await readJson(req);
+    } catch (err) {
+      return send(res, err.status || 400, { error: 'invalid json' });
+    }
+    const query = typeof body?.query === 'string' ? body.query : '';
+    const variables =
+      body?.variables && typeof body.variables === 'object' ? body.variables : {};
+    if (!query || query.length > 8000 || !/contractAction\s*\(/.test(query)) {
+      return send(res, 400, { error: 'only contractAction reads are proxied' });
+    }
+    const address = variables?.address;
+    if (typeof address !== 'string' || !/^[0-9a-fA-F]+$/.test(address) || address.length > 128) {
+      return send(res, 400, { error: 'variables.address must be hex' });
+    }
+    const token = String(process.env.BLOCKFROST_PROJECT_ID || '').trim();
+    if (!token) {
+      return send(res, 503, { error: 'indexer token not configured (set BLOCKFROST_PROJECT_ID)' });
+    }
+    const upstream = `${effectiveIndexerBaseUrl()}?project_id=${encodeURIComponent(token)}`;
+    let upstreamRes;
+    try {
+      upstreamRes = await fetch(upstream, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ query, variables }),
+        signal: AbortSignal.timeout ? AbortSignal.timeout(20000) : undefined,
+      });
+    } catch {
+      publicLog('indexer-graphql upstream unreachable', {});
+      return send(res, 502, { error: 'indexer unreachable' });
+    }
+    const text = await upstreamRes.text().catch(() => '');
+    // Never reflect the token, even if the upstream echoed it.
+    const safe = text.split(token).join('[redacted]');
+    let parsed = null;
+    try {
+      parsed = JSON.parse(safe);
+    } catch {
+      parsed = null;
+    }
+    if (!parsed || typeof parsed !== 'object') {
+      return send(res, 502, { error: 'indexer returned non-JSON' });
+    }
+    return send(res, upstreamRes.status, parsed, 'no-store');
   }
 
   if (url.pathname === '/api/referral' && req.method === 'POST') {

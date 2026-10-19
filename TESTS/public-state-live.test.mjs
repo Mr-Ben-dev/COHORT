@@ -33,6 +33,9 @@ const {
   countersFromStateData,
   attestationFieldsFromStateData,
   decodeWave1Counters,
+  indexerUrl,
+  indexerBaseUrl,
+  RETIRED_HOSTS,
   BLOCKFROST_GRAPHQL_URL,
   WAVE1_CONTRACT_ADDRESS,
 } = await import('../apps/api/src/blockfrost-live.mjs');
@@ -321,6 +324,36 @@ test('GET /api/public-state with unreachable indexer: 502, labeled, token redact
   assert.equal(String(JSON.stringify(res.json)).includes('A7-ROUTE-SECRET'), false);
 });
 
+test('indexerUrl(): retired midnight.network hosts in the env fall back to Blockfrost', async (t) => {
+  // Regression: a stale deployment whose MIDNIGHT_INDEXER_URL still names
+  // the retired official Preprod hosts must query Blockfrost, not the dead
+  // host (the deployed Render env predates the migration).
+  const snap = snapshotEnv();
+  t.after(() => restoreEnv(snap));
+  process.env.BLOCKFROST_PROJECT_ID = 'a7-test-token';
+
+  for (const host of RETIRED_HOSTS) {
+    process.env.MIDNIGHT_INDEXER_URL = `https://${host}/api/v0`;
+    assert.equal(
+      indexerBaseUrl(),
+      BLOCKFROST_GRAPHQL_URL,
+      `retired host must be ignored: ${host}`,
+    );
+    assert.equal(
+      indexerUrl(),
+      `${BLOCKFROST_GRAPHQL_URL}?project_id=a7-test-token`,
+    );
+  }
+
+  // A non-retired operator override is still honored.
+  process.env.MIDNIGHT_INDEXER_URL = 'https://indexer.example.internal/api/v0';
+  assert.equal(indexerBaseUrl(), 'https://indexer.example.internal/api/v0');
+
+  // Unset env falls back to the Blockfrost default.
+  delete process.env.MIDNIGHT_INDEXER_URL;
+  assert.equal(indexerBaseUrl(), BLOCKFROST_GRAPHQL_URL);
+});
+
 test('GET /api/attestation-counters with no wave3: 200, null + labeled', async (t) => {
   const snap = snapshotEnv();
   t.after(() => restoreEnv(snap));
@@ -388,7 +421,10 @@ test('no dead Midnight Preprod hostnames in A7 files', () => {
   );
   const files = ['apps/api/src/blockfrost-live.mjs', 'apps/api/src/server.mjs', 'TESTS/public-state-live.test.mjs'];
   for (const f of files) {
-    const text = fs.readFileSync(path.join(root, f), 'utf8');
+    let text = fs.readFileSync(path.join(root, f), 'utf8');
+    // Exempt the RETIRED_HOSTS denylist: naming a retired host to REJECT it
+    // (indexerUrl() falls back to Blockfrost) is not using it as an endpoint.
+    text = text.replace(/const RETIRED_HOSTS = new Set\(\[[\s\S]*?\]\);/, '');
     for (const re of dead) {
       assert.equal(re.test(text), false, `${f} references dead host ${re}`);
     }
