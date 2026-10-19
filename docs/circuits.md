@@ -82,7 +82,7 @@ construction — or skip off-chain agreement entirely and call
 ### 2.2 `attest` / `attestWithAttributes` — issuer gating
 
 - `attest(attestation)`: publishes a precomputed attestation commitment. Two gates:
-  `assert(disclose(wIssuerSecret()) == issuerId())` — only the issuer may call it —
+  `assert(disclose(wIssuerSecret()) == issuerId)` — only the issuer may call it —
   and a replay check (`"attestation already published"`) before inserting into the
   `attestations` set.
 - `attestWithAttributes(age, cond, med, holderSecret, nonce)`: the preferred issuance
@@ -90,9 +90,11 @@ construction — or skip off-chain agreement entirely and call
   attributes via `attestationOf`, then replay-checked and inserted. The issuer never
   needs to agree with anyone on an off-chain hash encoding.
 
-`issuerId()` is the identity of the issuer (see §3). `issuerIdOf(secret)` is a
-ceremony helper that returns `disclose(secret)` — i.e. the 32 secret bytes unchanged —
-so the key-ceremony script can compute the value to bake into `issuerId()`.
+`issuerId` is the identity of the issuer (see §3): a **ledger** value installed once
+by the deployer via `initIssuer(id)` (one-time; a zeros check locks it — calling it
+twice throws `"issuer already initialized"`). `issuerIdOf(secret)` is a ceremony
+helper that returns `disclose(secret)` — i.e. the 32 secret bytes unchanged — so the
+key-ceremony script can compute the value for the deployer to install.
 
 ### 2.3 `proveAttested` — membership + predicate over attested attributes
 
@@ -123,24 +125,25 @@ holder-side proof that their **issuer-attested** attributes qualify:
 medical authority. It is the key-ceremony operator: whoever runs the ceremony holds
 the issuer secret and can attest any attributes to any holder.
 
-**The issuer gate compares against `issuerId()`, which is currently a placeholder.**
-The contract's `issuerId()` circuit returns 32 zero bytes (`"\x00" × 32`), marked
-`// CEREMONY-REPLACE: ISSUER_ID_BYTES` for the key ceremony to replace with the
-real value. The contract comment states the rationale explicitly: zeros are the
-safe placeholder — finding a preimage is infeasible, so **no issuer secret can
-pass the gate until the ceremony runs**. Right now, `attest` and
-`attestWithAttributes` cannot be successfully called by anyone.
+**The issuer gate compares against the `issuerId` ledger, installed once by the
+deployer.** Design note (verified empirically on compactc 0.31.1): `\xNN` string
+escapes are interpreted as Unicode codepoints and UTF-8-encoded, so any byte
+≥ 0x80 becomes two bytes — an arbitrary 32-byte issuer secret **cannot** live in a
+contract string literal. The first design (a baked-in `issuerId()` literal)
+compiled with the all-zeros placeholder but broke on the real ceremony key, so the
+identity moved to ledger state: `initIssuer(id)` writes `disclose(id)` once, and the
+zeros check makes it one-time. Until the deployer runs it, the ledger holds zeros
+and **no issuer secret can pass the gate**.
 
-**What changes when a real issuer key is installed.** The ceremony computes
-`issuerIdOf(demoIssuerSecret)` — i.e. the raw 32 secret bytes — and bakes them into
-`issuerId()`. After that, only someone presenting that secret passes the issuer
-gate. But per the B1 deviation note: because `disclose()` is the value-level
-identity, the baked-in `ISSUER_ID` **equals the raw issuer secret bytes**, which are
-readable from the contract source/compiled circuit. The gate is therefore
-**demo-grade — knowledge of the pre-ceremony secret — not a cryptographic secret.**
-If the issuer check needs to be secret-backed, it must move to a hash preimage
-(e.g. `persistentHash` of the secret); that is a contract spec change, not something
-this document can paper over.
+**What changes when a real issuer key is installed.** The ceremony generates the
+demo issuer secret; the deployer calls `initIssuer(secret)`. After that, only
+someone presenting that secret passes the issuer gate. But per the B1 deviation
+note: because `disclose()` is the value-level identity, the installed `issuerId`
+**equals the raw issuer secret bytes**, which are readable from public ledger
+state. The gate is therefore **demo-grade — knowledge of the pre-ceremony secret —
+not a cryptographic secret.** If the issuer check needs to be secret-backed, it
+must move to a hash preimage (e.g. `persistentHash` of the secret); that is a
+contract spec change, not something this document can paper over.
 
 **What the circuit still cannot prove.** Even with a real issuer: the circuit proves
 that *someone holding the issuer secret attested these attributes for this holder*.

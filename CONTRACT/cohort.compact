@@ -17,19 +17,25 @@ export ledger attestations: Set<Bytes<32>>;
 export ledger attestationsVerified: Counter;
 
 // ---------------------------------------------------------------------------
-// ISSUER_ID: identity of the demo issuer, installed by the key ceremony.
+// ISSUER_ID: identity of the demo issuer, installed once by the deployer.
 //
-// Language 0.23 has no top-level `const`, and 0x-hex literals parse as Uint
-// (capped at Uint<248>), so the value lives here as a 32-byte string using
-// \xNN escapes. The key-ceremony worker replaces the single marked return
-// line below with the 32 \xNN escapes of disclose(demoIssuerSecret).
-// (disclose() is the identity at the value level, so that is the 32 secret
-// bytes.) Zeros are the safe placeholder: finding a preimage is infeasible,
-// so no issuer secret can pass the gate until the ceremony runs.
+// Language 0.23 has no top-level `const`, 0x-hex literals parse as Uint
+// (capped at Uint<248>), and - verified empirically on compactc 0.31.1 -
+// \xNN string escapes are interpreted as Unicode codepoints and UTF-8
+// encoded, so any byte >= 0x80 becomes TWO bytes in the literal. A baked-in
+// 32-byte literal therefore cannot hold an arbitrary issuer secret.
+// Instead the deployer installs the demo issuer secret once, post-deploy,
+// via initIssuer(); the zeros check makes it one-time. Until initIssuer
+// runs, no issuer secret can pass the gate (zeros are not a valid secret).
+// Demo-grade, as documented: the ledger value is public, so the gate is
+// knowledge-of-the-pre-ceremony-secret, not a cryptographic secret.
 // ---------------------------------------------------------------------------
-circuit issuerId(): Bytes<32> {
-  // CEREMONY-REPLACE: ISSUER_ID_BYTES
-  return "\x3c\xbe\x0e\x26\xae\xfd\xf6\xd8\x4e\x73\x58\xd0\xd7\x21\xe3\xe0\x88\x26\x3b\xc2\xcb\x98\x1c\x8a\xf2\x2f\x00\x19\x07\xe7\xdd\xf1";
+export ledger issuerId: Bytes<32>;
+
+export circuit initIssuer(id: Bytes<32>): Boolean {
+  assert(issuerId == "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", "issuer already initialized");
+  issuerId = disclose(id);
+  return true;
 }
 
 circuit trialNullifier(trialId: Bytes<32>, sk: Bytes<32>): Bytes<32> {
@@ -100,16 +106,16 @@ export circuit attestationOf(
 
 // Ceremony helper: returns disclose(secret). disclose() is the identity at
 // the value level, so this returns the 32 secret bytes unchanged. The
-// key-ceremony script calls this to compute the ISSUER_ID value that gets
-// baked into issuerId() above.
+// key-ceremony script calls this to compute the ISSUER_ID value that the
+// deployer installs via initIssuer().
 export circuit issuerIdOf(secret: Bytes<32>): Bytes<32> {
   return disclose(secret);
 }
 
 // Publish a precomputed attestation. Only the issuer (holder of the secret
-// whose disclose() equals the baked-in ISSUER_ID) may call it.
+// whose disclose() equals the installed issuerId ledger value) may call it.
 export circuit attest(attestation: Bytes<32>): Boolean {
-  assert(disclose(wIssuerSecret()) == issuerId(), "not the issuer");
+  assert(disclose(wIssuerSecret()) == issuerId, "not the issuer");
   assert(!attestations.member(disclose(attestation)), "attestation already published");
   attestations.insert(disclose(attestation));
   return true;
@@ -125,7 +131,7 @@ export circuit attestWithAttributes(
   holderSecret: Bytes<32>,
   nonce: Bytes<32>
 ): Boolean {
-  assert(disclose(wIssuerSecret()) == issuerId(), "not the issuer");
+  assert(disclose(wIssuerSecret()) == issuerId, "not the issuer");
   const att = attestationOf(age, cond, med, holderSecret, nonce);
   assert(!attestations.member(disclose(att)), "attestation already published");
   attestations.insert(disclose(att));

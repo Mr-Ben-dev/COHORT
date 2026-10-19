@@ -24,9 +24,10 @@ export const PROVER_MIN_BYTES = 1_000_000;
  * (full-ZK compile, compactc 0.31.1, NO --skip-zk). Recorded in
  * docs/verifier-keys.md. UNDEPLOYED — pins only, no chain writes.
  */
-export const ATTEST_VERIFIER_SHA256 = '93f5b746871ad5eb5579e675e1913dc7b5aa830e0cea8ba602aa4e27f1c91303';
-export const ATTEST_WITH_ATTRIBUTES_VERIFIER_SHA256 = '84c89c88fa62c3a1cea7ffbbc67d4f0d0036bc844aff6f74e7d34413047320f4';
+export const ATTEST_VERIFIER_SHA256 = '9819eb36437ed0d4f24911eff41e502275ebbb6ed8466653946f63fa97c58ab1';
+export const ATTEST_WITH_ATTRIBUTES_VERIFIER_SHA256 = 'cbd12106fccbac72c04d2b60858871149209b2d164d2db02c4701d405dba6566';
 export const PROVE_ATTESTED_VERIFIER_SHA256 = 'a457129525ef3e0458dde077872df02c98d4647d39f278b2d0883f7b11275e13';
+export const INIT_ISSUER_VERIFIER_SHA256 = '80df3538420f83b9e9dbe20e3ac6d1e52cde722633cd8449bcb1f00e9e400858';
 
 /**
  * All four pinned circuit verifier keys, circuit name -> pinned SHA-256.
@@ -38,6 +39,7 @@ export const CIRCUIT_VERIFIER_PINS = Object.freeze({
   attestWithAttributes: ATTEST_WITH_ATTRIBUTES_VERIFIER_SHA256,
   proveAttested: PROVE_ATTESTED_VERIFIER_SHA256,
   proveEligible: VERIFIER_SHA256,
+  initIssuer: INIT_ISSUER_VERIFIER_SHA256,
 });
 
 /**

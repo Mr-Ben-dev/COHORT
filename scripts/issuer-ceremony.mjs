@@ -12,8 +12,11 @@
  *      (packages/contract/managed/cohort/contract/index.js).
  *   3. Calls the `issuerIdOf` circuit with the DEMO issuerSecret and prints the
  *      resulting ISSUER_ID (the public issuer identity).
- *   4. Writes the ISSUER_ID hex into CONTRACT/cohort.compact, replacing the
- *      placeholder, preserving CRLF line endings.
+ *   4. Prints the DEPLOYER STEP: after the contract is deployed, the
+ *      deployer installs this ISSUER_ID by calling the initIssuer(id) circuit
+ *      once (one-time; the zeros check locks it). The contract source is NOT
+ *      patched — compactc 0.31.1 UTF-8-encodes \\xNN escapes >= 0x80, so an
+ *      arbitrary 32-byte secret cannot live in a string literal.
  *   5. Issues demo attestations for 3 synthetic judge patients via the
  *      `attestationOf` circuit (random holderSecret + nonce each).
  *   6. Writes TESTS/judge-credentials/judge{1,2,3}.json for the judges.
@@ -118,28 +121,14 @@ function ctx() {
   return RT.createCircuitContext(addr, '0'.repeat(64), ctor.currentContractState, privateState);
 }
 
-// ---------------------------------------------------------------- pin ISSUER_ID into the contract source
-// B1 stores ISSUER_ID as the 32-byte string returned by circuit issuerId(),
-// marked with `// CEREMONY-REPLACE: ISSUER_ID_BYTES`. Replace the marked
-// return line with the \xNN escapes of the circuit-derived ISSUER_ID bytes.
-const contractPath = path.join(root, 'CONTRACT', 'cohort.compact');
-const before = fs.readFileSync(contractPath, 'utf8'); // CRLF preserved by byte replacement below
-const marker = '// CEREMONY-REPLACE: ISSUER_ID_BYTES';
-const markerIdx = before.indexOf(marker);
-if (markerIdx === -1) {
-  fail('no CEREMONY-REPLACE marker found in CONTRACT/cohort.compact — B1 has not written it yet; aborting.');
-}
-const tail = before.slice(markerIdx);
-const retRe = /return\s+"(\\x[0-9a-fA-F]{2})+"\s*;/;
-if (!retRe.test(tail)) {
-  fail('no placeholder return line after the CEREMONY-REPLACE marker — aborting.');
-}
-const escapes = [...Buffer.from(ISSUER_ID, 'hex')]
-  .map((b) => '\\x' + b.toString(16).padStart(2, '0'))
-  .join('');
-const after = before.slice(0, markerIdx) + tail.replace(retRe, `return "${escapes}";`);
-if (after === before) fail('ISSUER_ID replacement produced no change; aborting.');
-fs.writeFileSync(contractPath, after, 'utf8'); // no newline normalization — CRLF preserved
+// ---------------------------------------------------------------- deployer step (no source patching)
+// The issuer identity lives in the `issuerId` LEDGER, installed once by the
+// deployer via initIssuer(id) after deploy. The contract source is never
+// patched: compactc 0.31.1 interprets \xNN escapes as Unicode codepoints and
+// UTF-8-encodes them, so an arbitrary 32-byte secret cannot be written as a
+// string literal. The deployer reads the secret from
+// scripts/.issuer-secret.json (saved above) and calls initIssuer() once.
+// (The ISSUER_ID printed below is the public identity to install.)
 
 // ---------------------------------------------------------------- demo patient attestations
 const patients = [
@@ -183,8 +172,8 @@ console.log('(DEMO ISSUER: synthetic demo identity, not a real hospital or medic
 console.log(`ISSUER_ID: 0x${ISSUER_ID}`);
 for (const r of results) console.log(`${r.id} attestation: 0x${r.attestationHex}`);
 console.log('');
-console.log('NEXT STEP — recompile and refresh pins:');
-console.log('  node scripts/compile-contract.mjs');
-console.log('NOTE: recompiling after the ISSUER_ID pin changes the verifier SHA —');
-console.log('the pins (scripts/judge-pins.mjs) must be updated by the pins worker afterwards.');
+console.log('NEXT STEP — deploy, then the deployer installs the issuer ID:');
+console.log('  node scripts/deployer.mjs --deploy            # deploys the contract');
+console.log('  # then call initIssuer(issuerSecret) once with the secret from');
+console.log('  # scripts/.issuer-secret.json (deployer wallet)');
 console.log('(demo issuer secret saved to scripts/.issuer-secret.json — gitignored, mode 600, never printed)');

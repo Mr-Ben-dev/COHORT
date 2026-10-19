@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 // Every refusal below MUST reject in simulation. Positive controls exist only
 // to prove the harness can reach the circuit's assertion points.
 //
-// DEMO-ISSUER LABEL: issuerId() currently bakes the 32-zero-bytes placeholder
+// DEMO-ISSUER LABEL: the demo issuer ID is installed once per session via
 // (the B2 key ceremony has not installed a real secret yet), so the "correct"
 // issuer secret in these tests is 32 zero bytes. A "wrong" issuer secret is
 // any non-zero 32-byte value. When the ceremony runs, the zero-secret paths
@@ -37,9 +37,13 @@ const bytes32 = (n) => {
   return a;
 };
 
-// Demo-issuer secret: disclose() is the identity at the value level, so this
-// equals circuit issuerId() (32 zero bytes) until the B2 key ceremony.
-const DEMO_ISSUER_SECRET = new Uint8Array(32);
+// Demo-issuer secret: a fixed non-zero 32-byte value installed via
+// initIssuer() in boot(). disclose() is the identity at the value level.
+const DEMO_ISSUER_SECRET = (() => {
+  const a = new Uint8Array(32);
+  for (let i = 0; i < 32; i++) a[i] = (0x9e + i * 13) % 256;
+  return a;
+})();
 
 const witnesses = {
   wAge: (ctx) => [ctx.privateState, ctx.privateState.age],
@@ -72,7 +76,16 @@ function boot() {
     RT.createConstructorContext({ issuerSecret: DEMO_ISSUER_SECRET.slice() }, '0'.repeat(64)),
   );
   const addr = RT.sampleContractAddress();
-  return { contract, addr, state: ctor.currentContractState };
+  // Deployer flow: install the demo issuer ID once; all issuer gates below
+  // check against this installed ledger value.
+  const installed = contract.impureCircuits.initIssuer(
+    RT.createCircuitContext(addr, '0'.repeat(64), ctor.currentContractState, {
+      issuerSecret: DEMO_ISSUER_SECRET.slice(),
+    }),
+    DEMO_ISSUER_SECRET,
+  );
+  assert.equal(installed.result, true);
+  return { contract, addr, state: installed.context.currentQueryContext.state };
 }
 
 function issue(session, { age = 42n, cond = true, med = false, holderSecret = bytes32(21), nonce = bytes32(33), issuerSecret = DEMO_ISSUER_SECRET.slice() } = {}) {
@@ -109,7 +122,7 @@ const setSize = (l, name) => Number(l[name].size().toString());
 
 test('0 positive control (demo-issuer): issue + proveAttested succeed, counters move', () => {
   const s0 = boot();
-  // issuerIdOf(zero) round-trips the disclose identity: this IS the demo placeholder.
+  // issuerIdOf round-trips the disclose identity.
   const id = pureCircuits.issuerIdOf(DEMO_ISSUER_SECRET.slice());
   assert.deepEqual(Buffer.from(id), Buffer.from(DEMO_ISSUER_SECRET));
 

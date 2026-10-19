@@ -10,10 +10,9 @@ import { fileURLToPath } from 'node:url';
 // (packages/contract/.compile-out/contract/index.js) with the Midnight
 // compact-runtime simulator — zero real chain calls.
 //
-// issuerId() currently bakes the 32-zero-bytes demo placeholder (until the B2
-// key ceremony installs the real demo secret), so every issuer-gated circuit
-// here is exercised with the DEMO ISSUER SECRET (32 zero bytes). Tests are
-// labeled "demo-issuer" accordingly.
+// The demo issuer ID is installed once per session via initIssuer() (the
+// deployer flow). Every issuer-gated circuit here is exercised with the
+// DEMO ISSUER SECRET below. Tests are labeled "demo-issuer" accordingly.
 
 const require = createRequire(import.meta.url);
 const RT = require('@midnight-ntwrk/compact-runtime');
@@ -31,9 +30,14 @@ const bytes32 = (n) => {
   return a;
 };
 
-// Demo-issuer placeholder secret: matches circuit issuerId() (32 zero bytes).
-// NOTE: issuerIdOf(zeroSecret) is disclose() of the secret, i.e. identity.
-const DEMO_ISSUER_SECRET = new Uint8Array(32);
+// Demo-issuer secret: a fixed non-zero 32-byte value installed via
+// initIssuer() in boot(). NOTE: issuerIdOf(secret) is disclose() of the
+// secret, i.e. identity.
+const DEMO_ISSUER_SECRET = (() => {
+  const a = new Uint8Array(32);
+  for (let i = 0; i < 32; i++) a[i] = (0x9e + i * 13) % 256;
+  return a;
+})();
 
 const witnesses = {
   wAge: (ctx) => [ctx.privateState, ctx.privateState.age],
@@ -63,7 +67,19 @@ function makeAttestee(overrides = {}) {
 function boot(patient = makeAttestee()) {
   const contract = new Contract(witnesses);
   const ctor = contract.initialState(RT.createConstructorContext(patient, '0'.repeat(64)));
-  return { contract, ctor, addr: RT.sampleContractAddress() };
+  const addr = RT.sampleContractAddress();
+  // Deployer flow: install the demo issuer ID once; every issuer-gated
+  // circuit below runs against this installed ledger value.
+  const installed = contract.impureCircuits.initIssuer(
+    RT.createCircuitContext(addr, '0'.repeat(64), ctor.currentContractState, patient),
+    DEMO_ISSUER_SECRET,
+  );
+  assert.equal(installed.result, true);
+  return {
+    contract,
+    ctor: { currentContractState: installed.context.currentQueryContext.state },
+    addr,
+  };
 }
 
 function circuitCtx(session, privateState, contractState = session.ctor.currentContractState) {
@@ -140,15 +156,29 @@ test('demo-issuer: proveAttested returns true for an eligible patient on atteste
   assert.equal(led.referrals.size().toString(), '1');
 });
 
-test('demo-issuer: issuerIdOf(demo secret) matches the baked issuerId placeholder', () => {
-  // disclose() is the identity at value level, so issuerIdOf returns the
-  // secret bytes unchanged; the baked issuerId() placeholder is 32 zero
-  // bytes, which is exactly the demo-issuer secret these tests use.
+test('demo-issuer: initIssuer installs the issuer ID once, then locks', () => {
+  const contract = new Contract(witnesses);
+  const patient = makeAttestee();
+  const addr = RT.sampleContractAddress();
+  const ctor = contract.initialState(RT.createConstructorContext(patient, '0'.repeat(64)));
+  const first = contract.impureCircuits.initIssuer(
+    RT.createCircuitContext(addr, '0'.repeat(64), ctor.currentContractState, patient),
+    DEMO_ISSUER_SECRET,
+  );
+  assert.equal(first.result, true);
+  const led = ledger(first.context.currentQueryContext.state);
+  assert.deepEqual(Buffer.from(led.issuerId), Buffer.from(DEMO_ISSUER_SECRET));
+  // a second install must fail: the issuer ID is one-time
+  assert.throws(() => {
+    contract.impureCircuits.initIssuer(
+      RT.createCircuitContext(addr, '0'.repeat(64), first.context.currentQueryContext.state, patient),
+      bytes32(7),
+    );
+  }, /issuer already initialized/);
+  // issuerIdOf remains the disclose-identity helper
   const helper = pureCircuits.issuerIdOf(DEMO_ISSUER_SECRET);
   assert.equal(helper.length, 32);
   assert.deepEqual(Buffer.from(helper), Buffer.from(DEMO_ISSUER_SECRET));
-  const other = pureCircuits.issuerIdOf(bytes32(5));
-  assert.notDeepEqual(Buffer.from(other), Buffer.from(helper));
 });
 
 test('attestationOf is deterministic for identical inputs and holder-bound', () => {
