@@ -435,16 +435,30 @@ async function loadGeneratedContract() {
     try {
       await fs.promises.access(p, fs.constants.R_OK);
       const mod = await import(`file://${p}`);
-      const hasCircuits =
-        mod &&
-        typeof mod.Contract === 'function' &&
-        typeof mod.ledger === 'function' &&
-        mod.pureCircuits &&
-        typeof mod.pureCircuits.attestationOf === 'function' &&
-        typeof mod.pureCircuits.issuerIdOf === 'function' &&
-        mod.Contract.prototype &&
-        mod.Contract.prototype.circuits &&
-        typeof mod.Contract.prototype.circuits.attest === 'function';
+      // Circuits live on the instance (this.circuits = {...} in the
+      // constructor), not on the prototype, in compactc 0.31.x output.
+      // Instantiate with throwing stubs to verify the attestation API exists.
+      let hasCircuits = false;
+      try {
+        const probe = new mod.Contract({
+          wAge: () => { throw 0; }, wCondition: () => { throw 0; },
+          wMedication: () => { throw 0; }, wSecret: () => { throw 0; },
+          wBlind: () => { throw 0; }, wHolderSecret: () => { throw 0; },
+          wNonce: () => { throw 0; }, wIssuerSecret: () => { throw 0; },
+        });
+        hasCircuits =
+          mod &&
+          typeof mod.Contract === 'function' &&
+          typeof mod.ledger === 'function' &&
+          mod.pureCircuits &&
+          typeof mod.pureCircuits.attestationOf === 'function' &&
+          typeof mod.pureCircuits.issuerIdOf === 'function' &&
+          probe.circuits &&
+          typeof probe.circuits.attest === 'function' &&
+          typeof probe.circuits.proveAttested === 'function' &&
+          typeof probe.circuits.attestWithAttributes === 'function' &&
+          typeof probe.circuits.initIssuer === 'function';
+      } catch { hasCircuits = false; }
       if (hasCircuits) return { sourcePath: p, mod };
       attempts.push(`${p}: present but missing the attestation circuits (stale copy)`);
     } catch (err) {
@@ -487,12 +501,26 @@ async function runDeploy() {
   };
 
   // 1. Funding gate first. Never deploy blind.
+  //    COHORT_DEPLOY_BYPASS_GENERATION_FLAG=1 skips the *generation-registration*
+  //    check only (documented in docs/owner-deploy-runbook.md). The wallet sync
+  //    below still reveals the true spendable DUST balance; balanceTx fails
+  //    loudly if there is nothing to spend. Use when DUST was sponsored/
+  //    transferred directly rather than generated.
   process.stderr.write('deploy: running funding gate (--check)...\n');
   const gate = await runCheck();
+  const bypassGen = process.env.COHORT_DEPLOY_BYPASS_GENERATION_FLAG === '1';
   if (!gate.fundingGate?.deployAllowed) {
-    fail(`funding gate is ${gate.fundingGate?.verdict}: ${gate.fundingGate?.reason}`);
+    if (bypassGen && gate.dustGeneration?.registered === false) {
+      process.stderr.write(
+        'deploy: BYPASSING generation-registration gate (explicit flag). ' +
+          'Wallet sync will prove the real balance; aborting now would hide it.\n'
+      );
+    } else {
+      fail(`funding gate is ${gate.fundingGate?.verdict}: ${gate.fundingGate?.reason}`);
+    }
+  } else {
+    process.stderr.write(`deploy: funding gate GO (${gate.dustGeneration.currentDust} available, cap ${gate.dustGeneration.maxDust})\n`);
   }
-  process.stderr.write(`deploy: funding gate GO (${gate.dustGeneration.currentDust} available, cap ${gate.dustGeneration.maxDust})\n`);
 
   // 2. Latest compiled contract.
   const { sourcePath, mod } = await loadGeneratedContract();
@@ -539,7 +567,16 @@ async function runDeploy() {
   });
   process.stderr.write('deploy: wallet facade initialized, syncing...\n');
   await facade.start(shieldedSecretKeys, dustSecretKey);
-  const synced = await facade.waitForSyncedState();
+  // Sync with a timeout so we fail fast instead of hanging forever.
+  // If this times out, the VM likely cannot complete wallet sync.
+  const syncTimeoutMs = parseInt(process.env.COHORT_SYNC_TIMEOUT_MS || '600000', 10);
+  process.stderr.write(`deploy: waiting for sync (timeout ${syncTimeoutMs}ms)...\n`);
+  const synced = await Promise.race([
+    facade.waitForSyncedState(),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`wallet sync timed out after ${syncTimeoutMs}ms`)), syncTimeoutMs)
+    ),
+  ]);
   process.stderr.write(`deploy: synced. dust=${synced.dust.balance(new Date()).toString()} specks\n`);
 
   // 4. midnight-js providers.
