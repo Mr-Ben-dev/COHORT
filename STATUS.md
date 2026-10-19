@@ -28,6 +28,8 @@
 | `web/src/app/verify/*` (new), badges | SQUAD C (no-wallet worker) |
 | `web/src/app/demo/*` (new) | SQUAD C (two-tier worker) |
 | `apps/api/src/trials.mjs`, trial data | SQUAD D (catalog worker) |
+| `supabase/*` (new), `apps/api/src/catalog-db.mjs` (new), `TESTS/catalog-db.test.mjs` (new) | SQUAD D (supabase worker, D5) |
+| `apps/api/src/server.mjs` catalog-source wiring | PENDING SQUAD A (A1/A7) — verbatim patch staged in `supabase/README.md`, not applied (file ownership) |
 | `web/src/app/sites/*` (new) | SQUAD D (console worker) |
 | `packages/dapp/src/wallet/*` | SQUAD D (wallet worker) |
 | `RESEARCH/fhir-spike.md` (new) | SQUAD D (FHIR worker) |
@@ -68,7 +70,7 @@ export circuit attest(attestation: Bytes<32>): Boolean  // assert(disclose(wIssu
 export circuit attestWithAttributes(age: Uint<8>, cond: Boolean, med: Boolean, holderSecret: Bytes<32>, nonce: Bytes<32>): Boolean  // issuer-gated, computes attestationOf in-circuit
 export circuit proveAttested(trialId: Bytes<32>, minAge: Uint<8>, maxAge: Uint<8>, requireCondition: Boolean, forbidMedication: Boolean): Boolean
 ```
-attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolean]>([pad(32,"cohort:attrs"),age,cond,med])`; `binding=persistentHash<[Bytes<32>,Bytes<32>,Bytes<32>]>([pad(32,"cohort:holder"),holderSecret,nonce])`; return `persistentCommit<Bytes<32>>(attrsHash,binding)`. proveAttested: recompute attestation from wAge()/wCondition()/wMedication()/wHolderSecret()/wNonce(), assert member, program-scoped nullifier `persistentHash<Vector<3,Bytes<32>>>([pad(32,"cohort:attnul"),trialId,disclose(att)])`, same predicate asserts as proveEligible, referral as proveEligible, proven++, attestationsVerified++. proveEligible + trialNullifier byte-identical to deployed version (verified by diff). Full contract compiles on compactc 0.31.1 (typecheck + TS codegen OK; full-ZK proving-key run in progress at B1 finish).
+attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolean]>([pad(32,"cohort:attrs"),age,cond,med])`; `binding=persistentHash<[Bytes<32>,Bytes<32>,Bytes<32>]>([pad(32,"cohort:holder"),holderSecret,nonce])`; return `persistentCommit<Bytes<32>>(attrsHash,binding)`. proveAttested: recompute attestation from wAge()/wCondition()/wMedication()/wHolderSecret()/wNonce(), assert member, program-scoped nullifier `persistentHash<Vector<3,Bytes<32>>>([pad(32,"cohort:attnul"),trialId,disclose(att)])`, same predicate asserts as proveEligible, referral as proveEligible, proven++, attestationsVerified++. proveEligible + trialNullifier byte-identical to deployed version (verified by diff). Full contract compiles on compactc 0.31.1 (typecheck + TS codegen OK; full-ZK compile PASSED (zkir + prover/verifier keys for attest, attestWithAttributes, proveAttested, proveEligible; pure helpers attestationOf/issuerIdOf in generated TS)).
 
 #### Deviations from the draft spec (B2/B3/B7 read this)
 1. `const ISSUER_ID: Bytes<32> = 0x...` does NOT compile on language 0.23: `const` is not a top-level keyword, and `0x`-hex literals parse as Uint (capped at Uint<248>) — never Bytes<32>. Replaced with `circuit issuerId(): Bytes<32>` whose body is the 32-byte placeholder string `"\x00...\x00"` (32 escapes). The ceremony worker replaces the single marked line (`// CEREMONY-REPLACE: ISSUER_ID_BYTES`) with 32 `\xNN` escapes — `\xNN` escapes in string literals ARE the codegen vehicle for arbitrary 32-byte constants (verified compiling).
@@ -93,6 +95,7 @@ attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolea
 | D2 | Site verification console | — | NOT STARTED | web/src/app/sites/* (new) | C2, A7 |
 | D3 | Wallet matrix (Lace primary investigation + code) | — | NOT STARTED | packages/dapp/src/wallet/* | — |
 | D4 | Wallet matrix: GeroWallet primary, 1AM fallback, Lace flagged `proving:false` (code + web research, no pushes/deploys/chain writes) | d4 subagent | DONE | packages/dapp/src/wallets.mjs (new), docs/wallet-trust.md (new), docs/wallet-demo-checklist.md (new), TESTS/wallet-matrix.test.mjs (new, in test script), web copy: wallet-picker.tsx, wallet-modal.tsx, package.json | A1 concurrently editing packages/dapp/src — new file only, no edits to existing .mjs files |
+| D5 | Supabase public-catalog cache: schema+RLS, CT.gov sync script, anon-key read layer, catalog-version hash plumbing, tests | 69379855 | DONE | `supabase/schema.sql`, `supabase/sync.mjs`, `supabase/README.md`, `apps/api/src/catalog-db.mjs`, `TESTS/catalog-db.test.mjs` (all new); root `package.json` test script | Supabase credentials (live test); `server.mjs` `--use-db`/`CATALOG_SOURCE` wiring pending A1/A7 (ownership) — verbatim patch in `supabase/README.md` |
 
 ## SQUAD E — Communication
 | # | Task | Worker | Status | Files touched | Blockers |
