@@ -26,6 +26,9 @@ export const witnesses = {
   wMedication: (ctx) => [ctx.privateState, ctx.privateState.medication],
   wSecret: (ctx) => [ctx.privateState, ctx.privateState.secret],
   wBlind: (ctx) => [ctx.privateState, ctx.privateState.blind],
+  wHolderSecret: (ctx) => [ctx.privateState, ctx.privateState.holderSecret],
+  wNonce: (ctx) => [ctx.privateState, ctx.privateState.nonce],
+  wIssuerSecret: (ctx) => [ctx.privateState, ctx.privateState.issuerSecret],
 };
 
 export function makePatient(overrides = {}) {
@@ -35,6 +38,9 @@ export function makePatient(overrides = {}) {
     medication: false,
     secret: bytes32(7),
     blind: bytes32(9),
+    holderSecret: bytes32(21),
+    nonce: bytes32(33),
+    issuerSecret: bytes32(0),
     ...overrides,
   };
 }
