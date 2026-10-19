@@ -1,0 +1,366 @@
+{
+  "protocolSection": {
+    "identificationModule": {
+      "nctId": "NCT06296745",
+      "orgStudyIdInfo": {
+        "id": "2024-KY-008-01"
+      },
+      "organization": {
+        "fullName": "Guangzhou Medical University",
+        "class": "OTHER"
+      },
+      "briefTitle": "Intrathecal Pemetrexed for Leptomeningeal Metastasis From Lung Adenocarcinoma That Progressed After Osimertinib.",
+      "officialTitle": "An Open-label, Single-arm, Phase II Trial of Intrathecal Pemetrexed for Leptomeningeal Metastasis From Lung Adenocarcinoma That Progressed After a Double Dose of Third-generation TKIs, Including Osimertinib"
+    },
+    "statusModule": {
+      "statusVerifiedDate": "2026-01",
+      "overallStatus": "RECRUITING",
+      "expandedAccessInfo": {
+        "hasExpandedAccess": false
+      },
+      "startDateStruct": {
+        "date": "2025-09-01",
+        "type": "ACTUAL"
+      },
+      "primaryCompletionDateStruct": {
+        "date": "2026-01-20",
+        "type": "ESTIMATED"
+      },
+      "completionDateStruct": {
+        "date": "2027-03-20",
+        "type": "ESTIMATED"
+      },
+      "studyFirstSubmitDate": "2024-02-29",
+      "studyFirstSubmitQcDate": "2024-03-05",
+      "studyFirstPostDateStruct": {
+        "date": "2024-03-06",
+        "type": "ACTUAL"
+      },
+      "lastUpdateSubmitDate": "2026-01-28",
+      "lastUpdatePostDateStruct": {
+        "date": "2026-01-30",
+        "type": "ACTUAL"
+      }
+    },
+    "sponsorCollaboratorsModule": {
+      "responsibleParty": {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "investigatorFullName": "Zhenyu Pan",
+        "investigatorTitle": "Professor",
+        "investigatorAffiliation": "Guangzhou Medical University"
+      },
+      "leadSponsor": {
+        "name": "Guangzhou Medical University",
+        "class": "OTHER"
+      }
+    },
+    "oversightModule": {
+      "oversightHasDmc": true,
+      "isFdaRegulatedDrug": false,
+      "isFdaRegulatedDevice": false
+    },
+    "descriptionModule": {
+      "briefSummary": "Pemetrexed is one of the first-line chemotherapeutic agents for non-squamous non-small cell lung cancer (NSCLC). Since 2017, intrathecal pemetrexed has shown good efficacy for patients with leptomeningeal metastases from NSCLC. It has been recommended as the preferred drug for intrathecal chemotherapy by the Chinese Society of Clinical Oncology (CSCO) guidelines. Tyrosine kinase inhibitors (TKIs) play a promising role in treating non-small cell lung cancer patients with epidermal growth factor receptor (EGFR) mutations. An international multi-center clinical study published in 2019 confirmed that double dose of osimertinib showed significant improvement in leptomeningeal metastases from NSCLC with EGFR exon 19 deletion or exon 21 L858R/T790M mutation. It makes TKIs the mainstay of treatment for patients with EGFR-mutant NSCLC with leptomeningeal metastases. However, the choice of treatment after resistance to targeted therapy is a hot topic in clinical practice, with 78% of patients in the study above who responded to double-dose osimertinib still showing progression at the time of follow-up. The purpose of this study was to observe the safety and efficacy of intrathecal pemetrexed for leptomeningeal metastasis from lung adenocarcinoma that progressed after a double dose of a third-generation TKI such as osimertinib.",
+      "detailedDescription": "This study is a single arm, open and phase II clinical trial. Consecutive patients with leptomeningeal metastases from lung adenocarcinoma that progressed after a double dose of a third-generation TKI such as osimertinib are enrolled in this study. Concomitant regimen consisted of intrathecal chemotherapy (via lumbar puncture, pemetrexed 15 mg, plus dexamethasone 5 mg, twice a week for 2 weeks as an induction phase, followed by once a week for 4 weeks as a consolidation phase. Thereafter, the maintenance phase is once a month). The RANO proposal for response criteria of leptomeningeal metastasis was used to assess the clinical response in this study."
+    },
+    "conditionsModule": {
+      "conditions": [
+        "Leptomeningeal Metastasis"
+      ],
+      "keywords": [
+        "Leptomeningeal metastasis",
+        "Intrathecal chemotherapy",
+        "Pemetrexed",
+        "Osimertinib",
+        "Epidermal growth factor receptor mutation",
+        "Non-small-cell lung cancer"
+      ]
+    },
+    "designModule": {
+      "studyType": "INTERVENTIONAL",
+      "phases": [
+        "PHASE2"
+      ],
+      "designInfo": {
+        "allocation": "NA",
+        "interventionModel": "SINGLE_GROUP",
+        "primaryPurpose": "TREATMENT",
+        "maskingInfo": {
+          "masking": "NONE"
+        }
+      },
+      "enrollmentInfo": {
+        "count": 36,
+        "type": "ESTIMATED"
+      }
+    },
+    "armsInterventionsModule": {
+      "armGroups": [
+        {
+          "label": "Group",
+          "type": "EXPERIMENTAL",
+          "description": "Intra-pemetrexed",
+          "interventionNames": [
+            "Drug: Pemetrexed"
+          ]
+        }
+      ],
+      "interventions": [
+        {
+          "type": "DRUG",
+          "name": "Pemetrexed",
+          "description": "Pemetrexed 15 mg was administered with dexamethasone 5 mg via intraventricular or via lumbar puncture. First, induction intrathecal chemotherapy, twice per week for 2 weeks; then consolidation intrathecal chemotherapy, once per week for 4 weeks; and maintenance intrathecal chemotherapy, once per month until disease progression or unmanageable drug-related toxicity.",
+          "armGroupLabels": [
+            "Group"
+          ]
+        }
+      ]
+    },
+    "outcomesModule": {
+      "primaryOutcomes": [
+        {
+          "measure": "Clinical response rate",
+          "description": "The response assessment in neuro-oncology criteria (RANO) proposal for response criteria of leptomeningeal metastasis was used to assess the clinical response in this study.",
+          "timeFrame": "From date of treatment until the date of first documented progression or date of death from any cause, whichever came first, assessed up to 6 months."
+        },
+        {
+          "measure": "Neurological progression-free survival (NPFS)",
+          "description": "NPFS was defined as time from the start of treatment until neurological progression or death. The neurological progression was determined based on the RANO proposal evaluation criteria which have been established and published on Neuro Oncol.",
+          "timeFrame": "From date of treatment until the date of first documented neurological progression or date of death from any cause, whichever came first, assessed up to 6 months."
+        }
+      ],
+      "secondaryOutcomes": [
+        {
+          "measure": "Overall survival",
+          "description": "Survival time was recorded since the date of patient enrollment. All patients were followed up until death or the end of the study.",
+          "timeFrame": "From the enrollment of this study until date of death from any cause, whichever came first, or the last follow-up (at least 7 months)."
+        },
+        {
+          "measure": "Incidence of treatment-related adverse events",
+          "description": "The incidence of treatment-related adverse events were measured for determining tolerability and safety. Adverse events (AEs) are evaluated according to the Common Terminology Criteria for Adverse Events (CTCAE, version 4.03). Events of grade 3-5 are defined as moderate and severe adverse events.",
+          "timeFrame": "From date of treatment until the date of first documented progression or date of death from any cause, whichever came first, assessed up to 6 months."
+        }
+      ]
+    },
+    "eligibilityModule": {
+      "eligibilityCriteria": "Inclusion Criteria:\n\n1. Male or female aged between 18 and 75 years.\n2. Histologically or cytologically confirmed diagnosis of NSCLC with single activating EGFR mutations (L858R or Exon19Del).\n3. Confirmed diagnosis of leptomeningeal metastasis according to ESMO/ EANO guidelines.\n4. Progression after previous double doses of third-generation TKIs such as Osimertinib.\n5. Normal liver and kidney function; WBC≥4000/mm3, Plt≥100000/mm3.\n6. No history of severe nervous system disease.\n7. No severe dyscrasia.\n\nExclusion Criteria:\n\n1. Any evidence of nervous system failure, including severe encephalopathy, grade 3 or 4 leukoencephalopathy on imaging, and Glasgow Coma Score less than 11.\n2. Any evidence of extensive and lethal progressive systemic diseases without effective treatment.\n3. Patients with poor compliance or other reasons that were unsuitable for this study",
+      "healthyVolunteers": false,
+      "sex": "ALL",
+      "minimumAge": "18 Years",
+      "maximumAge": "75 Years",
+      "stdAges": [
+        "ADULT",
+        "OLDER_ADULT"
+      ]
+    },
+    "contactsLocationsModule": {
+      "centralContacts": [
+        {
+          "name": "Zhenyu Pan",
+          "role": "CONTACT",
+          "phone": "+8615804302753",
+          "email": "dr-zypan@163.com"
+        },
+        {
+          "name": "Guozi Yang",
+          "role": "CONTACT",
+          "phone": "+8615804302755",
+          "email": "guoziyang_1982@163.com"
+        }
+      ],
+      "overallOfficials": [
+        {
+          "name": "Zhenyu Pan",
+          "affiliation": "Guangzhou Medical University",
+          "role": "PRINCIPAL_INVESTIGATOR"
+        }
+      ],
+      "locations": [
+        {
+          "facility": "The Affiliated Huizhou Hospital, Guangzhou Medical University",
+          "status": "RECRUITING",
+          "city": "Huizhou",
+          "state": "Guangdong",
+          "zip": "516000",
+          "country": "China",
+          "contacts": [
+            {
+              "name": "Guozi Yang",
+              "role": "CONTACT",
+              "phone": "+8615804302755",
+              "email": "guoziyang_1982@163.com"
+            }
+          ],
+          "geoPoint": {
+            "lat": 23.11147,
+            "lon": 114.41523
+          }
+        }
+      ]
+    },
+    "referencesModule": {
+      "references": [
+        {
+          "pmid": "31809241",
+          "type": "BACKGROUND",
+          "citation": "Yang JCH, Kim SW, Kim DW, Lee JS, Cho BC, Ahn JS, Lee DH, Kim TM, Goldman JW, Natale RB, Brown AP, Collins B, Chmielecki J, Vishwanathan K, Mendoza-Naranjo A, Ahn MJ. Osimertinib in Patients With Epidermal Growth Factor Receptor Mutation-Positive Non-Small-Cell Lung Cancer and Leptomeningeal Metastases: The BLOOM Study. J Clin Oncol. 2020 Feb 20;38(6):538-547. doi: 10.1200/JCO.19.00457. Epub 2019 Dec 6."
+        },
+        {
+          "pmid": "31544065",
+          "type": "BACKGROUND",
+          "citation": "Pan Z, Yang G, Cui J, Li W, Li Y, Gao P, Jiang T, Sun Y, Dong L, Song Y, Zhao G. A Pilot Phase 1 Study of Intrathecal Pemetrexed for Refractory Leptomeningeal Metastases From Non-small-cell Lung Cancer. Front Oncol. 2019 Aug 30;9:838. doi: 10.3389/fonc.2019.00838. eCollection 2019."
+        },
+        {
+          "pmid": "32733606",
+          "type": "BACKGROUND",
+          "citation": "Pan Z, Yang G, He H, Cui J, Li W, Yuan T, Chen K, Jiang T, Gao P, Sun Y, Cong X, Li Z, Wang Y, Pang X, Song Y, Zhao G. Intrathecal pemetrexed combined with involved-field radiotherapy as a first-line intra-CSF therapy for leptomeningeal metastases from solid tumors: a phase I/II study. Ther Adv Med Oncol. 2020 Jul 17;12:1758835920937953. doi: 10.1177/1758835920937953. eCollection 2020."
+        },
+        {
+          "pmid": "36870951",
+          "type": "BACKGROUND",
+          "citation": "Xu Z, Hao X, Wang Q, Yang K, Li J, Xing P. Intracranial efficacy and safety of furmonertinib 160 mg with or without anti-angiogenic agent in advanced NSCLC patients with BM/LM as salvage therapy. BMC Cancer. 2023 Mar 4;23(1):206. doi: 10.1186/s12885-023-10676-x."
+        }
+      ]
+    },
+    "ipdSharingStatementModule": {
+      "ipdSharing": "YES",
+      "description": "All individual participant data that underlie results in a publication will be available to other researchers.",
+      "infoTypes": [
+        "STUDY_PROTOCOL",
+        "SAP"
+      ],
+      "timeFrame": "Starting 6 months after publication.",
+      "accessCriteria": "Individual participant data will be public accessable via contacting with principal investigator by email within 6 months after the trial complete."
+    }
+  },
+  "derivedSection": {
+    "miscInfoModule": {
+      "versionHolder": "2026-10-16"
+    },
+    "conditionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D055756",
+          "term": "Meningeal Carcinomatosis"
+        },
+        {
+          "id": "D002289",
+          "term": "Carcinoma, Non-Small-Cell Lung"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D008577",
+          "term": "Meningeal Neoplasms"
+        },
+        {
+          "id": "D016543",
+          "term": "Central Nervous System Neoplasms"
+        },
+        {
+          "id": "D009423",
+          "term": "Nervous System Neoplasms"
+        },
+        {
+          "id": "D009371",
+          "term": "Neoplasms by Site"
+        },
+        {
+          "id": "D009369",
+          "term": "Neoplasms"
+        },
+        {
+          "id": "D009422",
+          "term": "Nervous System Diseases"
+        },
+        {
+          "id": "D002283",
+          "term": "Carcinoma, Bronchogenic"
+        },
+        {
+          "id": "D001984",
+          "term": "Bronchial Neoplasms"
+        },
+        {
+          "id": "D008175",
+          "term": "Lung Neoplasms"
+        },
+        {
+          "id": "D012142",
+          "term": "Respiratory Tract Neoplasms"
+        },
+        {
+          "id": "D013899",
+          "term": "Thoracic Neoplasms"
+        },
+        {
+          "id": "D008171",
+          "term": "Lung Diseases"
+        },
+        {
+          "id": "D012140",
+          "term": "Respiratory Tract Diseases"
+        }
+      ]
+    },
+    "interventionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D000068437",
+          "term": "Pemetrexed"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D006147",
+          "term": "Guanine"
+        },
+        {
+          "id": "D007042",
+          "term": "Hypoxanthines"
+        },
+        {
+          "id": "D011688",
+          "term": "Purinones"
+        },
+        {
+          "id": "D011687",
+          "term": "Purines"
+        },
+        {
+          "id": "D006574",
+          "term": "Heterocyclic Compounds, 2-Ring"
+        },
+        {
+          "id": "D000072471",
+          "term": "Heterocyclic Compounds, Fused-Ring"
+        },
+        {
+          "id": "D006571",
+          "term": "Heterocyclic Compounds"
+        },
+        {
+          "id": "D005971",
+          "term": "Glutamates"
+        },
+        {
+          "id": "D024342",
+          "term": "Amino Acids, Acidic"
+        },
+        {
+          "id": "D000596",
+          "term": "Amino Acids"
+        },
+        {
+          "id": "D000602",
+          "term": "Amino Acids, Peptides, and Proteins"
+        },
+        {
+          "id": "D000600",
+          "term": "Amino Acids, Dicarboxylic"
+        }
+      ]
+    }
+  },
+  "hasResults": false
+}

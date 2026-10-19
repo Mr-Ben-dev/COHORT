@@ -91,7 +91,7 @@ attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolea
 ## SQUAD D — Product depth
 | # | Task | Worker | Status | Files touched | Blockers |
 |---|---|---|---|---|---|
-| D1 | Trial catalog 2→12 hand-mapped | — | NOT STARTED | apps/api/src/trials.mjs | — |
+| D1 | Trial catalog 2→12 hand-mapped | 2026-10-19 | DONE (tests 11/11 green) | apps/api/src/trials.mjs, scripts/ctgov-extract.mjs, data/ctgov/, TESTS/trials-catalog.test.mjs | 10 new RECRUITING trials (3 oncology, 3 cardiology, 2 diabetes, 2 neurology), each with verbatim provenance + non-empty unsupported[]; healthyVolunteers key already correct |
 | D2 | Site verification console | — | NOT STARTED | web/src/app/sites/* (new) | C2, A7 |
 | D3 | FHIR R4 / Synthea synthetic-record import (browser-local): 3 curated synthetic bundles, parser + path map, /import UI route, demo live-server path, `requestAttestation()` handoff, trust doc, tests | 04eea10c | DONE | web/public/fhir-demo/* (3 new), web/src/lib/fhir-import.mjs (new), web/src/lib/fhir-import.ts (new), web/src/app/import/page.tsx (new), docs/fhir-trust.md (new), TESTS/fhir-import.test.mjs (new, in test script), package.json | — |
 | D3-old | Wallet matrix (Lace primary investigation + code) — SUPERSEDED by the D4 row below | — | SUPERSEDED | — | — |

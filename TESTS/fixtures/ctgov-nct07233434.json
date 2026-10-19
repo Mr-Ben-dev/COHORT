@@ -1,0 +1,258 @@
+{
+  "protocolSection": {
+    "identificationModule": {
+      "nctId": "NCT07233434",
+      "orgStudyIdInfo": {
+        "id": "PAP_RI2_2019/07"
+      },
+      "organization": {
+        "fullName": "Centre Hospitalier Universitaire de la Guadeloupe",
+        "class": "OTHER"
+      },
+      "briefTitle": "Screening for Type 2 Diabetes by Oral Glucose Tolerance Test in the Population Groups Not Diagnosed by Fasting Blood Glucose in Guadeloupe",
+      "officialTitle": "Screening for Type 2 Diabetes by Oral Glucose Tolerance Test in the Population Groups Not Diagnosed by Fasting Blood Glucose in Guadeloupe: a Pilot Study",
+      "acronym": "DIADEG"
+    },
+    "statusModule": {
+      "statusVerifiedDate": "2025-10",
+      "overallStatus": "RECRUITING",
+      "expandedAccessInfo": {
+        "hasExpandedAccess": false
+      },
+      "startDateStruct": {
+        "date": "2021-02-02",
+        "type": "ACTUAL"
+      },
+      "primaryCompletionDateStruct": {
+        "date": "2027-02-02",
+        "type": "ESTIMATED"
+      },
+      "completionDateStruct": {
+        "date": "2028-08-02",
+        "type": "ESTIMATED"
+      },
+      "studyFirstSubmitDate": "2025-11-14",
+      "studyFirstSubmitQcDate": "2025-11-14",
+      "studyFirstPostDateStruct": {
+        "date": "2025-11-18",
+        "type": "ACTUAL"
+      },
+      "lastUpdateSubmitDate": "2025-11-14",
+      "lastUpdatePostDateStruct": {
+        "date": "2025-11-18",
+        "type": "ACTUAL"
+      }
+    },
+    "sponsorCollaboratorsModule": {
+      "responsibleParty": {
+        "type": "SPONSOR"
+      },
+      "leadSponsor": {
+        "name": "Centre Hospitalier Universitaire de la Guadeloupe",
+        "class": "OTHER"
+      }
+    },
+    "oversightModule": {
+      "oversightHasDmc": false,
+      "isFdaRegulatedDrug": false,
+      "isFdaRegulatedDevice": false
+    },
+    "descriptionModule": {
+      "briefSummary": "In France, only the fasting blood glucose (FBG) measurement is recommended for diabetes screening. Ethnic heterogeneity and genetic polymorphisms specific to the Afro-Caribbean and Indo-Caribbean population in Guadeloupe justify the interest to early screen type 2 diabetes mellitus (T2DM). Our main objective is to estimate the prevalence of T2DM defined by oral glucose tolerance (OGTT) in subjects with risk factors for T2DM and not diagnosed with the FBG.",
+      "detailedDescription": "Contrary to the French recommendations, the American recommendations for the diagnosis of T2DM, include FBG, HbA1c or OGTT. These recommendations suggest that there are differences in the HbA1c levels between subjects of African origin and Caucasian subjects. The population in Guadeloupe is characterized by ethnic heterogeneity with genetic polymorphisms specific to the subjects of African and Indian origin that could justify the interest of a targeted and early screening of T2DM by another test than FBG. The main dilemma is how to confirm that subjects with risk factors of T2DM but normal FBG are not diabetic? Some of them have normal FBG levels but HbA1c levels between 5.7 and 6.4% that are not used as diagnostic criteria in France. We think that OGTT could help to better diagnose T2DM in such subjects.\n\nAfter identifying these subjects, an OGTT will be performed after inclusion. The diagnosis of T2DM will be confirmed in subjects who exceeded the glucose threshold of 11mmol/L (200mg/dL), 2 hours after the OGTT.\n\nThe number of these diabetic subjects is evaluated to 10%, they will be treated according to the HAS recommendations and monitored during the year of the study. The other subjects without abnormalities will be followed at 12 months with OGTT repetition."
+    },
+    "conditionsModule": {
+      "conditions": [
+        "Non-Diabetic"
+      ],
+      "keywords": [
+        "oral glucose tolerance",
+        "type 2 diabetes mellitus",
+        "Fasting blood glucose",
+        "HbA1c",
+        "screening"
+      ]
+    },
+    "designModule": {
+      "studyType": "INTERVENTIONAL",
+      "phases": [
+        "NA"
+      ],
+      "designInfo": {
+        "allocation": "NA",
+        "interventionModel": "SINGLE_GROUP",
+        "interventionModelDescription": "After inclusion, the subjects will have an OGTT performed in the department of Diabetology. If the glucose blood levels remain normal after the OGTT, the test will be repeated after 12 months. A control of the HbA1c levels will be also performed associated with a physical examination.",
+        "primaryPurpose": "DIAGNOSTIC",
+        "maskingInfo": {
+          "masking": "NONE"
+        }
+      },
+      "enrollmentInfo": {
+        "count": 120,
+        "type": "ESTIMATED"
+      }
+    },
+    "armsInterventionsModule": {
+      "armGroups": [
+        {
+          "label": "non diabetic",
+          "type": "EXPERIMENTAL",
+          "description": "After inclusion, the subjects will have an OGTT performed in the department of non-diabetic subjects in Guadeloupe, from African or Indian origin who have risk factors of diabetes associated with normal FBG levels but HbA1c levels between 5.7 and 6.4%.",
+          "interventionNames": [
+            "Diagnostic Test: After inclusion, the subjects will have an OGTT performed in the department of Diabetology. If the glucose blood levels remain normal after the OGTT, the test will be repeated after 12 months. A contr"
+          ]
+        }
+      ],
+      "interventions": [
+        {
+          "type": "DIAGNOSTIC_TEST",
+          "name": "After inclusion, the subjects will have an OGTT performed in the department of Diabetology. If the glucose blood levels remain normal after the OGTT, the test will be repeated after 12 months. A contr",
+          "description": "After inclusion, the subjects will have an OGTT performed in the department of Diabetology. If the glucose blood levels remain normal after the OGTT, the test will be repeated after 12 months. A control of the HbA1c levels will be also performed associated with a physical examination.",
+          "armGroupLabels": [
+            "non diabetic"
+          ]
+        }
+      ]
+    },
+    "outcomesModule": {
+      "primaryOutcomes": [
+        {
+          "measure": "HbA1c levels > 5.7%,",
+          "description": "Percentage of patients with HbA1c levels \\> 5.7%, who exceeded the glucose threshold of 11mmol/L (200mg/dL), 2 hours after the oral glucose toleranceand who were not diagnosed with fasting blood glucose",
+          "timeFrame": "baseline, 12 months"
+        }
+      ],
+      "secondaryOutcomes": [
+        {
+          "measure": "diabetic and non-diabetic subjects according to oral glucose tolerance",
+          "description": "Percentage of diabetic and non-diabetic subjects according to OGTT by age, gender, presence of metabolic syndrome, ethnic origin and biological data",
+          "timeFrame": "baseline"
+        },
+        {
+          "measure": "explanatory factors",
+          "description": "Odd-ratio of explanatory factors for T2DM defined by the OGTT",
+          "timeFrame": "Baseline"
+        },
+        {
+          "measure": "type 2 diabetes mellitus after 1 year",
+          "description": "Percentage of non-diabetic subjects who develop a T2DM after 1 years of follow-up.",
+          "timeFrame": "12 months"
+        },
+        {
+          "measure": "fasting blood glucose",
+          "description": "Sensitivity, specificity, positive and negative predictive value of fasting blood glucose after 1 year",
+          "timeFrame": "12 months"
+        },
+        {
+          "measure": "oral glucose tolerance",
+          "description": "Sensitivity, specificity, positive and negative predictive value of oral glucose tolerance after 1 year.",
+          "timeFrame": "12 months"
+        }
+      ]
+    },
+    "eligibilityModule": {
+      "eligibilityCriteria": "o Inclusion criteria : Adult subject (over 18 years and under 65 years old) Subjects of African or Indian origin and self-declared Normal FBG levels (110mg/dL) HbA1c levels between 5.7 and 6.4% One or more of the following factors: BMI \\> 25 kg/m2, family history of T2DM in the 1st and 2nd familial degree, hypertension, dyslipidemia.\n\nAffiliation to the national social health system or equivalent Informed and written consent signed by the patient and the investigator (at the latest on the day of inclusion and before the completion of any research related exam)\n\no Exclusion criteria : Pregnant or lactating woman Women with a history of gestational diabetes Polycystic ovary syndrome Endocrine, hepatic or renal diseases affecting glycemic control Treatment that affect the metabolism of glucose or insulin Refusal to participate Subjects without adequate or impaired decisional abilities for consent to research and placed under guardianship, curatorship or safeguard of justice, person participating in another research including an exclusion period still in progress, severely impaired physical and / or psychological health, which, according to the investigator, may affect the compliance of the study participant",
+      "healthyVolunteers": true,
+      "sex": "ALL",
+      "minimumAge": "18 Years",
+      "maximumAge": "65 Years",
+      "stdAges": [
+        "ADULT",
+        "OLDER_ADULT"
+      ]
+    },
+    "contactsLocationsModule": {
+      "centralContacts": [
+        {
+          "name": "Valérie HAMONY-SOTER",
+          "role": "CONTACT",
+          "phone": "+590 590 93 46 77",
+          "email": "valerie.soter@chu-guadeloupe.fr"
+        },
+        {
+          "name": "Eunice NUBRET",
+          "role": "CONTACT",
+          "email": "eunice.nubret@chu-guadeloupe.fr"
+        }
+      ],
+      "overallOfficials": [
+        {
+          "name": "Fritz-Line VELAYOUDOM, Doctor",
+          "affiliation": "CHU de la Guadeloupe",
+          "role": "PRINCIPAL_INVESTIGATOR"
+        }
+      ],
+      "locations": [
+        {
+          "facility": "Centre Hospitalier Universitaire de la Guadeloupe",
+          "status": "RECRUITING",
+          "city": "Pointe-à-Pitre",
+          "state": "Guadeloupe",
+          "zip": "97159",
+          "country": "Guadeloupe",
+          "contacts": [
+            {
+              "name": "Valérie HAMONY-SOTER",
+              "role": "CONTACT",
+              "phone": "+590590934686",
+              "email": "valerie.soter@chu-guadeloupe.fr"
+            },
+            {
+              "name": "Eunice NUBRET",
+              "role": "CONTACT",
+              "phone": "0590934686",
+              "email": "eunice.nubret@chu-guadeloupe.fr"
+            },
+            {
+              "name": "Fritz-Line VELAYOUDOM, Doctor",
+              "role": "PRINCIPAL_INVESTIGATOR"
+            }
+          ],
+          "geoPoint": {
+            "lat": 16.23638,
+            "lon": -61.53459
+          }
+        }
+      ]
+    },
+    "ipdSharingStatementModule": {
+      "ipdSharing": "NO"
+    }
+  },
+  "derivedSection": {
+    "miscInfoModule": {
+      "versionHolder": "2026-10-16"
+    },
+    "conditionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D003924",
+          "term": "Diabetes Mellitus, Type 2"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D003920",
+          "term": "Diabetes Mellitus"
+        },
+        {
+          "id": "D044882",
+          "term": "Glucose Metabolism Disorders"
+        },
+        {
+          "id": "D008659",
+          "term": "Metabolic Diseases"
+        },
+        {
+          "id": "D009750",
+          "term": "Nutritional and Metabolic Diseases"
+        },
+        {
+          "id": "D004700",
+          "term": "Endocrine System Diseases"
+        }
+      ]
+    }
+  },
+  "hasResults": false
+}

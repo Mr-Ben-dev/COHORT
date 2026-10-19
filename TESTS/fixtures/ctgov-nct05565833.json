@@ -1,0 +1,383 @@
+{
+  "protocolSection": {
+    "identificationModule": {
+      "nctId": "NCT05565833",
+      "orgStudyIdInfo": {
+        "id": "IRB-HSR #220077"
+      },
+      "organization": {
+        "fullName": "University of Virginia",
+        "class": "OTHER"
+      },
+      "briefTitle": "Sleep Healthy Using the Internet Mitigating Insomnia to Address Neurocognitive Difficulties (SHUTi MIND)",
+      "officialTitle": "Internet-based Insomnia Intervention to Prevent Cognitive Decline in Older Adults With Mild Cognitive Impairment (SHUTi MIND)"
+    },
+    "statusModule": {
+      "statusVerifiedDate": "2024-05",
+      "overallStatus": "RECRUITING",
+      "expandedAccessInfo": {
+        "hasExpandedAccess": false
+      },
+      "startDateStruct": {
+        "date": "2023-02-27",
+        "type": "ACTUAL"
+      },
+      "primaryCompletionDateStruct": {
+        "date": "2028-01",
+        "type": "ESTIMATED"
+      },
+      "completionDateStruct": {
+        "date": "2028-01",
+        "type": "ESTIMATED"
+      },
+      "studyFirstSubmitDate": "2022-09-08",
+      "studyFirstSubmitQcDate": "2022-09-29",
+      "studyFirstPostDateStruct": {
+        "date": "2022-10-04",
+        "type": "ACTUAL"
+      },
+      "lastUpdateSubmitDate": "2024-05-06",
+      "lastUpdatePostDateStruct": {
+        "date": "2024-05-08",
+        "type": "ACTUAL"
+      }
+    },
+    "sponsorCollaboratorsModule": {
+      "responsibleParty": {
+        "type": "PRINCIPAL_INVESTIGATOR",
+        "investigatorFullName": "Meghan Mattos",
+        "investigatorTitle": "Assistant Professor of Nursing",
+        "investigatorAffiliation": "University of Virginia"
+      },
+      "leadSponsor": {
+        "name": "University of Virginia",
+        "class": "OTHER"
+      }
+    },
+    "oversightModule": {
+      "oversightHasDmc": true,
+      "isFdaRegulatedDrug": false,
+      "isFdaRegulatedDevice": false
+    },
+    "descriptionModule": {
+      "briefSummary": "This randomized controlled trial will evaluate the impact of an Internet-delivered cognitive behavioral therapy for insomnia (CBT-I) intervention on sleep and the extent to which it contributes to cognitive health in individuals with mild cognitive impairment. Participants with insomnia who meet the study criteria for mild cognitive impairment will be recruited to determine the effects of the CBT-I intervention compared to a patient education condition on sleep and cognition. Internet-based recruitment methods will be used, and outcomes include sleep variables, daytime variables, and cognitive status.",
+      "detailedDescription": "This randomized controlled trial will evaluate the impact of an Internet-delivered cognitive behavioral therapy for insomnia (CBT-I) intervention on sleep and the extent to which it contributes to cognitive health in individuals with mild cognitive impairment. Participants with insomnia who meet the study criteria for mild cognitive impairment will be recruited to determine the effects of the CBT-I intervention compared to patient education (PE) control condition on sleep and cognition. Internet-based recruitment methods will be used, and outcomes include sleep variables (reduced overall insomnia severity and wake after sleep onset), daytime variables (reduced levels of fatigue, improved quality of life, and improved mood), and cognitive status (memory, attention/psychomotor speed, and executive functioning domains). Participants will complete a pre-assessment battery, which consists of an online cognitive test, an online questionnaire, and two weeks of sleep diaries. Once complete, participants will be randomized to either the Internet-based PE or CBT-I intervention. At the start of week nine, all participants will be instructed to complete the post-assessment battery (cognitive test, questionnaires, and diaries). After completing the post-assessment, participants will have continued access to their assigned online program throughout the study duration. This same assessment (cognitive test, questionnaires, and diaries) will be completed at 6, 12, 18, and 24 months."
+    },
+    "conditionsModule": {
+      "conditions": [
+        "Insomnia",
+        "Cognitive Dysfunction",
+        "Mild Cognitive Impairment",
+        "Sleep Initiation and Maintenance Disorders",
+        "Sleep Disorders, Intrinsic",
+        "Dyssomnias",
+        "Sleep Wake Disorders",
+        "Nervous System Diseases",
+        "Alzheimer Disease"
+      ],
+      "keywords": [
+        "Insomnia",
+        "Alzheimer's disease",
+        "Mild cognitive impairment",
+        "Cognitive behavioral therapy"
+      ]
+    },
+    "designModule": {
+      "studyType": "INTERVENTIONAL",
+      "phases": [
+        "PHASE2"
+      ],
+      "designInfo": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "primaryPurpose": "TREATMENT",
+        "maskingInfo": {
+          "masking": "NONE"
+        }
+      },
+      "enrollmentInfo": {
+        "count": 144,
+        "type": "ESTIMATED"
+      }
+    },
+    "armsInterventionsModule": {
+      "armGroups": [
+        {
+          "label": "SHUTi OASIS",
+          "type": "EXPERIMENTAL",
+          "description": "Participants will be assigned to the SHUTi (Sleep Healthy Using the Internet) for Older Adult Sufferers of Insomnia and Sleeplessness (OASIS) online intervention optimized for older adults. CBTi will be delivered online and metered out over time with each new core becoming available one week after the completion of the previous core. The intervention period is 9 weeks. They will spend 1-2 hours during the intervention period completing daily sleep diaries as well as interactive core content covering topics of sleep behaviors, sleep thoughts, sleep education, and relapse prevention targeting issues specific to older adults. As users progress through the intervention, they will receive automated, tailored instructions on how to improve their sleep.",
+          "interventionNames": [
+            "Behavioral: SHUTi OASIS"
+          ]
+        },
+        {
+          "label": "Patient Education Website",
+          "type": "PLACEBO_COMPARATOR",
+          "description": "Participants will be assigned to a relevant patient education website. It will include information about insomnia symptoms, diagnosis, prognosis, and information about CBT strategies for the older adult. Unlike SHUTi, the content will not be tailored and will be presented all at once.",
+          "interventionNames": [
+            "Other: Patient Education"
+          ]
+        }
+      ],
+      "interventions": [
+        {
+          "type": "BEHAVIORAL",
+          "name": "SHUTi OASIS",
+          "description": "Cognitive Behavioral Therapy for insomnia delivered online and metered out over 6-9 weeks in a fully automated, interactive, tailored web-based program",
+          "armGroupLabels": [
+            "SHUTi OASIS"
+          ]
+        },
+        {
+          "type": "OTHER",
+          "name": "Patient Education",
+          "description": "An educational website containing information on insomnia",
+          "armGroupLabels": [
+            "Patient Education Website"
+          ]
+        }
+      ]
+    },
+    "outcomesModule": {
+      "primaryOutcomes": [
+        {
+          "measure": "Insomnia Severity Index",
+          "description": "Change in overall insomnia severity",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        }
+      ],
+      "secondaryOutcomes": [
+        {
+          "measure": "Wake after sleep onset (WASO)",
+          "description": "Change in periods of wakefulness occurring after defined sleep onset as measured by daily sleep diaries over 10-14 day periods, measured in minutes, collected through sleep diary entries",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Sleep onset latency (SOL)",
+          "description": "Change in length of time that it takes to transition from wakefulness to sleep, measured in minutes, collected through sleep diary entries",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Multidimensional Fatigue Symptoms Inventory - Short Form",
+          "description": "Change in self-report measures of five dimensions of fatigue ( general fatigue, physical fatigue, emotional fatigue, mental fatigue, and vigor) measured using Multidimensional Fatigue Symptoms Inventory-Short Form. Total MFSI-SF scores range from 24 to 96, with a higher score indicating a higher fatigue level",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Short Form-12 Health Survey (Quality of Life)",
+          "description": "The SF-12 Health Survey will be used to measure changes in physical and mental quality of life. Scores range from 0 to 100, with higher scores indicating better physical and mental health",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Match to Sample Visual Search",
+          "description": "Changes in attention and processing speed will be measured using the Cambridge Neuropsychological Test Automated Battery (CANTAB) Match to Sample Visual Search",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Spatial Working Memory Test",
+          "description": "Changes in working memory and executive function will be measured using the Cambridge Neuropsychological Test Automated Battery (CANTAB) Spatial Working Memory Test",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Paired Associates Learning",
+          "description": "Changes in episodic memory will be measured using the Cambridge Neuropsychological Test Automated Battery (CANTAB) Paired Associates Learning",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Sleep Efficiency",
+          "description": "Amount of time spent asleep divided by the total time in bed",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        }
+      ],
+      "otherOutcomes": [
+        {
+          "measure": "Insomnia Knowledge Scale",
+          "description": "Sleep knowledge and cognitive behavioral therapy for insomnia techniques; scores range from 0-10 and higher scores indicate greater insomnia knowledge",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Center for Epidemiologic Studies Depression Scale (CES-D)",
+          "description": "Depression and anxiety are measured using the Center for Epidemiologic Studies Depression Scale (CES-D). Scores range from 0-60, where higher scores indicate greater likelihood of depression",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Falls frequency",
+          "description": "Falls questionnaire including number and frequency of falls",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Patient-Reported Outcomes Measurement Information System (PROMIS)",
+          "description": "Pain intensity and interference are measured using PROMIS Pain Intensity questions. On a scale of 0-100, a score of 50 is considered the mean/reference population, and higher scores indicate greater pain intensity.",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Self-Efficacy Scale- Insomnia-Specific",
+          "description": "Global-, task-, and self-regulation self-efficacy changes are measured using Self-Efficacy Scale developed by Bouchard, Bastien \\& Morin (2010) and includes 40 questions. Questions are answered using a scale from 0 (can't do at all) to 100 (absolutely certain can do), where higher scores indicate higher self-efficacy.",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        },
+        {
+          "measure": "Lawson's Instrumental Activities of Daily Living Scale",
+          "description": "Activities that allow an individual to live independently in a community. Score range from 0 (low function, dependent) to 8 (high function, independent).",
+          "timeFrame": "Baseline, 9 weeks, 6 months, 12 months, 18 months, and 24 months"
+        }
+      ]
+    },
+    "eligibilityModule": {
+      "eligibilityCriteria": "Inclusion Criteria:\n\n* Provision of signed and dated informed consent form\n* Stated willingness to comply with all study procedures and availability for the duration of the study\n* Male or female, aged ≥ 65 years of age.\n* Able to speak and read English, and is a US resident.\n* Have access to any Internet-enabled device (computer, tablet, smartphone) and willing to be emailed about the study.\n* Sleep-onset insomnia and/or sleep maintenance insomnia symptoms\n* The sleep disturbance (or associated daytime fatigue) causes significant distress or impairment in social, occupational, or other areas of functioning over the past three months.\n* Cognitive impairment through study assessment.\n* Stable medication regimen unless medication is known to cause insomnia\n\nExclusion Criteria:\n\n* Current psychological treatment for insomnia\n* Initiation of psychological or psychiatric treatment within the past three months\n* Current diagnosis of Huntington's or Parkinson's disease\n* Current treatment for hyperthyroidism\n* Currently undergoing chemotherapy\n* Presence of asthma or respiratory concerns with night treatment\n* Chronic pain treated with opioids\n* Not recovered from a brain tumor, injury, or infection\n* Epilepsy without stable treatment for at least 3 months\n* Irregular sleep schedule\n* Use of stimulating medications after 5pm or taken for less than 3 months\n* Psychotic or bipolar disorder\n* Moderate to high risk of suicide\n* Alcohol or drug abuse within the past year\n* Other untreated sleep disorders (e.g., obstructive sleep apnea)\n* Study screen for severe depression",
+      "healthyVolunteers": false,
+      "sex": "ALL",
+      "minimumAge": "65 Years",
+      "stdAges": [
+        "OLDER_ADULT"
+      ]
+    },
+    "contactsLocationsModule": {
+      "centralContacts": [
+        {
+          "name": "Meghan K Mattos, PhD, RN, CNL",
+          "role": "CONTACT",
+          "phone": "434-243-3936",
+          "email": "ms2bv@virginia.edu"
+        }
+      ],
+      "overallOfficials": [
+        {
+          "name": "Meghan K Mattos, PhD, RN, CNL",
+          "affiliation": "University of Virginia",
+          "role": "PRINCIPAL_INVESTIGATOR"
+        }
+      ],
+      "locations": [
+        {
+          "facility": "University of Virginia",
+          "status": "RECRUITING",
+          "city": "Charlottesville",
+          "state": "Virginia",
+          "zip": "22908",
+          "country": "United States",
+          "contacts": [
+            {
+              "name": "Meghan Mattos, PhD",
+              "role": "CONTACT",
+              "phone": "434-243-3936",
+              "email": "ms2bv@virginia.edu"
+            }
+          ],
+          "geoPoint": {
+            "lat": 38.02931,
+            "lon": -78.47668
+          }
+        }
+      ]
+    }
+  },
+  "derivedSection": {
+    "miscInfoModule": {
+      "versionHolder": "2026-10-16"
+    },
+    "conditionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D007319",
+          "term": "Sleep Initiation and Maintenance Disorders"
+        },
+        {
+          "id": "D060825",
+          "term": "Cognitive Dysfunction"
+        },
+        {
+          "id": "D020919",
+          "term": "Sleep Disorders, Intrinsic"
+        },
+        {
+          "id": "D020920",
+          "term": "Dyssomnias"
+        },
+        {
+          "id": "D012893",
+          "term": "Sleep Wake Disorders"
+        },
+        {
+          "id": "D009422",
+          "term": "Nervous System Diseases"
+        },
+        {
+          "id": "D000544",
+          "term": "Alzheimer Disease"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D001523",
+          "term": "Mental Disorders"
+        },
+        {
+          "id": "D003072",
+          "term": "Cognition Disorders"
+        },
+        {
+          "id": "D019965",
+          "term": "Neurocognitive Disorders"
+        },
+        {
+          "id": "D009461",
+          "term": "Neurologic Manifestations"
+        },
+        {
+          "id": "D012816",
+          "term": "Signs and Symptoms"
+        },
+        {
+          "id": "D013568",
+          "term": "Pathological Conditions, Signs and Symptoms"
+        },
+        {
+          "id": "D003704",
+          "term": "Dementia"
+        },
+        {
+          "id": "D001927",
+          "term": "Brain Diseases"
+        },
+        {
+          "id": "D002493",
+          "term": "Central Nervous System Diseases"
+        },
+        {
+          "id": "D024801",
+          "term": "Tauopathies"
+        },
+        {
+          "id": "D019636",
+          "term": "Neurodegenerative Diseases"
+        }
+      ]
+    },
+    "interventionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D010353",
+          "term": "Patient Education as Topic"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D006266",
+          "term": "Health Education"
+        },
+        {
+          "id": "D011314",
+          "term": "Preventive Health Services"
+        },
+        {
+          "id": "D006296",
+          "term": "Health Services"
+        },
+        {
+          "id": "D005159",
+          "term": "Health Care Facilities Workforce and Services"
+        }
+      ]
+    }
+  },
+  "hasResults": false
+}

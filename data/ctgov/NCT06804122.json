@@ -1,0 +1,264 @@
+{
+  "protocolSection": {
+    "identificationModule": {
+      "nctId": "NCT06804122",
+      "orgStudyIdInfo": {
+        "id": "R24101"
+      },
+      "organization": {
+        "fullName": "Tampere Heart Hospital",
+        "class": "OTHER"
+      },
+      "briefTitle": "Exercise-based Rehabilitation in Patients With Pulmonary Arterial Hypertension",
+      "officialTitle": "Effects of Exercise-based Rehabilitation on Exercise Capacity, Quality of Life and Physical Activity in Patients With Pulmonary Artery Disease",
+      "acronym": "PAHexercise"
+    },
+    "statusModule": {
+      "statusVerifiedDate": "2026-08",
+      "overallStatus": "RECRUITING",
+      "expandedAccessInfo": {
+        "hasExpandedAccess": false
+      },
+      "startDateStruct": {
+        "date": "2025-01-27",
+        "type": "ACTUAL"
+      },
+      "primaryCompletionDateStruct": {
+        "date": "2026-12-31",
+        "type": "ESTIMATED"
+      },
+      "completionDateStruct": {
+        "date": "2027-07-31",
+        "type": "ESTIMATED"
+      },
+      "studyFirstSubmitDate": "2025-01-27",
+      "studyFirstSubmitQcDate": "2025-01-27",
+      "studyFirstPostDateStruct": {
+        "date": "2025-01-31",
+        "type": "ACTUAL"
+      },
+      "lastUpdateSubmitDate": "2026-08-24",
+      "lastUpdatePostDateStruct": {
+        "date": "2026-08-25",
+        "type": "ACTUAL"
+      }
+    },
+    "sponsorCollaboratorsModule": {
+      "responsibleParty": {
+        "type": "SPONSOR"
+      },
+      "leadSponsor": {
+        "name": "Tampere Heart Hospital",
+        "class": "OTHER"
+      },
+      "collaborators": [
+        {
+          "name": "Tampere University Hospital",
+          "class": "OTHER"
+        },
+        {
+          "name": "Tampere University",
+          "class": "OTHER"
+        }
+      ]
+    },
+    "oversightModule": {
+      "oversightHasDmc": false,
+      "isFdaRegulatedDrug": false,
+      "isFdaRegulatedDevice": false
+    },
+    "descriptionModule": {
+      "briefSummary": "Pulmonary arterial hypertension (PAH) is a rare and severe disease characterized by elevation of pulmonary artery pressure (PAP) and increased pulmonary vascular resistance (PVR) due to the narrowing of small pulmonary arteries. The European Society of Cardiology (ESC) and the European Respiratory Society (ERS) recommend supervised exercise-based rehabilitation as part of the treatment of PAH patients alongside optimal medical therapy (Level of evidence A, Class of recommendation I).\n\nStudies on exercise-based rehabilitation for PAH patients are limited, and most interventions have been conducted at least partially in hospital settings. Unlike more common cardiovascular diseases, there are no detailed international exercise guidelines tailored specifically for PAH patients.\n\nThis study aims to verify that a group-based outpatient rehabilitation protocol suitable for the Finnish healthcare system improves exercise capacity, quality of life, and physical activity of PAH patients and is safe for appropriately selected patients. Additionally, the study aims to determine whether PAH patients adhere to regular exercise training and whether physical activity increases in the long term.\n\nThe goal is to assess whether an outpatient rehabilitation protocol, designed for the Finnish healthcare system, can achieve similar results to those observed in previous international studies. The primary outcome measure is the change in the six-minute walking distance (6MWD) compared to the patient's baseline. Long-term 6MWD data are often available for patients. The 6MWD is the most commonly used primary outcome in randomized and controlled PAH drug trials, and improvements in this test have been the basis for drug approvals. An improvement of 33 meters in the 6MWD is considered clinically significant, and the goal is to achieve this change with group-based outpatient rehabilitation.\n\nSecondary outcomes include changes in quality of life (SF-36), WHO functional class, NT-proBNP levels, echocardiographic parameters, ESC/ERS risk-stratification score (four-strata model), muscle strength, respiratory measures, balance, daily step count, and insomnia severity.",
+      "detailedDescription": "Effects of group form exercise-based outpatient rehabilitation to Exercise Capacity, Quality of Life and Physical Activity in pulmonary artery hypertension (PAHexercise)\n\nPulmonary arterial hypertension (PAH) is a rare, severe and life-threatening disease with a poor prognosis, even with current medical treatments. In addition to medication, exercise rehabilitation has been shown to positively impact patients' functional capacity and quality of life. Following the diagnosis, patients often reduce their physical activity, experiencing hesitancy and uncertainty regarding safe exercise practices. However, the 2022 ESC/ERS international treatment guidelines recommend exercise rehabilitation for PAH patients with evidence level 1A. The strongest evidence for the benefits of rehabilitation comes from international multicenter studies, where rehabilitation has primarily occurred in hospital settings. There is no suitable or feasible guideline for outpatient-based exercise rehabilitation. However, studies indicate that exercise rehabilitation is safe for medically stable patients.\n\nThe aim of our research is to investigate and describe whether group-based outpatient exercise rehabilitation has an impact on the exercise capacity, quality of life, and physical activity of patients with pulmonary arterial hypertension. Additionally, we aim to develop an effective model for outpatient exercise rehabilitation for Finnish PAH patients. The rehabilitation will be supervised by experienced physiotherapists. Only patients in stable condition under effective medication will be included in the study, ensuring the safety of the rehabilitation. Furthermore, international safety standards, such as those related to oxygen saturation, heart rate, and hemoglobin levels, will be adhered to. Overexertion will be avoided. The rehabilitation sessions will take place in the facilities of the Tampere Heart Hospital, and a contingency plan has been developed to manage any adverse events.\n\nObjectives, Primary, and Secondary Outcomes\n\nThe study aims to:\n\n* Demonstrate the efficacy of a group-based outpatient rehabilitation program in improving the physical performance, quality of life, and physical activity of PAH patients.\n* Assess long-term adherence to regular exercise training.\n* Compare results to international standards to establish the program's suitability within the Finnish healthcare system.\n\nPrimary Outcome: Change in 6MWT results compared to baseline.\n\nSecondary Outcomes:\n\n* Change in Quality of life (SF-36).\n* Change in WHO functional classification.\n* Change in NT-proBNP biomarker levels.\n* Changes in echocardiographic parameters.\n* Change in the ESC risk classification score.\n* Changes in muscle strength, respiratory parameters, balance, daily step count, and insomnia severity.\n\nResearch Methods\n\nThe study is a prospective, observational, non-controlled, quantitative study. It is a non-randomized case study focusing on a small group in a specific context. Quantitative methods will be used to analyze data, using participants' baseline and historical follow-up results as comparators.\n\nDue to the small patient cohort, a formal power analysis is not feasible. However, the goal is to demonstrate that the chosen rehabilitation method achieves a median improvement in 6MWT results comparable to those observed in large, randomized multicenter trials.\n\nSchedule of the Research\n\nParticipants (maximum 20, minimum 8) will be recruited between 2025 and 2030. PAH is a rare disease, with international studies including sample sizes ranging from 7 to 183 participants.\n\nThe target group comprises PAH patients under follow-up at the cardiology outpatient clinic of Tays Heart Hospital.\n\nImplementation of the Research\n\nInclusion and Exclusion Criteria\n\nInclusion Criteria:\n\n* Adults over 18 years old residing in Tampere or nearby municipalities.\n* WHO functional classification II-III.\n* Commitment to the exercise program.\n* Stable disease condition with no PAH medication changes in the two months prior.\n* No recent syncope or arrhythmias causing symptoms within the past two months.\n\nExclusion Criteria:\n\n* Severe pulmonary disease or left ventricular failure (HFrEF).\n* Pregnancy.\n* Severe congenital heart defect (Eisenmenger syndrome).\n* Severe liver disease.\n* Acute inflammatory condition.\n* Severe anemia (hemoglobin ≤ 75% of the lower reference limit).\n* Systolic blood pressure below 85 mmHg.\n* Recent syncope.\n* Other significant conditions affecting physical capacity, such as severe neurological diseases or musculoskeletal issues.\n* Untreated severe arrhythmias.\n* Changes in PAH medication during the rehabilitation program.\n\nExecution of Rehabilitation The program includes once a week total 15 group exercise sessions led by a physiotherapist, along with three individual sessions for baseline, post-program, and one-year follow-up assessments. Group sizes are limited to a maximum of four participants.\n\nEach session consists of:\n\n1. Warm-up.\n2. Circuit training focusing on muscle strength.\n3. Cool-down. Participants will also follow a home-based exercise program, including endurance, strength, and respiratory exercises.\n\nMetrics Performance metrics include the 6MWT, grip strength, chair stand test (10 repetitions), single-leg standing, respiratory function tests, and inspiratory muscle strength measurements. Participants will complete the SF-36, ISI (Insomnia Severity Index), and IPAQ (International Physical Activity Questionnaire) surveys before, after, and one year after the program. Daily physical activity will be tracked using a step counter.\n\nEchocardiographic evaluations will be conducted before and after the program, with potential mid-program assessments. Blood tests will monitor NT-proBNP and hemoglobin levels."
+    },
+    "conditionsModule": {
+      "conditions": [
+        "Pulmonary Arterial Hypertension"
+      ],
+      "keywords": [
+        "Pulmonary Arterial Hypertension",
+        "Exercise-based rehabilitation",
+        "Intervention"
+      ]
+    },
+    "designModule": {
+      "studyType": "INTERVENTIONAL",
+      "phases": [
+        "NA"
+      ],
+      "designInfo": {
+        "allocation": "NA",
+        "interventionModel": "SINGLE_GROUP",
+        "interventionModelDescription": "Exercise-based out-patients intervention is implemented to all particitpants who will undergo rehabiliation for pulmonary arterial hypertension",
+        "primaryPurpose": "TREATMENT",
+        "maskingInfo": {
+          "masking": "NONE"
+        }
+      },
+      "enrollmentInfo": {
+        "count": 20,
+        "type": "ESTIMATED"
+      }
+    },
+    "armsInterventionsModule": {
+      "armGroups": [
+        {
+          "label": "Exercise-based outpatient rehabiliation",
+          "type": "EXPERIMENTAL",
+          "description": "All patients are allocated to this treatement arm where they are provided with structured guidance for implementation of exercise rehabiliation in an out-patient setting.",
+          "interventionNames": [
+            "Behavioral: EXERCISE TRAINING WITH OR WITHOUT MEDICATION"
+          ]
+        }
+      ],
+      "interventions": [
+        {
+          "type": "BEHAVIORAL",
+          "name": "EXERCISE TRAINING WITH OR WITHOUT MEDICATION",
+          "description": "Patients are counseled how to do endurance training and strenght training at home by a trained physiotherapist.",
+          "armGroupLabels": [
+            "Exercise-based outpatient rehabiliation"
+          ]
+        }
+      ]
+    },
+    "outcomesModule": {
+      "primaryOutcomes": [
+        {
+          "measure": "Change in six-minute walking test result",
+          "description": "Each participant performs a six-minute walking test at baseline (before exercise-based intervention) and after the intervention that lasts 12 weeks.",
+          "timeFrame": "12 weeks"
+        }
+      ]
+    },
+    "eligibilityModule": {
+      "eligibilityCriteria": "Inclusion Criteria:\n\n* Adults over 18 years old residing in Tampere or nearby municipalities.\n* WHO functional classification II-III.\n* Commitment to the exercise program.\n* Stable disease condition with no PAH medication changes in the two months prior.\n* No recent syncope or arrhythmias causing symptoms within the past two months.\n\nExclusion Criteria:\n\n* Severe pulmonary disease or left ventricular failure (HFrEF).\n* Pregnancy.\n* Severe congenital heart defect (Eisenmenger syndrome).\n* Severe liver disease.\n* Acute inflammatory condition.\n* Severe anemia (hemoglobin ≤ 75% of the lower reference limit).\n* Systolic blood pressure below 85 mmHg.\n* Recent syncope.\n* Other significant conditions affecting physical capacity, such as severe neurological diseases or musculoskeletal issues.\n* Untreated severe arrhythmias.\n* Changes in PAH medication during the rehabilitation program.",
+      "healthyVolunteers": false,
+      "sex": "ALL",
+      "minimumAge": "18 Years",
+      "stdAges": [
+        "ADULT",
+        "OLDER_ADULT"
+      ]
+    },
+    "contactsLocationsModule": {
+      "centralContacts": [
+        {
+          "name": "Pauliina Leskelä, MD",
+          "role": "CONTACT",
+          "phone": "+3583311611",
+          "email": "pauliina.leskela@sydansairaala.fi"
+        },
+        {
+          "name": "Jussi A Hernesniemi, MD PhD",
+          "role": "CONTACT",
+          "phone": "+3583311611",
+          "email": "jussi.hernesniemi@sydansairaala.fi"
+        }
+      ],
+      "overallOfficials": [
+        {
+          "name": "Jussi A Hernesniemi, MD PhD",
+          "affiliation": "Tampere Heart Hospital",
+          "role": "STUDY_CHAIR"
+        }
+      ],
+      "locations": [
+        {
+          "facility": "Tampere Heart Hospital",
+          "status": "RECRUITING",
+          "city": "Tampere",
+          "state": "Pirkanmaa",
+          "zip": "33300",
+          "country": "Finland",
+          "contacts": [
+            {
+              "name": "Kati Helleharju, Research cordinator",
+              "role": "CONTACT",
+              "phone": "+3583311611",
+              "email": "kati.helleharju@sydansairaala.fi"
+            }
+          ],
+          "geoPoint": {
+            "lat": 61.49911,
+            "lon": 23.78712
+          }
+        }
+      ]
+    },
+    "ipdSharingStatementModule": {
+      "ipdSharing": "NO",
+      "description": "Due to Finnish legislation, IPD cannot be shared outside the European Union. However, upon reasonable request the data can be shared for scientific purposes pending the approval of the study board"
+    }
+  },
+  "derivedSection": {
+    "miscInfoModule": {
+      "versionHolder": "2026-10-16"
+    },
+    "conditionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D000081029",
+          "term": "Pulmonary Arterial Hypertension"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D006976",
+          "term": "Hypertension, Pulmonary"
+        },
+        {
+          "id": "D008171",
+          "term": "Lung Diseases"
+        },
+        {
+          "id": "D012140",
+          "term": "Respiratory Tract Diseases"
+        }
+      ]
+    },
+    "interventionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D015444",
+          "term": "Exercise"
+        },
+        {
+          "id": "D004304",
+          "term": "Dosage Forms"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D009043",
+          "term": "Motor Activity"
+        },
+        {
+          "id": "D009068",
+          "term": "Movement"
+        },
+        {
+          "id": "D009142",
+          "term": "Musculoskeletal Physiological Phenomena"
+        },
+        {
+          "id": "D055687",
+          "term": "Musculoskeletal and Neural Physiological Phenomena"
+        },
+        {
+          "id": "D004364",
+          "term": "Pharmaceutical Preparations"
+        },
+        {
+          "id": "D013678",
+          "term": "Technology, Pharmaceutical"
+        },
+        {
+          "id": "D008919",
+          "term": "Investigative Techniques"
+        }
+      ]
+    }
+  },
+  "hasResults": false
+}

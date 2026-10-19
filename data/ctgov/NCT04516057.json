@@ -1,0 +1,462 @@
+{
+  "protocolSection": {
+    "identificationModule": {
+      "nctId": "NCT04516057",
+      "orgStudyIdInfo": {
+        "id": "1968"
+      },
+      "organization": {
+        "fullName": "Sunnybrook Health Sciences Centre",
+        "class": "OTHER"
+      },
+      "briefTitle": "Nabilone for Agitation Blinded Intervention Trial",
+      "officialTitle": "Nabilone for Agitation Blinded Intervention Trial",
+      "acronym": "NAB-IT"
+    },
+    "statusModule": {
+      "statusVerifiedDate": "2026-01",
+      "overallStatus": "RECRUITING",
+      "expandedAccessInfo": {
+        "hasExpandedAccess": false
+      },
+      "startDateStruct": {
+        "date": "2021-02-01",
+        "type": "ACTUAL"
+      },
+      "primaryCompletionDateStruct": {
+        "date": "2027-04",
+        "type": "ESTIMATED"
+      },
+      "completionDateStruct": {
+        "date": "2027-04",
+        "type": "ESTIMATED"
+      },
+      "studyFirstSubmitDate": "2020-08-05",
+      "studyFirstSubmitQcDate": "2020-08-14",
+      "studyFirstPostDateStruct": {
+        "date": "2020-08-17",
+        "type": "ACTUAL"
+      },
+      "lastUpdateSubmitDate": "2026-01-27",
+      "lastUpdatePostDateStruct": {
+        "date": "2026-01-28",
+        "type": "ACTUAL"
+      }
+    },
+    "sponsorCollaboratorsModule": {
+      "responsibleParty": {
+        "type": "SPONSOR"
+      },
+      "leadSponsor": {
+        "name": "Sunnybrook Health Sciences Centre",
+        "class": "OTHER"
+      },
+      "collaborators": [
+        {
+          "name": "Alzheimer's Drug Discovery Foundation",
+          "class": "OTHER"
+        }
+      ]
+    },
+    "oversightModule": {
+      "oversightHasDmc": true,
+      "isFdaRegulatedDrug": false,
+      "isFdaRegulatedDevice": false,
+      "isUsExport": false
+    },
+    "descriptionModule": {
+      "briefSummary": "This study will look at whether nabilone is an effective treatment for agitation in Alzheimer's disease (AD) patients. Agitation is highly prevalent in patients with AD and is one of the most distressing and challenging-to-treat symptoms. Agitation is associated with faster progression to institutionalization, increased caregiver burden, poorer quality of life, and increased risk of death. In addition, current pharmacological options show only modest efficacy and elevated risks of adverse events. Therefore, identifying safer and more effective treatments for agitation in AD is a clinical and research priority.\n\nNabilone is a synthetic cannabinoid that is Health Canada-approved to treat chemotherapy-induced nausea and vomiting.\n\nThe PI's research group completed a 6-week double-blind placebo-controlled randomized cross-over pilot trial in 38 patients with moderate-to-severe AD, providing the first preliminary evidence regarding the safety and efficacy of nabilone in this population. They found that nabilone significantly improved agitation, overall neuropsychiatric symptoms, and caregiver distress. That study was limited by its sample size and questions remain regarding the efficacy of nabilone for nutrition and pain and predictors of response. However, the promising preliminary findings encourage a pivotal, practice-changing phase III trial to inform clinical practice.\n\nParticipants in this study will be randomized to receive either nabilone or a placebo for 8 weeks. In addition to looking at the effectiveness of nabilone in treating agitation, the researchers will also look at whether it is beneficial for other relevant outcomes for patients with AD including overall neuropsychiatric symptoms, caregiver distress, cognition, nutritional status, and pain. Participants will also be followed for 8 weeks following completion of the study treatment."
+    },
+    "conditionsModule": {
+      "conditions": [
+        "Alzheimer Disease",
+        "Agitation"
+      ],
+      "keywords": [
+        "Cannabis",
+        "Cannabinoid",
+        "THC"
+      ]
+    },
+    "designModule": {
+      "studyType": "INTERVENTIONAL",
+      "phases": [
+        "PHASE3"
+      ],
+      "designInfo": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "primaryPurpose": "TREATMENT",
+        "maskingInfo": {
+          "masking": "QUADRUPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR",
+            "OUTCOMES_ASSESSOR"
+          ]
+        }
+      },
+      "enrollmentInfo": {
+        "count": 112,
+        "type": "ESTIMATED"
+      }
+    },
+    "armsInterventionsModule": {
+      "armGroups": [
+        {
+          "label": "Nabilone Arm",
+          "type": "EXPERIMENTAL",
+          "description": "Participants randomized to the nabilone arm will be titrated up to a maximum dose of 2 mg/day.",
+          "interventionNames": [
+            "Drug: Nabilone"
+          ]
+        },
+        {
+          "label": "Placebo Arm",
+          "type": "PLACEBO_COMPARATOR",
+          "description": "Participants randomized to the placebo arm will receive placebo capsules.",
+          "interventionNames": [
+            "Other: Placebo"
+          ]
+        }
+      ],
+      "interventions": [
+        {
+          "type": "DRUG",
+          "name": "Nabilone",
+          "description": "After the screening period, participants randomized to the nabilone arm will receive nabilone for 8 weeks. Participants will then be followed for 8 weeks following completion of the study treatment.",
+          "armGroupLabels": [
+            "Nabilone Arm"
+          ],
+          "otherNames": [
+            "Cesamet"
+          ]
+        },
+        {
+          "type": "OTHER",
+          "name": "Placebo",
+          "description": "After the screening period, participants randomized to the placebo arm will receive placebo capsules for 8 weeks. Participants will then be followed for 8 weeks following completion of the study treatment.",
+          "armGroupLabels": [
+            "Placebo Arm"
+          ]
+        }
+      ]
+    },
+    "outcomesModule": {
+      "primaryOutcomes": [
+        {
+          "measure": "Agitation - Cohen-Mansfield Agitation Inventory (CMAI)",
+          "description": "A 29-point scale that measures agitation in two dimensions, verbal and physical, each of which having two poles, aggressive and non-aggressive. Scores range from 29-203 points, with a higher score indicating a worse outcome. This includes the CMAI IPA Agitation Score \\& CMAI IPA Delphi Modification, which are derived from the CMAI.",
+          "timeFrame": "Baseline (0 Weeks) to 8 Weeks"
+        }
+      ],
+      "secondaryOutcomes": [
+        {
+          "measure": "Behaviour - Neuropsychiatric Inventory - Nursing Home (NPI-NH)",
+          "description": "A widely used assessment of behaviour disturbances in dementia, including: apathy, agitation, delusions, hallucinations, depression, euphoria, aberrant motor behaviour, irritability, disinhibition, anxiety, sleeping, and eating. The frequency and severity of these symptoms are judged on a 4-point and 3-point scale, respectively. Scores range from 0-144 points, with a higher score indicating a worse outcome.",
+          "timeFrame": "Baseline (0 Weeks) to 8 Weeks"
+        },
+        {
+          "measure": "Cognition - Standardized Mini-Mental State Examination (sMMSE)",
+          "description": "Measures global cognition, and assesses orientation to time and place, immediate recall, short-term verbal memory, calculation, language, and construct ability. Scores range from 0-30 points, with a lower score indicating a worse outcome.",
+          "timeFrame": "Baseline (0 Weeks) to 8 Weeks"
+        },
+        {
+          "measure": "Weight",
+          "timeFrame": "Baseline (0 Weeks) to 8 Weeks"
+        },
+        {
+          "measure": "Nutritional Status - Mini Nutritional Assessment - Short Form (MNA-SF)",
+          "description": "A structured interview consisting of 6 items that categorizes patients as malnourished, at risk of malnutrition, or of normal nutritional status. Scores range from 0-14 points, with a lower score indicating a worse outcome.",
+          "timeFrame": "Baseline (0 Weeks) to 8 Weeks"
+        },
+        {
+          "measure": "Pain - Pain Assessment Checklist for Seniors with Limited Ability to Communicate-II (PACSLAC-II)",
+          "description": "A 31-item observer-rated scale assessing facial expressions, activity/body movements, social/personality/mood indicators and mental status changes. Scores range from 0-31 points, with a higher score indicating a worse outcome.",
+          "timeFrame": "Baseline (0 Weeks) to 8 Weeks"
+        },
+        {
+          "measure": "Global Change - Alzheimer's Disease Cooperative Study - Clinical Global Impression of Severity/Change (ADCS-CGIS/C)",
+          "description": "A commonly-used clinician-rated scale that quantifies disease severity and clinical change (worsening, no change, or improvement), based on information regarding the patient's medical history, cognition, behaviour, and function. Numerical scores are not assigned.",
+          "timeFrame": "Baseline (0 Weeks) to 8 Weeks"
+        }
+      ],
+      "otherOutcomes": [
+        {
+          "measure": "Sedation - Udvalg for Kliniske Undersøgelser (UKU) Side-Effect Rating Scale",
+          "description": "Sedation will be measured using the Sleepiness/Sedation subscale of the UKU-Side Effect Rating Scale. The UKU is a clinician-rated scale that assesses the side effects of psychopharmacological medications. Scores range from 0-3, with a higher score indicating more sleepiness/sedation.",
+          "timeFrame": "Baseline (0 Weeks) to 8 Weeks"
+        }
+      ]
+    },
+    "eligibilityModule": {
+      "eligibilityCriteria": "Inclusion Criteria:\n\n1. Males or females ≥55 years of age; females must be post-menopausal\n2. Diagnostic and Statistical Manual of Mental Disorders-5 (DSM 5) criteria for Major Neurocognitive Disorder due to AD. Patients with Major Neurocognitive Disorder due to multiple etiologies (AD and vascular) will be included\n3. sMMSE ≤24\n4. Presence of clinically significant agitation based on the IPA definition\n5. If treated with cognitive-enhancing medications (cholinesterase inhibitors and/or memantine), dosage must be stable for at least 3 months prior to study randomization\n6. Availability of a primary caregiver to accompany the participant to study visits and to participate in the study. The primary caregiver must be sufficiently proficient in English to complete the required study assessments, as per investigator judgement.\n\nExclusion Criteria:\n\n1. Change in psychotropic medications less than 1 week prior to study randomization (e.g., concomitant antidepressants)\n2. Contraindications to cannabinoids, e.g. allergies to cannabis and cannabis products, potential clinically important drug-drug interactions\n3. Current uncontrolled cardiovascular disease (e.g. uncontrolled hypertension, ischemic heart disease, arrhythmia and severe heart failure), as per investigator assessment\n4. Current significant liver disease, as per investigator assessment\n5. Presence or history of other psychiatric disorders or neurological conditions (e.g. psychotic disorders, schizophrenia, stroke, epilepsy)\n6. Participants currently meeting DSM 5 criteria for Major Depressive Episode (MDE)\n7. Previous or current abuse of/dependence on marijuana\n8. Clinically significant delusions and/or hallucinations (NPI-NH delusion/hallucinations subscore ≥4)\n9. Reported recreational use of marijuana or other cannabis products within 3 months prior to study randomization",
+      "healthyVolunteers": false,
+      "sex": "ALL",
+      "minimumAge": "55 Years",
+      "stdAges": [
+        "ADULT",
+        "OLDER_ADULT"
+      ]
+    },
+    "contactsLocationsModule": {
+      "centralContacts": [
+        {
+          "name": "NAB-IT Coordinating Centre",
+          "role": "CONTACT",
+          "phone": "416-480-6100",
+          "phoneExt": "5630",
+          "email": "NAB-IT@sunnybrook.ca"
+        }
+      ],
+      "overallOfficials": [
+        {
+          "name": "Krista L. Lanctot, PhD",
+          "affiliation": "Sunnybrook Research Institute",
+          "role": "PRINCIPAL_INVESTIGATOR"
+        },
+        {
+          "name": "Giovanni Marotta, MD",
+          "affiliation": "Sunnybrook Health Sciences Centre",
+          "role": "PRINCIPAL_INVESTIGATOR"
+        }
+      ],
+      "locations": [
+        {
+          "facility": "University of Calgary",
+          "status": "RECRUITING",
+          "city": "Calgary",
+          "state": "Alberta",
+          "zip": "T2N 4N1",
+          "country": "Canada",
+          "contacts": [
+            {
+              "name": "Ramnik Sekhon",
+              "role": "CONTACT",
+              "email": "ramnik.sekhon@ucalgary.ca"
+            }
+          ],
+          "geoPoint": {
+            "lat": 51.05011,
+            "lon": -114.08529
+          }
+        },
+        {
+          "facility": "London Health Sciences Centre",
+          "status": "RECRUITING",
+          "city": "London",
+          "state": "Ontario",
+          "zip": "N6A 5W9",
+          "country": "Canada",
+          "contacts": [
+            {
+              "name": "Adriana Diez",
+              "role": "CONTACT",
+              "phone": "519-685-8500",
+              "phoneExt": "77024",
+              "email": "Adriana.Diez@lhsc.on.ca"
+            }
+          ],
+          "geoPoint": {
+            "lat": 42.98339,
+            "lon": -81.23304
+          }
+        },
+        {
+          "facility": "Sunnybrook Health Sciences Centre",
+          "status": "RECRUITING",
+          "city": "Toronto",
+          "state": "Ontario",
+          "zip": "M4N 3M5",
+          "country": "Canada",
+          "contacts": [
+            {
+              "name": "Kate Survilla",
+              "role": "CONTACT",
+              "phone": "416-480-6100",
+              "phoneExt": "63185",
+              "email": "kate.survilla@sri.utoronto.ca"
+            }
+          ],
+          "geoPoint": {
+            "lat": 43.70643,
+            "lon": -79.39864
+          }
+        },
+        {
+          "facility": "Centre for Addiction and Mental Health",
+          "status": "RECRUITING",
+          "city": "Toronto",
+          "state": "Ontario",
+          "country": "Canada",
+          "contacts": [
+            {
+              "name": "Loreque Fearon",
+              "role": "CONTACT",
+              "email": "NAB-IT@camh.ca"
+            }
+          ],
+          "geoPoint": {
+            "lat": 43.70643,
+            "lon": -79.39864
+          }
+        },
+        {
+          "facility": "St. Michael's Hospital",
+          "status": "RECRUITING",
+          "city": "Toronto",
+          "state": "Ontario",
+          "country": "Canada",
+          "contacts": [
+            {
+              "name": "Adrienne Atayde",
+              "role": "CONTACT",
+              "email": "Adrienne.Atayde@unityhealth.to"
+            }
+          ],
+          "geoPoint": {
+            "lat": 43.70643,
+            "lon": -79.39864
+          }
+        },
+        {
+          "facility": "Ontario Shores Centre for Mental Health Sciences",
+          "status": "RECRUITING",
+          "city": "Whitby",
+          "state": "Ontario",
+          "zip": "L1N 5S9",
+          "country": "Canada",
+          "contacts": [
+            {
+              "name": "Heather Daly",
+              "role": "CONTACT",
+              "email": "dalyh@ontarioshores.ca"
+            }
+          ],
+          "geoPoint": {
+            "lat": 43.88342,
+            "lon": -78.93287
+          }
+        }
+      ]
+    },
+    "referencesModule": {
+      "references": [
+        {
+          "pmid": "31182351",
+          "type": "BACKGROUND",
+          "citation": "Herrmann N, Ruthirakuhan M, Gallagher D, Verhoeff NPLG, Kiss A, Black SE, Lanctot KL. Randomized Placebo-Controlled Trial of Nabilone for Agitation in Alzheimer's Disease. Am J Geriatr Psychiatry. 2019 Nov;27(11):1161-1173. doi: 10.1016/j.jagp.2019.05.002. Epub 2019 May 8."
+        }
+      ]
+    }
+  },
+  "derivedSection": {
+    "miscInfoModule": {
+      "versionHolder": "2026-10-16"
+    },
+    "conditionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D000544",
+          "term": "Alzheimer Disease"
+        },
+        {
+          "id": "D011595",
+          "term": "Psychomotor Agitation"
+        },
+        {
+          "id": "D002189",
+          "term": "Marijuana Abuse"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D003704",
+          "term": "Dementia"
+        },
+        {
+          "id": "D001927",
+          "term": "Brain Diseases"
+        },
+        {
+          "id": "D002493",
+          "term": "Central Nervous System Diseases"
+        },
+        {
+          "id": "D009422",
+          "term": "Nervous System Diseases"
+        },
+        {
+          "id": "D024801",
+          "term": "Tauopathies"
+        },
+        {
+          "id": "D019636",
+          "term": "Neurodegenerative Diseases"
+        },
+        {
+          "id": "D019965",
+          "term": "Neurocognitive Disorders"
+        },
+        {
+          "id": "D001523",
+          "term": "Mental Disorders"
+        },
+        {
+          "id": "D020820",
+          "term": "Dyskinesias"
+        },
+        {
+          "id": "D009461",
+          "term": "Neurologic Manifestations"
+        },
+        {
+          "id": "D011596",
+          "term": "Psychomotor Disorders"
+        },
+        {
+          "id": "D019954",
+          "term": "Neurobehavioral Manifestations"
+        },
+        {
+          "id": "D012816",
+          "term": "Signs and Symptoms"
+        },
+        {
+          "id": "D013568",
+          "term": "Pathological Conditions, Signs and Symptoms"
+        },
+        {
+          "id": "D000096762",
+          "term": "Aberrant Motor Behavior in Dementia"
+        },
+        {
+          "id": "D001526",
+          "term": "Behavioral Symptoms"
+        },
+        {
+          "id": "D001519",
+          "term": "Behavior"
+        },
+        {
+          "id": "D019966",
+          "term": "Substance-Related Disorders"
+        },
+        {
+          "id": "D064419",
+          "term": "Chemically-Induced Disorders"
+        }
+      ]
+    },
+    "interventionBrowseModule": {
+      "meshes": [
+        {
+          "id": "C011941",
+          "term": "nabilone"
+        }
+      ]
+    }
+  },
+  "hasResults": false
+}

@@ -1,0 +1,303 @@
+{
+  "protocolSection": {
+    "identificationModule": {
+      "nctId": "NCT07153614",
+      "orgStudyIdInfo": {
+        "id": "5229"
+      },
+      "secondaryIdInfos": [
+        {
+          "id": "Institutional Review Board",
+          "type": "OTHER",
+          "domain": "The University of Tennessee Health Science Center"
+        }
+      ],
+      "organization": {
+        "fullName": "University of Tennessee Graduate School of Medicine",
+        "class": "OTHER"
+      },
+      "briefTitle": "Efficacy of Perioperative Opioid Sparing Techniques on Time to Initiation of Chemotherapy",
+      "officialTitle": "Efficacy of Perioperative Opioid Sparing Techniques on Time to Initiation of Chemotherapy: A Randomized Single Blinded Control Study"
+    },
+    "statusModule": {
+      "statusVerifiedDate": "2025-08",
+      "overallStatus": "RECRUITING",
+      "expandedAccessInfo": {
+        "hasExpandedAccess": false
+      },
+      "startDateStruct": {
+        "date": "2025-02-03",
+        "type": "ACTUAL"
+      },
+      "primaryCompletionDateStruct": {
+        "date": "2027-02-03",
+        "type": "ESTIMATED"
+      },
+      "completionDateStruct": {
+        "date": "2027-02-03",
+        "type": "ESTIMATED"
+      },
+      "studyFirstSubmitDate": "2025-08-15",
+      "studyFirstSubmitQcDate": "2025-08-29",
+      "studyFirstPostDateStruct": {
+        "date": "2025-09-04",
+        "type": "ACTUAL"
+      },
+      "lastUpdateSubmitDate": "2025-08-29",
+      "lastUpdatePostDateStruct": {
+        "date": "2025-09-04",
+        "type": "ACTUAL"
+      }
+    },
+    "sponsorCollaboratorsModule": {
+      "responsibleParty": {
+        "type": "SPONSOR"
+      },
+      "leadSponsor": {
+        "name": "University of Tennessee Graduate School of Medicine",
+        "class": "OTHER"
+      }
+    },
+    "oversightModule": {
+      "isFdaRegulatedDrug": false,
+      "isFdaRegulatedDevice": false
+    },
+    "descriptionModule": {
+      "briefSummary": "The primary purpose of this study is to determine if intrathecal morphine (ITM) administration is superior to quadratus lumborum block or surgeon administered transversus abdominis plane (TAP) blocks result in decreased time to initiation of chemotherapy following oncologic surgery.\n\nThe secondary objectives of this study are to determine:\n\n* The difference between interventions in time to return of bowel function in days\n* The difference between interventions in incidence of opioid related adverse drug events (ORADEs)\n* The difference between interventions in cumulative and post-operative total morphine milligram equivalents\n* The difference between interventions in quality-of-life assessment tool and patient satisfaction (brief pain index short form BPI-sf9)\n* The difference between interventions in hospital length of stay in days\n* The difference between cumulative pain scores between interventions\n* The difference between short acting and long-acting bupivacaine in pain management and time to chemotherapy\n\nThe hypothesis is that preoperative intrathecal morphine administration will significantly reduce the time to initiation of postoperative chemotherapy.",
+      "detailedDescription": "Enhanced recovery after surgery (ERAS) has become the standard of perioperative care for patients undergoing oncologic surgery. Multimodal and regional anesthetic techniques to reduce postoperative pain and opioid requirements are a key component of ERAS. Epidural analgesia was considered standard in early ERAS protocols. however, it is labor-intensive, requires close postoperative follow-up, and may exacerbate hemodynamic instability.\n\nLong-acting intrathecal (IT) opioid use in oncologic surgery has been described as an equianalgesic technique to epidural analgesia with an improved safety profile, although both have the potential for neurological complications and respiratory depression9. Quadratus lumborum (QL) block is an alternative opioid sparing technique to neuraxial analgesia for abdominal surgery. QL blocks can provide similar pain coverage as an epidural with decreased hemodynamic instability. However, it is limited by its relatively short duration of effect, which ranges from 6 to 12 h. Another method employed is the transversus abdominis plane block. One of the advantages of this technique is that it does not depend on a separate service to perform like ITM and QL as it is commonly performed by the surgeon during surgery. However, unlike the QL block which has been shown to spread to the lumbar plexus and even thoracic paravertebral space providing both somatic and visceral analgesia, TAP blocks only provide somatic analgesia coverage. TAP blocks are still frequently performed by oncologic surgeons though the long term success compared to QL and ITM blocks is unclear. Most research looking into the efficacy of these techniques has been aimed at studying their effects on pain scores, opioid requirements, and opioid related adverse drug events.\n\nTime to initiation of adjuvant chemotherapy (AC) following oncologic surgery is an important predictor of survivability that has not yet been considered in QL vs. IT comparison studies. Two meta-analyses demonstrated that postponing the postoperative AC was associated with poor survival in colorectal cancer patients. Results from Biagi et al. showed that every 4 weeks delay result in a 14% decrease of overall survival (OS). Similarly, Guetz's study indicated that delaying the initiation of AC for \\> 8 weeks after operation significantly decreased OS. In pancreatic and colorectal cancer, several factors are involved in this metric. One of the more common factors in this patient population is gastrointestinal complications including ileus. Some of these complications can be affected by perioperative opioid consumption."
+    },
+    "conditionsModule": {
+      "conditions": [
+        "Perioperative Opioid Sparing Techniques"
+      ],
+      "keywords": [
+        "Opioid",
+        "Perioperative Opioid Sparing Techniques",
+        "Colorectal Cancer",
+        "Foregut Cancer",
+        "Hepatopancreatobiliary (HPB)"
+      ]
+    },
+    "designModule": {
+      "studyType": "INTERVENTIONAL",
+      "phases": [
+        "NA"
+      ],
+      "designInfo": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "primaryPurpose": "TREATMENT",
+        "maskingInfo": {
+          "masking": "SINGLE",
+          "whoMasked": [
+            "OUTCOMES_ASSESSOR"
+          ]
+        }
+      },
+      "enrollmentInfo": {
+        "count": 200,
+        "type": "ESTIMATED"
+      }
+    },
+    "armsInterventionsModule": {
+      "armGroups": [
+        {
+          "label": "ITM group",
+          "type": "EXPERIMENTAL",
+          "description": "Patients will receive an intrathecal morphine block performed by the Anesthesiologist. This will be accomplished by placing the patient in a preoperative holding room with standard ASA monitors 150 mcg of morphine will be administered intrathecally",
+          "interventionNames": [
+            "Procedure: Intrathecal Morphine Block"
+          ]
+        },
+        {
+          "label": "QL group",
+          "type": "ACTIVE_COMPARATOR",
+          "description": "Patients will receive a bilateral quadratus lumborum block containing 30 mL of 0.25% bupivacaine and 4mg of dexamethasone. This will be accomplished by placing the patient in a preoperative holding room with standard ASA monitors where the bilateral quadratus lumborum block will be performed by the Anesthesiologist",
+          "interventionNames": [
+            "Procedure: Bilateral Quadratus Lumborum Block"
+          ]
+        },
+        {
+          "label": "TAP block group",
+          "type": "ACTIVE_COMPARATOR",
+          "description": "Patients will undergo a bilateral transverse abdominis plane block performed by the surgical team using an exparel-based solution mixed with 50mL of saline. This block will be performed intraoperatively before the incisions are closed",
+          "interventionNames": [
+            "Procedure: Bilateral Transverse Abdominis Plane Block"
+          ]
+        }
+      ],
+      "interventions": [
+        {
+          "type": "PROCEDURE",
+          "name": "Intrathecal Morphine Block",
+          "description": "Morphine 150 mcg",
+          "armGroupLabels": [
+            "ITM group"
+          ]
+        },
+        {
+          "type": "PROCEDURE",
+          "name": "Bilateral Quadratus Lumborum Block",
+          "description": "30 mL of 0.25% bupivacaine and 4mg of dexamethasone",
+          "armGroupLabels": [
+            "QL group"
+          ]
+        },
+        {
+          "type": "PROCEDURE",
+          "name": "Bilateral Transverse Abdominis Plane Block",
+          "description": "Exparel-based solution mixed with 50mL of saline",
+          "armGroupLabels": [
+            "TAP block group"
+          ]
+        }
+      ]
+    },
+    "outcomesModule": {
+      "primaryOutcomes": [
+        {
+          "measure": "Time to initiation of chemotherapy (in days) as deemed by a blinded medical oncologist",
+          "timeFrame": "Day of surgery to first chemotherapy session, assessed on (Day 30, Day 60, Day 90 visits)"
+        }
+      ],
+      "secondaryOutcomes": [
+        {
+          "measure": "Time (in hours) to Return of Bowel Function, Defined as First Passage of Flatus or Stool",
+          "timeFrame": "From end of surgery up to 14 days postoperatively"
+        },
+        {
+          "measure": "Incidence of ORADEs",
+          "timeFrame": "From baseline up to 90 days post-surgery"
+        },
+        {
+          "measure": "Cumulative and postoperative morphine milligram equivalents",
+          "timeFrame": "From baseline up to 90 days post-surgery"
+        },
+        {
+          "measure": "Hospital length of stay in days",
+          "timeFrame": "Post-op to discharge, assessed up to 30 days postoperatively"
+        },
+        {
+          "measure": "Pain scores measured by Visual Analog Scale (VAS), 0-10",
+          "timeFrame": "Postoperatively at 1, 2, and 6 hours after surgery (Day 0); at 24 and 48 hours (Days 1 and 2); and on Days 7, 30, 60, and 90"
+        },
+        {
+          "measure": "Patient satisfaction scores (Brief Pain Inventory - Short Form, Question 9 [BPI-sf9])",
+          "timeFrame": "Post-op 14, 30, 60, and 90 days."
+        }
+      ]
+    },
+    "eligibilityModule": {
+      "eligibilityCriteria": "Inclusion Criteria:\n\n1. 18-80 years of age\n2. Patients undergoing open surgery for foregut, HPB, and colorectal cancer\n3. Able to read and understand study procedures\n4. Willing to participate and sign an ICF\n5. If female of childbearing potential, subject must have a negative pregnancy test\n6. Recommended for adjuvant chemotherapy\n7. Patients scheduled for an AM admit procedure\n8. English speaking\n9. Patients with a midline incision\n\nExclusion Criteria:\n\n1. Chronic Opioid Use (received an opioid within 90 days preoperatively)\n2. Recreational Drug Use\n3. Patients with cognitive impairments that can affect their ability to give consent\n4. Patients that are currently taking anti-coagulants \\<7 days prior to surgery\n5. Pregnant or breastfeeding\n6. Does not require adjuvant chemotherapy\n7. Relative Contradictions for receiving a nerve block\\*\n8. Patients that have been admitted prior to surgery for chief complaint related to complications from malignancy\n9. Inability to provide consent\n\n   * Absolute Contraindications\n\n     * Lack of patient consent.\n     * Skin infection at the site of needle insertion. Relative Contraindications\n     * Coagulopathy\n     * Systemic infection\n     * Anatomical distortion\n     * Neuropathy\n\nDrugs/Device usage within 7 Days of Randomization if any:\n\n• Anticoagulants",
+      "healthyVolunteers": false,
+      "sex": "ALL",
+      "minimumAge": "18 Years",
+      "maximumAge": "80 Years",
+      "stdAges": [
+        "ADULT",
+        "OLDER_ADULT"
+      ]
+    },
+    "contactsLocationsModule": {
+      "locations": [
+        {
+          "facility": "University of Tennessee Graduate School of Medicine",
+          "status": "RECRUITING",
+          "city": "Knoxville",
+          "state": "Tennessee",
+          "zip": "37920",
+          "country": "United States",
+          "contacts": [
+            {
+              "name": "Study Coordinator: Lauren Crawford, MS",
+              "role": "CONTACT",
+              "phone": "865-305-9308",
+              "email": "lcrawford@utmck.edu"
+            },
+            {
+              "name": "Che A. Solla MD, MBA",
+              "role": "PRINCIPAL_INVESTIGATOR"
+            }
+          ],
+          "geoPoint": {
+            "lat": 35.96064,
+            "lon": -83.92074
+          }
+        }
+      ]
+    }
+  },
+  "documentSection": {
+    "largeDocumentModule": {
+      "largeDocs": [
+        {
+          "typeAbbrev": "Prot_SAP",
+          "hasProtocol": true,
+          "hasSap": true,
+          "hasIcf": false,
+          "label": "Study Protocol and Statistical Analysis Plan",
+          "date": "2025-05-14",
+          "uploadDate": "2025-08-15T11:11",
+          "filename": "Prot_SAP_000.pdf",
+          "size": 644793
+        }
+      ]
+    }
+  },
+  "derivedSection": {
+    "miscInfoModule": {
+      "versionHolder": "2026-10-16"
+    },
+    "conditionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D015179",
+          "term": "Colorectal Neoplasms"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D007414",
+          "term": "Intestinal Neoplasms"
+        },
+        {
+          "id": "D005770",
+          "term": "Gastrointestinal Neoplasms"
+        },
+        {
+          "id": "D004067",
+          "term": "Digestive System Neoplasms"
+        },
+        {
+          "id": "D009371",
+          "term": "Neoplasms by Site"
+        },
+        {
+          "id": "D009369",
+          "term": "Neoplasms"
+        },
+        {
+          "id": "D004066",
+          "term": "Digestive System Diseases"
+        },
+        {
+          "id": "D005767",
+          "term": "Gastrointestinal Diseases"
+        },
+        {
+          "id": "D003108",
+          "term": "Colonic Diseases"
+        },
+        {
+          "id": "D007410",
+          "term": "Intestinal Diseases"
+        },
+        {
+          "id": "D012002",
+          "term": "Rectal Diseases"
+        }
+      ]
+    }
+  },
+  "hasResults": false
+}

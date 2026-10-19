@@ -1,0 +1,267 @@
+{
+  "protocolSection": {
+    "identificationModule": {
+      "nctId": "NCT06643819",
+      "orgStudyIdInfo": {
+        "id": "A119_01HTN2312"
+      },
+      "organization": {
+        "fullName": "Chong Kun Dang Pharmaceutical",
+        "class": "INDUSTRY"
+      },
+      "briefTitle": "Phase 3 Trial to Evaluate the Efficacy and Safety of CKD-202A",
+      "officialTitle": "A Randomized, Double-blind, Active-controlled, Multi-center, Therapeutic Confirmatory, Phase 3 Trial to Evaluate the Efficacy and Safety of CKD-202A"
+    },
+    "statusModule": {
+      "statusVerifiedDate": "2025-12",
+      "overallStatus": "RECRUITING",
+      "expandedAccessInfo": {
+        "hasExpandedAccess": false
+      },
+      "startDateStruct": {
+        "date": "2024-10-14",
+        "type": "ACTUAL"
+      },
+      "primaryCompletionDateStruct": {
+        "date": "2026-03-31",
+        "type": "ESTIMATED"
+      },
+      "completionDateStruct": {
+        "date": "2026-12-31",
+        "type": "ESTIMATED"
+      },
+      "studyFirstSubmitDate": "2024-10-14",
+      "studyFirstSubmitQcDate": "2024-10-14",
+      "studyFirstPostDateStruct": {
+        "date": "2024-10-16",
+        "type": "ACTUAL"
+      },
+      "lastUpdateSubmitDate": "2025-12-04",
+      "lastUpdatePostDateStruct": {
+        "date": "2025-12-11",
+        "type": "ACTUAL"
+      }
+    },
+    "sponsorCollaboratorsModule": {
+      "responsibleParty": {
+        "type": "SPONSOR"
+      },
+      "leadSponsor": {
+        "name": "Chong Kun Dang Pharmaceutical",
+        "class": "INDUSTRY"
+      }
+    },
+    "oversightModule": {
+      "oversightHasDmc": false,
+      "isFdaRegulatedDrug": false,
+      "isFdaRegulatedDevice": false
+    },
+    "descriptionModule": {
+      "briefSummary": "Phase 3 Trial to Evaluate the Efficacy and Safety of CKD-202A(Sacubitril∙Valsartan)"
+    },
+    "conditionsModule": {
+      "conditions": [
+        "Essential Hypertension"
+      ]
+    },
+    "designModule": {
+      "studyType": "INTERVENTIONAL",
+      "phases": [
+        "PHASE3"
+      ],
+      "designInfo": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "primaryPurpose": "TREATMENT",
+        "maskingInfo": {
+          "masking": "DOUBLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "INVESTIGATOR"
+          ]
+        }
+      },
+      "enrollmentInfo": {
+        "count": 324,
+        "type": "ESTIMATED"
+      }
+    },
+    "armsInterventionsModule": {
+      "armGroups": [
+        {
+          "label": "Test Group1",
+          "type": "EXPERIMENTAL",
+          "interventionNames": [
+            "Drug: Sacubitril∙Valsartan(dose maintenance)"
+          ]
+        },
+        {
+          "label": "Test Group2",
+          "type": "EXPERIMENTAL",
+          "interventionNames": [
+            "Drug: Sacubitril∙Valsartan(dose increasing)"
+          ]
+        },
+        {
+          "label": "CONTROL",
+          "type": "ACTIVE_COMPARATOR",
+          "interventionNames": [
+            "Drug: Valsartan"
+          ]
+        }
+      ],
+      "interventions": [
+        {
+          "type": "DRUG",
+          "name": "Sacubitril∙Valsartan(dose maintenance)",
+          "description": "During the 4 weeks of Placebo Run-in Period(Single blind), all participants are treated 1 placebo of CKD-202A(Sacubitril∙Valsartan) 100mg and 1 placebo of D763(Valsartan 80 mg) each, total of 2 oral doses once a day.\n\nAfter Placebo Run-in Period, During the 4 weeks out of 10 weeks of Treatment Period(Double blind), All TEST1 pariticipants are treated 1 CKD-202A (Sacubitril∙Valsartan) 100 mg and 1 placebo of D763(Valsartan 80 mg) each, total of 2 oral doses once a day.\n\nAfter 4 weeks of Treatment Period, During the 6 weeks out of 10 weeks of Treatment Period(Double blind), All TEST1 pariticipants are treateed 1 CKD-202A (Sacubitril∙Valsartan) 100 mg, 1 placebo of CKD-202A(Sacubitril∙Valsartan) 200mg, 1 placebo of D764(Valsartan 160 mg) each, and a total of 3 oral doses once a day.",
+          "armGroupLabels": [
+            "Test Group1"
+          ]
+        },
+        {
+          "type": "DRUG",
+          "name": "Sacubitril∙Valsartan(dose increasing)",
+          "description": "During the 4 weeks of Placebo Run-in Period(Single blind), all participants are treated 1 placebo of CKD-202A(Sacubitril∙Valsartan) 100mg and 1 placebo of D763(Valsartan 80 mg) each, total of 2 oral doses once a day.\n\nAfter Placebo Run-in Period, During the 4 weeks out of 10 weeks of Treatment Period(Double blind), All TEST2 pariticipants are treated 1 CKD-202A (Sacubitril∙Valsartan) 100 mg and 1 placebo of D763(Valsartan 80 mg) each, total of 2 oral doses once a day.\n\nAfter 4 weeks of Treatment Period, During the 6 weeks out of 10 weeks of Treatment Period(Double blind), All TEST1 pariticipants are treateed 1 placebo of CKD-202A (Sacubitril∙Valsartan) 100 mg, 1 CKD-202A(Sacubitril∙Valsartan) 200mg, 1 placebo of D764(Valsartan 160 mg) each, and a total of 3 oral doses once a day.",
+          "armGroupLabels": [
+            "Test Group2"
+          ]
+        },
+        {
+          "type": "DRUG",
+          "name": "Valsartan",
+          "description": "During the 4 weeks of Placebo Run-in Period(Single blind), all participants are treated 1 placebo of CKD-202A(Sacubitril∙Valsartan) 100mg and 1 placebo of D763(Valsartan 80 mg) each, total of 2 oral doses once a day. After Placebo Run-in Period, During the 4 weeks out of 10 weeks of Treatment Period(Double blind), All TEST2 pariticipants are treated 1 placebo of CKD-202A (Sacubitril∙Valsartan) 100 mg and 1 D763(Valsartan 80 mg) each, total of 2 oral doses once a day. After 4 weeks of Treatment Period, During the 6 weeks out of 10 weeks of Treatment Period(Double blind), All TEST1 pariticipants are treateed 1 placebo of CKD-202A (Sacubitril∙Valsartan) 100 mg, 1 placebo of CKD-202A(Sacubitril∙Valsartan) 200mg, 1 D764(Valsartan 160 mg) each, and a total of 3 oral doses once a day.",
+          "armGroupLabels": [
+            "CONTROL"
+          ]
+        }
+      ]
+    },
+    "outcomesModule": {
+      "primaryOutcomes": [
+        {
+          "measure": "change from baseline in MASBP(Mean Ambulatory Systolic Blood Pressure)",
+          "description": "The purpose of Clinical Trial is confirmation that test group 2 (Sacubitril∙Valsartan 200mg) is superior to control group (Valsartan 160mg)",
+          "timeFrame": "10 weeks after baseline"
+        }
+      ]
+    },
+    "eligibilityModule": {
+      "eligibilityCriteria": "Inclusion Criteria:\n\n* Participants who are 19 years old or older.\n* Participants who have voluntarily decided to participate in this clinical trial and signed ICF.\n\nExclusion Criteria:\n\n* Participants with a history of secondary hypertension or suspected secondary hypertension.\n* Participants with a orthostatic hypotension.\n* Participants who require combination administration of antihypertensive drugs other than clinical trial drugs during the clinical trial participation period.\n* Participants with type 1 diabetes or poorly controlled diabetes.\n* Participants who treated other clinical trial drugs within 4 weeks of screening visit.\n* Participants with a history of drug or alcohol abuse or suspected patient within 24 weeks as of the time of screening\n* Pregnant women, lactating women, or Subjects who do not agree to use appropriate contraception during the clinical trial period and for two weeks after the end of administration of the last clinical trial drug\n* Participants who are unable to participate in this clinical trial at the discretion of the investigator.",
+      "healthyVolunteers": false,
+      "sex": "ALL",
+      "minimumAge": "19 Years",
+      "stdAges": [
+        "ADULT",
+        "OLDER_ADULT"
+      ]
+    },
+    "contactsLocationsModule": {
+      "centralContacts": [
+        {
+          "name": "Keehyun Ham, Project Leader",
+          "role": "CONTACT",
+          "phone": "+82-2-2194-0479",
+          "email": "hamki@ckdpharm.com"
+        }
+      ],
+      "locations": [
+        {
+          "facility": "Wonju Severance Christian Hospital",
+          "status": "RECRUITING",
+          "city": "Wŏnju",
+          "country": "South Korea",
+          "contacts": [
+            {
+              "name": "Byungsu Yoo, PI",
+              "role": "CONTACT",
+              "phone": "+82-33-741-0917",
+              "email": "yubs@yonsei.ac.kr"
+            }
+          ],
+          "geoPoint": {
+            "lat": 37.35139,
+            "lon": 127.94528
+          }
+        }
+      ]
+    },
+    "ipdSharingStatementModule": {
+      "ipdSharing": "NO"
+    }
+  },
+  "derivedSection": {
+    "miscInfoModule": {
+      "versionHolder": "2026-10-16"
+    },
+    "conditionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D000075222",
+          "term": "Essential Hypertension"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D006973",
+          "term": "Hypertension"
+        },
+        {
+          "id": "D014652",
+          "term": "Vascular Diseases"
+        },
+        {
+          "id": "D002318",
+          "term": "Cardiovascular Diseases"
+        }
+      ]
+    },
+    "interventionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D000068756",
+          "term": "Valsartan"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D013777",
+          "term": "Tetrazoles"
+        },
+        {
+          "id": "D001393",
+          "term": "Azoles"
+        },
+        {
+          "id": "D006573",
+          "term": "Heterocyclic Compounds, 1-Ring"
+        },
+        {
+          "id": "D006571",
+          "term": "Heterocyclic Compounds"
+        },
+        {
+          "id": "D014633",
+          "term": "Valine"
+        },
+        {
+          "id": "D000597",
+          "term": "Amino Acids, Branched-Chain"
+        },
+        {
+          "id": "D000596",
+          "term": "Amino Acids"
+        },
+        {
+          "id": "D000602",
+          "term": "Amino Acids, Peptides, and Proteins"
+        },
+        {
+          "id": "D000601",
+          "term": "Amino Acids, Essential"
+        }
+      ]
+    }
+  },
+  "hasResults": false
+}

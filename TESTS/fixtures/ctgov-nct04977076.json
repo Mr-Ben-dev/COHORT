@@ -1,0 +1,251 @@
+{
+  "protocolSection": {
+    "identificationModule": {
+      "nctId": "NCT04977076",
+      "orgStudyIdInfo": {
+        "id": "METCZ20210099"
+      },
+      "organization": {
+        "fullName": "Zuyderland Medisch Centrum",
+        "class": "OTHER"
+      },
+      "briefTitle": "Comparison Between Direct Oral Anticoagulation (DOAC) Interruption and DOAC Continuation in Patients Undergoing Elective Invasive Coronary Angiography or Percutaneous Coronary Intervention",
+      "officialTitle": "Comparison Between Direct Oral Anticoagulation (DOAC) Interruption and DOAC Continuation in Patients Undergoing Elective Invasive Coronary Angiography or Percutaneous Coronary Intervention",
+      "acronym": "SLIM-2"
+    },
+    "statusModule": {
+      "statusVerifiedDate": "2025-10",
+      "overallStatus": "RECRUITING",
+      "expandedAccessInfo": {
+        "hasExpandedAccess": false
+      },
+      "startDateStruct": {
+        "date": "2022-09-01",
+        "type": "ACTUAL"
+      },
+      "primaryCompletionDateStruct": {
+        "date": "2027-12-31",
+        "type": "ESTIMATED"
+      },
+      "completionDateStruct": {
+        "date": "2027-12-31",
+        "type": "ESTIMATED"
+      },
+      "studyFirstSubmitDate": "2021-07-20",
+      "studyFirstSubmitQcDate": "2021-07-20",
+      "studyFirstPostDateStruct": {
+        "date": "2021-07-26",
+        "type": "ACTUAL"
+      },
+      "lastUpdateSubmitDate": "2026-05-26",
+      "lastUpdatePostDateStruct": {
+        "date": "2026-05-29",
+        "type": "ACTUAL"
+      }
+    },
+    "sponsorCollaboratorsModule": {
+      "responsibleParty": {
+        "type": "SPONSOR"
+      },
+      "leadSponsor": {
+        "name": "Zuyderland Medisch Centrum",
+        "class": "OTHER"
+      }
+    },
+    "oversightModule": {
+      "oversightHasDmc": false,
+      "isFdaRegulatedDrug": false,
+      "isFdaRegulatedDevice": false
+    },
+    "descriptionModule": {
+      "briefSummary": "A prospective, multicenter, 1:1 randomized, investigator initiated study. Goal of this study is to examine the safety of uninterrupted periprocedural DOAC use.",
+      "detailedDescription": "Rationale: Patients with atrial fibrillation (AF) often have coexisting coronary artery disease (CAD). An estimated 5 to 15% of all AF patients will require coronary stenting. Direct Oral Anticoagulants (DOAC) are more commonly used in preventing thromboembolic complications in patients with AF, thereby substituting the use of Vitamin-K Antagonists (VKA). Therefore, many patients undergoing invasive coronary angiography (ICA) and percutaneous coronary intervention (PCI) are taking direct oral anticoagulants (DOAC). In patients using VKA it is recommended to defer elective coronary angiography until international Normalized Ratio (INR) is \\<2.2 when radial artery access is used. However, no large clinical trials have proven the safety of continuing DOAC use when undergoing ICA or PCI. The current guidelines recommend interrupting DOAC treatment at least 24 before ICA or PCI; however, this recommendation is only based on limited data. Clinical decisions on DOAC use must therefore be based on clinical trials in which substantial numbers of patients with Acute Coronary Syndrome (ACS) were included.\n\nObjective: To study the safety of DOAC continuation in patients undergoing ICA or PCI.\n\nStudy design: A prospective, multicenter, 1:1 randomized, investigator initiated study.\n\nStudy population: Patients aged \\>18 years using DOAC and undergoing elective ICA or PCI.\n\nIntervention: The intervention group will continue using DOAC as usual. No adjustments of DOAC use will be made before and after ICA or PCI. The control group will receive standard care. DOAC use will be interrupted at least 24-48 hours in advance of ICA or PCI, based on renal clearance and DOAC specimen.\n\nMain study parameters/endpoints: : Non-coronary artery bypass graft (CABG) related in-hospital bleeding (BARC 2, 3 or 5).\n\nNature and extent of the burden and risks associated with participation, benefit and group relatedness: Only a small burden is associated with participation. Patients are asked to fill out a questionnaire after 30 days. Patients in the control group may have a mildly higher risk of thromboembolic complications and patients in the intervention group may have a mildly higher risk of bleeding complications."
+    },
+    "conditionsModule": {
+      "conditions": [
+        "Atrial Fibrillation",
+        "Coronary Artery Disease",
+        "Anticoagulants"
+      ]
+    },
+    "designModule": {
+      "studyType": "INTERVENTIONAL",
+      "phases": [
+        "NA"
+      ],
+      "designInfo": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "interventionModelDescription": "A prospective, multicenter, 1:1 randomized, investigator initiated study.",
+        "primaryPurpose": "PREVENTION",
+        "maskingInfo": {
+          "masking": "NONE"
+        }
+      },
+      "enrollmentInfo": {
+        "count": 1270,
+        "type": "ESTIMATED"
+      }
+    },
+    "armsInterventionsModule": {
+      "armGroups": [
+        {
+          "label": "Interrupted DOAC use (group 1)",
+          "type": "ACTIVE_COMPARATOR",
+          "description": "Patients in group 1 will receive standard care. Therefore, DOAC use will be interrupted at least 24 hours in advance of ICA or PCI. Based on the renal clearance, last DOAC intake may be extended to 48 hours prior to the procedure \\[Table 2\\]. After the procedure, patients will continue using their DOAC as usual.",
+          "interventionNames": [
+            "Other: Interrupted DOAC use"
+          ]
+        },
+        {
+          "label": "Uninterrupted DOAC use (group 2)",
+          "type": "EXPERIMENTAL",
+          "description": "In group 2, all patients will continue to use their specific DOAC as usual. This means that no adjustments of DOAC use will be made before and after ICA or PCI. After the procedure patients will continue to use DOAC from the next planned dose.",
+          "interventionNames": [
+            "Other: Uninterrupted DOAC use"
+          ]
+        }
+      ],
+      "interventions": [
+        {
+          "type": "OTHER",
+          "name": "Uninterrupted DOAC use",
+          "description": "Continuing DOAC use in advance of elective ICA or PCI.",
+          "armGroupLabels": [
+            "Uninterrupted DOAC use (group 2)"
+          ]
+        },
+        {
+          "type": "OTHER",
+          "name": "Interrupted DOAC use",
+          "description": "Usual care, interruption of DOAC prior to procedure.",
+          "armGroupLabels": [
+            "Interrupted DOAC use (group 1)"
+          ]
+        }
+      ]
+    },
+    "outcomesModule": {
+      "primaryOutcomes": [
+        {
+          "measure": "Major Bleeding",
+          "description": "Non-CABG related in-hospital bleeding (BARC 2, 3 or 5)",
+          "timeFrame": "30 days"
+        }
+      ]
+    },
+    "eligibilityModule": {
+      "eligibilityCriteria": "Inclusion Criteria:\n\n* Patients aged \\>18 years using DOAC and undergoing elective ICA or PCI.\n* Provided signed informed consent\n\nExclusion Criteria:\n\nA potential subject who meets any of the following criteria will be excluded from participation in this study:\n\nAny of the following:\n\n* Patients initially presenting with Acute Coronary Syndrome (STEMI, NSTEMI, UA)\n* Patients \\<18 years old\n* Calculated creatinine clearance \\<30 mL/min\n* Patients simultaneously participating in another clinical trial\n* History or condition associated with increased bleeding risk, as listed below:\n\n  * Major surgical procedure within 30 days before the procedure\n  * Known inaccessible radial artery during previous procedure\n  * History of GI bleeding in the previous 6 months\n  * History of intracranial, intraocular, spinal, or atraumatic intra-articular bleeding\n  * Chronic bleeding disorder\n  * Known intracranial neoplasm, arteriovenous malformation, or aneurysm\n  * Known anemia with last measured haemoglobin value \\<6 mmol/L \\[9.67 g/dL\\]\n  * Current pregnancy or breast-feeding\n  * Known significant liver disease (e.g., acute clinical hepatitis, chronic active hepatitis, cirrhosis), or Alanine aminotransferase (ALT) \\>3 x the upper limit of normal.\n* Participation in another clinical trial",
+      "healthyVolunteers": false,
+      "sex": "ALL",
+      "minimumAge": "18 Years",
+      "stdAges": [
+        "ADULT",
+        "OLDER_ADULT"
+      ]
+    },
+    "contactsLocationsModule": {
+      "centralContacts": [
+        {
+          "name": "Sanne Janssen, MSC",
+          "role": "CONTACT",
+          "phone": "08854597522",
+          "email": "sanne.janssen@zuyderland.nl"
+        }
+      ],
+      "locations": [
+        {
+          "facility": "Zuyderland MC",
+          "status": "RECRUITING",
+          "city": "Heerlen",
+          "state": "Limburg",
+          "zip": "6419PC",
+          "country": "Netherlands",
+          "contacts": [
+            {
+              "name": "Sanne Janssen, MSc",
+              "role": "CONTACT",
+              "email": "sanne.janssen@zuyderland.nl"
+            }
+          ],
+          "geoPoint": {
+            "lat": 50.88365,
+            "lon": 5.98154
+          }
+        }
+      ]
+    },
+    "referencesModule": {
+      "references": [
+        {
+          "pmid": "42055156",
+          "type": "DERIVED",
+          "citation": "Janssen S, Luijkx JJP, Swinnen W, Vriesendorp P, Ten Berg JM, van 't Hof AWJ, Rasoul S; SLIM-2 study group. Direct oral anticoagulation interruption vs continuation in patients undergoing elective invasive coronary angiography or percutaneous coronary intervention: Design and rationale of the South Limburg Myocardial Infarction Study Group Trial 2 (SLIM-2). Am Heart J. 2026 Sep;299:107462. doi: 10.1016/j.ahj.2026.107462. Epub 2026 Apr 27."
+        }
+      ]
+    },
+    "ipdSharingStatementModule": {
+      "ipdSharing": "NO"
+    }
+  },
+  "derivedSection": {
+    "miscInfoModule": {
+      "versionHolder": "2026-10-16"
+    },
+    "conditionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D001281",
+          "term": "Atrial Fibrillation"
+        },
+        {
+          "id": "D003324",
+          "term": "Coronary Artery Disease"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D001145",
+          "term": "Arrhythmias, Cardiac"
+        },
+        {
+          "id": "D006331",
+          "term": "Heart Diseases"
+        },
+        {
+          "id": "D002318",
+          "term": "Cardiovascular Diseases"
+        },
+        {
+          "id": "D010335",
+          "term": "Pathologic Processes"
+        },
+        {
+          "id": "D013568",
+          "term": "Pathological Conditions, Signs and Symptoms"
+        },
+        {
+          "id": "D003327",
+          "term": "Coronary Disease"
+        },
+        {
+          "id": "D017202",
+          "term": "Myocardial Ischemia"
+        },
+        {
+          "id": "D001161",
+          "term": "Arteriosclerosis"
+        },
+        {
+          "id": "D001157",
+          "term": "Arterial Occlusive Diseases"
+        },
+        {
+          "id": "D014652",
+          "term": "Vascular Diseases"
+        }
+      ]
+    }
+  },
+  "hasResults": false
+}
