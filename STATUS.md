@@ -54,7 +54,7 @@
 | B5 | Full-ZK compile + verifier SHA record + pins update | — | NOT STARTED | scripts/ | waits for B1 |
 | B6 | Proof-server measurement | — | NOT STARTED | — | waits for B5 |
 | B7 | dapp wiring for new circuits | — | NOT STARTED | packages/dapp/src/attest.mjs (new) | waits for B1 |
-| B8 | Circuit documentation | — | NOT STARTED | docs/circuits.md (new) | waits for B1 |
+| B8 | Circuit documentation | B8 subagent (parent-orchestrator task) | DONE | `docs/circuits.md` (new, committed), `STATUS.md` (this row) | none — wrote from `CONTRACT/cohort.compact` as implemented + B1 interface spec (both circuits, issuer-attested trio, trust boundary, mermaid flow; honesty sections: self-asserted Wave-1 inputs, demo-grade issuer gate, circuit cannot prove medical-record authenticity) |
 
 ### B1 contract interface (binding) — AS IMPLEMENTED 2026-10-19 ~05:30 EEST
 ```compact
