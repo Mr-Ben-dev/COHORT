@@ -89,8 +89,10 @@ export function WalletModal() {
           <DialogTitle className="text-cloud-white">Connect a wallet</DialogTitle>
           <DialogDescription className="text-pearl/75">
             Choose a Midnight DApp Connector injected in this browser. COHORT
-            targets Preprod. 1AM can generate this proof in-browser. Lace can
-            connect; proving for this flow is limited.
+            targets Preprod. GeroWallet is recommended (passkey unlock); note its
+            default proof location is Gero Cloud — witness data leaves this device
+            unless you switch to a local proof server. 1AM proves in-browser and
+            keeps witnesses local. Lace can connect; it cannot prove in-browser.
           </DialogDescription>
         </DialogHeader>
         <p className="text-caption text-lilac-mist">

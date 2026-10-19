@@ -15,10 +15,14 @@ export function WalletPicker() {
     <>
       <h2 className="text-subheading font-semibold text-cloud-white">Connect your wallet</h2>
       <p className="mt-2 text-body-sm text-pearl/70">
-        1AM is the gold path for this proof. Lace can connect; it cannot currently
-        generate this proof in-browser. Connect must stay inside this click. 1AM
-        does not open a page popup. After Connect, approve COHORT from the toolbar
-        icon. Lace may open an authorization popup.
+        GeroWallet is the recommended option for this proof (passkey unlock, no
+        seed phrase). Tradeoff: Gero's default proof location is Gero Cloud, so
+        witness data leaves this device — 1AM proves in-browser instead and keeps
+        witnesses local. Lace can connect; it cannot generate this proof
+        in-browser. Connect must stay inside this click.
+        GeroWallet does not open a page popup; neither does 1AM. After
+        Connect, approve COHORT from the toolbar icon. Lace may open an
+        authorization popup.
       </p>
       {wallet.status === "permission-required" && wallet.provider === "Lace" ? (
         <p className="mt-2 text-body-sm text-clinical-cyan" role="status">

@@ -45,7 +45,7 @@
 ## SQUAD B — Hero circuit (hash-native)
 | # | Task | Worker | Status | Files touched | Blockers |
 |---|---|---|---|---|---|
-| B1 | Contract author: attestations Set, attest(), attestWithAttributes(), proveAttested(), attestationOf(), ISSUER_ID (interface spec in section below) | — | NOT STARTED | CONTRACT/cohort.compact | — |
+| B1 | Contract author: attestations Set, attest(), attestWithAttributes(), proveAttested(), attestationOf(), ISSUER_ID (interface spec in section below) | af979b4e (B1) | DONE | CONTRACT/cohort.compact | none — see deviations in interface spec |
 | B2 | Demo issuer key-ceremony script | 44ab66df | RUNNING — script written + tested (clean exit 2 pre-B1); polling for B1 interface | scripts/issuer-ceremony.mjs (new), .gitignore (+scripts/.issuer-secret.json) | B1 contract interface (issuerIdOf/attestationOf/ISSUER_ID placeholder not yet in contract) |
 | B3 | Simulator happy-path tests | — | NOT STARTED | TESTS/attest-happy.test.mjs | waits for B1 |
 | B4 | Refusal/adversarial tests | — | NOT STARTED | TESTS/attest-adversarial.test.mjs | waits for B1 |
@@ -54,20 +54,26 @@
 | B7 | dapp wiring for new circuits | — | NOT STARTED | packages/dapp/src/attest.mjs (new) | waits for B1 |
 | B8 | Circuit documentation | — | NOT STARTED | docs/circuits.md (new) | waits for B1 |
 
-### B1 contract interface (binding)
+### B1 contract interface (binding) — AS IMPLEMENTED 2026-10-19 ~05:30 EEST
 ```compact
 witness wHolderSecret(): Bytes<32>;
 witness wNonce(): Bytes<32>;
 witness wIssuerSecret(): Bytes<32>;
-const ISSUER_ID: Bytes<32> = 0x<64 hex from ceremony>; // codegen if hex literal fails
+// ISSUER_ID lives in circuit issuerId(): Bytes<32> (see deviations); zeros placeholder, ceremony-replaced
 export ledger attestations: Set<Bytes<32>>;
 export ledger attestationsVerified: Counter;
 export circuit attestationOf(age: Uint<8>, cond: Boolean, med: Boolean, holderSecret: Bytes<32>, nonce: Bytes<32>): Bytes<32>
-export circuit attest(attestation: Bytes<32>): Boolean  // assert(disclose(wIssuerSecret())==ISSUER_ID); insert
-export circuit attestWithAttributes(age: Uint<8>, cond: Boolean, med: Boolean, holderSecret: Bytes<32>, nonce: Bytes<32>): Boolean  // issuer-gated, computes in-circuit
+export circuit issuerIdOf(secret: Bytes<32>): Bytes<32>   // ceremony helper: returns disclose(secret)
+export circuit attest(attestation: Bytes<32>): Boolean  // assert(disclose(wIssuerSecret())==issuerId()); replay-check; insert
+export circuit attestWithAttributes(age: Uint<8>, cond: Boolean, med: Boolean, holderSecret: Bytes<32>, nonce: Bytes<32>): Boolean  // issuer-gated, computes attestationOf in-circuit
 export circuit proveAttested(trialId: Bytes<32>, minAge: Uint<8>, maxAge: Uint<8>, requireCondition: Boolean, forbidMedication: Boolean): Boolean
 ```
-attestationOf logic: `attrsHash=persistentHash([pad(32,"cohort:attrs"),disclose(age),disclose(cond),disclose(med)])`; `binding=persistentHash([pad(32,"cohort:holder"),holderSecret,nonce])`; return `persistentCommit(attrsHash,binding)`. proveAttested: recompute attestation, assert member, program-scoped nullifier `persistentHash([pad(32,"cohort:attnul"),trialId,disclose(att)])`, predicate, referral, proven++, attestationsVerified++. proveEligible UNCHANGED.
+attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolean]>([pad(32,"cohort:attrs"),age,cond,med])`; `binding=persistentHash<[Bytes<32>,Bytes<32>,Bytes<32>]>([pad(32,"cohort:holder"),holderSecret,nonce])`; return `persistentCommit<Bytes<32>>(attrsHash,binding)`. proveAttested: recompute attestation from wAge()/wCondition()/wMedication()/wHolderSecret()/wNonce(), assert member, program-scoped nullifier `persistentHash<Vector<3,Bytes<32>>>([pad(32,"cohort:attnul"),trialId,disclose(att)])`, same predicate asserts as proveEligible, referral as proveEligible, proven++, attestationsVerified++. proveEligible + trialNullifier byte-identical to deployed version (verified by diff). Full contract compiles on compactc 0.31.1 (typecheck + TS codegen OK; full-ZK proving-key run in progress at B1 finish).
+
+#### Deviations from the draft spec (B2/B3/B7 read this)
+1. `const ISSUER_ID: Bytes<32> = 0x...` does NOT compile on language 0.23: `const` is not a top-level keyword, and `0x`-hex literals parse as Uint (capped at Uint<248>) — never Bytes<32>. Replaced with `circuit issuerId(): Bytes<32>` whose body is the 32-byte placeholder string `"\x00...\x00"` (32 escapes). The ceremony worker replaces the single marked line (`// CEREMONY-REPLACE: ISSUER_ID_BYTES`) with 32 `\xNN` escapes — `\xNN` escapes in string literals ARE the codegen vehicle for arbitrary 32-byte constants (verified compiling).
+2. `disclose(x)` is a compiler permission marker, NOT a bytes conversion: it is the identity at the value level (`disclose(Uint<248>)` typechecks as Uint<248>; `disclose(age)` with `age: Uint<8>` is Uint<8> and fails as a `Vector<N, Bytes<32>>` element). So attestationOf hashes typed tuples (see logic above) instead of `disclose()`-converted elements. Off-chain recomputation must use the tuple construction, or simply call `attestationOf` / use `attestWithAttributes` (preferred — no off-chain hash agreement needed).
+3. OBSERVATION for integrator/B2 (not changed — interface is binding): because disclose() is the identity, `issuerIdOf(secret)` returns the 32 secret bytes unchanged, and the baked-in ISSUER_ID equals the raw issuer secret bytes. Post-ceremony the "secret" is readable from the contract source/compiled circuit — the issuer gate is demo-grade (knowledge of the pre-ceremony secret), not a cryptographic secret. If Wave-3 judging needs a real secret, the issuer check must move to a hash preimage (e.g. `persistentHash` of the secret) — that is a spec change for the parent/integrator to approve.
 
 ## SQUAD C — Integration layer
 | # | Task | Worker | Status | Files touched | Blockers |
@@ -86,7 +92,7 @@ attestationOf logic: `attrsHash=persistentHash([pad(32,"cohort:attrs"),disclose(
 | D1 | Trial catalog 2→12 hand-mapped | — | NOT STARTED | apps/api/src/trials.mjs | — |
 | D2 | Site verification console | — | NOT STARTED | web/src/app/sites/* (new) | C2, A7 |
 | D3 | Wallet matrix (Lace primary investigation + code) | — | NOT STARTED | packages/dapp/src/wallet/* | — |
-| D4 | FHIR spike (research + prototype, no PHI) | — | NOT STARTED | RESEARCH/fhir-spike.md | — |
+| D4 | Wallet matrix: GeroWallet primary, 1AM fallback, Lace flagged `proving:false` (code + web research, no pushes/deploys/chain writes) | d4 subagent | DONE | packages/dapp/src/wallets.mjs (new), docs/wallet-trust.md (new), docs/wallet-demo-checklist.md (new), TESTS/wallet-matrix.test.mjs (new, in test script), web copy: wallet-picker.tsx, wallet-modal.tsx, package.json | A1 concurrently editing packages/dapp/src — new file only, no edits to existing .mjs files |
 
 ## SQUAD E — Communication
 | # | Task | Worker | Status | Files touched | Blockers |
