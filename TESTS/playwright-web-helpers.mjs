@@ -74,3 +74,107 @@ export async function openCheck(page, origin) {
   await checkBtn.click();
   await page.locator('input[id^="age-"]').waitFor({ timeout: 20000 });
 }
+
+/**
+ * Launch Chromium for the Vercel web tests.
+ *
+ * Environment knobs (unset = repo defaults, unchanged behavior):
+ * - PLAYWRIGHT_CHROME_PATH: executablePath to use instead of channel lookup
+ *   (this VM has no channel 'chrome'/'msedge'; the Playwright-cached
+ *   chromium-1248 build works, /opt/meta-chromium/chrome is blocked by its
+ *   Local Network Access checks for localhost).
+ * - PLAYWRIGHT_NO_SANDBOX=1: pass --no-sandbox (required in containers where
+ *   the Chromium sandbox cannot start; without it launch hangs forever).
+ * - PLAYWRIGHT_PROXY_FORWARD=1: run a tiny localhost forward proxy that
+ *   injects Proxy-Authorization (read from the *http_proxy env at runtime,
+ *   never hardcoded) and point Chromium at it. Needed because this VM's
+ *   egress proxy drops unauthenticated CONNECTs instead of answering 407,
+ *   so Chromium's challenge/response proxy auth never engages.
+ *
+ * Falls back to the historical channel:'chrome' -> channel:'msedge' chain.
+ */
+import net from 'node:net';
+
+let forwardProxy = null;
+
+/** Localhost TCP relay that injects Proxy-Authorization for the egress proxy. */
+async function ensureAuthForwardProxy() {
+  if (forwardProxy) return forwardProxy.port;
+  const raw =
+    process.env.HTTPS_PROXY ||
+    process.env.https_proxy ||
+    process.env.HTTP_PROXY ||
+    process.env.http_proxy;
+  if (!raw) throw new Error('PLAYWRIGHT_PROXY_FORWARD=1 but no *http_proxy env set');
+  const u = new URL(raw);
+  const auth =
+    'Basic ' +
+    Buffer.from(`${decodeURIComponent(u.username)}:${decodeURIComponent(u.password)}`).toString('base64');
+  const targetHost = u.hostname;
+  const targetPort = Number(u.port) || 3128;
+  const server = net.createServer((client) => {
+    let head = Buffer.alloc(0);
+    const onData = (chunk) => {
+      head = Buffer.concat([head, chunk]);
+      const idx = head.indexOf('\r\n\r\n');
+      if (idx === -1) return;
+      client.off('data', onData);
+      let headStr = head.slice(0, idx).toString('latin1');
+      const rest = head.slice(idx + 4);
+      if (!/proxy-authorization:/i.test(headStr)) {
+        headStr = headStr.replace('\r\n', `\r\nProxy-Authorization: ${auth}\r\n`);
+      }
+      const upstream = net.connect(targetPort, targetHost, () => {
+        upstream.write(headStr + '\r\n\r\n');
+        if (rest.length) upstream.write(rest);
+        client.pipe(upstream);
+        upstream.pipe(client);
+      });
+      const destroy = () => {
+        client.destroy();
+        upstream.destroy();
+      };
+      upstream.on('error', destroy);
+      client.on('error', destroy);
+    };
+    client.on('data', onData);
+    client.on('error', () => {});
+  });
+  await new Promise((resolve, reject) => {
+    server.on('error', reject);
+    server.listen(0, '127.0.0.1', resolve);
+  });
+  server.unref();
+  forwardProxy = { server, port: server.address().port };
+  return forwardProxy.port;
+}
+
+function proxyBypass() {
+  const raw = process.env.NO_PROXY || process.env.no_proxy || '';
+  const parts = raw
+    .split(',')
+    .map((x) => x.trim().replace(/^\[|\]$/g, ''))
+    .filter(Boolean);
+  for (const must of ['localhost', '127.0.0.1']) {
+    if (!parts.includes(must)) parts.push(must);
+  }
+  return parts.join(',');
+}
+
+export async function launchWebBrowser() {
+  const { chromium } = await import('playwright-core');
+  const args = [];
+  if (process.env.PLAYWRIGHT_NO_SANDBOX === '1') args.push('--no-sandbox');
+  const opts = { headless: true, args };
+  if (process.env.PLAYWRIGHT_PROXY_FORWARD === '1') {
+    const port = await ensureAuthForwardProxy();
+    opts.proxy = { server: `http://127.0.0.1:${port}`, bypass: proxyBypass() };
+  }
+  if (process.env.PLAYWRIGHT_CHROME_PATH) {
+    opts.executablePath = process.env.PLAYWRIGHT_CHROME_PATH;
+    return chromium.launch(opts);
+  }
+  return chromium.launch({ ...opts, channel: 'chrome' }).catch(() =>
+    chromium.launch({ ...opts, channel: 'msedge' }),
+  );
+}

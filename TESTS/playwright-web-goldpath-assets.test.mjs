@@ -1,20 +1,41 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { chromium } from 'playwright-core';
-import { openCheck } from './playwright-web-helpers.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { openCheck, launchWebBrowser } from './playwright-web-helpers.mjs';
 
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const VERCEL_URL = process.env.PLAYWRIGHT_WEB_URL || 'https://cohort-web-orcin.vercel.app';
 const RENDER = 'https://cohort-y4zr.onrender.com';
 
+// NOTE: ignoreHTTPSErrors is set because CI/VM egress runs behind a
+// TLS-intercepting proxy whose CA is not in Chromium's trust store
+// (curl/node work via SSL_CERT_FILE). It does not weaken any privacy
+// assertion here — no test in this file asserts on TLS validity.
 async function launch() {
-  return chromium.launch({ channel: 'chrome', headless: true }).catch(() =>
-    chromium.launch({ channel: 'msedge', headless: true }),
-  );
+  return launchWebBrowser();
 }
 
 test('Vercel page can load CohortDapp wasm, Render /zk keys, and indexer public state', async () => {
+  // The in-page dapp bundle queries the Blockfrost indexer, which needs the
+  // project token as ?project_id=. The token is a test-run input (never
+  // committed). The DEPLOYED Vercel bundle predates caller-supplied
+  // ?project_id= support (urlHasProjectId) and its esbuild node-polyfill
+  // holds a closed-over env object, so it cannot accept the test-run token.
+  // Serve the CURRENT repo build (scripts/build-dapp.mjs, run by pretest)
+  // for /dapp/cohort-dapp.js instead: the wasm / verifier / compiler
+  // assertions below still hit the real deployed assets, and the indexer
+  // round-trip is a real Blockfrost query from a real browser.
+  const indexerToken = process.env.BLOCKFROST_PROJECT_ID || '';
+  assert.ok(indexerToken, 'BLOCKFROST_PROJECT_ID must be set in the environment for this test');
+  const localDapp = path.join(root, 'web', 'public', 'dapp', 'cohort-dapp.js');
+  assert.ok(fs.existsSync(localDapp), `missing built dapp (run scripts/build-dapp.mjs): ${localDapp}`);
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
+  await page.route('**/dapp/cohort-dapp.js', (route) =>
+    route.fulfill({ path: localDapp, contentType: 'text/javascript' }),
+  );
   const failures = [];
   const csp = [];
   page.on('requestfailed', (req) => {
@@ -30,7 +51,7 @@ test('Vercel page can load CohortDapp wasm, Render /zk keys, and indexer public 
     await page.goto(VERCEL_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.getByRole('navigation', { name: 'Main navigation' }).waitFor({ timeout: 30000 });
 
-    const assets = await page.evaluate(async (render) => {
+    const assets = await page.evaluate(async ({ render, token }) => {
       const wasmUrl = new URL('/dapp/midnight_onchain_runtime_wasm_bg.wasm', location.href).href;
       const dappUrl = new URL('/dapp/cohort-dapp.js', location.href).href;
       const [wasm, verifier, compiler] = await Promise.all([
@@ -40,7 +61,11 @@ test('Vercel page can load CohortDapp wasm, Render /zk keys, and indexer public 
       ]);
       const info = await compiler.json();
       const mod = await import(/* @vite-ignore */ dappUrl);
-      const verification = await mod.CohortDapp.getPublicVerification();
+      const q = `?project_id=${encodeURIComponent(token)}`;
+      const verification = await mod.CohortDapp.getPublicVerification({
+        indexerUrl: `https://midnight-preprod.blockfrost.io/api/v0${q}`,
+        indexerWsUrl: `wss://midnight-preprod.blockfrost.io/api/v0/ws${q}`,
+      });
       return {
         wasmStatus: wasm.status,
         wasmType: wasm.headers.get('content-type'),
@@ -55,7 +80,7 @@ test('Vercel page can load CohortDapp wasm, Render /zk keys, and indexer public 
         contract: verification.contractAddress,
         hasProve: typeof mod.CohortDapp.proveEligibility,
       };
-    }, RENDER);
+    }, { render: RENDER, token: indexerToken });
 
     assert.equal(assets.wasmStatus, 200, JSON.stringify(assets));
     assert.match(String(assets.wasmType), /wasm/);
@@ -82,7 +107,7 @@ test('Vercel page can load CohortDapp wasm, Render /zk keys, and indexer public 
 
 test('Vercel proving view preloads dapp without sending private facts', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   const leaked = [];
   page.on('request', (req) => {
     const hay = `${req.url()}\n${req.postData() || ''}`;
@@ -125,7 +150,7 @@ const ALLOWED_HOST_RE =
 
 test('Vercel check flow only talks to pinned public destinations', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   const hosts = new Set();
   page.on('request', (req) => {
     try {

@@ -69385,14 +69385,21 @@ function withProjectId(url2) {
   if (!url2 || typeof url2 !== "string") return url2;
   try {
     if (!isBlockfrostUrl(url2)) return url2;
-    const u = new URL(url2);
-    if (u.searchParams.has("project_id")) return url2;
+    if (urlHasProjectId(url2)) return url2;
     const token = blockfrostProjectId();
     if (!token) return url2;
+    const u = new URL(url2);
     u.searchParams.set("project_id", token);
     return u.toString();
   } catch {
     return url2;
+  }
+}
+function urlHasProjectId(url2) {
+  try {
+    return new URL(url2).searchParams.has("project_id");
+  } catch {
+    return false;
   }
 }
 function blockfrostIndexerUrl() {
@@ -69416,7 +69423,7 @@ function createPublicDataProvider({ indexerUrl: indexerUrl2, indexerWsUrl }) {
   }
   indexerUrl2 = withProjectId(indexerUrl2);
   indexerWsUrl = withProjectId(indexerWsUrl);
-  if (isBlockfrostUrl(indexerUrl2) && !blockfrostTokenConfigured()) {
+  if (isBlockfrostUrl(indexerUrl2) && !blockfrostTokenConfigured() && !urlHasProjectId(indexerUrl2)) {
     throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, blockfrostTokenMissingReason());
   }
   return indexerPublicDataProvider(indexerUrl2, indexerWsUrl);

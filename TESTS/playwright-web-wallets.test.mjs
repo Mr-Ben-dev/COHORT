@@ -1,14 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { chromium } from 'playwright-core';
-import { openCheck } from './playwright-web-helpers.mjs';
+import { openCheck, launchWebBrowser } from './playwright-web-helpers.mjs';
 
 const VERCEL_URL = process.env.PLAYWRIGHT_WEB_URL || 'https://cohort-web-orcin.vercel.app';
 
+// NOTE: ignoreHTTPSErrors is set because CI/VM egress runs behind a
+// TLS-intercepting proxy whose CA is not in Chromium's trust store
+// (curl/node work via SSL_CERT_FILE). It does not weaken any privacy
+// assertion here — no test in this file asserts on TLS validity.
 async function launch() {
-  return chromium.launch({ channel: 'chrome', headless: true }).catch(() =>
-    chromium.launch({ channel: 'msedge', headless: true }),
-  );
+  return launchWebBrowser();
 }
 
 function injectConnectorScript() {
@@ -92,7 +93,7 @@ async function connectFromModal(page, index) {
 
 test('Vercel: injected Lace connects and fail-closes proving without a fake tx', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   try {
     await page.addInitScript(injectConnectorScript);
     await openCheck(page, VERCEL_URL);
@@ -115,7 +116,7 @@ test('Vercel: injected Lace connects and fail-closes proving without a fake tx',
 
 test('Vercel: injected 1AM connect stays on Approve and does not invent confirmed', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   try {
     await page.addInitScript(injectConnectorScript);
     await openCheck(page, VERCEL_URL);
@@ -136,7 +137,7 @@ test('Vercel: injected 1AM connect stays on Approve and does not invent confirme
 
 test('Vercel: remembered rdns shows Reconnect without pretending the wallet is connected', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   try {
     await page.addInitScript(() => {
       try {
@@ -162,7 +163,7 @@ test('Vercel: remembered rdns shows Reconnect without pretending the wallet is c
 
 test('Vercel: hanging UUID Lace connect keeps the picker and does not show 1AM waiting copy', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   try {
     await page.addInitScript(() => {
       window.midnight = {
@@ -216,7 +217,7 @@ test('Vercel: hanging UUID Lace connect keeps the picker and does not show 1AM w
 
 test('Vercel: disconnect does not wipe encrypted profile and reconnect restores it', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   const leaked = [];
   page.on('request', (req) => {
     const hay = `${req.url()}\n${req.postData() || ''}`;
@@ -247,7 +248,7 @@ test('Vercel: disconnect does not wipe encrypted profile and reconnect restores 
 
 test('Vercel: 1AM and Lace keep isolated private profiles', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   try {
     await page.addInitScript(injectConnectorScript);
     await page.goto(VERCEL_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });

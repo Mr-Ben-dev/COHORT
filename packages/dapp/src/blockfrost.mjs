@@ -50,14 +50,28 @@ export function withProjectId(url) {
   if (!url || typeof url !== 'string') return url;
   try {
     if (!isBlockfrostUrl(url)) return url;
-    const u = new URL(url);
-    if (u.searchParams.has('project_id')) return url;
+    if (urlHasProjectId(url)) return url;
     const token = blockfrostProjectId();
     if (!token) return url;
+    const u = new URL(url);
     u.searchParams.set('project_id', token);
     return u.toString();
   } catch {
     return url;
+  }
+}
+
+/**
+ * True when the URL already carries a `?project_id=` credential.
+ * A caller-supplied project_id is a sufficient credential on its own:
+ * createPublicDataProvider() accepts it without requiring the env token.
+ * Never throws.
+ */
+export function urlHasProjectId(url) {
+  try {
+    return new URL(url).searchParams.has('project_id');
+  } catch {
+    return false;
   }
 }
 

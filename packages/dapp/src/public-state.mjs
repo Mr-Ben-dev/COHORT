@@ -10,6 +10,7 @@ import {
   blockfrostTokenConfigured,
   blockfrostTokenMissingReason,
   isBlockfrostUrl,
+  urlHasProjectId,
   withProjectId,
 } from './blockfrost.mjs';
 
@@ -24,7 +25,10 @@ export function createPublicDataProvider({ indexerUrl, indexerWsUrl }) {
   }
   indexerUrl = withProjectId(indexerUrl);
   indexerWsUrl = withProjectId(indexerWsUrl);
-  if (isBlockfrostUrl(indexerUrl) && !blockfrostTokenConfigured()) {
+  // A caller-supplied ?project_id= on the URL is a sufficient credential
+  // (e.g. browser contexts where the env token is unavailable); the env
+  // token is only required when the URL carries none.
+  if (isBlockfrostUrl(indexerUrl) && !blockfrostTokenConfigured() && !urlHasProjectId(indexerUrl)) {
     throw new CohortError(ErrorCode.INDEXER_UNAVAILABLE, blockfrostTokenMissingReason());
   }
   return indexerPublicDataProvider(indexerUrl, indexerWsUrl);

@@ -4,7 +4,7 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
-import { openCheck } from './playwright-web-helpers.mjs';
+import { openCheck, launchWebBrowser } from './playwright-web-helpers.mjs';
 import { dumpOriginPrivacy, assertNoPrivateFactsInOrigin } from './playwright-storage-audit.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -12,12 +12,12 @@ const webDir = path.join(root, 'web');
 const PATIENT_A = 31;
 const PATIENT_B = 52;
 
+// NOTE: ignoreHTTPSErrors is set because CI/VM egress runs behind a
+// TLS-intercepting proxy whose CA is not in Chromium's trust store
+// (curl/node work via SSL_CERT_FILE). It does not weaken any privacy
+// assertion here — no test in this file asserts on TLS validity.
 function launchChromium() {
-  return import('playwright-core').then(({ chromium }) =>
-    chromium.launch({ channel: 'chrome', headless: true }).catch(() =>
-      chromium.launch({ channel: 'msedge', headless: true }),
-    ),
-  );
+  return launchWebBrowser();
 }
 
 function startNext(port) {
@@ -62,7 +62,7 @@ test('Playwright: designer UI does not send PATIENT_A age to COHORT APIs', async
 
   const browser = await launchChromium();
   t.after(() => browser.close().catch(() => {}));
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   const leaked = [];
   page.on('request', (req) => {
     const urlStr = req.url();
@@ -105,7 +105,7 @@ const VERCEL_URL = process.env.PLAYWRIGHT_WEB_URL || 'https://cohort-web-orcin.v
 test('Playwright Vercel: PATIENT_A age never appears on COHORT or Vercel API traffic', async (t) => {
   const browser = await launchChromium();
   t.after(() => browser.close().catch(() => {}));
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   const leaked = [];
   page.on('request', (req) => {
     const urlStr = req.url();
@@ -160,7 +160,7 @@ test('Playwright Vercel: PATIENT_A age never appears on COHORT or Vercel API tra
 test('Playwright Vercel: PATIENT_B age never appears on COHORT or Vercel API traffic', async (t) => {
   const browser = await launchChromium();
   t.after(() => browser.close().catch(() => {}));
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   const leaked = [];
   page.on('request', (req) => {
     const urlStr = req.url();

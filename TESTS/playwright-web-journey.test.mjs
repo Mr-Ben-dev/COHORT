@@ -1,14 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { chromium } from 'playwright-core';
-import { openCheck as openCheckAt } from './playwright-web-helpers.mjs';
+import { openCheck as openCheckAt, launchWebBrowser } from './playwright-web-helpers.mjs';
 
 const VERCEL_URL = process.env.PLAYWRIGHT_WEB_URL || 'https://cohort-web-orcin.vercel.app';
 
+// NOTE: ignoreHTTPSErrors is set because CI/VM egress runs behind a
+// TLS-intercepting proxy whose CA is not in Chromium's trust store
+// (curl/node work via SSL_CERT_FILE). It does not weaken any privacy
+// assertion here — no test in this file asserts on TLS validity.
 async function launch() {
-  return chromium.launch({ channel: 'chrome', headless: true }).catch(() =>
-    chromium.launch({ channel: 'msedge', headless: true }),
-  );
+  return launchWebBrowser();
 }
 
 async function openCheck(page) {
@@ -31,7 +32,7 @@ async function completeTypedForm(page, { age, condition, medication }) {
 
 test('Vercel: too-young local preview is ineligible and invents no tx', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   try {
     await openCheck(page);
     await completeTypedForm(page, { age: 17, condition: true, medication: false });
@@ -50,7 +51,7 @@ test('Vercel: too-young local preview is ineligible and invents no tx', async ()
 
 test('Vercel: eligible preview waits for 1AM and does not fake confirmed', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   try {
     await openCheck(page);
     await completeTypedForm(page, { age: 32, condition: true, medication: false });
@@ -70,8 +71,8 @@ test('Vercel: eligible preview waits for 1AM and does not fake confirmed', async
 
 test('Vercel: two contexts do not share private age answers', async () => {
   const browser = await launch();
-  const a = await browser.newContext();
-  const b = await browser.newContext();
+  const a = await browser.newContext({ ignoreHTTPSErrors: true });
+  const b = await browser.newContext({ ignoreHTTPSErrors: true });
   const pageA = await a.newPage();
   const pageB = await b.newPage();
   try {
@@ -94,7 +95,7 @@ test('Vercel: two contexts do not share private age answers', async () => {
 
 test('Vercel mobile viewport: trial check is usable without a fake wallet', async () => {
   const browser = await launch();
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, ignoreHTTPSErrors: true });
   try {
     await openCheck(page);
     const body = await page.innerText('body');
@@ -108,7 +109,7 @@ test('Vercel mobile viewport: trial check is usable without a fake wallet', asyn
 
 test('Vercel: private profile finds potential matches without posting facts', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   const leaked = [];
   page.on('request', (req) => {
     const url = req.url();
@@ -143,7 +144,7 @@ test('Vercel: private profile finds potential matches without posting facts', as
 
 test('Vercel: private profile survives reload without posting facts', async () => {
   const browser = await launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ ignoreHTTPSErrors: true });
   const leaked = [];
   page.on('request', (req) => {
     const url = req.url();
