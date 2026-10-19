@@ -88,3 +88,20 @@
 |---|---|---|
 | No escrowed referral marketplace (honestly not-live) | HONORED | No marketplace built; no coin-holding circuit. Matches are references in killed/resear
 ...[truncated 5712 chars]
+---
+
+## Addendum — 2026-10-19 ~09:00 EEST (owner: "make COHORT complete, take your time")
+
+**Deployer hardenings (all committed + pushed as "mr ben dev"):**
+- `COHORT_DEPLOY_BYPASS_GENERATION_FLAG=1` now actually implemented (was documented in runbook but never coded). Skips only the generation-registration gate; wallet sync still proves real spendable balance.
+- Sync timeout: `COHORT_SYNC_TIMEOUT_MS` (default 10m) — fails fast instead of hanging forever.
+- Fixed `loadGeneratedContract` circuit check for compactc 0.31.x (circuits on instance, not prototype).
+- New: `scripts/swap-contract-address.mjs` — one-command rotation of the contract address across all 10 wired files post-deploy.
+
+**Contract deploy status:** Attempted 3x from this VM. WSS fixed (Node 24 native WebSocket + NODE_USE_ENV_PROXY), proof server running (8.1.0 via system ld-linux), contract recompiled (verifier 5af3b4b2… byte-identical). **Hard limit:** `WalletFacade.waitForSyncedState()` cannot complete here — times out after 10 min. Raw WSS + graphql-ws work; the SDK's full sync hangs. Deploy remains the ONE laptop step per `docs/owner-deploy-runbook.md`.
+
+**Tests re-run 2026-10-19 ~08:55:** 223 pass, 0 fail (non-browser), 4 skipped. Browser tests excluded (VM TLS).
+
+**Deployments verified live:** Render API `cohort-y4zr.onrender.com` → `{"status":"ok"}`; Vercel production `cohort-web-orcin.vercel.app` → HTTP 200.
+
+**Phase 6:** DONE (pilot-brief.md + demo-script-5min.md, commit f516db3).
