@@ -46,7 +46,7 @@
 | # | Task | Worker | Status | Files touched | Blockers |
 |---|---|---|---|---|---|
 | B1 | Contract author: attestations Set, attest(), attestWithAttributes(), proveAttested(), attestationOf(), ISSUER_ID (interface spec in section below) | — | NOT STARTED | CONTRACT/cohort.compact | — |
-| B2 | Demo issuer key-ceremony script | — | NOT STARTED | scripts/issuer-ceremony.mjs | interface spec (below) |
+| B2 | Demo issuer key-ceremony script | 44ab66df | RUNNING — script written + tested (clean exit 2 pre-B1); polling for B1 interface | scripts/issuer-ceremony.mjs (new), .gitignore (+scripts/.issuer-secret.json) | B1 contract interface (issuerIdOf/attestationOf/ISSUER_ID placeholder not yet in contract) |
 | B3 | Simulator happy-path tests | — | NOT STARTED | TESTS/attest-happy.test.mjs | waits for B1 |
 | B4 | Refusal/adversarial tests | — | NOT STARTED | TESTS/attest-adversarial.test.mjs | waits for B1 |
 | B5 | Full-ZK compile + verifier SHA record + pins update | — | NOT STARTED | scripts/ | waits for B1 |
@@ -91,7 +91,7 @@ attestationOf logic: `attrsHash=persistentHash([pad(32,"cohort:attrs"),disclose(
 ## SQUAD E — Communication
 | # | Task | Worker | Status | Files touched | Blockers |
 |---|---|---|---|---|---|
-| E1 | Video script ≤4min (mission in first 30s, new delta on screen) | — | NOT STARTED | docs/video-script.md (new) | B (what's new) |
+| E1 | Video script ≤4min (mission in first 30s, new delta on screen) | SQUAD E | DONE | docs/video-script.md (new, committed 179b425) | tx hashes/addresses marked [FILL AFTER DEPLOY]; blockers cleared — script works on simulator tier if deploy misses shoot day |
 | E2 | Deck outline (real numbers only, sourced) | — | DONE | docs/deck-outline.md (new) | DOMAIN-RESEARCH.md |
 | E3 | What-changed + submission pack draft (new hashes only when available) | — | NOT STARTED | docs/what-changed.md, docs/submission-pack.md | B5 (new SHAs) |
 
@@ -100,3 +100,4 @@ attestationOf logic: `attrsHash=persistentHash([pad(32,"cohort:attrs"),disclose(
 - wSex removed (commit d828db2); verifier SHA byte-identical (5af3b4b…).
 - A1 (migration) running; narrowed scope sent (skip README curl, public-state logic, regression test).
 - 2026-10-19 ~05:10: Wave 1 squads launched (7 workers): B1 contract author (52abe3ab, critical path), B2 ceremony (44ab66df), A5 regression test (ffb67c5f), D1 CT.gov catalog (acec6753), D2 Supabase (69379855), D4 wallet matrix (3567fb92), E2 deck outline (a6971dd1). Wave 2 (B3/B4/B5/B6/B7/B8, A7/A8, C1-C7, D3/D5, E1/E3) spawns on dependency clear.
+- 2026-10-19 ~05:15: A5 DONE (77fb2ca, regression test fails-until-migration as designed); E2 DONE (6605830, deck outline). Spawned D3 FHIR (04eea10c), E1 video script (770bac1a). A1 mid-migration (15 files modified, uncommitted).
