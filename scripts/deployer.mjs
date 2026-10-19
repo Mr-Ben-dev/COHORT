@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+// MUST be first: patches globalThis.WebSocket to tunnel WSS through the
+// egress proxy (ported from REMIT's operator-wallet.ts). The wallet SDK's
+// graphql-ws uses the global WebSocket, which otherwise ignores HTTPS_PROXY.
+import './ws-proxy-patch.mjs';
+
 /**
  * SQUAD F — COHORT Preprod deployer.
  *
