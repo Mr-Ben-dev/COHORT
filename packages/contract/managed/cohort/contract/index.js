@@ -104,6 +104,40 @@ export class Contract {
     }
     this.witnesses = witnesses_0;
     this.circuits = {
+      initIssuer: (...args_1) => {
+        if (args_1.length !== 2) {
+          throw new __compactRuntime.CompactError(`initIssuer: expected 2 arguments (as invoked from Typescript), received ${args_1.length}`);
+        }
+        const contextOrig_0 = args_1[0];
+        const id_0 = args_1[1];
+        if (!(typeof(contextOrig_0) === 'object' && contextOrig_0.currentQueryContext != undefined)) {
+          __compactRuntime.typeError('initIssuer',
+                                     'argument 1 (as invoked from Typescript)',
+                                     'cohort.compact line 35 char 1',
+                                     'CircuitContext',
+                                     contextOrig_0)
+        }
+        if (!(id_0.buffer instanceof ArrayBuffer && id_0.BYTES_PER_ELEMENT === 1 && id_0.length === 32)) {
+          __compactRuntime.typeError('initIssuer',
+                                     'argument 1 (argument 2 as invoked from Typescript)',
+                                     'cohort.compact line 35 char 1',
+                                     'Bytes<32>',
+                                     id_0)
+        }
+        const context = { ...contextOrig_0, gasCost: __compactRuntime.emptyRunningCost() };
+        const partialProofData = {
+          input: {
+            value: _descriptor_0.toValue(id_0),
+            alignment: _descriptor_0.alignment()
+          },
+          output: undefined,
+          publicTranscript: [],
+          privateTranscriptOutputs: []
+        };
+        const result_0 = this._initIssuer_0(context, partialProofData, id_0);
+        partialProofData.output = { value: _descriptor_1.toValue(result_0), alignment: _descriptor_1.alignment() };
+        return { result: result_0, context: context, proofData: partialProofData, gasCost: context.gasCost };
+      },
       proveEligible: (...args_1) => {
         if (args_1.length !== 6) {
           throw new __compactRuntime.CompactError(`proveEligible: expected 6 arguments (as invoked from Typescript), received ${args_1.length}`);
@@ -117,42 +151,42 @@ export class Contract {
         if (!(typeof(contextOrig_0) === 'object' && contextOrig_0.currentQueryContext != undefined)) {
           __compactRuntime.typeError('proveEligible',
                                      'argument 1 (as invoked from Typescript)',
-                                     'cohort.compact line 43 char 1',
+                                     'cohort.compact line 49 char 1',
                                      'CircuitContext',
                                      contextOrig_0)
         }
         if (!(trialId_0.buffer instanceof ArrayBuffer && trialId_0.BYTES_PER_ELEMENT === 1 && trialId_0.length === 32)) {
           __compactRuntime.typeError('proveEligible',
                                      'argument 1 (argument 2 as invoked from Typescript)',
-                                     'cohort.compact line 43 char 1',
+                                     'cohort.compact line 49 char 1',
                                      'Bytes<32>',
                                      trialId_0)
         }
         if (!(typeof(minAge_0) === 'bigint' && minAge_0 >= 0n && minAge_0 <= 255n)) {
           __compactRuntime.typeError('proveEligible',
                                      'argument 2 (argument 3 as invoked from Typescript)',
-                                     'cohort.compact line 43 char 1',
+                                     'cohort.compact line 49 char 1',
                                      'Uint<0..256>',
                                      minAge_0)
         }
         if (!(typeof(maxAge_0) === 'bigint' && maxAge_0 >= 0n && maxAge_0 <= 255n)) {
           __compactRuntime.typeError('proveEligible',
                                      'argument 3 (argument 4 as invoked from Typescript)',
-                                     'cohort.compact line 43 char 1',
+                                     'cohort.compact line 49 char 1',
                                      'Uint<0..256>',
                                      maxAge_0)
         }
         if (!(typeof(requireCondition_0) === 'boolean')) {
           __compactRuntime.typeError('proveEligible',
                                      'argument 4 (argument 5 as invoked from Typescript)',
-                                     'cohort.compact line 43 char 1',
+                                     'cohort.compact line 49 char 1',
                                      'Boolean',
                                      requireCondition_0)
         }
         if (!(typeof(forbidMedication_0) === 'boolean')) {
           __compactRuntime.typeError('proveEligible',
                                      'argument 5 (argument 6 as invoked from Typescript)',
-                                     'cohort.compact line 43 char 1',
+                                     'cohort.compact line 49 char 1',
                                      'Boolean',
                                      forbidMedication_0)
         }
@@ -191,14 +225,14 @@ export class Contract {
         if (!(typeof(contextOrig_0) === 'object' && contextOrig_0.currentQueryContext != undefined)) {
           __compactRuntime.typeError('attest',
                                      'argument 1 (as invoked from Typescript)',
-                                     'cohort.compact line 111 char 1',
+                                     'cohort.compact line 117 char 1',
                                      'CircuitContext',
                                      contextOrig_0)
         }
         if (!(attestation_0.buffer instanceof ArrayBuffer && attestation_0.BYTES_PER_ELEMENT === 1 && attestation_0.length === 32)) {
           __compactRuntime.typeError('attest',
                                      'argument 1 (argument 2 as invoked from Typescript)',
-                                     'cohort.compact line 111 char 1',
+                                     'cohort.compact line 117 char 1',
                                      'Bytes<32>',
                                      attestation_0)
         }
@@ -229,42 +263,42 @@ export class Contract {
         if (!(typeof(contextOrig_0) === 'object' && contextOrig_0.currentQueryContext != undefined)) {
           __compactRuntime.typeError('attestWithAttributes',
                                      'argument 1 (as invoked from Typescript)',
-                                     'cohort.compact line 121 char 1',
+                                     'cohort.compact line 127 char 1',
                                      'CircuitContext',
                                      contextOrig_0)
         }
         if (!(typeof(age_0) === 'bigint' && age_0 >= 0n && age_0 <= 255n)) {
           __compactRuntime.typeError('attestWithAttributes',
                                      'argument 1 (argument 2 as invoked from Typescript)',
-                                     'cohort.compact line 121 char 1',
+                                     'cohort.compact line 127 char 1',
                                      'Uint<0..256>',
                                      age_0)
         }
         if (!(typeof(cond_0) === 'boolean')) {
           __compactRuntime.typeError('attestWithAttributes',
                                      'argument 2 (argument 3 as invoked from Typescript)',
-                                     'cohort.compact line 121 char 1',
+                                     'cohort.compact line 127 char 1',
                                      'Boolean',
                                      cond_0)
         }
         if (!(typeof(med_0) === 'boolean')) {
           __compactRuntime.typeError('attestWithAttributes',
                                      'argument 3 (argument 4 as invoked from Typescript)',
-                                     'cohort.compact line 121 char 1',
+                                     'cohort.compact line 127 char 1',
                                      'Boolean',
                                      med_0)
         }
         if (!(holderSecret_0.buffer instanceof ArrayBuffer && holderSecret_0.BYTES_PER_ELEMENT === 1 && holderSecret_0.length === 32)) {
           __compactRuntime.typeError('attestWithAttributes',
                                      'argument 4 (argument 5 as invoked from Typescript)',
-                                     'cohort.compact line 121 char 1',
+                                     'cohort.compact line 127 char 1',
                                      'Bytes<32>',
                                      holderSecret_0)
         }
         if (!(nonce_0.buffer instanceof ArrayBuffer && nonce_0.BYTES_PER_ELEMENT === 1 && nonce_0.length === 32)) {
           __compactRuntime.typeError('attestWithAttributes',
                                      'argument 5 (argument 6 as invoked from Typescript)',
-                                     'cohort.compact line 121 char 1',
+                                     'cohort.compact line 127 char 1',
                                      'Bytes<32>',
                                      nonce_0)
         }
@@ -301,42 +335,42 @@ export class Contract {
         if (!(typeof(contextOrig_0) === 'object' && contextOrig_0.currentQueryContext != undefined)) {
           __compactRuntime.typeError('proveAttested',
                                      'argument 1 (as invoked from Typescript)',
-                                     'cohort.compact line 140 char 1',
+                                     'cohort.compact line 146 char 1',
                                      'CircuitContext',
                                      contextOrig_0)
         }
         if (!(trialId_0.buffer instanceof ArrayBuffer && trialId_0.BYTES_PER_ELEMENT === 1 && trialId_0.length === 32)) {
           __compactRuntime.typeError('proveAttested',
                                      'argument 1 (argument 2 as invoked from Typescript)',
-                                     'cohort.compact line 140 char 1',
+                                     'cohort.compact line 146 char 1',
                                      'Bytes<32>',
                                      trialId_0)
         }
         if (!(typeof(minAge_0) === 'bigint' && minAge_0 >= 0n && minAge_0 <= 255n)) {
           __compactRuntime.typeError('proveAttested',
                                      'argument 2 (argument 3 as invoked from Typescript)',
-                                     'cohort.compact line 140 char 1',
+                                     'cohort.compact line 146 char 1',
                                      'Uint<0..256>',
                                      minAge_0)
         }
         if (!(typeof(maxAge_0) === 'bigint' && maxAge_0 >= 0n && maxAge_0 <= 255n)) {
           __compactRuntime.typeError('proveAttested',
                                      'argument 3 (argument 4 as invoked from Typescript)',
-                                     'cohort.compact line 140 char 1',
+                                     'cohort.compact line 146 char 1',
                                      'Uint<0..256>',
                                      maxAge_0)
         }
         if (!(typeof(requireCondition_0) === 'boolean')) {
           __compactRuntime.typeError('proveAttested',
                                      'argument 4 (argument 5 as invoked from Typescript)',
-                                     'cohort.compact line 140 char 1',
+                                     'cohort.compact line 146 char 1',
                                      'Boolean',
                                      requireCondition_0)
         }
         if (!(typeof(forbidMedication_0) === 'boolean')) {
           __compactRuntime.typeError('proveAttested',
                                      'argument 5 (argument 6 as invoked from Typescript)',
-                                     'cohort.compact line 140 char 1',
+                                     'cohort.compact line 146 char 1',
                                      'Boolean',
                                      forbidMedication_0)
         }
@@ -362,12 +396,14 @@ export class Contract {
       }
     };
     this.impureCircuits = {
+      initIssuer: this.circuits.initIssuer,
       proveEligible: this.circuits.proveEligible,
       attest: this.circuits.attest,
       attestWithAttributes: this.circuits.attestWithAttributes,
       proveAttested: this.circuits.proveAttested
     };
     this.provableCircuits = {
+      initIssuer: this.circuits.initIssuer,
       proveEligible: this.circuits.proveEligible,
       attest: this.circuits.attest,
       attestWithAttributes: this.circuits.attestWithAttributes,
@@ -398,7 +434,9 @@ export class Contract {
     stateValue_0 = stateValue_0.arrayPush(__compactRuntime.StateValue.newNull());
     stateValue_0 = stateValue_0.arrayPush(__compactRuntime.StateValue.newNull());
     stateValue_0 = stateValue_0.arrayPush(__compactRuntime.StateValue.newNull());
+    stateValue_0 = stateValue_0.arrayPush(__compactRuntime.StateValue.newNull());
     state_0.data = new __compactRuntime.ChargedState(stateValue_0);
+    state_0.setOperation('initIssuer', new __compactRuntime.ContractOperation());
     state_0.setOperation('proveEligible', new __compactRuntime.ContractOperation());
     state_0.setOperation('attest', new __compactRuntime.ContractOperation());
     state_0.setOperation('attestWithAttributes', new __compactRuntime.ContractOperation());
@@ -462,6 +500,16 @@ export class Contract {
                                        { push: { storage: true,
                                                  value: __compactRuntime.StateValue.newCell({ value: _descriptor_6.toValue(0n),
                                                                                               alignment: _descriptor_6.alignment() }).encode() } },
+                                       { ins: { cached: false, n: 1 } }]);
+    __compactRuntime.queryLedgerState(context,
+                                      partialProofData,
+                                      [
+                                       { push: { storage: false,
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_3.toValue(5n),
+                                                                                              alignment: _descriptor_3.alignment() }).encode() } },
+                                       { push: { storage: true,
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(new Uint8Array(32)),
+                                                                                              alignment: _descriptor_0.alignment() }).encode() } },
                                        { ins: { cached: false, n: 1 } }]);
     state_0.data = new __compactRuntime.ChargedState(context.currentQueryContext.state.state);
     return {
@@ -620,8 +668,32 @@ export class Contract {
     });
     return result_0;
   }
-  _issuerId_0() {
-    return new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  _initIssuer_0(context, partialProofData, id_0) {
+    __compactRuntime.assert(this._equal_0(_descriptor_0.fromValue(__compactRuntime.queryLedgerState(context,
+                                                                                                    partialProofData,
+                                                                                                    [
+                                                                                                     { dup: { n: 0 } },
+                                                                                                     { idx: { cached: false,
+                                                                                                              pushPath: false,
+                                                                                                              path: [
+                                                                                                                     { tag: 'value',
+                                                                                                                       value: { value: _descriptor_3.toValue(5n),
+                                                                                                                                alignment: _descriptor_3.alignment() } }] } },
+                                                                                                     { popeq: { cached: false,
+                                                                                                                result: undefined } }]).value),
+                                          new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])),
+                            'issuer already initialized');
+    __compactRuntime.queryLedgerState(context,
+                                      partialProofData,
+                                      [
+                                       { push: { storage: false,
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_3.toValue(5n),
+                                                                                              alignment: _descriptor_3.alignment() }).encode() } },
+                                       { push: { storage: true,
+                                                 value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(id_0),
+                                                                                              alignment: _descriptor_0.alignment() }).encode() } },
+                                       { ins: { cached: false, n: 1 } }]);
+    return true;
   }
   _trialNullifier_0(trialId_0, sk_0) {
     return this._persistentHash_1([new Uint8Array([99, 111, 104, 111, 114, 116, 58, 114, 101, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
@@ -733,9 +805,20 @@ export class Contract {
   }
   _issuerIdOf_0(secret_0) { return secret_0; }
   _attest_0(context, partialProofData, attestation_0) {
-    __compactRuntime.assert(this._equal_0(this._wIssuerSecret_0(context,
+    __compactRuntime.assert(this._equal_1(this._wIssuerSecret_0(context,
                                                                 partialProofData),
-                                          this._issuerId_0()),
+                                          _descriptor_0.fromValue(__compactRuntime.queryLedgerState(context,
+                                                                                                    partialProofData,
+                                                                                                    [
+                                                                                                     { dup: { n: 0 } },
+                                                                                                     { idx: { cached: false,
+                                                                                                              pushPath: false,
+                                                                                                              path: [
+                                                                                                                     { tag: 'value',
+                                                                                                                       value: { value: _descriptor_3.toValue(5n),
+                                                                                                                                alignment: _descriptor_3.alignment() } }] } },
+                                                                                                     { popeq: { cached: false,
+                                                                                                                result: undefined } }]).value)),
                             'not the issuer');
     __compactRuntime.assert(!_descriptor_1.fromValue(__compactRuntime.queryLedgerState(context,
                                                                                        partialProofData,
@@ -780,9 +863,20 @@ export class Contract {
                           holderSecret_0,
                           nonce_0)
   {
-    __compactRuntime.assert(this._equal_1(this._wIssuerSecret_0(context,
+    __compactRuntime.assert(this._equal_2(this._wIssuerSecret_0(context,
                                                                 partialProofData),
-                                          this._issuerId_0()),
+                                          _descriptor_0.fromValue(__compactRuntime.queryLedgerState(context,
+                                                                                                    partialProofData,
+                                                                                                    [
+                                                                                                     { dup: { n: 0 } },
+                                                                                                     { idx: { cached: false,
+                                                                                                              pushPath: false,
+                                                                                                              path: [
+                                                                                                                     { tag: 'value',
+                                                                                                                       value: { value: _descriptor_3.toValue(5n),
+                                                                                                                                alignment: _descriptor_3.alignment() } }] } },
+                                                                                                     { popeq: { cached: false,
+                                                                                                                result: undefined } }]).value)),
                             'not the issuer');
     const att_0 = this._attestationOf_0(age_0,
                                         cond_0,
@@ -961,6 +1055,10 @@ export class Contract {
     return true;
   }
   _equal_1(x0, y0) {
+    if (!x0.every((x, i) => y0[i] === x)) { return false; }
+    return true;
+  }
+  _equal_2(x0, y0) {
     if (!x0.every((x, i) => y0[i] === x)) { return false; }
     return true;
   }
@@ -1240,6 +1338,20 @@ export function ledger(stateOrChargedState) {
                                                                                                    alignment: _descriptor_3.alignment() } }] } },
                                                                         { popeq: { cached: true,
                                                                                    result: undefined } }]).value);
+    },
+    get issuerId() {
+      return _descriptor_0.fromValue(__compactRuntime.queryLedgerState(context,
+                                                                       partialProofData,
+                                                                       [
+                                                                        { dup: { n: 0 } },
+                                                                        { idx: { cached: false,
+                                                                                 pushPath: false,
+                                                                                 path: [
+                                                                                        { tag: 'value',
+                                                                                          value: { value: _descriptor_3.toValue(5n),
+                                                                                                   alignment: _descriptor_3.alignment() } }] } },
+                                                                        { popeq: { cached: false,
+                                                                                   result: undefined } }]).value);
     }
   };
 }
@@ -1269,35 +1381,35 @@ export const pureCircuits = {
     if (!(typeof(age_0) === 'bigint' && age_0 >= 0n && age_0 <= 255n)) {
       __compactRuntime.typeError('attestationOf',
                                  'argument 1',
-                                 'cohort.compact line 80 char 1',
+                                 'cohort.compact line 86 char 1',
                                  'Uint<0..256>',
                                  age_0)
     }
     if (!(typeof(cond_0) === 'boolean')) {
       __compactRuntime.typeError('attestationOf',
                                  'argument 2',
-                                 'cohort.compact line 80 char 1',
+                                 'cohort.compact line 86 char 1',
                                  'Boolean',
                                  cond_0)
     }
     if (!(typeof(med_0) === 'boolean')) {
       __compactRuntime.typeError('attestationOf',
                                  'argument 3',
-                                 'cohort.compact line 80 char 1',
+                                 'cohort.compact line 86 char 1',
                                  'Boolean',
                                  med_0)
     }
     if (!(holderSecret_0.buffer instanceof ArrayBuffer && holderSecret_0.BYTES_PER_ELEMENT === 1 && holderSecret_0.length === 32)) {
       __compactRuntime.typeError('attestationOf',
                                  'argument 4',
-                                 'cohort.compact line 80 char 1',
+                                 'cohort.compact line 86 char 1',
                                  'Bytes<32>',
                                  holderSecret_0)
     }
     if (!(nonce_0.buffer instanceof ArrayBuffer && nonce_0.BYTES_PER_ELEMENT === 1 && nonce_0.length === 32)) {
       __compactRuntime.typeError('attestationOf',
                                  'argument 5',
-                                 'cohort.compact line 80 char 1',
+                                 'cohort.compact line 86 char 1',
                                  'Bytes<32>',
                                  nonce_0)
     }
@@ -1315,7 +1427,7 @@ export const pureCircuits = {
     if (!(secret_0.buffer instanceof ArrayBuffer && secret_0.BYTES_PER_ELEMENT === 1 && secret_0.length === 32)) {
       __compactRuntime.typeError('issuerIdOf',
                                  'argument 1',
-                                 'cohort.compact line 105 char 1',
+                                 'cohort.compact line 111 char 1',
                                  'Bytes<32>',
                                  secret_0)
     }

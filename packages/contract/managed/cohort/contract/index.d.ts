@@ -12,6 +12,7 @@ export type Witnesses<PS> = {
 }
 
 export type ImpureCircuits<PS> = {
+  initIssuer(context: __compactRuntime.CircuitContext<PS>, id_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
   proveEligible(context: __compactRuntime.CircuitContext<PS>,
                 trialId_0: Uint8Array,
                 minAge_0: bigint,
@@ -34,6 +35,7 @@ export type ImpureCircuits<PS> = {
 }
 
 export type ProvableCircuits<PS> = {
+  initIssuer(context: __compactRuntime.CircuitContext<PS>, id_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
   proveEligible(context: __compactRuntime.CircuitContext<PS>,
                 trialId_0: Uint8Array,
                 minAge_0: bigint,
@@ -65,6 +67,7 @@ export type PureCircuits = {
 }
 
 export type Circuits<PS> = {
+  initIssuer(context: __compactRuntime.CircuitContext<PS>, id_0: Uint8Array): __compactRuntime.CircuitResults<PS, boolean>;
   proveEligible(context: __compactRuntime.CircuitContext<PS>,
                 trialId_0: Uint8Array,
                 minAge_0: bigint,
@@ -114,6 +117,7 @@ export type Ledger = {
     [Symbol.iterator](): Iterator<Uint8Array>
   };
   readonly attestationsVerified: bigint;
+  readonly issuerId: Uint8Array;
 }
 
 export type ContractReferenceLocations = any;
