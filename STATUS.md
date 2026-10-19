@@ -143,3 +143,11 @@ initIssuer flow (6/6 and 7/7 green).
   npm test (commit 6101bbe). Full suite running. Verifier SHAs re-measured: all
   five match pins (proveEligible 5af3b4b2…, attest 9819eb36…, attestWithAttributes
   cbd12106…, proveAttested a4571295…, initIssuer 80df3538…).
+- 2026-10-19 ~07:10 EEST: fixed dual-package compact-runtime hazard (web/node_modules
+  copy vs root copy broke simulator type checks). browser-entry.mjs wrapper exports
+  __compactRuntime; demo-runner runtimeOf() refuses mixed copies (commit 78c61a4).
+- 2026-10-19 ~07:15 EEST: full npm test WITH token: 244 tests, 224 pass, 17 fail, 3
+  skipped — all 17 failures are Playwright browser tests hitting the live Vercel URL
+  with net::ERR_CERT_AUTHORITY_INVALID (egress-proxy TLS interception; environmental).
+  Zero non-browser failures. compile-contract.mjs circuit check fixed for multi-circuit
+  builds (commit f088823).
