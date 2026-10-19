@@ -127,3 +127,19 @@ initIssuer flow (6/6 and 7/7 green).
 - A1 (migration) running; narrowed scope sent (skip README curl, public-state logic, regression test).
 - 2026-10-19 ~05:10: Wave 1 squads launched (7 workers): B1 contract author (52abe3ab, critical path), B2 ceremony (44ab66df), A5 regression test (ffb67c5f), D1 CT.gov catalog (acec6753), D2 Supabase (69379855), D4 wallet matrix (3567fb92), E2 deck outline (a6971dd1). Wave 2 (B3/B4/B5/B6/B7/B8, A7/A8, C1-C7, D3/D5, E1/E3) spawns on dependency clear.
 - 2026-10-19 ~05:15: A5 DONE (77fb2ca, regression test fails-until-migration as designed); E2 DONE (6605830, deck outline). Spawned D3 FHIR (04eea10c), E1 video script (770bac1a). A1 mid-migration (15 files modified, uncommitted).
+
+## Integrator log (continued)
+- 2026-10-19 ~06:50 EEST: Vercel build failure root-caused (C3 demo page imported
+  ../../../packages/dapp relatively; Vercel rootDir=web). Fixed by extending the
+  browser bundle exports (wallets, truth-gate, proveEligibilityViaWallet) and adding
+  a compiled-contract browser bundle; demo-runner + page load /dapp/*.js at runtime
+  (Node tests fall back to on-disk sources). `next build` in web/ now passes
+  (commit 5b6c672). compact-runtime pinned to repo toolchain 0.16.0 in
+  web/package.json (commit 7f0c520; 4.1.1 does not exist on npm).
+- 2026-10-19 ~06:55 EEST: deployer --check run live: funding gate NO-GO —
+  reward address not registered for DUST generation (indexer height 3043097).
+  NO contract deploy; blocked on owner faucet/registration (human captcha).
+- 2026-10-19 ~06:55 EEST: all 30 workers done; 4 missing test files registered in
+  npm test (commit 6101bbe). Full suite running. Verifier SHAs re-measured: all
+  five match pins (proveEligible 5af3b4b2…, attest 9819eb36…, attestWithAttributes
+  cbd12106…, proveAttested a4571295…, initIssuer 80df3538…).
