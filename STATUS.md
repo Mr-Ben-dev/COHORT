@@ -93,7 +93,8 @@ attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolea
 |---|---|---|---|---|---|
 | D1 | Trial catalog 2→12 hand-mapped | — | NOT STARTED | apps/api/src/trials.mjs | — |
 | D2 | Site verification console | — | NOT STARTED | web/src/app/sites/* (new) | C2, A7 |
-| D3 | Wallet matrix (Lace primary investigation + code) | — | NOT STARTED | packages/dapp/src/wallet/* | — |
+| D3 | FHIR R4 / Synthea synthetic-record import (browser-local): 3 curated synthetic bundles, parser + path map, /import UI route, demo live-server path, `requestAttestation()` handoff, trust doc, tests | 04eea10c | DONE | web/public/fhir-demo/* (3 new), web/src/lib/fhir-import.mjs (new), web/src/lib/fhir-import.ts (new), web/src/app/import/page.tsx (new), docs/fhir-trust.md (new), TESTS/fhir-import.test.mjs (new, in test script), package.json | — |
+| D3-old | Wallet matrix (Lace primary investigation + code) — SUPERSEDED by the D4 row below | — | SUPERSEDED | — | — |
 | D4 | Wallet matrix: GeroWallet primary, 1AM fallback, Lace flagged `proving:false` (code + web research, no pushes/deploys/chain writes) | d4 subagent | DONE | packages/dapp/src/wallets.mjs (new), docs/wallet-trust.md (new), docs/wallet-demo-checklist.md (new), TESTS/wallet-matrix.test.mjs (new, in test script), web copy: wallet-picker.tsx, wallet-modal.tsx, package.json | A1 concurrently editing packages/dapp/src — new file only, no edits to existing .mjs files |
 | D5 | Supabase public-catalog cache: schema+RLS, CT.gov sync script, anon-key read layer, catalog-version hash plumbing, tests | 69379855 | DONE | `supabase/schema.sql`, `supabase/sync.mjs`, `supabase/README.md`, `apps/api/src/catalog-db.mjs`, `TESTS/catalog-db.test.mjs` (all new); root `package.json` test script | Supabase credentials (live test); `server.mjs` `--use-db`/`CATALOG_SOURCE` wiring pending A1/A7 (ownership) — verbatim patch in `supabase/README.md` |
 
