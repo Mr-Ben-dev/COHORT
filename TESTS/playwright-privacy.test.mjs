@@ -51,7 +51,12 @@ test('Playwright Chromium: PATIENT_A/B ages stay off COHORT origin traffic and s
   await page.selectOption('#condition', 'true');
   await page.selectOption('#medication', 'false');
   await page.click('#prove');
-  await page.waitForFunction(() => Boolean(document.getElementById('status')?.textContent?.trim()));
+  // 120s: in-browser ZK proving under a fully parallel suite on a shared VM
+  // can take far longer than the 30s default; the timeout guards liveness,
+  // not privacy (all privacy assertions below are timeout-independent).
+  await page.waitForFunction(() => Boolean(document.getElementById('status')?.textContent?.trim()), null, {
+    timeout: 120000,
+  });
 
   const storage = await page.evaluate(() => ({
     href: location.href,
