@@ -50,7 +50,7 @@
 | B1 | Contract author: attestations Set, attest(), attestWithAttributes(), proveAttested(), attestationOf(), ISSUER_ID (interface spec in section below) | af979b4e (B1) | DONE | CONTRACT/cohort.compact | none — see deviations in interface spec |
 | B2 | Demo issuer key-ceremony script | 44ab66df | RUNNING — script written + tested (clean exit 2 pre-B1); polling for B1 interface | scripts/issuer-ceremony.mjs (new), .gitignore (+scripts/.issuer-secret.json) | B1 contract interface (issuerIdOf/attestationOf/ISSUER_ID placeholder not yet in contract) |
 | B3 | Simulator happy-path tests | b3 worker (this run) | DONE — 6 tests, 6 pass, 26 assertions; registered in package.json test script | TESTS/attest-happy.test.mjs (new), root `package.json` test script | none |
-| B4 | Refusal/adversarial tests | — | NOT STARTED | TESTS/attest-adversarial.test.mjs | waits for B1 |
+| B4 | Refusal/adversarial tests | b4 worker (this run) | DONE — 7 tests, 7 pass; all 6 refusal paths reject in simulation, labeled demo-issuer; registered in package.json test script | TESTS/attest-adversarial.test.mjs (new), root `package.json` test script, STATUS.md (this row) | none |
 | B5 | Full-ZK compile + verifier SHA record + pins update | 6f153b59 (B5) | DONE | docs/verifier-keys.md (new), scripts/judge-pins.mjs (additive pins + verifyAllVerifierKeys()) | proveEligible verifier SHA byte-identical to Wave-1 pin; 3 new circuits pinned, undeployed |
 | B6 | Proof-server measurement | — | NOT STARTED | — | waits for B5 |
 | B7 | dapp wiring for new circuits | — | NOT STARTED | packages/dapp/src/attest.mjs (new) | waits for B1 |
