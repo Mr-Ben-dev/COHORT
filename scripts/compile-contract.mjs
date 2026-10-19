@@ -189,8 +189,9 @@ export function verifyArtifactSet(base, label, { includeContractJs = false } = {
   if (info['runtime-version'] !== COMPACT_RUNTIME) {
     throw new Error(`${label} runtime-version ${info['runtime-version']} != ${COMPACT_RUNTIME}`);
   }
-  if (info.circuits?.[0]?.name !== CIRCUIT_ID) {
-    throw new Error(`${label} circuit is ${info.circuits?.[0]?.name}, expected ${CIRCUIT_ID}`);
+  const circuitNames = (info.circuits ?? []).map((c) => c.name);
+  if (!circuitNames.includes(CIRCUIT_ID)) {
+    throw new Error(`${label} circuits [${circuitNames.join(', ')}] do not include ${CIRCUIT_ID}`);
   }
   const verifierSha = sha256File(p.verifier);
   const proverSha = sha256File(p.prover);
