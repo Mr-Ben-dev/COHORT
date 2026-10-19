@@ -225,7 +225,7 @@ function TierOneCard() {
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
             <p className="text-sm font-medium">proveAttested (issuer-attested path)</p>
-            <Badge variant="outline" className="border-[#b1a6f6] text-[#3b38b7]">coming with issuer ceremony</Badge>
+            <Badge variant="outline" className="border-[#b1a6f6] text-[#3b38b7]">attested path not live yet</Badge>
           </div>
           <Button disabled className="w-full" variant="outline">
             Run proveAttested in this browser
@@ -562,10 +562,12 @@ function SeamNotes() {
           same witness/boot code as <span className="font-mono">TESTS/circuit-lib.mjs</span>.
         </li>
         <li>
-          <span className="font-medium">proveAttested gate:</span> locked as “coming with issuer ceremony”
-          because <span className="font-mono">scripts/issuer-ceremony.mjs</span> has not run (no ISSUER_ID baked
-          in, no judge credentials). The page probes the live build and unlocks automatically once B2&apos;s
-          ceremony lands.
+          <span className="font-medium">proveAttested gate:</span> locked as “attested path not live yet”. The
+          demo-issuer ceremony has run (ISSUER_ID pinned in{" "}
+          <span className="font-mono">CONTRACT/cohort.compact</span>, judge credentials issued), but this
+          browser bundle was compiled before the pin — the page probes the live build on load and the button
+          unlocks automatically once a rebuilt bundle (non-zero issuerId) ships. The attested circuits are
+          also not deployed on-chain yet, so there is no on-chain attestation to verify against.
         </li>
         <li>
           <span className="font-medium">Truth gate:</span>{" "}

@@ -21,9 +21,12 @@
  *   four circuits (proveEligible, attest, attestWithAttributes,
  *   proveAttested). availableCircuits() feature-detects per build, so the
  *   runner never assumes a circuit exists. proveAttested stays GATED in the
- *   demo regardless: the issuer key ceremony has not run (ISSUER_ID is still
- *   the zero placeholder — verified behaviorally by probeCeremony), so no
- *   attestation can exist for it to verify.
+ *   demo regardless: the demo-issuer ceremony has run (B2, ISSUER_ID pinned
+ *   in CONTRACT/cohort.compact, judge credentials issued), BUT this browser
+ *   build was compiled before the pin — issuerId() is still the zero
+ *   placeholder (verified behaviorally by probeCeremony) — and the attested
+ *   circuits are not deployed on-chain. The gate unlocks automatically once
+ *   a rebuilt bundle lands.
  *
  * PRIVACY: Tier 1 witnesses live in page React state and are passed to the
  * simulator in-memory only. demo-runner performs zero network I/O on the
@@ -301,11 +304,15 @@ export function runProveEligibleSimulator(contractModule, {
 // ---------------------------------------------------------------------------
 
 const CEREMONY_PENDING_REASON =
-  'The demo-issuer key ceremony (scripts/issuer-ceremony.mjs) has not run yet: ' +
-  'no ISSUER_ID is baked into the contract and no judge attestation ' +
-  'credentials exist (TESTS/judge-credentials/ is empty). Without a published ' +
-  "attestation the circuit rejects with 'no issuer attestation for these " +
-  "attributes'. This button unlocks once B2's ceremony lands.";
+  'The attested path is not live in this demo build yet. The demo-issuer key ' +
+  'ceremony HAS run (scripts/issuer-ceremony.mjs; ISSUER_ID pinned in ' +
+  'CONTRACT/cohort.compact; judge credentials in TESTS/judge-credentials/), but ' +
+  'two things are still missing: (1) this browser bundle was compiled before ' +
+  'the ISSUER_ID pin, so its issuerId() is still the zero placeholder — no ' +
+  'attestation can verify against it; (2) the attest/attestWithAttributes/' +
+  'proveAttested circuits are not deployed on-chain. This button unlocks ' +
+  'automatically once the browser build is recompiled with the pinned ' +
+  'ISSUER_ID (the page probes the live build on load).';
 
 export function gateProveAttested({ ceremonyComplete = false } = {}) {
   if (ceremonyComplete === true) return { allowed: true, reason: null };
@@ -358,7 +365,11 @@ export function probeCeremony(contractModule) {
     return {
       ceremonyComplete: false,
       issuerIdHex: '00'.repeat(32),
-      reason: 'ISSUER_ID is the zero placeholder — the demo-issuer key ceremony has not run.',
+      reason:
+        'issuerId() is the zero placeholder in this compiled build. The key ' +
+        'ceremony has run (ISSUER_ID is pinned in CONTRACT/cohort.compact), but ' +
+        'this build was compiled before the pin — it needs a recompile, and ' +
+        'the attested circuits are not deployed yet.',
     };
   } catch (err) {
     if (/not the issuer/.test(err?.message ?? '')) {

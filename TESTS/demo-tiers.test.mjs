@@ -143,11 +143,12 @@ test('simulator: fresh blinds keep nullifier sets distinct across trials', () =>
 // Ceremony probe against the real build (documents current state honestly)
 // ---------------------------------------------------------------------------
 
-test('ceremony probe reports not-complete: ISSUER_ID is the zero placeholder', () => {
+test('ceremony probe reports not-complete: build predates the ISSUER_ID pin', () => {
   const probe = runner.probeCeremony(contractModule);
   assert.equal(probe.ceremonyComplete, false);
   assert.equal(probe.issuerIdHex, '00'.repeat(32));
-  assert.match(probe.reason, /ceremony has not run/);
+  assert.match(probe.reason, /zero placeholder in this compiled build/);
+  assert.match(probe.reason, /compiled before the pin/);
 });
 
 // ---------------------------------------------------------------------------
