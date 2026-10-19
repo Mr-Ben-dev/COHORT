@@ -80,7 +80,7 @@ attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolea
 ## SQUAD C — Integration layer
 | # | Task | Worker | Status | Files touched | Blockers |
 |---|---|---|---|---|---|
-| C1 | Truth gate: poll Blockfrost for ledger effect before UI success | — | NOT STARTED | packages/dapp/src/truth-gate.mjs (new) | token in .env |
+| C1 | Truth gate: poll Blockfrost for ledger effect before UI success | 19136020 (truth-gate worker) | DONE — 7/7 tests pass (6 mocked + 1 LIVE read of deployed contract, skips cleanly without token) | `packages/dapp/src/truth-gate.mjs` (new), `TESTS/truth-gate.test.mjs` (new) | — |
 | C2 | No-wallet read path + live/sample badges (site console reads via same-origin proxy) | — | DONE (10/10 tests green, tsc clean) | web/src/lib/cohort-verify.mjs (new), web/src/app/verify/page.tsx + _components/verify-client.tsx + _components/provenance-badge.tsx (new), TESTS/cohort-verify.test.mjs (new) | NOTE: needs same-origin /api/public-state + /api/attestation-counters proxy routes (A1 proxy pattern exists for /api/config); A7's source strings must use "live-onchain" for green badge |
 | C3 | Two-tier demo: in-browser simulator tier + wallet tier | — | NOT STARTED | web/src/app/demo/* (new) | B1 (contract) |
 | C4 | Proof-of-execution counter wiring (attestationsVerified → API → UI) | — | NOT STARTED | apps/api, web | B1, A7 |
