@@ -714,6 +714,28 @@ This Wave verifies the supported typed subset: age bounds and mapped condition/m
 
 ---
 
+## 29. Honest non-claims — read before trusting any proof
+
+Deliberate boundaries, pinned by `TESTS/non-claims.test.mjs`. Full text in
+[`docs/honest-non-claims.md`](docs/honest-non-claims.md).
+
+1. **Not HIPAA-compliant, not a medical certification.** A proof attests that a
+   computation ran correctly over committed attributes — it does not say the
+   attributes are medically true.
+2. **The demo issuer is not a hospital.** It is a throwaway key from
+   `scripts/issuer-ceremony.mjs` — not a medical authority; demo weight only.
+3. **Wave-1 eligibility facts are self-asserted by the patient.** Only Wave-3
+   attestations are issuer-committed, and only after a real issuer ceremony.
+4. **The new `attest`/`proveAttested` circuits are UNDEPLOYED in this run.**
+   Counters shown for them are labeled not-deployed.
+5. **GeroWallet's default cloud proving sends witnesses to Gero infra** — a real
+   trust boundary for clinical data (see `docs/wallet-trust.md`).
+6. **The trial-catalog cache is non-proof public data.** A poisoned catalog
+   cannot forge a proof.
+7. **Synthetic data only** — no real patient records anywhere in this project.
+
+---
+
 ## 28. License
 
 Apache License 2.0. See [`LICENSE`](LICENSE).
