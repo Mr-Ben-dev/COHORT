@@ -56,27 +56,35 @@
 | B7 | dapp wiring for new circuits | 63279733 (B7) | DONE | packages/dapp/src/attest.mjs (new), TESTS/attest-dapp.test.mjs (new), STATUS.md (this row) | none — 12 unit tests pass, 3 live paths skipped (need deployed attestation contract + COHORT_ATTEST_CONTRACT_ADDRESS) |
 | B8 | Circuit documentation | B8 subagent (parent-orchestrator task) | DONE | `docs/circuits.md` (new, committed), `STATUS.md` (this row) | none — wrote from `CONTRACT/cohort.compact` as implemented + B1 interface spec (both circuits, issuer-attested trio, trust boundary, mermaid flow; honesty sections: self-asserted Wave-1 inputs, demo-grade issuer gate, circuit cannot prove medical-record authenticity) |
 
-### B1 contract interface (binding) — AS IMPLEMENTED 2026-10-19 ~05:30 EEST
+### B1 contract interface (binding) — AS IMPLEMENTED 2026-10-19, REVISED ~06:35 EEST
 ```compact
 witness wHolderSecret(): Bytes<32>;
 witness wNonce(): Bytes<32>;
 witness wIssuerSecret(): Bytes<32>;
-// ISSUER_ID lives in circuit issuerId(): Bytes<32> (see deviations); zeros placeholder, ceremony-replaced
+export ledger issuerId: Bytes<32>;   // installed ONCE by deployer via initIssuer(); zeros until then
 export ledger attestations: Set<Bytes<32>>;
 export ledger attestationsVerified: Counter;
+export circuit initIssuer(id: Bytes<32>): Boolean   // one-time; asserts issuerId == 32 zero bytes, then issuerId = disclose(id)
 export circuit attestationOf(age: Uint<8>, cond: Boolean, med: Boolean, holderSecret: Bytes<32>, nonce: Bytes<32>): Bytes<32>
 export circuit issuerIdOf(secret: Bytes<32>): Bytes<32>   // ceremony helper: returns disclose(secret)
-export circuit attest(attestation: Bytes<32>): Boolean  // assert(disclose(wIssuerSecret())==issuerId()); replay-check; insert
+export circuit attest(attestation: Bytes<32>): Boolean  // assert(disclose(wIssuerSecret())==issuerId); replay-check; insert
 export circuit attestWithAttributes(age: Uint<8>, cond: Boolean, med: Boolean, holderSecret: Bytes<32>, nonce: Bytes<32>): Boolean  // issuer-gated, computes attestationOf in-circuit
 export circuit proveAttested(trialId: Bytes<32>, minAge: Uint<8>, maxAge: Uint<8>, requireCondition: Boolean, forbidMedication: Boolean): Boolean
 ```
-attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolean]>([pad(32,"cohort:attrs"),age,cond,med])`; `binding=persistentHash<[Bytes<32>,Bytes<32>,Bytes<32>]>([pad(32,"cohort:holder"),holderSecret,nonce])`; return `persistentCommit<Bytes<32>>(attrsHash,binding)`. proveAttested: recompute attestation from wAge()/wCondition()/wMedication()/wHolderSecret()/wNonce(), assert member, program-scoped nullifier `persistentHash<Vector<3,Bytes<32>>>([pad(32,"cohort:attnul"),trialId,disclose(att)])`, same predicate asserts as proveEligible, referral as proveEligible, proven++, attestationsVerified++. proveEligible + trialNullifier byte-identical to deployed version (verified by diff). Full contract compiles on compactc 0.31.1 (typecheck + TS codegen OK; full-ZK compile PASSED (zkir + prover/verifier keys for attest, attestWithAttributes, proveAttested, proveEligible; pure helpers attestationOf/issuerIdOf in generated TS)).
-
-#### Deviations from the draft spec (B2/B3/B7 read this)
-1. `const ISSUER_ID: Bytes<32> = 0x...` does NOT compile on language 0.23: `const` is not a top-level keyword, and `0x`-hex literals parse as Uint (capped at Uint<248>) — never Bytes<32>. Replaced with `circuit issuerId(): Bytes<32>` whose body is the 32-byte placeholder string `"\x00...\x00"` (32 escapes). The ceremony worker replaces the single marked line (`// CEREMONY-REPLACE: ISSUER_ID_BYTES`) with 32 `\xNN` escapes — `\xNN` escapes in string literals ARE the codegen vehicle for arbitrary 32-byte constants (verified compiling).
-2. `disclose(x)` is a compiler permission marker, NOT a bytes conversion: it is the identity at the value level (`disclose(Uint<248>)` typechecks as Uint<248>; `disclose(age)` with `age: Uint<8>` is Uint<8> and fails as a `Vector<N, Bytes<32>>` element). So attestationOf hashes typed tuples (see logic above) instead of `disclose()`-converted elements. Off-chain recomputation must use the tuple construction, or simply call `attestationOf` / use `attestWithAttributes` (preferred — no off-chain hash agreement needed).
-3. OBSERVATION for integrator/B2 (not changed — interface is binding): because disclose() is the identity, `issuerIdOf(secret)` returns the 32 secret bytes unchanged, and the baked-in ISSUER_ID equals the raw issuer secret bytes. Post-ceremony the "secret" is readable from the contract source/compiled circuit — the issuer gate is demo-grade (knowledge of the pre-ceremony secret), not a cryptographic secret. If Wave-3 judging needs a real secret, the issuer check must move to a hash preimage (e.g. `persistentHash` of the secret) — that is a spec change for the parent/integrator to approve.
-
+DESIGN REVISION (integrator, 2026-10-19 ~06:35 EEST): the original `circuit issuerId(): Bytes<32>`
+baked-literal design was ABANDONED — verified empirically that compactc 0.31.1 interprets
+`\xNN` string escapes as Unicode codepoints and UTF-8-encodes them (byte >= 0x80 becomes
+two bytes), so an arbitrary 32-byte secret cannot live in a literal (B2's real ceremony key
+produced Bytes<50>, compile failed). The issuer identity is now the `issuerId` LEDGER,
+installed once by the deployer via `initIssuer()`. The ceremony script no longer patches
+the contract source; the deployer calls initIssuer(secret) post-deploy.
+Verifier SHAs (full-ZK, compactc 0.31.1, re-measured): proveEligible 5af3b4b2ed345f711c5ff87367cfb0049732701c5a5336d51234b2a95fe32ab1
+(byte-identical to Wave-1 pin), attest 9819eb36437ed0d4f24911eff41e502275ebbb6ed8466653946f63fa97c58ab1,
+attestWithAttributes cbd12106fccbac72c04d2b60858871149209b2d164d2db02c4701d405dba6566,
+proveAttested a457129525ef3e0458dde077872df02c98d4647d39f278b2d0883f7b11275e13 (unchanged —
+never referenced issuerId), initIssuer 80df3538420f83b9e9dbe20e3ac6d1e52cde722633cd8449bcb1f00e9e400858.
+All five pins verified MATCH in scripts/judge-pins.mjs. B3/B4 simulator tests updated to the
+initIssuer flow (6/6 and 7/7 green).
 ## SQUAD C — Integration layer
 | # | Task | Worker | Status | Files touched | Blockers |
 |---|---|---|---|---|---|
@@ -97,6 +105,7 @@ attestationOf logic: `attrsHash=persistentHash<[Bytes<32>,Uint<8>,Boolean,Boolea
 | D3-old | Wallet matrix (Lace primary investigation + code) — SUPERSEDED by the D4 row below | — | SUPERSEDED | — | — |
 | D4 | Wallet matrix: GeroWallet primary, 1AM fallback, Lace flagged `proving:false` (code + web research, no pushes/deploys/chain writes) | d4 subagent | DONE | packages/dapp/src/wallets.mjs (new), docs/wallet-trust.md (new), docs/wallet-demo-checklist.md (new), TESTS/wallet-matrix.test.mjs (new, in test script), web copy: wallet-picker.tsx, wallet-modal.tsx, package.json | A1 concurrently editing packages/dapp/src — new file only, no edits to existing .mjs files |
 | D5 | Supabase public-catalog cache: schema+RLS, CT.gov sync script, anon-key read layer, catalog-version hash plumbing, tests | 69379855 | DONE | `supabase/schema.sql`, `supabase/sync.mjs`, `supabase/README.md`, `apps/api/src/catalog-db.mjs`, `TESTS/catalog-db.test.mjs` (all new); root `package.json` test script | Supabase credentials (live test); `server.mjs` `--use-db`/`CATALOG_SOURCE` wiring pending A1/A7 (ownership) — verbatim patch in `supabase/README.md` |
+| D6 | Render Postgres public-catalog cache (REPLACES the D5 Supabase recommendation): `db/schema.sql`, pg read layer w/ idempotent `migrate()`, CT.gov→pg sync one-off job, mocked tests | d6 subagent | DONE (tests 15/15 green) | `db/schema.sql`, `apps/api/src/catalog-pg.mjs`, `apps/api/src/sync-catalog-pg.mjs`, `TESTS/catalog-pg.test.mjs` (all new); root `package.json` (`pg` dep + test line); `STATUS.md` (this row) | NOT live-tested against Render Postgres — this environment cannot complete the Postgres SSL handshake (egress proxy interferes); first live run happens on Render (`migrate()` on API boot when DATABASE_URL is set, `sync-catalog-pg.mjs` one-off job); DATABASE_URL is server-side only on the Render API service; `server.mjs` wiring pending A1/A7 (ownership) — verbatim patch in `catalog-pg.mjs` header comment |
 
 ## SQUAD E — Communication
 | # | Task | Worker | Status | Files touched | Blockers |
